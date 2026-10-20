@@ -3,6 +3,7 @@ import hmac
 import json
 import os
 import secrets
+import tempfile
 import time
 from contextlib import asynccontextmanager, suppress
 from datetime import date, datetime
@@ -10,11 +11,12 @@ from pathlib import Path
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
 
-from fastapi import Depends, FastAPI, Header, Query, Request
+from fastapi import Depends, FastAPI, File, Header, Query, Request, Response, UploadFile
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import ValidationError
+from starlette.background import BackgroundTask
 
 from . import __version__
 from .ai import AIConfiguration, provider_for
@@ -27,13 +29,22 @@ from .auth import (
     refresh_session,
     verify_password,
 )
-from .backup import HouseholdExport, export_household, import_household
+from .backup import (
+    MAX_ARCHIVE,
+    MAX_JSON_EXPORT,
+    HouseholdExport,
+    export_archive,
+    export_household,
+    import_archive,
+    import_household,
+)
 from .bring import reconcile
 from .bring_runtime import UnofficialBringConnector
 from .db import Database
 from .errors import DomainError
 from .importing import bounded_fetch_html, extract, platform_for
 from .jobs import claim, enqueue, finish
+from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
 from .models import (
     BringConfiguration,
     BringCredentials,
@@ -59,6 +70,8 @@ bearer = HTTPBearer(auto_error=False)
 def create_app(data_dir: Path | None = None, run_worker: bool = True):
     data_dir = data_dir or Path(os.environ.get("DATA_DIR", "/data"))
     database = Database(data_dir)
+    media_slots = asyncio.Semaphore(2)
+    archive_slots = asyncio.Semaphore(1)
     SecretVault(data_dir / "config")
     token_file = data_dir / "config" / "setup-token"
     with database.connect() as db:
@@ -185,22 +198,54 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
 
     @app.middleware("http")
     async def security(request: Request, call_next):
-        size = request.headers.get("content-length", "0")
+        image_upload = request.method == "PUT" and request.url.path.startswith("/api/v1/media/")
+        archive_upload = (
+            request.method == "POST" and request.url.path == "/api/v1/admin/import/archive"
+        )
+        json_restore = request.method == "POST" and request.url.path == "/api/v1/admin/import"
+        body_limit = (
+            MAX_ARCHIVE
+            if archive_upload
+            else (
+                (MAX_UPLOAD_BYTES + 65536)
+                if image_upload
+                else (MAX_JSON_EXPORT if json_restore else 1_500_000)
+            )
+        )
         try:
-            too_large = int(size) > 1_500_000
+            too_large = int(request.headers.get("content-length", "0")) > body_limit
         except ValueError:
             too_large = True
         if too_large:
             return JSONResponse({"error": {"code": "request_too_large"}}, status_code=413)
-        # Also cap chunked bodies. Reverse proxy limits remain required against slow clients.
-        if request.method in ("POST", "PUT", "PATCH"):
-            body = bytearray()
-            async for chunk in request.stream():
-                body.extend(chunk)
-                if len(body) > 1_500_000:
-                    return JSONResponse({"error": {"code": "request_too_large"}}, status_code=413)
-            request._body = bytes(body)
-        response = await call_next(request)
+        # Authenticate large transfers before reading/parsing their bodies. Browser CSRF
+        # validation is the same as every other authenticated mutation.
+        if image_upload or archive_upload or json_restore:
+            try:
+                session(request, await bearer(request))
+            except DomainError as exc:
+                return JSONResponse({"error": {"code": exc.code}}, status_code=exc.status)
+
+        async def bounded_request():
+            if not archive_upload and request.method in ("POST", "PUT", "PATCH"):
+                body = bytearray()
+                async for chunk in request.stream():
+                    body.extend(chunk)
+                    if len(body) > body_limit:
+                        return JSONResponse(
+                            {"error": {"code": "request_too_large"}}, status_code=413
+                        )
+                request._body = bytes(body)
+            return await call_next(request)
+
+        if archive_upload:
+            async with archive_slots:
+                response = await bounded_request()
+        elif image_upload or json_restore:
+            async with media_slots:
+                response = await bounded_request()
+        else:
+            response = await bounded_request()
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["Content-Security-Policy"] = (
@@ -257,7 +302,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             "structured_import_preview": True,
             "bring_automatic_mutations": False,
             "ai": bool(os.environ.get("AI_PROVIDER")),
-            "media_upload": False,
+            "media_upload": True,
         }
 
     @app.post("/api/v1/setup", status_code=201, response_model=Tokens)
@@ -665,6 +710,92 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         response.delete_cookie("aircooker_session", path="/")
         response.delete_cookie("aircooker_csrf", path="/")
         return response
+
+    @app.put("/api/v1/media/{image_id}", response_model=MediaInfo)
+    async def upload_photo(image_id: UUID, file: UploadFile = File(...), s=Depends(session)):
+        try:
+            raw = await file.read(MAX_UPLOAD_BYTES + 1)
+            return await asyncio.to_thread(
+                put_media, database, image_id, raw, file.content_type or ""
+            )
+        finally:
+            await file.close()
+
+    @app.get("/api/v1/media/{image_id}/info", response_model=MediaInfo)
+    def photo_info(image_id: UUID, s=Depends(session)):
+        with database.connect() as db:
+            row = db.execute("SELECT * FROM recipe_media WHERE id=?", (str(image_id),)).fetchone()
+        if not row:
+            raise DomainError("image_not_found", 404)
+        return info_for(row)
+
+    @app.get(
+        "/api/v1/media/{image_id}",
+        response_class=Response,
+        responses={
+            200: {"content": {"image/jpeg": {"schema": {"type": "string", "format": "binary"}}}}
+        },
+    )
+    def download_photo(image_id: UUID, s=Depends(session)):
+        with database.connect() as db:
+            row = db.execute(
+                "SELECT data,sha256 FROM recipe_media WHERE id=?", (str(image_id),)
+            ).fetchone()
+        if not row:
+            raise DomainError("image_not_found", 404)
+        return Response(
+            row["data"], media_type="image/jpeg", headers={"ETag": '"' + row["sha256"] + '"'}
+        )
+
+    @app.get(
+        "/api/v1/admin/export/archive",
+        response_class=FileResponse,
+        responses={
+            200: {
+                "content": {"application/zip": {"schema": {"type": "string", "format": "binary"}}}
+            }
+        },
+    )
+    async def download_archive(s=Depends(session)):
+        async with archive_slots:
+            path = await asyncio.to_thread(export_archive, database)
+        return FileResponse(
+            path,
+            media_type="application/zip",
+            filename="aircooker-household.zip",
+            background=BackgroundTask(path.unlink, missing_ok=True),
+        )
+
+    @app.post(
+        "/api/v1/admin/import/archive",
+        openapi_extra={
+            "requestBody": {
+                "required": True,
+                "content": {"application/zip": {"schema": {"type": "string", "format": "binary"}}},
+            }
+        },
+    )
+    async def restore_archive(request: Request, s=Depends(session)):
+        if request.headers.get("content-type", "").split(";")[0] != "application/zip":
+            raise DomainError("archive_content_type_required", 415)
+        # Stream authenticated uploads to a protected file rather than buffering a whole
+        # household image library in memory. The import worker never extracts member paths.
+        path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                prefix=".restore-", suffix=".zip", dir=data_dir / "jobs", delete=False
+            ) as output:
+                path = Path(output.name)
+                count = 0
+                async for chunk in request.stream():
+                    count += len(chunk)
+                    if count > MAX_ARCHIVE:
+                        raise DomainError("archive_size_limit", 413)
+                    await asyncio.to_thread(output.write, chunk)
+            return await asyncio.to_thread(import_archive, database, path, s["device_id"])
+        finally:
+            if path:
+                path.unlink(missing_ok=True)
 
     @app.get("/api/v1/admin/export", response_model=HouseholdExport)
     def export_data(s=Depends(session)):

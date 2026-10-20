@@ -15,7 +15,12 @@ def active(db, kind, entity_id):
     ).fetchone()
 
 
-def validate_references(db, kind, payload):
+def validate_references(db, kind, payload, restoring=False):
+    if kind == "recipe" and payload.get("image_id"):
+        if not db.execute(
+            "SELECT 1 FROM recipe_media WHERE id=?", (payload["image_id"],)
+        ).fetchone():
+            raise DomainError("recipe_image_not_found", 409)
     if kind in ("meal", "leftover"):
         if not active(db, "recipe", payload["recipe_id"]):
             raise DomainError("recipe_not_found", 409)
@@ -28,10 +33,14 @@ def validate_references(db, kind, payload):
         if not row:
             raise DomainError("leftover_not_found", 409)
         leftover = json.loads(row["payload"])
-        if leftover["discarded"] or leftover["recipe_id"] != payload["recipe_id"]:
+        if (leftover["discarded"] and not restoring) or leftover["recipe_id"] != payload[
+            "recipe_id"
+        ]:
             raise DomainError("invalid_leftover", 409)
-        if payload["date"] < leftover["produced_on"]:
+        if not restoring and payload["date"] < leftover["produced_on"]:
             raise DomainError("leftover_not_yet_produced", 409)
+        if restoring:
+            return None
         from decimal import Decimal
 
         allocated = Decimal(0)
@@ -43,7 +52,7 @@ def validate_references(db, kind, payload):
     return None
 
 
-def apply_mutation(db, mutation: Mutation, device_id: str):
+def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
     if str(mutation.device_id) != device_id:
         raise DomainError("device_mismatch", 403)
     if mutation.idempotency_key != mutation.mutation_id:
@@ -72,7 +81,7 @@ def apply_mutation(db, mutation: Mutation, device_id: str):
         )
     else:
         deleted = mutation.operation == "delete"
-        payload = {}
+        payload = json.loads(existing["payload"]) if deleted and existing else {}
         if not deleted:
             payload = (
                 ENTITY_MODELS[kind]
@@ -82,7 +91,7 @@ def apply_mutation(db, mutation: Mutation, device_id: str):
             # Exclude this entity's former allocation while validating replacements.
             if kind == "meal" and existing:
                 db.execute("UPDATE entity SET deleted=1 WHERE kind=? AND id=?", (kind, eid))
-            allocated = validate_references(db, kind, payload)
+            allocated = validate_references(db, kind, payload, restoring)
             if allocated is not None:
                 from decimal import Decimal
 
@@ -99,7 +108,7 @@ def apply_mutation(db, mutation: Mutation, device_id: str):
             "INSERT INTO entity VALUES (?,?,?,?,?,?) ON CONFLICT(kind,id) DO UPDATE SET revision=excluded.revision,deleted=excluded.deleted,payload=excluded.payload,updated_at=excluded.updated_at",
             (kind, eid, seq, deleted, encoded, stamp),
         )
-        if kind == "recipe" and not deleted:
+        if kind == "recipe" and not deleted and not restoring:
             provenance = payload.get("provenance", {})
             iid = provenance.get("import_job_id")
             if iid:

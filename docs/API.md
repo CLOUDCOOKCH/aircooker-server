@@ -57,6 +57,23 @@ mutation to `/imports/{id}/confirm`. Unsupported content returns `needs_input` w
 code and retains its source URL. AI additionally requires `use_ai=true` and
 `consent_external_ai=true`; the administrator selects endpoint, model and credential file.
 
+## Recipe photos
+
+PUT `/api/v1/media/{image_id}` with multipart field `file` (JPEG/PNG/WebP, at most 8 MiB
+source, 16 million pixels). Use a stable client-generated UUID and preserve source bytes
+until acknowledgement. The server corrects orientation, drops metadata and stores a JPEG
+at most 2048 pixels per edge / 1 MiB. It returns `MediaInfo`, including the canonical SHA-256.
+Replaying original or canonical bytes returns the existing asset; different bytes at the
+same UUID return `image_id_conflict` (409). Animated/invalid inputs fail with 422 and other
+media types with 415. Metadata does not contain filesystem paths.
+
+Authenticated GET `/media/{image_id}` returns JPEG bytes with ETag; `/info` returns metadata.
+Missing assets return 404. Upload before submitting a recipe's `image_id`, or its mutation
+fails with `recipe_image_not_found` (409). Assets are immutable and not deleted when an
+image is replaced: offline references and retained history must remain valid. A 256 MiB
+household quota returns `media_storage_limit` (409) without discarding existing records.
+See [backup and restore](BACKUP.md) for JSON v2 and streamed archive endpoints.
+
 ## Errors and limits
 
 Errors have `{ "error": { "code": "stable_machine_code" } }`. Submitted invalid values are

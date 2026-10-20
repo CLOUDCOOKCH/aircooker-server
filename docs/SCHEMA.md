@@ -11,6 +11,7 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | entity | Atomic canonical snapshots keyed by kind/UUID, revision and tombstone |
 | change_log | Monotonically increasing server-committed delta sequence |
 | mutation | Device-scoped replay result and immutable request fingerprint |
+| recipe_media | Immutable UUID/JPEG BLOBs, source/canonical checksums, 1 MiB per image and 256 MiB household quota |
 | recipe / recipe_ingredient / recipe_step | Normalised domain projections with ingredient ordering and recipe foreign keys |
 | meal_plan_entry / leftover / pantry_item | Indexed date/category projection and explicit recipe/leftover links |
 | background_job | Deduplicated jobs, leases, fencing token, generation, retries, redacted error code |
@@ -19,7 +20,7 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | rate_limit / audit_event | Durable request buckets and local security-operation audit events |
 
 Templates, recurrence rules and preferences are currently represented in typed entity
-snapshots. Dedicated projections, separate rating history, acceptance history, media,
+snapshots. Dedicated projections, separate rating history, acceptance history,
 shopping-period records and per-device sync cursors are still incomplete. The schema is an
 incremental implementation, not a claim that all evaluated entities have been delivered.
 

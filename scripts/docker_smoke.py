@@ -2,6 +2,7 @@
 Only creates/deletes uniquely named test containers and anonymous test volumes.
 """
 
+import io
 import json
 import os
 import subprocess
@@ -10,6 +11,8 @@ from datetime import UTC, datetime
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 from uuid import uuid4
+
+from PIL import Image
 
 IMAGE = os.environ.get("AIRCOOKER_TEST_IMAGE", "aircooker-server:development")
 DOCKER = ["docker", "--host=unix:///var/run/docker.sock"]
@@ -32,7 +35,7 @@ def docker(*args):
 
 
 def request(base, path, body=None, headers=None, method=None):
-    raw = None if body is None else json.dumps(body).encode()
+    raw = body if isinstance(body, bytes) else None if body is None else json.dumps(body).encode()
     req = Request(
         base + path,
         data=raw,
@@ -41,7 +44,13 @@ def request(base, path, body=None, headers=None, method=None):
     )
     with urlopen(req, timeout=10) as response:
         content = response.read()
-        return json.loads(content) if content else None
+        if not content:
+            return None
+        return (
+            json.loads(content)
+            if response.headers.get_content_type() == "application/json"
+            else content
+        )
 
 
 def mutation(device, kind, payload, eid=None, base=0):
@@ -107,11 +116,29 @@ def main():
 
     try:
         name, base, device, headers = start()
+        image_id = str(uuid4())
+        photo = io.BytesIO()
+        Image.new("RGB", (12, 12), "orange").save(photo, format="PNG")
+        boundary = "aircooker-smoke-boundary"
+        upload = (
+            (
+                f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="photo.png"\r\n'
+                "Content-Type: image/png\r\n\r\n"
+            ).encode()
+            + photo.getvalue()
+            + f"\r\n--{boundary}--\r\n".encode()
+        )
+        upload_headers = {**headers, "Content-Type": "multipart/form-data; boundary=" + boundary}
+        info = request(base, "/api/v1/media/" + image_id, upload, upload_headers, "PUT")
+        assert info["content_type"] == "image/jpeg"
+        assert request(base, "/api/v1/media/" + image_id, upload, upload_headers, "PUT") == info
+        canonical_photo = request(base, "/api/v1/media/" + image_id, headers=headers)
         recipe = mutation(
             device,
             "recipe",
             {
                 "title": "Smoke soup",
+                "image_id": image_id,
                 "servings": "2",
                 "ingredients": [
                     {"id": str(uuid4()), "name": "Carrots", "quantity": "200", "unit": "g"}
@@ -157,13 +184,26 @@ def main():
             ]
             == "Offline edit replayed"
         )
+        assert request(base, "/api/v1/media/" + image_id, headers=headers) == canonical_photo
         exported = request(base, "/api/v1/admin/export", headers=headers)
         _, other, _, other_headers = start()
         assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == 2
         restored = request(other, "/api/v1/planning/shopping-projection", headers=other_headers)
         assert restored["requirements"][0]["spec"] == "400 g"
+        assert request(other, "/api/v1/media/" + image_id, headers=other_headers) == canonical_photo
+        archive = request(base, "/api/v1/admin/export/archive", headers=headers)
+        _, third, _, third_headers = start()
+        restored_archive = request(
+            third,
+            "/api/v1/admin/import/archive",
+            archive,
+            {**third_headers, "Content-Type": "application/zip"},
+            "POST",
+        )
+        assert restored_archive == {"imported": 2, "media_imported": 1}
+        assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, export and clean-install restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, photo persistence, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

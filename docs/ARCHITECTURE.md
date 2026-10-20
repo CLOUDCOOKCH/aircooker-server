@@ -31,9 +31,9 @@ flowchart LR
   Bring --> External[Unofficial Bring shopping service]
 ```
 
-The diagram describes the target paths being implemented. Native share-inbox submission,
-media, advanced calendar actions and several configuration screens are incomplete; consult
-the acceptance checklist before treating a path as delivered.
+The diagram describes paths being implemented. Bounded photo storage and media-aware
+restore are tested. Native photo/calendar interfaces still need Apple SDK validation;
+share lifecycle and several configuration screens remain incomplete. Consult the checklist.
 
 ## Technology decisions
 

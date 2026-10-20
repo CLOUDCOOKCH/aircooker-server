@@ -63,7 +63,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | --- | --- |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, repeatable migrations, transactional mutation replay/tombstones | Implemented; automated tests |
-| Recipes, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
+| Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
 | Recurrences, serving scaling, pantry-aware aggregation | Implemented; bounded expansion and domain tests |
 | Recommendations | Deterministic dinner previews; preference/history sophistication remains partial |
 | Website recipe import | JSON-LD previews; ingredient parsing, images and broader HTML extraction remain partial |
@@ -71,7 +71,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | AI | Text adapters and validated output; simulated HTTP tests, no live verification |
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
 | Admin UI | English/German setup, login, jobs, summary and export; other configuration screens remain partial |
-| Export/import | Versioned non-secret JSON and transactional merge; media/replacement workflow remains partial |
+| Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
 | Releases | Local development only; release CI is configuration, not proof of publication |
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.

@@ -1,27 +1,38 @@
 # Export, backup and recovery
 
-Two different tools serve different needs. A household export is a versioned non-secret
-portable data document. A SQLite disaster-recovery snapshot includes secrets and sessions.
-Do not confuse them.
+A household export is a versioned non-secret portable document or archive. A SQLite
+recovery snapshot includes secrets and sessions. Both may contain private recipe content.
 
 ## Non-secret household export
 
-Use the authenticated console Export action or GET `/api/v1/admin/export`. Format name is
-`aircooker-household`, version 1. It contains household name/timezone/language and typed
-active entity snapshots. It excludes password hashes, sessions, integration credentials,
-keys, prompts, job internals and raw diagnostics. Treat recipe content as private even
-though credentials are absent.
+The administration console downloads GET `/api/v1/admin/export/archive`. Its ZIP contains
+`manifest.json` (`aircooker-household-archive`, version 1) and `media/<UUID>.jpg` files with
+SHA-256 metadata. It includes household name/timezone/language, typed entity snapshots,
+retained deletion history and referenced photos. It excludes password hashes, active
+sessions, integration credentials, keys, prompts, job internals and diagnostics.
 
-POST the document to `/api/v1/admin/import` on an already configured clean installation.
-Imports validate schemas, order recipe/leftover/meal dependencies and commit atomically.
-Duplicate IDs produce 409 and roll back the entire request; there is no silent overwrite.
-The browser currently exports but has no import screen. Destructive replacement is not
-implemented and must not be implied by the merge endpoint.
+GET `/api/v1/admin/export` provides JSON (`aircooker-household`, version 2) with base64 media
+for small exports. Version 1 JSON remains importable. If JSON exceeds 8 MiB, use the archive.
 
-**Current limits:** media is not yet uploaded/exported; historical meals referring to a
-deleted recipe need additional export treatment; exports over the 1.5 MB HTTP body limit
-cannot be imported by this endpoint. Complete media-aware streaming export/import and
-validated replacement with explicit confirmation are release blockers.
+On an already configured destination, POST JSON to `/api/v1/admin/import` or stream the ZIP
+body to `/api/v1/admin/import/archive` with `Content-Type: application/zip`. Authenticate
+with the destination household session. Browser mutations also require same-origin CSRF.
+These endpoints merge; they never silently replace existing entities. Duplicate entity IDs
+produce 409 and roll back media, entities, settings and sync changes together. Validate the
+result through the application and API before relying on a backup.
+
+Archive restores reject unexpected/duplicate member names, symlinks, unsupported encryption,
+invalid schemas, mismatched images/checksums and oversized content. They never extract ZIP
+paths. Imported historical references can point to retained deleted recipes; tombstones
+are applied after dependency restoration. Import provenance survives without old job data.
+
+Limits: 10,000 entities, 5,000 media records, 8 MiB manifest/JSON, 280 MiB archive and a
+256 MiB stored-photo quota. Transfers use protected `/data/jobs/.export-*.zip` and
+`.restore-*.zip` files. Successful transfers clean up their files; interrupted process
+termination can leave files. With the container stopped, administrators may remove only
+these transfer files; never delete the durable job database. Automatic retention cleanup,
+an administration import screen, and destructive replacement with explicit confirmation
+remain incomplete. Do not wipe an existing household to work around a merge conflict.
 
 ## Transactionally consistent sensitive backup
 
@@ -29,22 +40,19 @@ validated replacement with explicit confirmation are release blockers.
 docker compose exec aircooker python -m aircooker.cli backup --output /data/backups/household.sqlite3
 ```
 
-The output must not already exist. SQLite's online backup API makes the database consistent
-while WAL writes continue. Permissions are 0600. This contains password hashes, sessions,
-import data and ownership history. Encrypt it before copying it off-host; this CLI does not
-automatically encrypt the output and is explicitly a local administrator operation.
+The output must not exist. SQLite's online backup API creates a consistent snapshot while
+WAL writes continue. Permissions are 0600. It includes photos, password hashes, sessions,
+import data and ownership history. Encrypt it before copying it off-host; this CLI does
+not encrypt automatically and is explicitly a local administrator operation.
 
-For a complete disaster backup, stop the container and securely back up the entire local
-volume, including media, the integration encryption key and encrypted credentials. Keep
-the matching image digest/version. A cold volume snapshot avoids cross-file consistency
-issues. Never use an uncoordinated copy of an actively written SQLite file as a backup.
+For complete recovery, stop the container and securely back up the entire local volume,
+including configuration and integration encryption keys. Retain the matching image
+version/digest. Never make an uncoordinated copy of an actively written SQLite database.
 
 ## Restore a volume
 
-Stop all writers. Preserve a copy of the current volume. Restore the complete matching
-snapshot into a new local data volume owned by UID/GID 10001, keep it isolated from public
-traffic, start the matching image, and verify DB health and household data. Revoke sessions
-using local recovery before exposing a disaster-restored instance; restored tokens should
-not remain trusted. Devices with cursors ahead of a restored server need controlled resync
-while preserving their pending changes. Test restoration regularly; an untested archive
-is not recovery evidence.
+Stop all writers. Preserve the current volume. Restore a matching snapshot into a new local
+volume owned by UID/GID 10001, keep it isolated from public traffic, start the matching image,
+and verify DB health and household data. Revoke sessions using local recovery before public
+exposure. Devices with cursors ahead of the restored server need controlled resync while
+preserving pending changes. Test restoration regularly; an untested archive is not evidence.

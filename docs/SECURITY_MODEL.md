@@ -31,7 +31,7 @@ normal TLS verification. CORS is not enabled; unrelated browser origins cannot r
 responses. Reverse proxy trust defaults empty, not universal.
 
 Known open risks: request/body parsing still needs load and slow-client testing; there is no
-complete retention policy; media handling is absent; filesystem privileges do not defend
+complete retention policy; image/ZIP decoders need broader adversarial and load validation; filesystem privileges do not defend
 against a malicious Docker administrator; integration service semantics remain unverified.
 External integration configuration requires account-level authentication but the shared
 account has no finer administrator role. A production readiness audit is still mandatory.
