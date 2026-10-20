@@ -5,9 +5,9 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 
 | Check | Executed result | Limit |
 | --- | --- | --- |
-| Backend tests against hashed runtime dependencies | **72 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
+| Backend tests against hashed runtime dependencies | **81 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
 | Ruff lint and format | Passed | Python source/tests/scripts only |
-| mypy | Passed across 21 application modules | `check_untyped_defs`, not exhaustive strict typing |
+| mypy | Passed across 22 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
 | Swift core compile and tests | **40 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
@@ -18,6 +18,7 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
 | Source Gitleaks 8.28.0 scans | No findings in both repositories | Build outputs/installed tooling excluded, source tests included |
 | pip-audit 2.9.0 on runtime lock | 34 packages, no known advisories reported | Advisory database coverage is finite |
+| pip-audit on optional browser/development lock | 45 packages, no known advisories reported | pytest upgraded to 9.0.3 after an advisory was detected |
 | Trivy 0.67.2 | **Gate fails: 44 HIGH package matches across 8 unique advisories; 0 CRITICAL** | Remaining matches have no fixed version listed; exploitability not adjudicated |
 | Workflow YAML / scanner TOML / export plist | Parsed | No GitHub/macOS workflow executed |
 
@@ -25,10 +26,13 @@ Docker E2E verifies non-root/read-only startup, token-protected setup, HTTP auth
 idempotent mutation replay, recipe/meal persistence and scaling projection, server restart,
 replayed offline edit, immutable photo upload/replay, exact photo bytes after restart,
 leftover ingredient exclusion, suggestion approval/replay across server restart,
-JSON v2 and streamed ZIP restore into independently configured clean containers. It does not substitute for a physical two-device iOS workflow.
+encrypted AI configuration/redaction across restart, JSON v2 and streamed ZIP restore into independently configured clean containers. It does not substitute for a physical two-device iOS workflow.
 
-Earlier browser checks exercised first-run setup, login, dashboard, EN/DE switching, mobile width,
-CSRF logout and absence of JavaScript errors. Screenshots are genuine Chromium output with
+Real Chromium checks exercised first-run setup/login, household settings, unsaved-input
+preservation during EN/DE switching, mobile layout, encrypted AI settings/probe, Bring
+list selection/retry, JSON import, ZIP download, duplicate archive rejection, device-session
+revocation, password change and absence of JavaScript errors. AI/Bring adapters were explicit
+test-only doubles; these checks do not establish live-service compatibility. Screenshots are genuine Chromium output with
 a synthetic household: [desktop](screenshots/admin-desktop.png),
 [German mobile](screenshots/admin-mobile-de.png). No fabricated iOS screenshots exist.
 
@@ -41,7 +45,8 @@ The resulting candidate has no critical matches and no remaining matches with pu
 fixes in the scanner's data, but still fails the configured HIGH/CRITICAL gate.
 
 See [machine-readable container findings](validation/container-security.json) and
-[dependency audit](validation/dependency-audit.json). Forty-four matches represent eight
+[runtime dependency audit](validation/dependency-audit.json) and
+[browser/development audit](validation/browser-dependency-audit.json). Forty-four matches represent eight
 unique advisory IDs repeated across binary packages, not 44 independently validated
 application vulnerabilities. They must be triaged against actual runtime paths and tracked
 until remediated or explicitly resolved with evidence. No scanner suppression was added.
@@ -74,4 +79,4 @@ cache bounds. UserNotifications/WidgetKit delivery/rendering and local logout cl
 Apple SDK/device validation work.
 
 See IMPLEMENTATION.md for remaining work: shared recommendation preferences, cross-device
-approval recovery, complete admin settings, destructive restore, cleanup and conflict UI. External credential gaps do not excuse these missing features.
+approval recovery, admin deletion/extended diagnostics, destructive restore, cleanup and conflict UI. External credential gaps do not excuse these missing features.

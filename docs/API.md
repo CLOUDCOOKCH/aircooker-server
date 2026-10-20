@@ -55,7 +55,7 @@ Replaying the same ID/content returns the existing job. Different content for th
 409. Poll `/imports/{id}`. A `preview` is not a saved recipe. Submit a reviewed recipe
 mutation to `/imports/{id}/confirm`. Unsupported content returns `needs_input` with an error
 code and retains its source URL. AI additionally requires `use_ai=true` and
-`consent_external_ai=true`; the administrator selects endpoint, model and credential file.
+`consent_external_ai=true`; the administrator selects endpoint, model and encrypted saved key or credential file.
 
 ## Weekly suggestion review
 
@@ -106,3 +106,17 @@ Default access tokens last 15 minutes; refresh tokens rotate and expire after 30
 Replaying an old refresh token revokes that device session. Store refreshed credentials in
 Keychain before retrying the request. Logout/recovery/password change must revoke sessions.
 The admin console uses short-lived cookie access and requires login after expiration.
+
+## Administration configuration
+
+Authenticated GET `/admin/status` returns typed aggregate storage, recipe and pending-job
+counts. GET `/auth/sessions` returns UUIDs, token expiries, integer `revoked` (0/1) and the
+additive `current` flag; token hashes and secrets are excluded.
+
+GET/PUT `/admin/ai` return redacted `AISettingsStatus`. PUT accepts complete settings;
+`api_key=null` retains an existing key only for the same provider/base URL, while an empty
+string clears it. `enabled=false` persists a disabled override. POST `/admin/ai/test` sends
+fixed synthetic text, validates a recipe, and returns `validated_probe_response` with
+`household_content_sent=false`. It shares the configured hourly budget and is also limited
+to five probes per minute. No persistent live-verification guarantee is implied. See
+[administration](ADMINISTRATION.md) for credentials, environment precedence and UI coverage.

@@ -203,6 +203,21 @@ def main():
         assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
         projection = request(base, "/api/v1/planning/shopping-projection", headers=headers)
         assert projection["requirements"][0]["spec"] == "600 g"
+        ai_credential = "synthetic container AI credential"
+        configured_ai = request(
+            base,
+            "/api/v1/admin/ai",
+            {
+                "provider": "openai-compatible",
+                "base_url": "https://ai.example/v1",
+                "model": "container-test",
+                "api_key": ai_credential,
+            },
+            headers,
+            "PUT",
+        )
+        assert configured_ai["enabled"] and configured_ai["key_configured"]
+        assert ai_credential not in json.dumps(configured_ai)
         docker("restart", name)
         base = "http://127.0.0.1:" + docker("port", name, "8080/tcp").rsplit(":", 1)[1]
         for _ in range(60):
@@ -211,6 +226,12 @@ def main():
                     break
             except (URLError, ConnectionError, TimeoutError):
                 time.sleep(0.25)
+        restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
+        assert (
+            restored_ai["enabled"]
+            and restored_ai["key_configured"]
+            and restored_ai["origin"] == "saved"
+        )
         assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
         edit = mutation(
             device,
@@ -228,6 +249,7 @@ def main():
         )
         assert request(base, "/api/v1/media/" + image_id, headers=headers) == canonical_photo
         exported = request(base, "/api/v1/admin/export", headers=headers)
+        assert ai_credential not in json.dumps(exported)
         _, other, _, other_headers = start()
         assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == len(
             exported["entities"]
@@ -247,7 +269,7 @@ def main():
         assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

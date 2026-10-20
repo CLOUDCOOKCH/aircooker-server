@@ -1,16 +1,182 @@
 "use strict";
 const words={en:{title:"Your household, at a glance.",connect:"Connect to your kitchen",username:"Username",password:"Password",token:"Container setup token",household:"Household name",timezone:"Time zone",continue:"Continue",overview:"Kitchen overview",logout:"Sign out",jobs:"Recent background jobs",refresh:"Refresh",export:"Export household data",limitations:"Configure optional integrations through the server API or environment. Live compatibility must be verified.",ready:"Ready",error:"Request failed. Code: ",empty:"No background jobs yet.",pending:"Pending jobs",recipes:"Recipes",bring:"Bring!",disabled:"Not configured",configured:"Configured",verification:"Verification required"},de:{title:"Dein Haushalt auf einen Blick.",connect:"Mit deiner Küche verbinden",username:"Benutzername",password:"Passwort",token:"Einrichtungstoken des Containers",household:"Name des Haushalts",timezone:"Zeitzone",continue:"Weiter",overview:"Küchenübersicht",logout:"Abmelden",jobs:"Letzte Hintergrundaufträge",refresh:"Aktualisieren",export:"Haushaltsdaten exportieren",limitations:"Optionale Integrationen werden über die Server-API oder Umgebung eingerichtet. Die Live-Kompatibilität muss geprüft werden.",ready:"Bereit",error:"Anfrage fehlgeschlagen. Code: ",empty:"Noch keine Hintergrundaufträge.",pending:"Ausstehende Aufträge",recipes:"Rezepte",bring:"Bring!",disabled:"Nicht konfiguriert",configured:"Eingerichtet",verification:"Prüfung erforderlich"}};
-let locale="en",configured=false;
-const device=localStorage.getItem("aircooker.device")||crypto.randomUUID();localStorage.setItem("aircooker.device",device);
+const additions={"en": {"household_settings": "Household settings", "security": "Account and devices", "save": "Save changes", "default_language": "Default language", "current_password": "Current password", "new_password": "New password (at least 12 characters)", "change_password": "Change password and sign out all devices", "password_hint": "Every device must sign in again after a password change.", "sessions": "Device sessions", "revoke": "Revoke session", "revoke_question": "Revoke this device session?", "active": "Active", "revoked": "Revoked", "expires": "Refresh access expires", "ai_settings": "Optional AI extraction", "ai_enable": "Enable AI extraction", "provider": "Provider", "base_url": "API base URL", "model": "Model identifier", "api_key": "API key", "key_hint": "Leave blank to keep a saved key. Changing provider or URL clears the previous key unless you enter a new one.", "clear_key": "Remove saved key", "key_saved": "A key is stored securely. Its value is never shown here.", "no_key": "No API key stored.", "timeout": "Timeout in seconds", "content_limit": "Maximum source bytes", "request_limit": "AI requests per hour", "structured": "Use structured output when supported by this model", "local_http": "Allow HTTP for a trusted self-hosted AI endpoint", "ai_disclosure": "AI is optional. Source content is sent to the configured provider only with consent for that import. Keys stay on your server.", "ai_test": "Test saved AI configuration", "ai_test_hint": "Sends a small synthetic recipe, not household content. Provider usage charges may apply.", "ai_validated": "The provider returned a validated recipe for the connection test.", "bring_settings": "Bring! connection", "bring_email": "Bring! account email", "bring_password": "Bring! password", "bring_save": "Save Bring! credentials", "bring_test": "Connect and load existing lists", "bring_list": "Existing shopping list", "bring_select": "Use this list", "bring_retry": "Queue reconciliation", "disconnect": "Disconnect Bring!", "disconnect_question": "Remove the saved Bring! connection? Existing Bring! items will be preserved.", "bring_warning": "This unofficial integration requires a dedicated-list compatibility report before automatic writes are enabled. Saving credentials does not prove that authentication or sync works.", "bring_saved": "Credentials saved. Use Connect to verify access.", "bring_selected": "List selected. Automatic writes still require compatibility verification.", "queued": "Reconciliation queued; external changes are pending.", "data_management": "Data export and import", "archive_file": "Household JSON or ZIP export", "import_data": "Merge household export", "import_hint": "Imports merge atomically. Duplicate IDs reject the entire import; existing records are never overwritten. Keep a backup before importing.", "import_question": "Merge this export into the current household?", "saved": "Changes saved.", "imported": "Household data imported.", "busy": "Working…", "session_ended": "Sign in to continue. Your session may have expired or been revoked.", "limitations": "External integrations remain unverified until tested with your own configuration.", "storage": "Storage", "database": "Database", "photo_storage": "Recipe photos", "free_space": "Free on data volume", "current_session": "This session", "not_configured": "Not configured", "compatibility_unverified": "Compatibility verification required", "job_queued": "Queued", "job_running": "Running", "job_done": "Done", "job_failed": "Failed"}, "de": {"household_settings": "Haushaltseinstellungen", "security": "Konto und Geräte", "save": "Änderungen speichern", "default_language": "Standardsprache", "current_password": "Aktuelles Passwort", "new_password": "Neues Passwort (mindestens 12 Zeichen)", "change_password": "Passwort ändern und alle Geräte abmelden", "password_hint": "Nach einer Passwortänderung müssen sich alle Geräte erneut anmelden.", "sessions": "Gerätesitzungen", "revoke": "Sitzung widerrufen", "revoke_question": "Diese Gerätesitzung widerrufen?", "active": "Aktiv", "revoked": "Widerrufen", "expires": "Zugriff endet", "ai_settings": "Optionale KI-Extraktion", "ai_enable": "KI-Extraktion aktivieren", "provider": "Anbieter", "base_url": "API-Basis-URL", "model": "Modellkennung", "api_key": "API-Schlüssel", "key_hint": "Leer lassen, um einen gespeicherten Schlüssel beizubehalten. Beim Wechsel von Anbieter oder URL wird der bisherige Schlüssel entfernt, sofern du keinen neuen eingibst.", "clear_key": "Gespeicherten Schlüssel entfernen", "key_saved": "Ein Schlüssel ist sicher gespeichert. Sein Wert wird hier nicht angezeigt.", "no_key": "Kein API-Schlüssel gespeichert.", "timeout": "Zeitlimit in Sekunden", "content_limit": "Maximale Quellgröße in Bytes", "request_limit": "KI-Anfragen pro Stunde", "structured": "Strukturierte Ausgabe verwenden, wenn dieses Modell sie unterstützt", "local_http": "HTTP für einen vertrauenswürdigen selbst gehosteten KI-Endpunkt erlauben", "ai_disclosure": "KI ist optional. Quellinhalte werden nur mit Zustimmung für den jeweiligen Import an den konfigurierten Anbieter gesendet. Schlüssel bleiben auf deinem Server.", "ai_test": "Gespeicherte KI-Konfiguration testen", "ai_test_hint": "Sendet ein kleines künstliches Rezept, keine Haushaltsinhalte. Es können Nutzungskosten beim Anbieter entstehen.", "ai_validated": "Der Anbieter hat beim Verbindungstest ein gültiges Rezept zurückgegeben.", "bring_settings": "Bring!-Verbindung", "bring_email": "E-Mail des Bring!-Kontos", "bring_password": "Bring!-Passwort", "bring_save": "Bring!-Zugangsdaten speichern", "bring_test": "Verbinden und bestehende Listen laden", "bring_list": "Bestehende Einkaufsliste", "bring_select": "Diese Liste verwenden", "bring_retry": "Abgleich einreihen", "disconnect": "Bring! trennen", "disconnect_question": "Gespeicherte Bring!-Verbindung entfernen? Bestehende Bring!-Einträge bleiben erhalten.", "bring_warning": "Diese inoffizielle Integration benötigt einen Kompatibilitätsbericht einer eigenen Testliste, bevor automatische Schreibvorgänge aktiviert werden. Das Speichern von Zugangsdaten bestätigt weder die Anmeldung noch die Synchronisierung.", "bring_saved": "Zugangsdaten gespeichert. Prüfe den Zugriff mit Verbinden.", "bring_selected": "Liste gewählt. Automatische Schreibvorgänge benötigen weiterhin eine Kompatibilitätsprüfung.", "queued": "Abgleich eingereiht; externe Änderungen stehen aus.", "data_management": "Datenexport und Import", "archive_file": "JSON- oder ZIP-Haushaltsexport", "import_data": "Haushaltsexport zusammenführen", "import_hint": "Importe werden atomar zusammengeführt. Doppelte IDs führen zum Abbruch des gesamten Imports; vorhandene Einträge werden nicht überschrieben. Sichere deine Daten vor dem Import.", "import_question": "Diesen Export mit dem aktuellen Haushalt zusammenführen?", "saved": "Änderungen gespeichert.", "imported": "Haushaltsdaten importiert.", "busy": "Wird ausgeführt …", "session_ended": "Melde dich erneut an. Deine Sitzung ist möglicherweise abgelaufen oder wurde widerrufen.", "limitations": "Externe Integrationen sind erst nach einem Test mit deiner Konfiguration geprüft.", "storage": "Speicher", "database": "Datenbank", "photo_storage": "Rezeptfotos", "free_space": "Auf Datenvolume verfügbar", "current_session": "Diese Sitzung", "not_configured": "Nicht konfiguriert", "compatibility_unverified": "Kompatibilitätsprüfung erforderlich", "job_queued": "Eingereiht", "job_running": "Wird ausgeführt", "job_done": "Erledigt", "job_failed": "Fehlgeschlagen"}};
+for(const language of ["en","de"]) Object.assign(words[language],additions[language]);
 const $=id=>document.getElementById(id);
-function translate(){document.documentElement.lang=locale;document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=words[locale][e.dataset.i18n]);}
+let locale="en", configured=false, storageStatus=null;
+const device=localStorage.getItem("aircooker.device")||crypto.randomUUID();
+localStorage.setItem("aircooker.device",device);
+function translate(){
+  document.documentElement.lang=locale;
+  document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=words[locale][e.dataset.i18n]);
+  for(const id of ["status","ai-key-status"]){const e=$(id);if(e.dataset.errorCode)e.textContent+=" · "+e.dataset.errorCode;}
+  if($("bring-state").dataset.listId)$("bring-state").textContent+=" · "+$("bring-state").dataset.listId;
+  renderStorage();translateSessions();translateJobs();
+}
+function message(key){$("status").dataset.i18n=key;delete $("status").dataset.errorCode;$("status").textContent=words[locale][key]||key;}
+function showError(code){$("status").dataset.i18n="error";$("status").dataset.errorCode=code;$("status").textContent=words[locale].error+code;}
+function renderStorage(){
+  if(!storageStatus)return;
+  const bytes=value=>new Intl.NumberFormat(locale,{style:"unit",unit:"megabyte",maximumFractionDigits:1}).format(value/1000000);
+  $("storage").textContent=words[locale].database+": "+bytes(storageStatus.database_bytes)+" · "+words[locale].photo_storage+": "+bytes(storageStatus.media_bytes)+" · "+words[locale].free_space+": "+bytes(storageStatus.disk_free_bytes);
+}
+function translateSessions(){
+  document.querySelectorAll(".session-row").forEach(row=>{
+    const d=row.dataset;
+    row.querySelector("span").textContent=(d.current==="true"?words[locale].current_session+" · ":"")+d.device+" · "+words[locale][d.revoked==="true"?"revoked":"active"]+" · "+words[locale].expires+" "+new Date(Number(d.expires)*1000).toLocaleString(locale);
+  });
+}
+function translateJobs(){document.querySelectorAll(".job").forEach(row=>row.textContent=row.dataset.kind+" · "+(words[locale]["job_"+row.dataset.state]||row.dataset.state)+(row.dataset.error?" · "+row.dataset.error:""));}
+function signedOut(){
+  $("dashboard").hidden=true; $("authentication").hidden=false;
+  document.querySelectorAll('input[type="password"]').forEach(e=>e.value="");
+}
 function csrf(){return document.cookie.split("; ").find(c=>c.startsWith("aircooker_csrf="))?.split("=")[1]||"";}
-async function request(path,options={}){const response=await fetch(path,{...options,headers:{"Content-Type":"application/json","X-CSRF-Token":csrf(),...options.headers},credentials:"same-origin"});if(!response.ok){let code="http_"+response.status;try{code=(await response.json()).error.code;}catch{}throw new Error(code);}return response.status===204?null:response.json();}
-function error(err){$("status").textContent=words[locale].error+err.message;}
-async function refresh(){try{const [jobs,recipes,bring,info]=await Promise.all([request("/api/v1/admin/jobs"),request("/api/v1/recipes?limit=200"),request("/api/v1/integrations/bring/status"),request("/api/v1/system/info")]);$("identity").textContent=info.name+" · v"+info.version;$("authentication").hidden=true;$("dashboard").hidden=false;$("metrics").replaceChildren();for(const [label,value] of [[words[locale].pending,jobs.filter(j=>["queued","running"].includes(j.state)).length],[words[locale].recipes,String(recipes.items.length)+(recipes.next?"+":"")],[words[locale].bring,bring.state==="configured"?words[locale].configured:(bring.state==="not_configured"?words[locale].disabled:words[locale].verification)]]){const box=document.createElement("div");box.className="metric";const strong=document.createElement("strong");strong.textContent=value;const span=document.createElement("span");span.textContent=label;box.append(strong,span);$("metrics").append(box);}$("jobs").replaceChildren();for(const job of jobs){const row=document.createElement("div");row.className="job";row.textContent=job.kind+" · "+job.state+(job.error_code?" · "+job.error_code:"");$("jobs").append(row);}if(!jobs.length)$("jobs").textContent=words[locale].empty;$("status").textContent=words[locale].ready;}catch(err){error(err);}}
-$("language").onchange=()=>{locale=$("language").value;translate();if(!$("dashboard").hidden)refresh();};
-$("login").onsubmit=async event=>{event.preventDefault();const data=Object.fromEntries(new FormData(event.target));const auth={username:data.username,password:data.password,device_id:device};try{if(!configured){await request("/api/v1/setup",{method:"POST",headers:{"X-Setup-Token":data.token},body:JSON.stringify({...auth,name:data.name,timezone:data.timezone,language:locale})});configured=true;}await request("/api/v1/admin/login",{method:"POST",body:JSON.stringify(auth)});event.target.reset();await refresh();}catch(err){error(err);}};
-$("logout").onclick=async()=>{try{await request("/api/v1/admin/logout",{method:"POST"});$("dashboard").hidden=true;$("authentication").hidden=false;}catch(err){error(err);}};
-$("reload").onclick=refresh;
+async function request(path,options={}){
+  const response=await fetch(path,{...options,headers:{"Content-Type":"application/json","X-CSRF-Token":csrf(),...options.headers},credentials:"same-origin",redirect:"error"});
+  if(!response.ok){
+    let code="http_"+response.status;
+    try{code=(await response.json()).error.code;}catch{}
+    if(response.status===401){signedOut(); message("session_ended");}
+    throw new Error(code);
+  }
+  return response.status===204?null:response.json();
+}
+async function action(element,work){
+  const buttons=Array.from(element.querySelectorAll("button"));
+  if(element.tagName==="BUTTON")buttons.push(element);
+  const original=buttons.map(button=>button.disabled);
+  buttons.forEach(button=>button.disabled=true); message("busy");
+  try{await work();}catch(err){showError(err.message);}
+  finally{buttons.forEach((button,i)=>button.disabled=original[i]);if($("status").dataset.i18n==="busy")message("ready");}
+}
+function put(path,body){return request(path,{method:"PUT",body:JSON.stringify(body)});}
+function post(path,body={}){return request(path,{method:"POST",body:JSON.stringify(body)});}
+function field(form,name){return form.elements.namedItem(name);}
+function aiEnabled(){
+  const form=$("ai-form"); const enabled=field(form,"enabled").checked;
+  form.querySelectorAll("[data-ai-option]").forEach(input=>input.disabled=!enabled);
+}
+async function refreshSessions(){
+  const sessions=await request("/api/v1/auth/sessions"); $("sessions").replaceChildren();
+  for(const session of sessions){
+    const row=document.createElement("div"); row.className="session-row";
+    const label=document.createElement("span");
+    label.textContent=(session.current?words[locale].current_session+" · ":"")+session.device_id.slice(0,8)+" · "+(session.revoked?words[locale].revoked:words[locale].active)+" · "+words[locale].expires+" "+new Date(session.refresh_expires*1000).toLocaleString(locale);
+    row.dataset.device=session.device_id.slice(0,8);row.dataset.current=String(session.current);row.dataset.revoked=String(Boolean(session.revoked));row.dataset.expires=session.refresh_expires;
+    row.append(label);
+    if(!session.revoked){
+      const button=document.createElement("button");button.type="button";button.className="secondary";button.textContent=words[locale].revoke;button.dataset.i18n="revoke";
+      button.onclick=()=>action(button,async()=>{
+        if(!confirm(words[locale].revoke_question))return;
+        await request("/api/v1/auth/sessions/"+encodeURIComponent(session.id),{method:"DELETE"});
+        await refreshSessions();message("saved");
+      });row.append(button);
+    }
+    $("sessions").append(row);
+  }
+  translateSessions();
+}
+async function refresh(){
+  const [jobs,bring,info,household,ai,status]=await Promise.all([
+    request("/api/v1/admin/jobs"),request("/api/v1/integrations/bring/status"),
+    request("/api/v1/system/info"),request("/api/v1/household"),request("/api/v1/admin/ai"),request("/api/v1/admin/status")]);
+  $("identity").textContent=info.name+" · v"+info.version;
+  $("authentication").hidden=true;$("dashboard").hidden=false;$("metrics").replaceChildren();
+  for(const [key,value] of [["pending",status.pending_jobs],["recipes",String(status.recipes)],["bring",bring.state==="configured"?words[locale].configured:(bring.state==="not_configured"?words[locale].disabled:words[locale].verification)]]){
+    const box=document.createElement("div");box.className="metric";
+    const strong=document.createElement("strong");strong.textContent=value;
+    if(key==="bring")strong.dataset.i18n=bring.state==="configured"?"configured":bring.state==="not_configured"?"disabled":"verification";
+    const span=document.createElement("span");span.dataset.i18n=key;span.textContent=words[locale][key];box.append(strong,span);$("metrics").append(box);
+  }
+  storageStatus=status;renderStorage();
+  $("jobs").replaceChildren();
+  for(const job of jobs){const row=document.createElement("div");row.className="job";row.dataset.kind=job.kind;row.dataset.state=job.state;row.dataset.error=job.error_code||"";row.textContent=job.kind+" · "+job.state+(job.error_code?" · "+job.error_code:"");$("jobs").append(row);}
+  if(!jobs.length){$("jobs").dataset.i18n="empty";$("jobs").textContent=words[locale].empty;}else{delete $("jobs").dataset.i18n;}
+  translateJobs();
+  const h=$("household-form");for(const key of ["name","timezone","language"])field(h,key).value=household[key];
+  const form=$("ai-form");field(form,"enabled").checked=ai.enabled;
+  for(const key of ["provider","base_url","model","timeout","max_content","requests_per_hour"]){
+    if(ai[key]!==null&&ai[key]!==undefined)field(form,key).value=ai[key];
+  }
+  for(const key of ["structured_output","allow_local_http"])field(form,key).checked=ai[key];
+  $("ai-key-status").dataset.i18n=ai.key_configured?"key_saved":"no_key";$("ai-key-status").dataset.errorCode=ai.configuration_error||"";
+  $("ai-key-status").textContent=words[locale][ai.key_configured?"key_saved":"no_key"]+(ai.configuration_error?" · "+ai.configuration_error:"");
+  $("bring-retry").disabled=!bring.list_id;
+  $("bring-state").dataset.i18n=bring.state;$("bring-state").dataset.listId=bring.list_id||"";
+  $("bring-state").textContent=(words[locale][bring.state]||bring.state)+(bring.list_id?" · "+bring.list_id:"");
+  aiEnabled();await refreshSessions();message("ready");
+}
+$("language").onchange=()=>{locale=$("language").value;translate();};
+$("login").onsubmit=event=>{event.preventDefault();const form=event.target;
+  action(form,async()=>{
+    const data=Object.fromEntries(new FormData(form));const auth={username:data.username,password:data.password,device_id:device};
+    try{
+      if(!configured){
+        // Account creation carries the administrator token only in its header.
+        const session=await request("/api/v1/setup",{method:"POST",headers:{"X-Setup-Token":data.token},body:JSON.stringify({...auth,name:data.name,timezone:data.timezone,language:locale})});
+        configured=true;$("setup-fields").hidden=true;
+        await request("/api/v1/auth/logout",{method:"POST",headers:{Authorization:"Bearer "+session.access_token},body:"{}"});
+      }
+      await post("/api/v1/admin/login",auth);form.reset();await refresh();
+    }finally{field(form,"password").value="";field(form,"token").value="";}
+  });
+};
+$("household-form").onsubmit=event=>{event.preventDefault();action(event.target,async()=>{
+  await put("/api/v1/household",Object.fromEntries(new FormData(event.target)));message("saved");
+});};
+$("password-form").onsubmit=event=>{event.preventDefault();action(event.target,async()=>{
+  try{await post("/api/v1/auth/password",Object.fromEntries(new FormData(event.target)));signedOut();message("session_ended");}
+  finally{event.target.reset();}
+});};
+field($("ai-form"),"enabled").onchange=aiEnabled;
+$("ai-form").onsubmit=event=>{event.preventDefault();const form=event.target;
+  action(form,async()=>{
+    const data={enabled:field(form,"enabled").checked};
+    if(data.enabled){
+      for(const key of ["provider","base_url","model"])data[key]=field(form,key).value;
+      for(const key of ["timeout","max_content","requests_per_hour"])data[key]=Number(field(form,key).value);
+      for(const key of ["structured_output","allow_local_http"])data[key]=field(form,key).checked;
+      const key=field(form,"api_key").value.trim();if(key)data.api_key=key;
+      if(field(form,"clear_key").checked)data.api_key="";
+    }
+    try{await put("/api/v1/admin/ai",data);await refresh();message("saved");}
+    finally{field(form,"api_key").value="";field(form,"clear_key").checked=false;}
+  });
+};
+$("ai-test").onclick=()=>action($("ai-test"),async()=>{await post("/api/v1/admin/ai/test");message("ai_validated");});
+$("bring-form").onsubmit=event=>{event.preventDefault();const form=event.target;
+  action(form,async()=>{try{await post("/api/v1/integrations/bring/connect",Object.fromEntries(new FormData(form)));message("bring_saved");}
+  finally{field(form,"password").value="";}});
+};
+$("bring-test").onclick=()=>action($("bring-test"),async()=>{
+  const result=await request("/api/v1/integrations/bring/lists");$("bring-list").replaceChildren();
+  for(const list of result.lists){const option=document.createElement("option");option.value=list.id;option.textContent=list.name;$("bring-list").append(option);}
+  $("bring-select").disabled=!result.lists.length;message("ready");
+});
+$("bring-select").onclick=()=>action($("bring-select"),async()=>{
+  await put("/api/v1/integrations/bring/configuration",{list_id:$("bring-list").value});await refresh();message("bring_selected");
+});
+$("bring-retry").onclick=()=>action($("bring-retry"),async()=>{await post("/api/v1/integrations/bring/reconcile");message("queued");});
+$("bring-disconnect").onclick=()=>action($("bring-disconnect"),async()=>{
+  if(!confirm(words[locale].disconnect_question))return;
+  await request("/api/v1/integrations/bring/disconnect",{method:"DELETE"});$("bring-list").replaceChildren();$("bring-select").disabled=true;await refresh();message("saved");
+});
+$("import-form").onsubmit=event=>{event.preventDefault();action(event.target,async()=>{
+  const file=$("import-file").files[0];if(!file)return;
+  if(!confirm(words[locale].import_question))return;
+  if(file.size>280*1024*1024)throw new Error("archive_size_limit");
+  if(file.name.toLowerCase().endsWith(".zip"))await request("/api/v1/admin/import/archive",{method:"POST",body:file,headers:{"Content-Type":"application/zip"}});
+  else{
+    if(file.size>8*1024*1024)throw new Error("json_size_limit");
+    await post("/api/v1/admin/import",JSON.parse(await file.text()));
+  }
+  event.target.reset();await refresh();message("imported");
+});};
+$("logout").onclick=()=>action($("logout"),async()=>{await post("/api/v1/admin/logout");signedOut();message("session_ended");});
+$("reload").onclick=()=>action($("reload"),refresh);
 $("export").onclick=()=>{window.location.assign("/api/v1/admin/export/archive");};
-(async()=>{try{const info=await request("/api/v1/system/info");configured=info.configured;$("setup-fields").hidden=configured;$("identity").textContent=info.name+" · v"+info.version;translate();if(configured)await refresh();}catch(err){error(err);}})();
+(async()=>{try{
+  const info=await request("/api/v1/system/info");configured=info.configured;$("setup-fields").hidden=configured;
+  $("identity").textContent=info.name+" · v"+info.version;translate();if(configured)await refresh();
+}catch(err){showError(err.message);}})();

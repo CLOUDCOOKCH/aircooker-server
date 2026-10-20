@@ -36,8 +36,12 @@ be read-only; `/tmp` is a bounded tmpfs. Keep the single-worker process model.
 | AI_API_KEY_FILE | unset | Restricted regular file, no group/world access, not a symlink |
 | AI_TIMEOUT | 30 | 1–120 seconds |
 | AI_MAX_CONTENT | 50000 | 100–100000 UTF-8 bytes |
+| AI_REQUESTS_PER_HOUR | 20 | Shared durable hourly budget for AI imports and connection probes |
 | AI_STRUCTURED_OUTPUT | 0 | Opt into provider-specific JSON mode after compatibility verification |
 | AI_ALLOW_LOCAL_HTTP | 0 | Explicitly permit the configured local provider's HTTP endpoint |
+
+Console-saved encrypted AI settings override these AI environment values, including when
+AI is disabled in the console. See [administration](ADMINISTRATION.md).
 
 Persistent layout: `database/aircooker.sqlite3` (+ WAL/SHM), `media/`, `jobs/`, `backups/`,
 `config/setup-token`, `config/integrations.key`, encrypted integration files and optional
@@ -46,8 +50,10 @@ Bring compatibility report. Queue records currently live in SQLite, not job file
 ## HTTPS reverse proxy
 
 Bind the application only to loopback as in Compose, or use an isolated Docker network.
-Terminate public TLS using a valid certificate. Set body limits (at most 1.5 MB currently),
-request read timeouts and ingress rate limits. Do not expose 8080 directly to the internet.
+Terminate public TLS using a valid certificate. Set request read timeouts and ingress rate
+limits. Ordinary JSON requests are bounded to 1,500,000 bytes by the application; photos
+allow 8 MiB plus multipart overhead, JSON restores 8 MiB and ZIP restores 280 MiB. Configure
+matching route-specific ingress limits so large restores do not increase ordinary API limits. Do not expose 8080 directly to the internet.
 Configure only the actual proxy address/range in `TRUSTED_PROXY_CIDRS`; forward original
 host, client IP and scheme. Cookie authentication always uses Secure/HttpOnly/SameSite=Strict
 and also requires CSRF header and the exact `BASE_URL` Origin on unsafe requests.
@@ -56,7 +62,14 @@ Example Caddy configuration for a host-installed reverse proxy:
 
 ```caddy
 meals.example.com {
-    request_body { max_size 1500KB }
+    @archive path /api/v1/admin/import/archive
+    request_body @archive { max_size 280MiB }
+    @jsonRestore path /api/v1/admin/import
+    request_body @jsonRestore { max_size 8MiB }
+    @media path /api/v1/media/*
+    request_body @media { max_size 9MiB }
+    @ordinary not path /api/v1/admin/import/archive /api/v1/admin/import /api/v1/media/*
+    request_body @ordinary { max_size 1500000 }
     reverse_proxy 127.0.0.1:8080
 }
 ```

@@ -3,6 +3,7 @@ import hmac
 import json
 import os
 import secrets
+import shutil
 import tempfile
 import time
 from contextlib import asynccontextmanager, suppress
@@ -21,7 +22,14 @@ from pydantic import ValidationError
 from starlette.background import BackgroundTask
 
 from . import __version__
-from .ai import AIConfiguration, provider_for
+from .ai import provider_for
+from .ai_settings import (
+    AISettings,
+    AISettingsStatus,
+    load_configuration,
+    save_configuration,
+    settings_status,
+)
 from .auth import (
     DUMMY_HASH,
     authenticate,
@@ -48,6 +56,7 @@ from .importing import bounded_fetch_html, extract, platform_for
 from .jobs import claim, enqueue, finish
 from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
 from .models import (
+    AdministrationStatus,
     BringConfiguration,
     BringCredentials,
     Credentials,
@@ -59,6 +68,7 @@ from .models import (
     Pull,
     Push,
     Refresh,
+    SessionInfo,
     Setup,
     SuggestionApply,
     SuggestionPreview,
@@ -121,12 +131,22 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 if not content:
                     content = bounded_fetch_html(draft["source_url"])
                 if payload.get("use_ai"):
-                    config = AIConfiguration.from_environment()
+                    config = load_configuration(data_dir / "config")
                     if config is None:
                         raise DomainError("ai_not_configured", 409)
                     if not payload.get("consent_external_ai"):
                         raise DomainError("ai_content_disclosure_consent_required", 422)
-                    recipe = provider_for(config).extract_recipe(content)
+                    with database.transaction() as db:
+                        allowed = rate_limit(
+                            db, "ai.requests", maximum=config.requests_per_hour, seconds=3600
+                        )
+                    if not allowed:
+                        raise DomainError("ai_request_limit", 429)
+                    provider = provider_for(config)
+                    try:
+                        recipe = provider.extract_recipe(content)
+                    finally:
+                        provider.close()
                     recipe.source_url = draft["source_url"]
                     recipe.source_platform = draft["source_platform"]
                     warnings = ["ai_extracted_review_all_fields"]
@@ -307,7 +327,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             "recipe_crud": True,
             "structured_import_preview": True,
             "bring_automatic_mutations": False,
-            "ai": bool(os.environ.get("AI_PROVIDER")),
+            "ai": settings_status(data_dir / "config").enabled,
             "media_upload": True,
         }
 
@@ -366,11 +386,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         with database.transaction() as db:
             db.execute("UPDATE session SET revoked=1 WHERE id=?", (s["id"],))
 
-    @app.get("/api/v1/auth/sessions")
+    @app.get("/api/v1/auth/sessions", response_model=list[SessionInfo])
     def sessions(s=Depends(session)):
         with database.connect() as db:
             return [
-                dict(r)
+                {**dict(r), "current": r["id"] == s["id"]}
                 for r in db.execute(
                     "SELECT id,device_id,access_expires,refresh_expires,revoked FROM session"
                 )
@@ -525,6 +545,36 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     def approve_suggestions(body: SuggestionApply, s=Depends(session)):
         return apply_preview(database, body, s["device_id"])
 
+    @app.get("/api/v1/admin/ai", response_model=AISettingsStatus)
+    def ai_settings(s=Depends(session)):
+        return settings_status(data_dir / "config")
+
+    @app.put("/api/v1/admin/ai", response_model=AISettingsStatus)
+    def configure_ai(body: AISettings, s=Depends(session)):
+        return save_configuration(data_dir / "config", body)
+
+    @app.post("/api/v1/admin/ai/test")
+    def test_ai(s=Depends(session)):
+        config = load_configuration(data_dir / "config")
+        if config is None:
+            raise DomainError("ai_not_configured", 409)
+        with database.transaction() as db:
+            allowed = rate_limit(db, "ai.test", maximum=5, seconds=60)
+            if allowed:
+                allowed = rate_limit(
+                    db, "ai.requests", maximum=config.requests_per_hour, seconds=3600
+                )
+        if not allowed:
+            raise DomainError("ai_test_rate_limited", 429)
+        provider = provider_for(config)
+        try:
+            provider.extract_recipe(
+                "Recipe: Connection test soup. Serves 2. Ingredient: 200 g carrots. Instruction: Simmer carrots in water until tender. No nutrition data available."
+            )
+        finally:
+            provider.close()
+        return {"state": "validated_probe_response", "household_content_sent": False}
+
     @app.get("/api/v1/integrations/bring/status")
     def bring_status(s=Depends(session)):
         raw = SecretVault(data_dir / "config").load("bring")
@@ -670,6 +720,34 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 (str(body.entity_id), str(import_id)),
             )
         return result
+
+    @app.get("/api/v1/admin/status", response_model=AdministrationStatus)
+    def administration_status(s=Depends(session)):
+        with database.connect() as db:
+            media = db.execute("SELECT COALESCE(SUM(byte_count),0) FROM recipe_media").fetchone()[0]
+            jobs = db.execute(
+                "SELECT COUNT(*) FROM background_job WHERE state IN ('queued','running')"
+            ).fetchone()[0]
+            recipes = db.execute(
+                "SELECT COUNT(*) FROM entity WHERE kind='recipe' AND deleted=0"
+            ).fetchone()[0]
+        size = 0
+        for path in (
+            database.path,
+            Path(str(database.path) + "-wal"),
+            Path(str(database.path) + "-shm"),
+        ):
+            try:
+                size += path.stat().st_size
+            except FileNotFoundError:
+                pass
+        return AdministrationStatus(
+            database_bytes=size,
+            media_bytes=media,
+            disk_free_bytes=shutil.disk_usage(data_dir).free,
+            pending_jobs=jobs,
+            recipes=recipes,
+        )
 
     @app.get("/api/v1/admin/jobs")
     def jobs(s=Depends(session)):

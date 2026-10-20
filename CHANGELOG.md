@@ -17,3 +17,11 @@ See the implementation checklist for feature status and verification limits.
   leftovers, with category/portion/repetition options and explicit reasons.
 - Add snapshot-checked transactional live approval with durable replay receipts.
 - Pin a canonical recommendation fixture shared with the independent native core tests.
+
+- Add English/German administration controls for household settings, password changes,
+  per-device revocation, Bring list configuration/retry and atomic JSON/ZIP import.
+- Add encrypted AI settings with endpoint-bound key retention, environment override,
+  redacted status, synthetic connection probes and persistent hourly request budgets.
+- Exercise operational console workflows in real Chromium with explicit external-service
+  doubles; configure a separate browser CI job and optional hashed tooling lock.
+- Upgrade pytest to 9.0.3 to address the reported local temporary-directory advisory.

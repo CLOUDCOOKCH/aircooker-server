@@ -25,8 +25,15 @@ class AIConfiguration:
     max_content: int = 50000
     structured_output: bool = False
     allow_local_http: bool = False
+    requests_per_hour: int = 20
 
     def __post_init__(self):
+        if self.provider not in {"openai", "openai-compatible", "anthropic", "ollama", "openwebui"}:
+            raise DomainError("ai_provider_unsupported", 422)
+        if not 1 <= self.requests_per_hour <= 1000:
+            raise DomainError("invalid_ai_request_limit", 422)
+        if any(ord(character) < 32 or ord(character) == 127 for character in self.api_key):
+            raise DomainError("invalid_ai_key", 422)
         url = urlsplit(self.base_url)
         if not url.hostname or url.username or url.password or url.query or url.fragment:
             raise DomainError("invalid_ai_endpoint", 422)
@@ -50,7 +57,7 @@ class AIConfiguration:
         key = ""
         key_file = os.environ.get("AI_API_KEY_FILE")
         if key_file:
-            descriptor = os.open(Path(key_file), os.O_RDONLY | os.O_NOFOLLOW)
+            descriptor = os.open(Path(key_file), os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
             with os.fdopen(descriptor) as handle:
                 permissions = os.fstat(handle.fileno())
                 if (
@@ -61,19 +68,27 @@ class AIConfiguration:
                 key = handle.read(8193).strip()
                 if len(key) > 8192:
                     raise DomainError("ai_key_too_large", 422)
+        try:
+            timeout = int(os.environ.get("AI_TIMEOUT", "30"))
+            max_content = int(os.environ.get("AI_MAX_CONTENT", "50000"))
+            requests_per_hour = int(os.environ.get("AI_REQUESTS_PER_HOUR", "20"))
+        except ValueError as exc:
+            raise DomainError("invalid_ai_configuration", 422) from exc
         return cls(
             provider,
             base,
             os.environ.get("AI_MODEL", ""),
             key,
-            timeout=int(os.environ.get("AI_TIMEOUT", "30")),
-            max_content=int(os.environ.get("AI_MAX_CONTENT", "50000")),
+            timeout=timeout,
+            max_content=max_content,
             structured_output=os.environ.get("AI_STRUCTURED_OUTPUT") == "1",
             allow_local_http=os.environ.get("AI_ALLOW_LOCAL_HTTP") == "1",
+            requests_per_hour=requests_per_hour,
         )
 
 
 class AIProvider(Protocol):
+    def close(self) -> None: ...
     def extract_recipe(self, content: str) -> Recipe: ...
 
 
@@ -86,6 +101,9 @@ class BaseProvider:
         self.client = httpx.Client(
             timeout=config.timeout, follow_redirects=False, transport=transport
         )
+
+    def close(self):
+        self.client.close()
 
     def send(self, path, body, headers):
         try:

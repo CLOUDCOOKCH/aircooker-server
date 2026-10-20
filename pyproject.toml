@@ -9,7 +9,8 @@ description = "Self-hosted household meal planning"
 license = "Apache-2.0"
 dependencies = ["fastapi==0.141.1", "pydantic==2.13.4", "uvicorn==0.52.1", "argon2-cffi==25.1.0", "httpx==0.28.1", "bring-api==1.1.2", "cryptography==50.0.0", "Pillow==13.0.0", "python-multipart==0.0.32"]
 [project.optional-dependencies]
-dev = ["pytest==8.4.2", "ruff==0.14.1", "mypy==1.18.2"]
+dev = ["pytest==9.0.3", "ruff==0.14.1", "mypy==1.18.2"]
+browser = ["playwright==1.62.0"]
 [tool.setuptools.packages.find]
 where = ["src"]
 [tool.setuptools.package-data]

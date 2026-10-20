@@ -248,3 +248,20 @@ class SuggestionApply(Model):
     monday: date
     basis: str = Field(pattern=r"^[a-f0-9]{64}$")
     mutations: list[Mutation] = Field(min_length=1, max_length=21)
+
+
+class SessionInfo(Model):
+    id: UUID
+    device_id: UUID
+    access_expires: float
+    refresh_expires: float
+    revoked: Literal[0, 1]
+    current: bool
+
+
+class AdministrationStatus(Model):
+    database_bytes: int
+    media_bytes: int
+    disk_free_bytes: int
+    pending_jobs: int
+    recipes: int

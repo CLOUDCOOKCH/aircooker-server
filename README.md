@@ -48,7 +48,7 @@ Open the configured HTTPS public URL and complete setup. The username and passwo
 chosen by the administrator. There is no default account and no public registration after
 setup. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYMENT.md),
 [security](docs/SECURITY_MODEL.md), [backup](docs/BACKUP.md), [API](docs/API.md) and
-[Bring! integration](docs/BRING.md).
+[Bring! integration](docs/BRING.md), and [administration](docs/ADMINISTRATION.md).
 
 ## Repositories
 
@@ -68,9 +68,9 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared preference learning remains partial |
 | Website recipe import | JSON-LD previews; ingredient parsing, images and broader HTML extraction remain partial |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |
-| AI | Text adapters and validated output; simulated HTTP tests, no live verification |
+| AI | Encrypted admin configuration, bounded text adapters and synthetic probe tests; no live verification |
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
-| Admin UI | English/German setup, login, jobs, summary and export; other configuration screens remain partial |
+| Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; deletion/extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
 | Releases | Local development only; release CI is configuration, not proof of publication |
 
