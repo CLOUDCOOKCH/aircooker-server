@@ -1,0 +1,24 @@
+services:
+  aircooker:
+    build: .
+    image: aircooker-server:development
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DATA_DIR: /data
+      BASE_URL: https://meals.example.com
+      TZ: Europe/Zurich
+      TRUSTED_PROXY_CIDRS: ""
+    volumes:
+      - aircooker-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 100
+    mem_limit: 512m
+    stop_grace_period: 40s
+volumes:
+  aircooker-data:
