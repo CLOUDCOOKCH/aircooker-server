@@ -17,7 +17,7 @@ phases have passed every acceptance gate.
 | 4 Planning | Meal CRUD, bounded recurrence, template records, leftovers validation, pantry, rated/history/leftover-aware local suggestions, replay-safe live approval, native calendar/drag/move, day/week copy, template previews, recurrence, leftover and review interfaces | Backend/core tested; native unverified; arbitrary copy destinations, shared household preferences, acceptance learning and cross-device approval collision UX remain partial |
 | 5 Bring | SDK adapter, encrypted credentials, list selection API, projection, UUID ownership/replay/purchase/rollover tests, durable retries | Synthetic connector tests; live unverified; full configuration UI and additional purchased requirement semantics incomplete |
 | 6 Imports/AI | Public HTTPS safety, JSON-LD drafts, import review confirmation, idempotent requests, text AI provider adapters, share inbox and review UI sources | Partial: source-specific captions/transcripts, ingredient parsing, live providers, image extraction, native lifecycle validation |
-| 7 UX | Dashboard/start-screen settings, system appearance, native components, localisation resources, cached widget and local reminder code | Partial/unverified: accessibility audit, notifications wiring, widgets/deep links, photography and UI performance |
+| 7 UX | Dashboard/start-screen settings, system appearance, native components, localisation, 14-day widget cache/deep links and opt-in local reminder settings/reconciliation | Core dates/DST/cache/links tested; native delivery/rendering/permission/lock lifecycle, accessibility, photography and UI performance unverified |
 | 8 Release | Local backup, media-aware JSON/ZIP restore, independent CI configuration, governance and release instructions | Partial: Apple build/signing/TestFlight, demo, screenshots/icons, remaining container advisory triage, full security review, ARM64 runtime, stable releases |
 
 ## Executed evidence
@@ -48,7 +48,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-72 backend tests and 34 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Earlier Chromium console
+72 backend tests and 40 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Earlier Chromium console
 workflows passed; the new archive-download click has not been re-exercised in Chromium. Dependency audit and source secret scans pass. Container security
 still fails: 44 high package matches across 8 unique advisories, no critical matches.
 See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected

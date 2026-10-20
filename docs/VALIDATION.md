@@ -10,9 +10,9 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | mypy | Passed across 21 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **34 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **40 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 194 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 212 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -67,7 +67,11 @@ New tests cover leftover edits/deletion/discard with existing bookings, simultan
 reservations from two authenticated devices, deterministic history/rating/variety scoring,
 reservation-aware suggestions, transactional approval rollback/replay/staleness and occupied
 slot preservation. Python and Swift execute the same pinned three-case fixture. Native
-source parsing and core tests do not establish Apple UI lifecycle or accessibility.
+source parsing and core tests do not establish Apple UI lifecycle or accessibility. Portable
+reminder/widget tests additionally cover household dates, DST gaps/repeated hours, grouped
+chronological limits, strict deep links, 14-day cached rollover/expiry, privacy and malformed
+cache bounds. UserNotifications/WidgetKit delivery/rendering and local logout cleanup remain
+Apple SDK/device validation work.
 
 See IMPLEMENTATION.md for remaining work: shared recommendation preferences, cross-device
 approval recovery, complete admin settings, destructive restore, cleanup and conflict UI. External credential gaps do not excuse these missing features.
