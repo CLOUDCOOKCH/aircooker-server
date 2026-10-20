@@ -10,9 +10,9 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | mypy | Passed across 22 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **40 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **53 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 212 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 240 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -79,4 +79,9 @@ cache bounds. UserNotifications/WidgetKit delivery/rendering and local logout cl
 Apple SDK/device validation work.
 
 See IMPLEMENTATION.md for remaining work: shared recommendation preferences, cross-device
-approval recovery, admin deletion/extended diagnostics, destructive restore, cleanup and conflict UI. External credential gaps do not excuse these missing features.
+approval recovery, admin deletion/extended diagnostics, destructive restore, cleanup, controlled full resync and native validation. External credential gaps do not excuse these missing features.
+
+The companion Swift recovery suite now verifies rejected-record isolation, persistent server
+snapshots, transactional multi-edit archives and new recipe identities, later archive
+restoration, stale-review protection, active-sync exclusion, malformed receipts/deltas, and
+local schema-v3 migration replay. Native review/sharing controls remain Apple SDK unverified.
