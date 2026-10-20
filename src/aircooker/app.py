@@ -7,7 +7,9 @@ import tempfile
 import time
 from contextlib import asynccontextmanager, suppress
 from datetime import date, datetime
+from decimal import Decimal
 from pathlib import Path
+from typing import Literal
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
 
@@ -58,10 +60,14 @@ from .models import (
     Push,
     Refresh,
     Setup,
+    SuggestionApply,
+    SuggestionPreview,
     Tokens,
 )
-from .planning import entities, occurrences, shopping_projection, suggest, week_start
+from .planning import entities, occurrences, shopping_projection, week_start
+from .recommendations import planning_basis, suggest_week
 from .secrets import SecretVault
+from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
 
 bearer = HTTPBearer(auto_error=False)
@@ -495,10 +501,29 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 "requirements": list(shopping_projection(db, monday).values()),
             }
 
-    @app.post("/api/v1/suggestions/weekly")
-    def suggestions(monday: date, seed: int = 0, s=Depends(session)):
+    @app.post("/api/v1/suggestions/weekly", response_model=SuggestionPreview)
+    def suggestions(
+        monday: date,
+        seed: int = Query(default=0, ge=0, le=2147483647),
+        categories: list[Literal["breakfast", "lunch", "dinner"]] = Query(
+            default=["dinner"], min_length=1, max_length=3
+        ),
+        allow_repeats: bool = False,
+        servings: Decimal | None = Query(default=None, gt=0, le=100),
+        s=Depends(session),
+    ):
         with database.connect() as db:
-            return {"preview": True, "meals": suggest(db, week_start(monday), seed)}
+            db.execute("BEGIN")
+            start = week_start(monday)
+            return SuggestionPreview(
+                monday=start,
+                basis=planning_basis(db),
+                meals=suggest_week(db, start, seed, categories, allow_repeats, servings),
+            )
+
+    @app.post("/api/v1/suggestions/apply", response_model=list[MutationResult])
+    def approve_suggestions(body: SuggestionApply, s=Depends(session)):
+        return apply_preview(database, body, s["device_id"])
 
     @app.get("/api/v1/integrations/bring/status")
     def bring_status(s=Depends(session)):

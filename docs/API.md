@@ -57,6 +57,26 @@ mutation to `/imports/{id}/confirm`. Unsupported content returns `needs_input` w
 code and retains its source URL. AI additionally requires `use_ai=true` and
 `consent_external_ai=true`; the administrator selects endpoint, model and credential file.
 
+## Weekly suggestion review
+
+POST `/suggestions/weekly?monday=2026-10-19&seed=0` returns `preview=true`, canonical
+Monday, snapshot `basis` and `meals` with reason codes. Optional repeated `categories`
+query parameters select breakfast/lunch/dinner; `allow_repeats` defaults false; `servings`
+can override recipe portions (positive, at most 100). Generation makes no calendar changes.
+
+POST `/suggestions/apply` with `{request_id, monday, basis, mutations}`. Mutations are
+ordinary complete meal mutations with new UUIDs and base revision zero; remove suggestion
+`reasons` before constructing their payloads. At most 21 unique empty meal slots may be
+approved. One transaction validates references/leftovers, applies all mutations and stores
+the request receipt. `suggestion_preview_stale` or `suggestion_slot_occupied` returns 409
+without changing the plan. Reuse the exact request UUID/body after response loss: the saved
+results return even if the basis is now stale. Changed content/device at that ID conflicts.
+This live API is distinct from iOS's locally atomic offline approval/outbox.
+
+Leftover edits enforce booked portions, recipe and preparation-date invariants. A booked
+batch deletion returns `leftover_in_use`; discard its unplanned availability instead.
+See [planning semantics](PLANNING.md) and ADR 006 for detailed guarantees and limitations.
+
 ## Recipe photos
 
 PUT `/api/v1/media/{image_id}` with multipart field `file` (JPEG/PNG/WebP, at most 8 MiB

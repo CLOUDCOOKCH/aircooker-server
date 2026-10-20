@@ -65,7 +65,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | SQLite WAL, repeatable migrations, transactional mutation replay/tombstones | Implemented; automated tests |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
 | Recurrences, serving scaling, pantry-aware aggregation | Implemented; bounded expansion and domain tests |
-| Recommendations | Deterministic dinner previews; preference/history sophistication remains partial |
+| Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared preference learning remains partial |
 | Website recipe import | JSON-LD previews; ingredient parsing, images and broader HTML extraction remain partial |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |
 | AI | Text adapters and validated output; simulated HTTP tests, no live verification |

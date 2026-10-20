@@ -126,43 +126,6 @@ def shopping_projection(db, monday: date):
 
 
 def suggest(db, monday: date, seed: int = 0):
-    recipes = entities(db, "recipe")
-    meals = entities(db, "meal")
-    occupied = set()
-    last_cooked: dict[str, date] = {}
-    used = set()
-    for raw in meals.values():
-        meal = Meal.model_validate(raw)
-        for day in occurrences(meal, monday, monday + timedelta(days=6)):
-            occupied.add((day, meal.category))
-            used.add(str(meal.recipe_id))
-        if meal.cooked and meal.date <= monday:
-            rid = str(meal.recipe_id)
-            last_cooked[rid] = max(last_cooked.get(rid, date.min), meal.date)
-    results = []
-    for offset in range(7):
-        day = monday + timedelta(days=offset)
-        if (day, "dinner") in occupied or not recipes:
-            continue
+    from .recommendations import suggest_week
 
-        def score(pair):
-            rid, recipe = pair
-            recency = min(60, (monday - last_cooked.get(rid, monday - timedelta(days=60))).days)
-            tie = int(hashlib.sha256(f"{seed}:{day}:{rid}".encode()).hexdigest()[:8], 16) % 10
-            return (recipe.get("rating") or 3) * 5 + recency - (100 if rid in used else 0) + tie
-
-        rid, recipe = max(recipes.items(), key=score)
-        reasons = ["positively_rated" if (recipe.get("rating") or 0) >= 4 else "library_variety"]
-        if rid not in last_cooked or (monday - last_cooked[rid]).days > 14:
-            reasons.append("not_cooked_recently")
-        results.append(
-            {
-                "recipe_id": rid,
-                "date": str(day),
-                "category": "dinner",
-                "servings": recipe["servings"],
-                "reasons": reasons,
-            }
-        )
-        used.add(rid)
-    return results
+    return suggest_week(db, monday, seed)

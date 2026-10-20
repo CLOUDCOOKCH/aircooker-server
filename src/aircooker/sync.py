@@ -2,6 +2,7 @@ import hashlib
 import json
 import time
 from datetime import UTC, datetime
+from decimal import Decimal
 
 from .errors import DomainError
 from .jobs import enqueue
@@ -15,7 +16,7 @@ def active(db, kind, entity_id):
     ).fetchone()
 
 
-def validate_references(db, kind, payload, restoring=False):
+def validate_references(db, kind, payload, restoring=False, prior=None):
     if kind == "recipe" and payload.get("image_id"):
         if not db.execute(
             "SELECT 1 FROM recipe_media WHERE id=?", (payload["image_id"],)
@@ -33,16 +34,19 @@ def validate_references(db, kind, payload, restoring=False):
         if not row:
             raise DomainError("leftover_not_found", 409)
         leftover = json.loads(row["payload"])
-        if (leftover["discarded"] and not restoring) or leftover["recipe_id"] != payload[
+        retained_booking = (
+            prior
+            and prior.get("leftover_id") == payload["leftover_id"]
+            and Decimal(payload["servings"]) <= Decimal(prior["servings"])
+        )
+        if (leftover["discarded"] and not restoring and not retained_booking) or leftover[
             "recipe_id"
-        ]:
+        ] != payload["recipe_id"]:
             raise DomainError("invalid_leftover", 409)
         if not restoring and payload["date"] < leftover["produced_on"]:
             raise DomainError("leftover_not_yet_produced", 409)
         if restoring:
             return None
-        from decimal import Decimal
-
         allocated = Decimal(0)
         for other in db.execute("SELECT payload FROM entity WHERE kind='meal' AND deleted=0"):
             meal = json.loads(other[0])
@@ -50,6 +54,26 @@ def validate_references(db, kind, payload, restoring=False):
                 allocated += Decimal(meal["servings"])
         return allocated
     return None
+
+
+def validate_leftover_change(db, eid, payload, deleted):
+    bookings = [
+        json.loads(row[0])
+        for row in db.execute("SELECT payload FROM entity WHERE kind='meal' AND deleted=0")
+        if json.loads(row[0]).get("leftover_id") == eid
+    ]
+    if deleted and bookings:
+        raise DomainError("leftover_in_use", 409)
+    if deleted:
+        return
+    if sum((Decimal(meal["servings"]) for meal in bookings), Decimal(0)) > Decimal(
+        payload["portions"]
+    ):
+        raise DomainError("insufficient_leftover_portions", 409)
+    if any(meal["recipe_id"] != payload["recipe_id"] for meal in bookings):
+        raise DomainError("leftover_recipe_in_use", 409)
+    if any(meal["date"] < payload["produced_on"] for meal in bookings):
+        raise DomainError("leftover_produced_after_booking", 409)
 
 
 def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
@@ -91,13 +115,15 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
             # Exclude this entity's former allocation while validating replacements.
             if kind == "meal" and existing:
                 db.execute("UPDATE entity SET deleted=1 WHERE kind=? AND id=?", (kind, eid))
-            allocated = validate_references(db, kind, payload, restoring)
+            allocated = validate_references(
+                db, kind, payload, restoring, json.loads(existing["payload"]) if existing else None
+            )
             if allocated is not None:
-                from decimal import Decimal
-
                 leftover = json.loads(active(db, "leftover", payload["leftover_id"])["payload"])
                 if allocated + Decimal(payload["servings"]) > Decimal(leftover["portions"]):
                     raise DomainError("insufficient_leftover_portions", 409)
+        if kind == "leftover" and not restoring:
+            validate_leftover_change(db, eid, payload, deleted)
         stamp = datetime.now(UTC).isoformat()
         encoded = json.dumps(payload, sort_keys=True)
         seq = db.execute(

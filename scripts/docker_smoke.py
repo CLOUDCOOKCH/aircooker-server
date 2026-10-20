@@ -160,8 +160,49 @@ def main():
             },
         )
         request(base, "/api/v1/sync/push", {"mutations": [meal]}, headers)
+        leftover = mutation(
+            device,
+            "leftover",
+            {
+                "recipe_id": recipe["entity_id"],
+                "produced_on": today,
+                "portions": "2",
+            },
+        )
+        request(base, "/api/v1/sync/push", {"mutations": [leftover]}, headers)
+        reheated = mutation(
+            device,
+            "meal",
+            {
+                "recipe_id": recipe["entity_id"],
+                "leftover_id": leftover["entity_id"],
+                "date": today,
+                "category": "lunch",
+                "servings": "2",
+            },
+        )
+        request(base, "/api/v1/sync/push", {"mutations": [reheated]}, headers)
+        from datetime import date, timedelta
+
+        day = date.fromisoformat(today)
+        monday = str(day - timedelta(days=day.weekday()))
+        preview = request(
+            base,
+            "/api/v1/suggestions/weekly?monday=" + monday + "&allow_repeats=true",
+            headers=headers,
+            method="POST",
+        )
+        suggestion = {k: v for k, v in preview["meals"][0].items() if k != "reasons"}
+        approval = {
+            "request_id": str(uuid4()),
+            "monday": monday,
+            "basis": preview["basis"],
+            "mutations": [mutation(device, "meal", suggestion)],
+        }
+        applied = request(base, "/api/v1/suggestions/apply", approval, headers)
+        assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
         projection = request(base, "/api/v1/planning/shopping-projection", headers=headers)
-        assert projection["requirements"][0]["spec"] == "400 g"
+        assert projection["requirements"][0]["spec"] == "600 g"
         docker("restart", name)
         base = "http://127.0.0.1:" + docker("port", name, "8080/tcp").rsplit(":", 1)[1]
         for _ in range(60):
@@ -170,6 +211,7 @@ def main():
                     break
             except (URLError, ConnectionError, TimeoutError):
                 time.sleep(0.25)
+        assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
         edit = mutation(
             device,
             "recipe",
@@ -187,9 +229,11 @@ def main():
         assert request(base, "/api/v1/media/" + image_id, headers=headers) == canonical_photo
         exported = request(base, "/api/v1/admin/export", headers=headers)
         _, other, _, other_headers = start()
-        assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == 2
+        assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == len(
+            exported["entities"]
+        )
         restored = request(other, "/api/v1/planning/shopping-projection", headers=other_headers)
-        assert restored["requirements"][0]["spec"] == "400 g"
+        assert restored["requirements"][0]["spec"] == "600 g"
         assert request(other, "/api/v1/media/" + image_id, headers=other_headers) == canonical_photo
         archive = request(base, "/api/v1/admin/export/archive", headers=headers)
         _, third, _, third_headers = start()
@@ -200,10 +244,10 @@ def main():
             {**third_headers, "Content-Type": "application/zip"},
             "POST",
         )
-        assert restored_archive == {"imported": 2, "media_imported": 1}
+        assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, photo persistence, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

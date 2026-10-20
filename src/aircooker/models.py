@@ -230,3 +230,21 @@ class HouseholdSettings(Model):
         except ZoneInfoNotFoundError as exc:
             raise ValueError("Unknown IANA timezone") from exc
         return value
+
+
+class WeeklySuggestion(Meal):
+    reasons: list[str] = Field(max_length=10)
+
+
+class SuggestionPreview(Model):
+    preview: Literal[True] = True
+    monday: date
+    basis: str = Field(pattern=r"^[a-f0-9]{64}$")
+    meals: list[WeeklySuggestion] = Field(max_length=21)
+
+
+class SuggestionApply(Model):
+    request_id: UUID
+    monday: date
+    basis: str = Field(pattern=r"^[a-f0-9]{64}$")
+    mutations: list[Mutation] = Field(min_length=1, max_length=21)

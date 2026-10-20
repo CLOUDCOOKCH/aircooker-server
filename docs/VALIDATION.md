@@ -5,14 +5,14 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 
 | Check | Executed result | Limit |
 | --- | --- | --- |
-| Backend tests against hashed runtime dependencies | **60 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
+| Backend tests against hashed runtime dependencies | **72 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
 | Ruff lint and format | Passed | Python source/tests/scripts only |
-| mypy | Passed across 19 application modules | `check_untyped_defs`, not exhaustive strict typing |
+| mypy | Passed across 21 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **24 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **34 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 146 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 194 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -24,6 +24,7 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 Docker E2E verifies non-root/read-only startup, token-protected setup, HTTP authentication,
 idempotent mutation replay, recipe/meal persistence and scaling projection, server restart,
 replayed offline edit, immutable photo upload/replay, exact photo bytes after restart,
+leftover ingredient exclusion, suggestion approval/replay across server restart,
 JSON v2 and streamed ZIP restore into independently configured clean containers. It does not substitute for a physical two-device iOS workflow.
 
 Earlier browser checks exercised first-run setup, login, dashboard, EN/DE switching, mobile width,
@@ -62,5 +63,11 @@ transaction rollback, lost response replay, local schema upgrades, bounded recur
 exceptions, civil-date arithmetic, detached moves, template recipe references and atomic
 copy batches. Native photo/calendar UI sources were formatted and syntax parsed only.
 
-See IMPLEMENTATION.md for remaining independent work: leftover/recommendation interfaces,
-complete admin settings, destructive restore, cleanup and sync conflict recovery UI. External credential gaps do not excuse these missing features.
+New tests cover leftover edits/deletion/discard with existing bookings, simultaneous
+reservations from two authenticated devices, deterministic history/rating/variety scoring,
+reservation-aware suggestions, transactional approval rollback/replay/staleness and occupied
+slot preservation. Python and Swift execute the same pinned three-case fixture. Native
+source parsing and core tests do not establish Apple UI lifecycle or accessibility.
+
+See IMPLEMENTATION.md for remaining work: shared recommendation preferences, cross-device
+approval recovery, complete admin settings, destructive restore, cleanup and conflict UI. External credential gaps do not excuse these missing features.

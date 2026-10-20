@@ -10,3 +10,10 @@ See the implementation checklist for feature status and verification limits.
   retaining historical references, tombstones and import provenance.
 - Extend real-container E2E to image upload/replay/restart and both restore formats.
 - Publish an additive OpenAPI contract for media; runtime dependency audit covers 34 packages.
+
+- Preserve leftover reservation invariants on batch edits, deletion and discard; verify
+  concurrent device reservations cannot spend the same portions twice.
+- Add deterministic weekly suggestions using ratings, recent history, variety and available
+  leftovers, with category/portion/repetition options and explicit reasons.
+- Add snapshot-checked transactional live approval with durable replay receipts.
+- Pin a canonical recommendation fixture shared with the independent native core tests.
