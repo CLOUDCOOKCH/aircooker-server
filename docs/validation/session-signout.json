@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-21",
+  "backend_tests": 97,
+  "swift_core_tests": 76,
+  "swift_toolchain": "6.2.1 Linux, hash-verified pinned OCI compiler on host",
+  "localisation_keys_per_language": 256,
+  "docker_image_id": "sha256:2d429bf6e3f60e407c25d9b826b51104bb12fe27344fab839f6de0b55c53c91e",
+  "docker_http_smoke": "passed: rotated refresh capability revocation, idempotency, persistence across restart, independent active device preserved, existing sync/photo/suggestions/restore scenarios",
+  "source_secret_scans": "passed both repositories, Gitleaks 8.28.0",
+  "container_security_gate": "failed: 44 HIGH package/advisory matches, 8 unique advisories, 0 CRITICAL, no fixed versions listed",
+  "contract_checks": "generated OpenAPI drift, exact companion pin/route/schema checks",
+  "native_apple_sdk": "not executed",
+  "native_keychain_ui_notifications": "unverified",
+  "live_bring_ai": "not executed",
+  "remote_publication": "not executed"
+}

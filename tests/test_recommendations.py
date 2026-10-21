@@ -337,3 +337,33 @@ def test_approval_never_replaces_occupied_slots(harness, mutation, existing):
         and response.json()["error"]["code"] == "suggestion_slot_occupied"
     )
     assert c.get("/api/v1/calendar/meals").json() == before
+
+
+def test_repetition_waits_for_all_available_recipes_despite_extreme_ratings(harness, mutation):
+    c, app, device, _ = harness
+    ids = []
+    for index, rating in enumerate([1, 5, 5]):
+        recipe = mutation(
+            device, payload={"title": f"Recipe {index}", "servings": "2", "rating": rating}
+        )
+        commit(c, recipe)
+        ids.append(recipe["entity_id"])
+    commit(
+        c,
+        mutation(
+            device,
+            kind="meal",
+            payload={
+                "recipe_id": ids[0],
+                "date": "2026-10-18",
+                "category": "dinner",
+                "cooked": True,
+            },
+        ),
+    )
+    with app.state.database.connect() as db:
+        for seed in range(10):
+            suggestions = suggest_week(db, date(2026, 10, 19), seed=seed, allow_repeats=True)
+            assert len(suggestions) == 7
+            assert len({meal["recipe_id"] for meal in suggestions[:3]}) == 3
+            assert len({meal["recipe_id"] for meal in suggestions[3:6]}) == 3

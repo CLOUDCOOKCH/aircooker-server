@@ -117,6 +117,33 @@ def main():
 
     try:
         name, base, device, headers = start()
+        logout_session = request(
+            base,
+            "/api/v1/auth/login",
+            {
+                "username": "cook",
+                "password": "synthetic smoke test password",
+                "device_id": str(uuid4()),
+            },
+        )
+        rotated_session = request(
+            base,
+            "/api/v1/auth/refresh",
+            {
+                "refresh_token": logout_session["refresh_token"],
+            },
+        )
+        for _ in range(2):
+            assert (
+                request(
+                    base,
+                    "/api/v1/auth/revoke",
+                    {
+                        "refresh_token": logout_session["refresh_token"],
+                    },
+                )
+                is None
+            )
         image_id = str(uuid4())
         photo = io.BytesIO()
         Image.new("RGB", (12, 12), "orange").save(photo, format="PNG")
@@ -233,6 +260,17 @@ def main():
                     break
             except (URLError, ConnectionError, TimeoutError):
                 time.sleep(0.25)
+        try:
+            request(
+                base,
+                "/api/v1/recipes",
+                headers={
+                    "Authorization": "Bearer " + rotated_session["access_token"],
+                },
+            )
+            raise AssertionError("Revoked session survived restart")
+        except HTTPError as failure:
+            assert failure.code == 401
         restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
         assert (
             restored_ai["enabled"]
@@ -308,7 +346,7 @@ def main():
         assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

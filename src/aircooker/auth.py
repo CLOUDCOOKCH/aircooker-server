@@ -85,3 +85,18 @@ def refresh_session(database, token: str):
     if result is None:
         raise DomainError("invalid_refresh_token", 401)
     return result
+
+
+def revoke_refresh_capability(database, token: str):
+    """A refresh secret can only revoke its own session, including after rotation.
+
+    Return no account/session information, even for unknown or expired capabilities.
+    Retained refresh history already permits revocation on refresh-token replay.
+    """
+    token_hash = digest(token)
+    with database.transaction() as db:
+        db.execute(
+            "UPDATE session SET revoked=1 WHERE refresh_hash=? OR id IN "
+            "(SELECT session_id FROM refresh_history WHERE token_hash=?)",
+            (token_hash, token_hash),
+        )

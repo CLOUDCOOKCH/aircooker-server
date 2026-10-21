@@ -37,6 +37,7 @@ from .auth import (
     new_session,
     rate_limit,
     refresh_session,
+    revoke_refresh_capability,
     verify_password,
 )
 from .backup import (
@@ -385,6 +386,19 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     @app.post("/api/v1/auth/refresh", response_model=Tokens)
     def refresh(body: Refresh):
         return refresh_session(database, body.refresh_token)
+
+    @app.post("/api/v1/auth/revoke", status_code=204)
+    def revoke_capability(body: Refresh, request: Request):
+        # Capability authentication, not browser cookies. Never accept a session UUID.
+        with database.transaction() as db:
+            allowed = rate_limit(
+                db,
+                "revoke:" + (request.client.host if request.client else "unknown"),
+                maximum=60,
+            )
+        if not allowed:
+            raise DomainError("rate_limited", 429)
+        revoke_refresh_capability(database, body.refresh_token)
 
     @app.post("/api/v1/auth/logout", status_code=204)
     def logout(s=Depends(session)):

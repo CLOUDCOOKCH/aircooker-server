@@ -5,7 +5,7 @@ Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` v
 No mandatory hosted service, analytics or tracking.
 
 **Development version. The complete product acceptance criteria are not yet met.**
-The executable backend includes secure first-run setup, per-device sessions, versioned sync with restore-aware commit proofs,
+The executable backend includes secure first-run setup, per-device sessions and durable sign-out support, versioned sync with restore-aware commit proofs,
 recipe/calendar/pantry/leftover/template storage, bounded recurrence expansion, shopping
 projections, a durable queue, structured recipe previews, optional text AI adapters, a Bring!
 adapter, an administration console, and data export/import. See [status](docs/IMPLEMENTATION.md)

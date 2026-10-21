@@ -39,3 +39,9 @@ approval. Local preview/selection/outbox are atomic and survive restart. Its nor
 still sends individual ordered mutations: concurrent offline approvals can add multiple
 dishes to a slot. This limitation is documented; the live API's transactional guarantee is
 not falsely attributed to offline cross-device synchronisation.
+
+When repeated suggestions are allowed, choose the least-used available recipe first.
+Ratings, recency, frequency and deterministic seeded ordering rank recipes with equal use
+counts. Leftovers retain their separate priority. A finite score penalty alone allowed an
+extreme rating/history difference to repeat a recipe before the library was exhausted;
+Python and Swift now enforce this ordering explicitly and test it over ten seeds.

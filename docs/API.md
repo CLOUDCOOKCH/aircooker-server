@@ -155,3 +155,19 @@ local projection, it rechecks the anchor and archives all active local records p
 deletions/updates transactionally. Previous outgoing work is retained in local drafts,
 not replayed automatically. See ADR 007 and the companion SYNC_RECOVERY.md. Server history
 compaction and device-archive import are not implemented.
+
+## Offline-capable device sign-out
+
+POST `/api/v1/auth/logout` still revokes the access-authenticated current session. The
+additive POST `/api/v1/auth/revoke` instead accepts `{"refresh_token":"…"}` (`Refresh`
+schema, 32–256 characters). The secret authorises only revocation of its own session;
+current and retained rotated secrets work, so a refresh/logout race is recoverable.
+It does not require or use a Bearer token or browser cookie. A session UUID alone has no
+revocation authority. Unknown, expired and already-revoked capabilities return the same
+empty **204**, preventing a session lookup oracle and permitting lost-response retries.
+Invalid bodies return 422; more than 60 attempts per peer in five minutes return 429.
+
+A client must persist the capability securely before removing active authentication and
+retain it until an exact 204 receipt. A failed network request or an old server's 404 is
+pending revocation, not success. Never retain refresh secrets in an entity mutation queue.
+See ADR 008; this extension preserves API major/sync protocol 1/1.

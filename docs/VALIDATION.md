@@ -5,14 +5,14 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 
 | Check | Executed result | Limit |
 | --- | --- | --- |
-| Backend tests against hashed runtime dependencies | **92 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
+| Backend tests against hashed runtime dependencies | **97 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
 | Ruff lint and format | Passed | Python source/tests/scripts only |
-| mypy | Passed across 22 application modules | `check_untyped_defs`, not exhaustive strict typing |
+| mypy | Passed across 23 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **66 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **76 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 251 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 256 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -113,3 +113,25 @@ Latest source map: `migrations/005_sync_history.sql`, `sync_history.py`, `sync.p
 and `app.py`; OpenAPI and `sync-history-v1.json`; `test_sync_history.py` and extended Docker
 smoke; API/backup/schema/ADR/checklist documentation. Companion code and controls are listed
 in its independent validation report.
+
+
+## Device sign-out increment
+
+See [session sign-out evidence](validation/session-signout.json) for the current image and
+counts. The final suite has 97 backend and 76 portable Swift tests; Ruff/type/OpenAPI checks
+and source secret scans pass. The updated Docker E2E revokes a rotated refresh capability
+without an access token, retries it, restarts the container and confirms that the revoked
+device stays rejected while the original device still works. The full photo/sync/restore
+smoke remains passing. No browser admin UI was changed or rerun in this increment.
+
+New source map: `auth.py`, `app.py`, `recommendations.py`, `test_session_revocation.py`,
+`test_recommendations.py`, `scripts/docker_smoke.py`, generated OpenAPI, ADR 008,
+API/security/planning/checklist/changelog documentation and validation artifacts. No schema
+migration, dependency lock or deployment setting changed. The refreshed Trivy report still
+has 44 HIGH matches across 8 advisory IDs and no CRITICAL or published fixes; its gate fails.
+Native UI/Keychain lifecycle, physical devices and live external integrations remain open.
+
+A full test run initially exposed an existing seed-sensitive recommendation failure. Both
+languages now sort by use count before rating/history score; new extreme-rating/history
+regressions exercise ten seeds. All three existing cross-language fixtures remain unchanged
+and pass. Earlier history-specific counts above are historical evidence, not the current total.

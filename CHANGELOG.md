@@ -31,3 +31,8 @@ See the implementation checklist for feature status and verification limits.
 - Add stable paginated history snapshots with tombstones and a soft response payload budget.
 - Return delta/receipt proofs, retain ordinary restart compatibility, and publish a shared
   Python/Swift wire fixture for the pinned companion contract.
+
+- Add idempotent device revocation using current or rotated refresh capabilities, with
+  peer rate limits and no session-existence disclosure; retain Bearer logout compatibility.
+- Verify revocation persistence in the real-container restart workflow.
+- Make recipe use count outrank ratings/history when repeated weekly suggestions are allowed.

@@ -97,11 +97,11 @@ def suggest_week(
                         (recipe.get("rating") or 3) * 5
                         + cooked_days
                         + planned_days
-                        - 100 * used.get(rid, 0)
                         - 10 * frequency.get(rid, 0)
                         + tie(seed, day, category, rid)
                     )
-                    return (-value, rid)
+                    # Variety is a strict first priority; ratings/history break ties.
+                    return (used.get(rid, 0), -value, rid)
 
                 rid, recipe = min(candidates, key=score)
                 lid = None

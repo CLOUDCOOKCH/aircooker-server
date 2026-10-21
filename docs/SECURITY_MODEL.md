@@ -35,3 +35,9 @@ complete retention policy; image/ZIP decoders need broader adversarial and load 
 against a malicious Docker administrator; integration service semantics remain unverified.
 External integration configuration requires account-level authentication but the shared
 account has no finer administrator role. A production readiness audit is still mandatory.
+
+Device sign-out now has a capability-authenticated revocation endpoint (ADR 008). It
+accepts refresh secrets, never unauthenticated session IDs, revokes only the associated
+session and returns no session existence information. Retained rotation hashes close the
+lost-refresh-response race. The iOS source keeps pending secrets in device-only Keychain
+and rejects stale credential generations; native Keychain/lifecycle validation remains open.
