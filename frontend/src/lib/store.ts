@@ -191,6 +191,10 @@ export class LocalStore {
       imports: await tx.objectStore('imports').getAll(),
       archives: await tx.objectStore('archives').getAll(),
       anchor: await tx.objectStore('meta').get('anchor'),
+      settings_drafts: {
+        planning: await tx.objectStore('meta').get('planning:preferences-draft'),
+        reminders: await tx.objectStore('meta').get('push:preferences-draft'),
+      },
     };
     await tx.done;
     const draftPhotos = draftValues.flatMap((draft, i) =>

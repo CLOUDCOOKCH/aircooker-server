@@ -7,6 +7,7 @@ from decimal import Decimal
 
 from .models import Meal
 from .planning import entities, occurrences
+from .planning_preferences import context
 
 CATEGORIES = ("breakfast", "lunch", "dinner")
 
@@ -18,7 +19,11 @@ def planning_basis(db):
             "SELECT kind,id,revision,deleted,payload FROM entity WHERE kind IN ('recipe','meal','leftover') ORDER BY kind,id"
         )
     ]
-    return hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(
+            {"rows": rows, "planning": context(db).model_dump(mode="json")}, sort_keys=True
+        ).encode()
+    ).hexdigest()
 
 
 def tie(seed, day, category, rid):
@@ -36,10 +41,13 @@ def suggest_week(
     categories=("dinner",),
     allow_repeats=False,
     servings: Decimal | None = None,
+    *,
+    use_leftovers=True,
 ):
     recipes = entities(db, "recipe")
     meals = [Meal.model_validate(raw) for raw in entities(db, "meal").values()]
     leftovers = entities(db, "leftover")
+    accepted = {str(key): value for key, value in context(db).accepted_counts.items()}
     occupied: set[tuple[date, str]] = set()
     used: dict[str, int] = {}
     last_cooked: dict[str, date] = {}
@@ -68,7 +76,7 @@ def suggest_week(
             if (day, category) in occupied:
                 continue
             suitable = []
-            for lid, raw in leftovers.items():
+            for lid, raw in leftovers.items() if use_leftovers else []:
                 recipe = recipes.get(raw["recipe_id"])
                 if recipe is None or raw["discarded"] or raw["produced_on"] > str(day):
                     continue
@@ -98,6 +106,7 @@ def suggest_week(
                         + cooked_days
                         + planned_days
                         - 10 * frequency.get(rid, 0)
+                        + min(5, accepted.get(rid, 0)) * 2
                         + tie(seed, day, category, rid)
                     )
                     # Variety is a strict first priority; ratings/history break ties.
@@ -113,6 +122,8 @@ def suggest_week(
                     reasons.append("not_cooked_recently")
                 if not used.get(rid):
                     reasons.append("not_planned_this_week")
+                if accepted.get(rid):
+                    reasons.append("previously_accepted")
             results.append(
                 dict(
                     recipe_id=rid,

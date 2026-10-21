@@ -1,0 +1,52 @@
+{
+  "format": "mealf-planning-preferences-local-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "backend": {
+    "pytest_passed": 187,
+    "ruff": "passed lint/format",
+    "mypy_modules": 31,
+    "openapi_drift": "passed; additive settings schemas/endpoints, optional preview defaults and explicit household export v3",
+    "runtime_licence_baseline": "unchanged 40 packages"
+  },
+  "web": {
+    "core_tests_passed": 39,
+    "typecheck_format_build": "passed",
+    "npm_audit": "zero known advisories observed",
+    "ordinary_browser": "passed actual PWA/API/IDB/cookie sessions: full existing flows plus shared settings on two devices, offline preference draft/reload, cached last-saved scoring and explicit 21-meal approval/learning",
+    "rapid_activation": "two same-turn activations, direct IndexedDB assertion of exactly 21 mutations and one approval request ID; actual server then adds 21 meals and counts each chosen recipe once",
+    "axe": "stated EN desktop settings, DE dark phone settings and offline phone preview passed",
+    "push_regression": "real receiver with explicit subscription/vendor doubles passed; no live delivery",
+    "console_regression": "passed; AI/Bring adapters are explicit test-only doubles"
+  },
+  "docker": {
+    "architecture": "linux/amd64",
+    "image_id": "sha256:709b9b913e6443765722798df781dee4783da6afcaead1109566cf56fa5c53a8",
+    "smoke": "passed non-root/read-only restart, replay and clean JSON/ZIP restore including shared preferences and accepted-recipe counts"
+  },
+  "compatibility": {
+    "export": "household v3 / ZIP envelope v1; legacy v1/v2 import retained without new fields; invalid learning references roll back all writes",
+    "native": "existing entity kinds and retained native pin unchanged; no native shared-settings UI claimed",
+    "identifiers": "existing storage/session/archive marker/Bring ownership names retained"
+  },
+  "review": "fresh manual review; P1 rapid-activation guard and P2 recovery copy resolved; ship at tested shared-planning UI scope; no detector/specialist pass",
+  "captures": [
+    {
+      "path": "docs/screenshots/pwa-planning-settings-desktop.png",
+      "sha256": "64f7c9597fcdcf0d26b4fb2f0dc08264a3877be9bab277ed369c66d03a49f74c"
+    },
+    {
+      "path": "docs/screenshots/pwa-planning-settings-phone-de-dark.png",
+      "sha256": "e247b27591912a795d8b0d0a26712412e06cf60cdb6f29e06109cd4adb8707e7"
+    },
+    {
+      "path": "docs/screenshots/pwa-planning-preview-phone.png",
+      "sha256": "2b5101539f872be41b415d7ab2ca431f50e32c1a9a2e32210a6e36446caac12a"
+    }
+  ],
+  "limits": [
+    "No physical Safari/VoiceOver/lifecycle acceptance",
+    "No complete project, artwork or stable release acceptance",
+    "Automatic archive reconstruction, broad cleanup/quotas and other master tasks remain tracked"
+  ]
+}

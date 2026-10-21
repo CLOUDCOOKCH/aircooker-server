@@ -383,6 +383,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/household/planning-preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Preferences */
+        get: operations["get_preferences_api_v1_household_planning_preferences_get"];
+        /** Put Preferences */
+        put: operations["put_preferences_api_v1_household_planning_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/imports": {
         parameters: {
             query?: never;
@@ -1351,7 +1369,11 @@ export interface components {
             detail?: components["schemas"]["ValidationError"][];
         };
         /** HouseholdExport */
-        HouseholdExport: {
+        "HouseholdExport-Input": {
+            /** Accepted Suggestions */
+            accepted_suggestions?: {
+                [key: string]: number;
+            };
             /** Entities */
             entities: components["schemas"]["ExportEntity"][];
             /** Exported At */
@@ -1367,9 +1389,38 @@ export interface components {
             };
             /** Media */
             media?: components["schemas"]["ExportMedia"][];
+            planning_preferences?: components["schemas"]["PlanningPreferences-Input"] | null;
             /**
              * Version
-             * @default 2
+             * @default 3
+             */
+            version: number;
+        };
+        /** HouseholdExport */
+        "HouseholdExport-Output": {
+            /** Accepted Suggestions */
+            accepted_suggestions?: {
+                [key: string]: number;
+            };
+            /** Entities */
+            entities: components["schemas"]["ExportEntity"][];
+            /** Exported At */
+            exported_at: string;
+            /**
+             * Format
+             * @default aircooker-household
+             */
+            format: string;
+            /** Household */
+            household: {
+                [key: string]: string;
+            };
+            /** Media */
+            media?: components["schemas"]["ExportMedia"][];
+            planning_preferences?: components["schemas"]["PlanningPreferences-Output"] | null;
+            /**
+             * Version
+             * @default 3
              */
             version: number;
         };
@@ -1663,6 +1714,73 @@ export interface components {
             current_password: string;
             /** New Password */
             new_password: string;
+        };
+        /** PlanningContext */
+        PlanningContext: {
+            /** Accepted Counts */
+            accepted_counts: {
+                [key: string]: number;
+            };
+            preferences: components["schemas"]["PlanningPreferences-Output"];
+            /** Revision */
+            revision: number;
+        };
+        /** PlanningPreferences */
+        "PlanningPreferences-Input": {
+            /**
+             * Allow Repeats
+             * @default false
+             */
+            allow_repeats: boolean;
+            /** Categories */
+            categories?: ("breakfast" | "lunch" | "dinner")[];
+            /** Servings */
+            servings?: number | string | null;
+            /**
+             * Use Leftovers
+             * @default true
+             */
+            use_leftovers: boolean;
+        };
+        /** PlanningPreferences */
+        "PlanningPreferences-Output": {
+            /**
+             * Allow Repeats
+             * @default false
+             */
+            allow_repeats: boolean;
+            /** Categories */
+            categories?: ("breakfast" | "lunch" | "dinner")[];
+            /** Servings */
+            servings?: string | null;
+            /**
+             * Use Leftovers
+             * @default true
+             */
+            use_leftovers: boolean;
+        };
+        /** PreferenceReceipt */
+        PreferenceReceipt: {
+            /** Conflict */
+            conflict: boolean;
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+            /** Revision */
+            revision: number;
+        };
+        /** PreferenceWrite */
+        PreferenceWrite: {
+            /** Base Revision */
+            base_revision: number;
+            preferences: components["schemas"]["PlanningPreferences-Input"];
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
         };
         /** Pull */
         Pull: {
@@ -2200,7 +2318,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HouseholdExport"];
+                    "application/json": components["schemas"]["HouseholdExport-Output"];
                 };
             };
         };
@@ -2234,7 +2352,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HouseholdExport"];
+                "application/json": components["schemas"]["HouseholdExport-Input"];
             };
         };
         responses: {
@@ -2818,6 +2936,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HouseholdSettings"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_preferences_api_v1_household_planning_preferences_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanningContext"];
+                };
+            };
+        };
+    };
+    put_preferences_api_v1_household_planning_preferences_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferenceWrite"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferenceReceipt"];
                 };
             };
             /** @description Validation Error */
@@ -4077,8 +4248,8 @@ export interface operations {
             query: {
                 monday: string;
                 seed?: number;
-                categories?: ("breakfast" | "lunch" | "dinner")[];
-                allow_repeats?: boolean;
+                categories?: ("breakfast" | "lunch" | "dinner")[] | null;
+                allow_repeats?: boolean | null;
                 servings?: number | string | null;
             };
             header?: never;

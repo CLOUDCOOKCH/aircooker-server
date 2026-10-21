@@ -198,3 +198,15 @@ count (202). Cookie mutations require CSRF/origin. Invalid input is 422, absent/
 conflicting subscriptions are 409, expired auth 401 and per-device budgets 429. Credentials
 are never returned. These additive v1 endpoints do not alter the retained native client
 contract. REMINDERS.md specifies endpoint capabilities, privacy and delivery limitations.
+
+## Household planning preferences
+
+GET `/api/v1/household/planning-preferences` returns a typed revision/preferences/accepted_counts
+snapshot for local scoring. PUT takes request_id/base_revision/preferences and returns a
+typed request_id/revision/conflict receipt. Whole saves use server acceptance order; exact
+device-bound replays return their old receipt without rewriting current state. Invalid input
+422, reused IDs with changed payload/device 409, auth 401, cookie CSRF/origin 403 and write
+budget 429. Existing preview query parameters override stored defaults when supplied.
+`/suggestions/apply` learns only within its existing atomic successful approval transaction.
+Household JSON export is v3; old v1/v2 imports remain supported without new metadata.
+See PLANNING_PREFERENCES.md for wire/engine/backup behavior and limits.

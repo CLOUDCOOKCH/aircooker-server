@@ -38,7 +38,7 @@ client, not a declaration that the entire project or release checklist is finish
   subscription/vendor doubles and a real worker receiving an injected event; live unverified.
 - Browser dependency attribution/version gate; Node remains build-only, not a runtime service.
 
-Evidence: **180 backend tests**, **34 web core tests**, lint/types/format/OpenAPI/licence checks
+Evidence: **187 backend tests**, **39 web core tests**, lint/types/format/OpenAPI/licence checks
 and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
 save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
 assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
@@ -60,7 +60,8 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
       Per-device controls, offline drafts, scheduling/retries and the browser receiver have
       synthetic/Chromium coverage (REMINDERS.md); this does not prove live delivery. Passkeys
       remain unimplemented.
-- [ ] Shared household recommendation preferences and acceptance learning.
+- [x] Shared planning category/portion/repetition/leftover defaults and bounded explicit-approval
+      learning with cached offline scoring/drafts and versioned backup. See PLANNING_PREFERENCES.md.
 - [ ] Guided non-recipe archive reconstruction and automatic browser-recovery JSON import;
       current archives/exports preserve data but these recovery paths remain manual.
 - [ ] Full recurrence browser acceptance and expanded suggestion
@@ -89,3 +90,8 @@ Reminder implementation source 8c946b6 passed all six GitHub jobs in run 3959634
 browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
 See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
 limits. This verifies the development implementation, not live vendor/device delivery.
+
+Shared planning defaults and bounded approval learning are implemented with typed authenticated
+settings, server-ordered/replay-safe saves, cached offline scoring/drafts and atomic approval
+learning. Household export v3 includes preferences/counts and retains legacy imports. Exact
+source/tests/browser/CI evidence is tracked separately; see PLANNING_PREFERENCES.md.

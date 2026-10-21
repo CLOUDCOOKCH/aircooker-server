@@ -1,4 +1,23 @@
 export const en = {
+  planningApplyError:
+    'Could not finish adding this preview. Check your calendar before trying another mix.',
+  planningPreferences: 'Meal suggestions',
+  planningShared:
+    'Shared with your household. Suggestions use your saved choices, ratings and history, and learn from plans you approve.',
+  planningDemo: 'These choices stay in this isolated demo.',
+  planningCategories: 'Meals to suggest',
+  planningRepeats: 'Allow repeats after all available recipes have been used',
+  planningLeftovers: 'Prefer available leftovers',
+  planningFixedServings: 'Use a fixed number of portions',
+  planningChooseCategory: 'Choose at least one meal category.',
+  planningSaveHint:
+    'Save online to apply household choices. Offline edits stay here as a draft; offline suggestions use your last saved choices.',
+  planningSave: 'Save suggestion settings',
+  planningSaved: 'Suggestion settings saved. Plans still need your approval.',
+  planningError:
+    'Could not save suggestion settings. Check the portions and connection; your draft remains here.',
+  reasonAccepted: 'A recipe you have chosen before',
+
   pushReminders: 'Meal reminders',
   pushHeading: 'A gentle nudge at mealtime',
   pushBody:
@@ -223,11 +242,12 @@ export const en = {
     'Scheduling leftovers uses these portions and does not add the recipe’s ingredients to Bring!.',
   suggestions: 'A little inspiration',
   suggestionsBody:
-    'Fill open dinners with recipes you already love. Review everything before adding it.',
-  suggest: 'Suggest dinners',
+    'Fill open meals using your household choices and recipe library. Review everything before adding it.',
+  suggest: 'Suggest meals',
   regenerate: 'Try another mix',
   approve: 'Add to calendar',
-  noSuggestions: 'No new dinners to suggest. Add more recipes or leave some dinner slots open.',
+  noSuggestions:
+    'No new meals to suggest. Add recipes, leave meal slots open or adjust suggestion settings.',
   reasonNew: 'Not cooked recently',
   reasonRated: 'One of your favourites',
   reasonVariety: 'A little variety',
@@ -318,6 +338,25 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  planningApplyError:
+    'Diese Vorschau konnte nicht vollständig übernommen werden. Prüfe deinen Kalender, bevor du neue Vorschläge versuchst.',
+  planningPreferences: 'Mahlzeitenvorschläge',
+  planningShared:
+    'Gemeinsam für deinen Haushalt. Vorschläge nutzen gespeicherte Wünsche, Bewertungen und Verlauf und lernen aus bestätigten Plänen.',
+  planningDemo: 'Diese Wünsche bleiben in dieser getrennten Demo.',
+  planningCategories: 'Mahlzeiten für Vorschläge',
+  planningRepeats: 'Wiederholen, nachdem alle verfügbaren Rezepte verwendet wurden',
+  planningLeftovers: 'Verfügbare Reste bevorzugen',
+  planningFixedServings: 'Eine feste Anzahl Portionen verwenden',
+  planningChooseCategory: 'Wähle mindestens eine Mahlzeitenart.',
+  planningSaveHint:
+    'Speichere online, um Haushaltswünsche anzuwenden. Offline bleiben Änderungen hier als Entwurf; Vorschläge nutzen zuletzt gespeicherte Wünsche.',
+  planningSave: 'Vorschlagswünsche speichern',
+  planningSaved: 'Vorschlagswünsche gespeichert. Pläne benötigen weiterhin deine Bestätigung.',
+  planningError:
+    'Vorschlagswünsche konnten nicht gespeichert werden. Prüfe Portionen und Verbindung; dein Entwurf bleibt erhalten.',
+  reasonAccepted: 'Ein Rezept, das du schon gewählt hast',
+
   pushReminders: 'Mahlzeitenerinnerungen',
   pushHeading: 'Ein kleiner Anstupser zur Essenszeit',
   pushBody:
@@ -546,11 +585,12 @@ export const de: Record<Key, string> = {
     'Geplante Reste verwenden vorhandene Portionen. Ihre Zutaten werden nicht erneut an Bring! gesendet.',
   suggestions: 'Ein bisschen Inspiration',
   suggestionsBody:
-    'Fülle freie Abendessen mit Rezepten aus deiner Sammlung. Prüfe alles vor dem Übernehmen.',
-  suggest: 'Abendessen vorschlagen',
+    'Fülle freie Mahlzeiten mit Haushaltswünschen und Rezepten aus deiner Sammlung. Prüfe alles vor dem Übernehmen.',
+  suggest: 'Mahlzeiten vorschlagen',
   regenerate: 'Neu zusammenstellen',
   approve: 'In den Kalender übernehmen',
-  noSuggestions: 'Keine neuen Vorschläge. Ergänze Rezepte oder lass ein paar Abendessen frei.',
+  noSuggestions:
+    'Keine neuen Vorschläge. Ergänze Rezepte, lass Mahlzeiten frei oder ändere die Vorschlagswünsche.',
   reasonNew: 'Länger nicht gekocht',
   reasonRated: 'Eines deiner Lieblingsrezepte',
   reasonVariety: 'Etwas Abwechslung',

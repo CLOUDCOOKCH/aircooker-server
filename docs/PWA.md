@@ -173,3 +173,11 @@ The build emits dependency notices and a licence inventory, and rejects drift fr
 under `/app/`; API/auth/private media never enter it. Updates wait for an explicit reload;
 an active editor must be finished or left with its retained draft first. Only the initiating
 tab reloads on activation. Node and npm packages do not ship as a running production service.
+
+## Shared suggestion choices
+
+Settings → Meal suggestions configures categories, optional fixed portions, repeats and
+leftovers for the household after a connected save. Offline edits remain drafts; local
+suggestions use the last saved cached choices and approval history. Every proposed plan
+remains a preview until explicit approval. Recovery exports include preference/reminder
+drafts for manual reconstruction. See PLANNING_PREFERENCES.md.

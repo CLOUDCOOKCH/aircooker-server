@@ -481,6 +481,130 @@ def main():
                     and row["payload"]["category"] == "lunch"
                     for row in applied
                 ), (expected_day, applied)
+                # Shared household suggestion defaults, offline drafts and approved learning.
+                second.get_by_role("navigation").get_by_role(
+                    "button", name="Settings", exact=True
+                ).click()
+                planning = second.locator(".settings-group").filter(
+                    has=second.get_by_role("heading", name="Meal suggestions", exact=True)
+                )
+                planning.get_by_label("Breakfast", exact=True).check()
+                planning.get_by_label("Lunch", exact=True).check()
+                planning.get_by_label(
+                    "Allow repeats after all available recipes have been used", exact=True
+                ).check()
+                planning.get_by_label("Prefer available leftovers", exact=True).uncheck()
+                planning.get_by_label("Use a fixed number of portions", exact=True).check()
+                planning.get_by_label("Servings", exact=True).fill("3,5")
+                planning.get_by_role("button", name="Save suggestion settings", exact=True).click()
+                expect(
+                    second.get_by_text(
+                        "Suggestion settings saved. Plans still need your approval.", exact=True
+                    )
+                ).to_be_visible()
+                second.set_viewport_size({"width": 1440, "height": 1000})
+                audit("shared planning settings desktop", second)
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    second.screenshot(
+                        path=str(captures / "pwa-planning-settings-desktop.png"),
+                        full_page=True,
+                        animations="disabled",
+                    )
+                page.get_by_role("navigation").get_by_role(
+                    "button", name="Settings", exact=True
+                ).click()
+                page.get_by_role("button", name="Sync now", exact=True).click()
+                first_planning = page.locator(".settings-group").filter(
+                    has=page.get_by_role("heading", name="Meal suggestions", exact=True)
+                )
+                expect(first_planning.get_by_label("Servings", exact=True)).to_have_value("3.5")
+                expect(first_planning.get_by_label("Breakfast", exact=True)).to_be_checked()
+                second.get_by_label("Language", exact=True).select_option("de")
+                second.set_viewport_size({"width": 390, "height": 844})
+                second.emulate_media(color_scheme="dark")
+                audit("shared planning settings phone German dark", second)
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    second.screenshot(
+                        path=str(captures / "pwa-planning-settings-phone-de-dark.png"),
+                        full_page=True,
+                        animations="disabled",
+                    )
+                second.get_by_label("Sprache", exact=True).select_option("en")
+                second_context.set_offline(True)
+                planning.get_by_label("Servings", exact=True).fill("4.5")
+                second.reload()
+                second.get_by_role("navigation").get_by_role(
+                    "button", name="Settings", exact=True
+                ).click()
+                expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
+                # An unsaved draft does not change cached or server-wide suggestion defaults.
+                second.get_by_role("navigation").get_by_role(
+                    "button", name="Calendar", exact=True
+                ).click()
+                second.get_by_role("button", name="Next week", exact=True).click()
+                second.get_by_role("button", name="Next week", exact=True).click()
+                second.get_by_role("button", name="Suggest meals", exact=True).click()
+                preview = second.get_by_role("dialog", name="A little inspiration", exact=True)
+                expect(preview.locator(".suggestion-row")).to_have_count(21)
+                expect(preview.get_by_text("3.5 servings", exact=True)).to_have_count(21)
+                audit("offline shared preference suggestion preview phone", second)
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    second.screenshot(
+                        path=str(captures / "pwa-planning-preview-phone.png"),
+                        full_page=True,
+                        animations="disabled",
+                    )
+                # Two same-turn activations must produce only one optimistic approval batch.
+                preview.get_by_role("button", name="Add to calendar", exact=True).evaluate(
+                    "button=>{button.click();button.click();}"
+                )
+                expect(preview).not_to_be_visible()
+                queued = second.evaluate("""async()=>{
+                  const name=(await indexedDB.databases()).find(item=>item.name.startsWith('aircooker:')).name;
+                  return new Promise((resolve,reject)=>{const opening=indexedDB.open(name);opening.onerror=()=>reject(opening.error);
+                    opening.onsuccess=()=>{const db=opening.result,tx=db.transaction('outbox'),query=tx.objectStore('outbox').getAll();
+                      query.onsuccess=()=>resolve(query.result.map(row=>row.approval?.request_id));
+                      query.onerror=()=>reject(query.error);tx.oncomplete=()=>db.close();};});
+                }""")
+                assert len(queued) == 21 and len(set(queued)) == 1 and queued[0] is not None
+                # Only the two prior meals exist remotely until this device reconnects.
+                assert (
+                    page.evaluate(
+                        "async()=> (await(await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                    )
+                    == 2
+                )
+                second_context.set_offline(False)
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                added = wait_server_rows(
+                    second, "/api/v1/calendar/meals", lambda rows: len(rows) == 23
+                )
+                approved = [row for row in added if row["payload"]["date"] > expected_day]
+                assert len(approved) == 21 and all(
+                    row["payload"]["servings"] == "3.5" for row in approved
+                )
+                learning = second.evaluate(
+                    "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Aircooker-Client':'pwa'}})).json())"
+                )
+                assert learning["accepted_counts"] and all(
+                    count == 1 for count in learning["accepted_counts"].values()
+                )
+                second.get_by_role("navigation").get_by_role(
+                    "button", name="Settings", exact=True
+                ).click()
+                expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
+                planning.get_by_role("button", name="Save suggestion settings", exact=True).click()
+                expect(
+                    second.get_by_text(
+                        "Suggestion settings saved. Plans still need your approval.", exact=True
+                    )
+                ).to_be_visible()
+                assert (
+                    second.evaluate(
+                        "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Aircooker-Client':'pwa'}})).json()).preferences.servings"
+                    )
+                    == "4.5"
+                )
                 second_context.close()
                 # Worker cache contains public shell assets, never authenticated API/media.
                 cached = page.evaluate(
@@ -492,7 +616,7 @@ def main():
                 context.close()
                 browser.close()
                 print(
-                    "PWA real-browser smoke passed: isolated demo, English/German dark/mobile, setup, offline edit/reload, exact fractions, independent cookie sessions, commit-ordered conflicts, deletion/rejected-copy recovery, meal assignment, cooked leftovers, week-bound pantry overrides, explicit import review, offline template editing/reload/cancel and next-week application, axe WCAG checks and public-shell-only cache."
+                    "PWA real-browser smoke passed: isolated demo, English/German dark/mobile, setup, offline edit/reload, exact fractions, independent cookie sessions, commit-ordered conflicts, deletion/rejected-copy recovery, meal assignment, cooked leftovers, week-bound pantry overrides, explicit import review, offline template editing/reload/cancel and next-week application, axe WCAG checks shared suggestion settings across devices, offline preference drafts/previews and approval learning, and public-shell-only cache."
                 )
         finally:
             server.should_exit = True

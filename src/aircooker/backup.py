@@ -7,6 +7,7 @@ import tempfile
 import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Annotated
 from uuid import UUID, uuid4
 
 from pydantic import Field
@@ -14,6 +15,7 @@ from pydantic import Field
 from .errors import DomainError
 from .media import MAX_IMAGE_BYTES, MediaInfo, info_for, insert_media, validate_archived_image
 from .models import ENTITY_MODELS, EntityKind, HouseholdSettings, Model, Mutation
+from .planning_preferences import PlanningPreferences, context
 from .sync import apply_mutation
 
 MAX_JSON_EXPORT = 8 * 1024 * 1024
@@ -34,11 +36,15 @@ class ExportMedia(MediaInfo):
 
 class HouseholdExport(Model):
     format: str = "aircooker-household"
-    version: int = 2
+    version: int = 3
     exported_at: str
     household: dict[str, str]
     entities: list[ExportEntity] = Field(max_length=10000)
     media: list[ExportMedia] = Field(default_factory=list, max_length=5000)
+    planning_preferences: PlanningPreferences | None = None
+    accepted_suggestions: dict[UUID, Annotated[int, Field(ge=1, le=1000000)]] = Field(
+        default_factory=dict, max_length=10000
+    )
 
 
 class ArchiveManifest(Model):
@@ -66,8 +72,13 @@ def snapshot(db):
                 kind=row["kind"], id=row["id"], payload=payload, deleted=bool(row["deleted"])
             )
         )
+    planning = context(db)
     return HouseholdExport(
-        exported_at=datetime.now(UTC).isoformat(), household=dict(h), entities=entities
+        exported_at=datetime.now(UTC).isoformat(),
+        household=dict(h),
+        entities=entities,
+        planning_preferences=planning.preferences,
+        accepted_suggestions=planning.accepted_counts,
     )
 
 
@@ -103,8 +114,10 @@ def export_household(database):
 
 
 def apply_restore(db, body: HouseholdExport, device_id: str):
-    if body.format != "aircooker-household" or body.version not in (1, 2):
+    if body.format != "aircooker-household" or body.version not in (1, 2, 3):
         raise DomainError("unsupported_export_format", 422)
+    if body.version < 3 and (body.planning_preferences is not None or body.accepted_suggestions):
+        raise DomainError("unsupported_export_fields", 422)
     settings = HouseholdSettings.model_validate(body.household)
     seen = set()
     order = {"recipe": 0, "pantry": 1, "leftover": 2, "template": 3, "meal": 4}
@@ -165,6 +178,18 @@ def apply_restore(db, body: HouseholdExport, device_id: str):
         "UPDATE household SET name=?,timezone=?,language=? WHERE id=1",
         (settings.name, settings.timezone, settings.language),
     )
+    if body.planning_preferences is not None:
+        db.execute(
+            "UPDATE planning_preferences SET revision=revision+1,payload=? WHERE id=1",
+            (body.planning_preferences.model_dump_json(),),
+        )
+    imported_recipes = {
+        entity.id for entity in body.entities if entity.kind == "recipe" and entity.payload
+    }
+    for recipe_id, count in body.accepted_suggestions.items():
+        if recipe_id not in imported_recipes:
+            raise DomainError("invalid_export_acceptance_recipe", 422)
+        db.execute("INSERT INTO suggestion_acceptance VALUES (?,?)", (str(recipe_id), count))
     return {"imported": len(seen)}
 
 

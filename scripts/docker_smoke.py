@@ -249,6 +249,16 @@ def main():
         }
         applied = request(base, "/api/v1/suggestions/apply", approval, headers)
         assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
+        planning_path = "/api/v1/household/planning-preferences"
+        planning_update = {
+            "request_id": str(uuid4()),
+            "base_revision": 0,
+            "preferences": {"categories": ["lunch"], "servings": "3.5", "use_leftovers": False},
+        }
+        planning_receipt = request(base, planning_path, planning_update, headers, "PUT")
+        assert request(base, planning_path, planning_update, headers, "PUT") == planning_receipt
+        planning_before = request(base, planning_path, headers=headers)
+        assert planning_before["accepted_counts"] == {recipe["entity_id"]: 1}
         projection = request(base, "/api/v1/planning/shopping-projection", headers=headers)
         assert projection["requirements"][0]["spec"] == "600 g"
         ai_credential = "synthetic container AI credential"
@@ -292,6 +302,7 @@ def main():
         except HTTPError as failure:
             assert failure.code == 401
         restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
+        assert request(base, planning_path, headers=headers) == planning_before
         assert (
             request(base, "/api/v1/notifications/push", headers=headers)["public_key"]
             == push_before["public_key"]
@@ -383,12 +394,24 @@ def main():
         imported = request(base, "/api/v1/recipes/" + reviewed["entity_id"], headers=headers)
         assert imported["payload"]["title"] == "Imported bread"
         exported = request(base, "/api/v1/admin/export", headers=headers)
+        assert (
+            exported["version"] == 3
+            and exported["accepted_suggestions"] == planning_before["accepted_counts"]
+        )
         assert ai_credential not in json.dumps(exported)
         _, other, _, other_headers = start()
         assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == len(
             exported["entities"]
         )
         restored = request(other, "/api/v1/planning/shopping-projection", headers=other_headers)
+        assert (
+            request(other, planning_path, headers=other_headers)["preferences"]
+            == planning_before["preferences"]
+        )
+        assert (
+            request(other, planning_path, headers=other_headers)["accepted_counts"]
+            == planning_before["accepted_counts"]
+        )
         assert restored["requirements"][0]["spec"] == "600 g"
         assert request(other, "/api/v1/media/" + image_id, headers=other_headers) == canonical_photo
         archive = request(base, "/api/v1/admin/export/archive", headers=headers)
@@ -401,6 +424,14 @@ def main():
             "POST",
         )
         assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
+        assert (
+            request(third, planning_path, headers=third_headers)["preferences"]
+            == planning_before["preferences"]
+        )
+        assert (
+            request(third, planning_path, headers=third_headers)["accepted_counts"]
+            == planning_before["accepted_counts"]
+        )
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
             "PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore."

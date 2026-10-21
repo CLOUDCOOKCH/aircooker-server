@@ -4,6 +4,7 @@ import { useApp } from './model';
 import type { Tab } from './model';
 import { PageHeader, Sheet } from './components';
 import { ReminderSettings } from './ReminderSettings';
+import { PlanningSettings } from './PlanningSettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
 import { cloneRecipe } from './lib/planning';
@@ -128,6 +129,7 @@ export function Settings({
               )}
             </div>
           </section>
+          <PlanningSettings />
           <ReminderSettings />
           <section className="settings-group">
             <h2>{t('bring')}</h2>

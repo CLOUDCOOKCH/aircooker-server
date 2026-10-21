@@ -163,10 +163,12 @@ export function Sheet({
   title,
   children,
   onClose,
+  busy = false,
 }: {
   title: string;
   children: ReactNode;
   onClose: () => void;
+  busy?: boolean;
 }) {
   const { t } = useApp();
   const ref = useRef<HTMLDialogElement>(null);
@@ -183,16 +185,17 @@ export function Sheet({
   return (
     <dialog
       aria-labelledby={titleID}
+      aria-busy={busy || undefined}
       ref={ref}
       className="sheet"
       onCancel={(event) => {
         event.preventDefault();
-        onClose();
+        if (!busy) onClose();
       }}
     >
       <div className="sheet-heading">
         <h2 id={titleID}>{title}</h2>
-        <IconButton label={t('close')} onClick={onClose}>
+        <IconButton label={t('close')} onClick={onClose} disabled={busy}>
           <X size={20} />
         </IconButton>
       </div>

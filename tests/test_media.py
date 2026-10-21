@@ -127,7 +127,7 @@ def test_json_export_restores_exact_photo(harness, mutation, tmp_path):
     recipe, _ = save_recipe(client, mutation, device, info["id"])
     original = client.get("/api/v1/media/" + info["id"]).content
     exported = client.get("/api/v1/admin/export").json()
-    assert exported["version"] == 2 and len(exported["media"]) == 1
+    assert exported["version"] == 3 and len(exported["media"]) == 1
     with clean_client(tmp_path / "restored") as (target, _, _):
         response = target.post("/api/v1/admin/import", json=exported)
         assert response.status_code == 200, response.text
@@ -236,6 +236,8 @@ def test_imported_recipe_provenance_does_not_require_old_jobs(harness, mutation,
     exported = client.get("/api/v1/admin/export").json()
     item = mutation(device, payload={"title": "Restored import"})
     exported["version"] = 1
+    exported.pop("planning_preferences", None)
+    exported.pop("accepted_suggestions", None)
     exported["entities"] = [
         {
             "kind": "recipe",

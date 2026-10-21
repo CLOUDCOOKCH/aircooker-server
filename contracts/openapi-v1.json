@@ -536,9 +536,22 @@
         "title": "HTTPValidationError",
         "type": "object"
       },
-      "HouseholdExport": {
+      "HouseholdExport-Input": {
         "additionalProperties": false,
         "properties": {
+          "accepted_suggestions": {
+            "additionalProperties": {
+              "maximum": 1000000.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "maxProperties": 10000,
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "title": "Accepted Suggestions",
+            "type": "object"
+          },
           "entities": {
             "items": {
               "$ref": "#/components/schemas/ExportEntity"
@@ -571,8 +584,90 @@
             "title": "Media",
             "type": "array"
           },
+          "planning_preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanningPreferences-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "version": {
-            "default": 2,
+            "default": 3,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "exported_at",
+          "household",
+          "entities"
+        ],
+        "title": "HouseholdExport",
+        "type": "object"
+      },
+      "HouseholdExport-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_suggestions": {
+            "additionalProperties": {
+              "maximum": 1000000.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "maxProperties": 10000,
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "title": "Accepted Suggestions",
+            "type": "object"
+          },
+          "entities": {
+            "items": {
+              "$ref": "#/components/schemas/ExportEntity"
+            },
+            "maxItems": 10000,
+            "title": "Entities",
+            "type": "array"
+          },
+          "exported_at": {
+            "title": "Exported At",
+            "type": "string"
+          },
+          "format": {
+            "default": "aircooker-household",
+            "title": "Format",
+            "type": "string"
+          },
+          "household": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Household",
+            "type": "object"
+          },
+          "media": {
+            "items": {
+              "$ref": "#/components/schemas/ExportMedia"
+            },
+            "maxItems": 5000,
+            "title": "Media",
+            "type": "array"
+          },
+          "planning_preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanningPreferences-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "default": 3,
             "title": "Version",
             "type": "integer"
           }
@@ -1237,6 +1332,181 @@
           "new_password"
         ],
         "title": "PasswordChange",
+        "type": "object"
+      },
+      "PlanningContext": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted_counts": {
+            "additionalProperties": {
+              "maximum": 1000000.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "maxProperties": 10000,
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "title": "Accepted Counts",
+            "type": "object"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/PlanningPreferences-Output"
+          },
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision",
+          "preferences",
+          "accepted_counts"
+        ],
+        "title": "PlanningContext",
+        "type": "object"
+      },
+      "PlanningPreferences-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "allow_repeats": {
+            "default": false,
+            "title": "Allow Repeats",
+            "type": "boolean"
+          },
+          "categories": {
+            "items": {
+              "enum": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Categories",
+            "type": "array"
+          },
+          "servings": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 100.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Servings"
+          },
+          "use_leftovers": {
+            "default": true,
+            "title": "Use Leftovers",
+            "type": "boolean"
+          }
+        },
+        "title": "PlanningPreferences",
+        "type": "object"
+      },
+      "PlanningPreferences-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "allow_repeats": {
+            "default": false,
+            "title": "Allow Repeats",
+            "type": "boolean"
+          },
+          "categories": {
+            "items": {
+              "enum": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Categories",
+            "type": "array"
+          },
+          "servings": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Servings"
+          },
+          "use_leftovers": {
+            "default": true,
+            "title": "Use Leftovers",
+            "type": "boolean"
+          }
+        },
+        "title": "PlanningPreferences",
+        "type": "object"
+      },
+      "PreferenceReceipt": {
+        "additionalProperties": false,
+        "properties": {
+          "conflict": {
+            "title": "Conflict",
+            "type": "boolean"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "request_id",
+          "revision",
+          "conflict"
+        ],
+        "title": "PreferenceReceipt",
+        "type": "object"
+      },
+      "PreferenceWrite": {
+        "additionalProperties": false,
+        "properties": {
+          "base_revision": {
+            "minimum": 0.0,
+            "title": "Base Revision",
+            "type": "integer"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/PlanningPreferences-Input"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "base_revision",
+          "preferences"
+        ],
+        "title": "PreferenceWrite",
         "type": "object"
       },
       "Pull": {
@@ -2396,7 +2666,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HouseholdExport"
+                  "$ref": "#/components/schemas/HouseholdExport-Output"
                 }
               }
             },
@@ -2442,7 +2712,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HouseholdExport"
+                "$ref": "#/components/schemas/HouseholdExport-Input"
               }
             }
           },
@@ -3238,6 +3508,70 @@
           }
         ],
         "summary": "Update Household"
+      }
+    },
+    "/api/v1/household/planning-preferences": {
+      "get": {
+        "operationId": "get_preferences_api_v1_household_planning_preferences_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanningContext"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Preferences"
+      },
+      "put": {
+        "operationId": "put_preferences_api_v1_household_planning_preferences_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferenceWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferenceReceipt"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Put Preferences"
       }
     },
     "/api/v1/imports": {
@@ -4962,21 +5296,25 @@
             "name": "categories",
             "required": false,
             "schema": {
-              "default": [
-                "dinner"
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "breakfast",
+                      "lunch",
+                      "dinner"
+                    ],
+                    "type": "string"
+                  },
+                  "maxItems": 3,
+                  "minItems": 1,
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
               ],
-              "items": {
-                "enum": [
-                  "breakfast",
-                  "lunch",
-                  "dinner"
-                ],
-                "type": "string"
-              },
-              "maxItems": 3,
-              "minItems": 1,
-              "title": "Categories",
-              "type": "array"
+              "title": "Categories"
             }
           },
           {
@@ -4984,9 +5322,15 @@
             "name": "allow_repeats",
             "required": false,
             "schema": {
-              "default": false,
-              "title": "Allow Repeats",
-              "type": "boolean"
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Allow Repeats"
             }
           },
           {

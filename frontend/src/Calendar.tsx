@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Check,
@@ -974,12 +974,21 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
     { t } = app;
   const [seed, setSeed] = useState(0),
     [error, setError] = useState(false);
+  const approving = useRef(false);
+  const [busy, setBusy] = useState(false);
   const [chosen, setChosen] = useState<Set<string> | null>(null);
-  const suggestions = suggestWeek(app.rows, day, seed);
-  const key = (item: Suggestion) => item.date + item.recipeID;
+  const suggestions = suggestWeek(app.rows, day, seed, app.planning);
+  const key = (item: Suggestion) => item.date + item.category + item.recipeID;
   const approve = async () => {
+    if (approving.current) return;
+    approving.current = true;
+    setBusy(true);
     try {
-      const live = occurrences(app.entities('meal'), monday(day), addDays(monday(day), 6));
+      const live = occurrences(
+        await app.store.entities('meal'),
+        monday(day),
+        addDays(monday(day), 6),
+      );
       const selected = suggestions.filter((item) => !chosen || chosen.has(key(item)));
       if (
         selected.some((item) =>
@@ -1010,10 +1019,19 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
       onClose();
     } catch {
       setError(true);
+    } finally {
+      approving.current = false;
+      setBusy(false);
     }
   };
   return (
-    <Sheet title={t('suggestions')} onClose={onClose}>
+    <Sheet
+      title={t('suggestions')}
+      busy={busy}
+      onClose={() => {
+        if (!approving.current) onClose();
+      }}
+    >
       <p>{t('suggestionsBody')}</p>
       {!suggestions.length ? (
         <p className="empty-inline">{t('noSuggestions')}</p>
@@ -1025,6 +1043,7 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
               <label className="suggestion-row" key={key(item)}>
                 <input
                   type="checkbox"
+                  disabled={busy}
                   checked={!chosen || chosen.has(key(item))}
                   onChange={(e) => {
                     const next = new Set(chosen ?? suggestions.map(key));
@@ -1035,13 +1054,20 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
                 />
                 <Photo id={recipe?.payload.image_id} />
                 <span>
-                  <small>{displayDate(item.date, app.language, { weekday: 'long' })}</small>
+                  <small>
+                    {displayDate(item.date, app.language, { weekday: 'long' })} · {t(item.category)}
+                  </small>
                   <strong>{recipe?.payload.title}</strong>
+                  <small>
+                    {item.servings}{' '}
+                    {t(new Decimal(item.servings).eq(1) ? 'serving' : 'servingsText')}
+                  </small>
                   <small>
                     {t(
                       (
                         {
                           leftovers: 'reasonLeftovers',
+                          accepted: 'reasonAccepted',
                           new: 'reasonNew',
                           rated: 'reasonRated',
                           variety: 'reasonVariety',
@@ -1057,12 +1083,13 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
       )}
       {error && (
         <p role="alert" className="error-note">
-          {t('invalid')}
+          {t('planningApplyError')}
         </p>
       )}
       <div className="form-actions">
         <button
           className="secondary"
+          disabled={busy}
           onClick={() => {
             setSeed(seed + 1);
             setChosen(null);
@@ -1072,7 +1099,7 @@ export function Suggestions({ day, onClose }: { day: string; onClose: () => void
         </button>
         <button
           className="primary"
-          disabled={!suggestions.length || chosen?.size === 0}
+          disabled={busy || !suggestions.length || chosen?.size === 0}
           onClick={() => void approve()}
         >
           {t('approve')}

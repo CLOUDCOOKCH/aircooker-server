@@ -1,3 +1,5 @@
+import { DEFAULT_PLANNING } from './preferences.ts';
+import type { PlanningContext } from './preferences.ts';
 import Decimal from 'decimal.js';
 import { addDays, categories, civil, distance, emptyRecipe, monday, uuid } from './domain.ts';
 import type { Category, Entity, Meal, Recipe, Template } from './domain.ts';
@@ -178,10 +180,16 @@ export type Suggestion = {
   category: Category;
   servings: string;
   leftoverID: string | null;
-  reason: 'leftovers' | 'new' | 'rated' | 'variety';
+  reason: 'leftovers' | 'new' | 'rated' | 'variety' | 'accepted';
 };
 /** Pure local ranking. Fixed seed makes a preview repeatable; approval is a separate edit. */
-export function suggestWeek(rows: Entity[], week: string, seed = 0): Suggestion[] {
+export function suggestWeek(
+  rows: Entity[],
+  week: string,
+  seed = 0,
+  context: PlanningContext = DEFAULT_PLANNING,
+): Suggestion[] {
+  const preferences = context.preferences;
   const recipes = rows.filter((row) => row.kind === 'recipe' && !row.deleted) as Entity<'recipe'>[];
   const meals = rows.filter((row) => row.kind === 'meal' && !row.deleted) as Entity<'meal'>[];
   const leftovers = rows.filter(
@@ -190,70 +198,97 @@ export function suggestWeek(rows: Entity[], week: string, seed = 0): Suggestion[
   const start = monday(week);
   const scheduled = occurrences(meals, start, addDays(start, 6));
   const history = occurrences(meals, addDays(start, -180), addDays(start, -1));
-  const used = new Set(scheduled.map((item) => item.entity.payload.recipe_id));
+  const used = new Map<string, number>();
+  scheduled.forEach((item) =>
+    used.set(item.entity.payload.recipe_id, (used.get(item.entity.payload.recipe_id) ?? 0) + 1),
+  );
+  const available = new Map(
+    leftovers.map((row) => [row.id, new Decimal(availablePortions(row, meals))]),
+  );
   const result: Suggestion[] = [];
   for (let index = 0; index < 7; index++) {
     const day = addDays(start, index);
-    if (scheduled.some((item) => item.day === day && item.entity.payload.category === 'dinner'))
-      continue;
-    const leftover = leftovers.find(
-      (row) =>
-        !row.payload.discarded &&
-        row.payload.produced_on <= day &&
-        recipes.some((recipe) => recipe.id === row.payload.recipe_id) &&
-        new Decimal(availablePortions(row, meals)).gt(0) &&
-        !result.some((suggestion) => suggestion.leftoverID === row.id),
-    );
-    if (leftover) {
-      result.push({
-        recipeID: leftover.payload.recipe_id,
-        date: day,
-        category: 'dinner',
-        servings: availablePortions(leftover, meals),
-        leftoverID: leftover.id,
-        reason: 'leftovers',
-      });
-      used.add(leftover.payload.recipe_id);
-      continue;
-    }
-    const ranked = recipes
-      .map((recipe, order) => {
-        const cooked = history.filter(
-          (item) => item.entity.payload.recipe_id === recipe.id && item.entity.payload.cooked,
+    for (const category of categories.filter((value) => preferences.categories.includes(value))) {
+      if (scheduled.some((item) => item.day === day && item.entity.payload.category === category))
+        continue;
+      const leftover = preferences.use_leftovers
+        ? leftovers
+            .filter(
+              (row) =>
+                !row.payload.discarded &&
+                row.payload.produced_on <= day &&
+                recipes.some((recipe) => recipe.id === row.payload.recipe_id) &&
+                available.get(row.id)!.gt(0) &&
+                (preferences.servings === null || available.get(row.id)!.gte(preferences.servings)),
+            )
+            .sort(
+              (a, b) =>
+                a.payload.produced_on.localeCompare(b.payload.produced_on) ||
+                a.id.localeCompare(b.id),
+            )[0]
+        : undefined;
+      if (leftover) {
+        const portions = preferences.servings ?? available.get(leftover.id)!.toFixed();
+        available.set(leftover.id, available.get(leftover.id)!.minus(portions));
+        result.push({
+          recipeID: leftover.payload.recipe_id,
+          date: day,
+          category,
+          servings: portions,
+          leftoverID: leftover.id,
+          reason: 'leftovers',
+        });
+        used.set(leftover.payload.recipe_id, (used.get(leftover.payload.recipe_id) ?? 0) + 1);
+        continue;
+      }
+      const ranked = recipes
+        .filter((recipe) => preferences.allow_repeats || !used.get(recipe.id))
+        .map((recipe, order) => {
+          const cooked = history.filter(
+            (item) => item.entity.payload.recipe_id === recipe.id && item.entity.payload.cooked,
+          );
+          const recent = cooked.length
+            ? Math.max(...cooked.map((item) => 40 - Math.min(40, distance(item.day, day))))
+            : 0;
+          return {
+            recipe,
+            cooked,
+            score:
+              (recipe.payload.rating ?? 3) * 4 -
+              recent -
+              cooked.length * 2 +
+              Math.min(5, context.accepted_counts[recipe.id] ?? 0) * 2 +
+              ((order + seed) % Math.max(1, recipes.length)) / recipes.length,
+          };
+        })
+        .sort(
+          (a, b) =>
+            (used.get(a.recipe.id) ?? 0) - (used.get(b.recipe.id) ?? 0) ||
+            b.score - a.score ||
+            a.recipe.id.localeCompare(b.recipe.id),
         );
-        const recent = cooked.length
-          ? Math.max(...cooked.map((item) => 40 - Math.min(40, distance(item.day, day))))
-          : 0;
-        return {
-          recipe,
-          cooked,
-          score:
-            (recipe.payload.rating ?? 3) * 4 -
-            recent -
-            cooked.length * 2 -
-            (used.has(recipe.id) ? 1000 : 0) +
-            ((order + seed) % Math.max(1, recipes.length)) / recipes.length,
-        };
-      })
-      .sort((a, b) => b.score - a.score || a.recipe.id.localeCompare(b.recipe.id));
-    const choice = ranked[0];
-    if (!choice || used.has(choice.recipe.id)) continue;
-    used.add(choice.recipe.id);
-    result.push({
-      recipeID: choice.recipe.id,
-      date: day,
-      category: 'dinner',
-      servings: choice.recipe.payload.servings,
-      leftoverID: null,
-      reason: !choice.cooked.length
-        ? 'new'
-        : (choice.recipe.payload.rating ?? 0) >= 4
-          ? 'rated'
-          : 'variety',
-    });
+      const choice = ranked[0];
+      if (!choice) continue;
+      used.set(choice.recipe.id, (used.get(choice.recipe.id) ?? 0) + 1);
+      result.push({
+        recipeID: choice.recipe.id,
+        date: day,
+        category,
+        servings: preferences.servings ?? choice.recipe.payload.servings,
+        leftoverID: null,
+        reason: context.accepted_counts[choice.recipe.id]
+          ? 'accepted'
+          : !choice.cooked.length
+            ? 'new'
+            : (choice.recipe.payload.rating ?? 0) >= 4
+              ? 'rated'
+              : 'variety',
+      });
+    }
   }
   return result;
 }
+
 export function cloneRecipe(recipe: Recipe): Recipe {
   const provenance = { ...recipe.provenance };
   if (provenance.import_job_id) provenance.original_import_job_id = provenance.import_job_id;

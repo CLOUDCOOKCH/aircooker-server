@@ -82,6 +82,8 @@ from .models import (
     Tokens,
 )
 from .planning import entities, occurrences, shopping_projection, week_start
+from .planning_preferences import context as planning_context
+from .planning_preferences import register_routes as register_planning_preferences
 from .pwa_auth import ACCESS_COOKIE, is_pwa, require_csrf
 from .pwa_auth import register_routes as register_pwa_auth
 from .recommendations import planning_basis, suggest_week
@@ -318,6 +320,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
 
     register_reminders(app, session, reminders)
     app.state.reminders = reminders
+    register_planning_preferences(app, session, database)
 
     @app.get("/api/v1/system/info")
     def info():
@@ -585,20 +588,29 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     def suggestions(
         monday: date,
         seed: int = Query(default=0, ge=0, le=2147483647),
-        categories: list[Literal["breakfast", "lunch", "dinner"]] = Query(
-            default=["dinner"], min_length=1, max_length=3
+        categories: list[Literal["breakfast", "lunch", "dinner"]] | None = Query(
+            default=None, min_length=1, max_length=3
         ),
-        allow_repeats: bool = False,
+        allow_repeats: bool | None = None,
         servings: Decimal | None = Query(default=None, gt=0, le=100),
         s=Depends(session),
     ):
         with database.connect() as db:
             db.execute("BEGIN")
             start = week_start(monday)
+            preferences = planning_context(db).preferences
             return SuggestionPreview(
                 monday=start,
                 basis=planning_basis(db),
-                meals=suggest_week(db, start, seed, categories, allow_repeats, servings),
+                meals=suggest_week(
+                    db,
+                    start,
+                    seed,
+                    categories if categories is not None else preferences.categories,
+                    allow_repeats if allow_repeats is not None else preferences.allow_repeats,
+                    servings if servings is not None else preferences.servings,
+                    use_leftovers=preferences.use_leftovers,
+                ),
             )
 
     @app.post("/api/v1/suggestions/apply", response_model=list[MutationResult])

@@ -8,17 +8,19 @@ recovery snapshot includes secrets and sessions. Both may contain private recipe
 The administration console downloads GET `/api/v1/admin/export/archive`. Its ZIP contains
 `manifest.json` (`aircooker-household-archive`, version 1) and `media/<UUID>.jpg` files with
 SHA-256 metadata. It includes household name/timezone/language, typed entity snapshots,
-retained deletion history and referenced photos. It excludes password hashes, active
+retained deletion history, referenced photos, shared planning preferences and accepted-recipe counts. It excludes password hashes, active
 sessions, integration credentials, keys, prompts, job internals and diagnostics.
 
-GET `/api/v1/admin/export` provides JSON (`aircooker-household`, version 2) with base64 media
-for small exports. Version 1 JSON remains importable. If JSON exceeds 8 MiB, use the archive.
+GET `/api/v1/admin/export` provides JSON (`aircooker-household`, version 3) with base64 media
+for small exports. Version 1/2 JSON remains importable without the new preference/learning
+fields. The ZIP envelope stays v1 and embeds the v3 household manifest; older server versions
+cannot import it. Do not relabel archives to bypass compatibility checks. If JSON exceeds 8 MiB, use the archive.
 
 On an already configured destination, POST JSON to `/api/v1/admin/import` or stream the ZIP
 body to `/api/v1/admin/import/archive` with `Content-Type: application/zip`. Authenticate
 with the destination household session. Browser mutations also require same-origin CSRF.
 These endpoints merge; they never silently replace existing entities. Duplicate entity IDs
-produce 409 and roll back media, entities, settings and sync changes together. Validate the
+produce 409 and roll back media, entities, settings, planning preferences/learning and sync changes together. Validate the
 result through the application and API before relying on a backup.
 
 Archive restores reject unexpected/duplicate member names, symlinks, unsupported encryption,

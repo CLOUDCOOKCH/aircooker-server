@@ -33,7 +33,7 @@ overview pass backend and Chromium checks on remote run 39567118930 at 17f4b9e.
 | 1 Backend | Docker, migrations, setup, sessions, offline-capable revocation, rate limits, local recovery, jobs, typed read-only job/import diagnostics, admin page navigation and household/session/AI/Bring controls, JSON/ZIP transfer, generated contract | Tested core; partial deletion/diagnostics/storage controls, quotas, remaining typed responses and broader security/load tests |
 | 2 iOS foundation | SwiftUI tabs/onboarding, URL/QR sources, SQLite outbox, URLSession, Keychain, local authentication, localisations | Swift core tested on Linux; native app/extensions unverified on Apple SDK; rejected-change/archive recovery core tested, native recovery unverified; durable full resync core tested; native workflow validation remains |
 | 3 Recipes | Backend typed CRUD and native editor, decimal scaling, notes/ratings, immutable photos, durable offline photo queue | Backend/core tested; native unverified; photo cleanup, fractions/ranges UX, searching API and historical metadata incomplete |
-| 4 Planning | Meal CRUD, bounded recurrence, template records, leftovers validation, pantry, rated/history/leftover-aware local suggestions, replay-safe live approval, native calendar/drag/move, day/week copy, template previews, recurrence, leftover and review interfaces | Backend/core tested; native unverified; arbitrary copy destinations, shared household preferences, acceptance learning and cross-device approval collision UX remain partial |
+| 4 Planning | Meal CRUD, bounded recurrence, template records, leftovers validation, pantry, rated/history/leftover-aware local suggestions, replay-safe live approval, native calendar/drag/move, day/week copy, template previews, recurrence, leftover and review interfaces | Backend/core tested; native unverified; arbitrary copy destinations, cross-device approval collision UX remains partial; shared preferences/learning are tested in the PWA |
 | 5 Bring | SDK adapter, encrypted credentials, list selection API, projection, UUID ownership/replay/purchase/rollover tests, durable retries | Synthetic connector tests; live unverified; browser configuration tested with doubles; additional purchased requirement semantics incomplete |
 | 6 Imports/AI | Public HTTPS safety, JSON-LD drafts, conservative metric/EN/DE ingredient parsing, import review confirmation, idempotent requests, encrypted admin configuration, synthetic connection probes, request budgets, text AI provider adapters, share inbox and review UI sources | Partial: source-specific captions/transcripts, broader ingredient-language parsing, live providers, image extraction, native lifecycle validation |
 | 7 UX | Dashboard/start-screen settings, system appearance, native components, localisation, 14-day widget cache/deep links and opt-in local reminder settings/reconciliation | Core dates/DST/cache/links tested; native delivery/rendering/permission/lock lifecycle, accessibility, photography and UI performance unverified |
@@ -63,14 +63,14 @@ suppression and new-period identity. No live Bring smoke test was executed.
 - No Bring test account/list or AI endpoint credentials were supplied. Tests use synthetic
   connectors and HTTP responses. Automatic Bring writes stay disabled without proof.
 
-These blockers do not explain incomplete independent functionality: shared recommendation preferences, cross-device approval recovery,
+These blockers do not explain incomplete independent functionality: cross-device approval recovery,
 admin deletion/extended diagnostics, backup replacement, safe media cleanup, non-recipe archive reconstruction, native validation and release assets
 are tracked as remaining engineering work, not falsely labelled credential-blocked.
 
 
 ## Latest verification
 
-The current PWA integration passes 180 backend tests and 34 web core tests locally,
+The current PWA integration passes 187 backend tests and 39 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -88,8 +88,7 @@ manual review does not pretend they passed. Genuine screenshots and asset proven
 recorded in the PWA validation material. Current Docker smoke/security CI is recorded
 separately for the exact image/commit; do not apply earlier green runs to a newer tree.
 
-The overall project remains partial. Live Web Push validation, shared recommendation preferences/learning,
-complete archive reconstruction, broader source/media import,
+The overall project remains partial. Live Web Push validation, complete archive reconstruction, broader source/media import,
 admin deletion/destructive replacement, safe cleanup and release validation remain engineering
 work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
 No stable release or protected release acceptance is enabled by these development results.
@@ -111,3 +110,8 @@ Reminder implementation source 8c946b6 passed all six GitHub jobs in run 3959634
 browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
 See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
 limits. This verifies the development implementation, not live vendor/device delivery.
+
+Shared planning defaults and bounded approval learning are implemented with typed authenticated
+settings, server-ordered/replay-safe saves, cached offline scoring/drafts and atomic approval
+learning. Household export v3 includes preferences/counts and retains legacy imports. Exact
+source/tests/browser/CI evidence is tracked separately; see PLANNING_PREFERENCES.md.

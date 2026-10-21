@@ -4,6 +4,8 @@ import { APIClient, APIError } from './lib/api';
 import { LocalStore } from './lib/store';
 import { SyncEngine } from './lib/sync';
 import { reminderTarget } from './lib/notifications';
+import { DEFAULT_PLANNING, PLANNING_PATH, parsePlanningContext } from './lib/preferences';
+import type { PlanningContext } from './lib/preferences';
 import { openDemo, DEMO_ID } from './lib/demo';
 import { translate } from './i18n';
 import type { Key, Language } from './i18n';
@@ -33,6 +35,7 @@ function useRuntime(runtime: Runtime) {
     [pending, setPending] = useState<Queued[]>([]),
     [imports, setImports] = useState<ImportTask[]>([]);
   const [household, setHousehold] = useState(runtime.household);
+  const [planning, setPlanning] = useState<PlanningContext>(DEFAULT_PLANNING);
   const [language, setLanguageState] = useState<Language>(runtime.household.language);
   const [tab, setTabState] = useState<Tab>('home');
   const [syncing, setSyncing] = useState(false),
@@ -51,6 +54,15 @@ function useRuntime(runtime: Runtime) {
     setPending(queue);
     setImports(tasks);
   };
+  const refreshPlanning = async () => {
+    const current =
+      runtime.api && navigator.onLine
+        ? parsePlanningContext(await runtime.api.request(PLANNING_PATH))
+        : parsePlanningContext(await store.setting('planning:context', DEFAULT_PLANNING));
+    await store.setSetting('planning:context', current);
+    setPlanning(current);
+    return current;
+  };
   const sync = async () => {
     if (!runtime.api || !navigator.onLine) return;
     setSyncing(true);
@@ -63,6 +75,7 @@ function useRuntime(runtime: Runtime) {
       new Intl.DateTimeFormat('en', { timeZone: updated.timezone });
       await store.setSetting('household', updated);
       setHousehold(updated);
+      await refreshPlanning();
     } catch (e) {
       setError(e instanceof APIError ? e.code : 'connection_unavailable');
     } finally {
@@ -74,6 +87,13 @@ function useRuntime(runtime: Runtime) {
     let alive = true;
     void (async () => {
       await refresh();
+      try {
+        setPlanning(
+          parsePlanningContext(await store.setting('planning:context', DEFAULT_PLANNING)),
+        );
+      } catch {
+        setError('storage_error');
+      }
       const [savedTab, savedLanguage] = await Promise.all([
         store.setting<Tab>('start', 'home'),
         store.setting<Language>('language', runtime.household.language),
@@ -144,6 +164,8 @@ function useRuntime(runtime: Runtime) {
   return {
     ...runtime,
     household,
+    planning,
+    refreshPlanning,
     rows,
     pending,
     imports,

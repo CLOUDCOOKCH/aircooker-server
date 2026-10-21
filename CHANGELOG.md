@@ -1,5 +1,11 @@
 # Changelog
 
+- Add shared suggestion categories/portions/repeats/leftover choices with durable offline
+  drafts and cached local scoring. Learn only from successful explicit approvals, with
+  replay-safe bounded preference and strict variety. Guard rapid duplicate preview approval.
+- Include non-secret preferences/learning in household export v3 and transactional restore;
+  retain legacy v1/v2 imports. Browser recovery exports preserve settings drafts explicitly.
+
 - Add optional PWA meal reminders: per-device consent/preferences and offline drafts,
   household-time/DST scheduling, durable retries/receipts and editor-safe notification links.
   Encrypt subscription/VAPID secrets; pin vendor DNS/TLS destinations. Tests cover actual

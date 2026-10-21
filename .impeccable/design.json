@@ -277,7 +277,8 @@
       "element": "dialog",
       "name": "useId heading ID referenced by aria-labelledby",
       "focus": "native showModal; restore connected opener on cleanup",
-      "dismissal": "named close button; Escape invokes onClose"
+      "dismissal": "named close button; Escape invokes onClose",
+      "busy": "optional aria-busy; disable Close and block Escape during local approval commit; guarded approval close callback also protects same-turn window before rendering"
     },
     "Photo": {
       "loading": "lazy",
@@ -312,6 +313,22 @@
       "entry": "explicit",
       "isolation": "separate from existing household data",
       "disclosure": "visible label and exit action"
+    },
+    "planning": {
+      "source": [
+        "frontend/src/PlanningSettings.tsx",
+        "frontend/src/Calendar.tsx"
+      ],
+      "surface": "shared Meal suggestions group on existing solid Settings surface; system typography and forest-green controls; multi-category preview uses scrolling Sheet",
+      "defaults": "dinner; no repeated recipes; recipe-specific servings; available leftovers enabled",
+      "controls": "labelled breakfast/lunch/dinner checkboxes, repeats and leftover choices, optional labelled fixed-portions field; empty categories disable save; busy disables form",
+      "drafts": "per-device edits persist immediately through offline/reload separately from validated saved household snapshot; offline previews use last saved choices; refresh preserves unsaved draft; explicit online save shares settings; isolated demo stays local",
+      "feedback": "save success role=status reminds that plans need approval; save error role=alert explains portions/connection and retained draft",
+      "preview": "actual recipe title, weekday/category, portions and ranking reason; checked rows permit exclusion; zero selection disables Add to calendar; regenerate resets selection; preview generation writes no meals",
+      "approval": "synchronous guard blocks same-turn repeated activation; disable selection/regenerate/approval/dismissal during local commit; reread persisted local occupancy before save; server applies atomically against current calendar",
+      "recovery": "failure retains selection and releases guard for retry; English/German role=alert asks users to check calendar before another mix, without claiming no write occurred after a later refresh failure",
+      "learning": "each distinct chosen recipe increments once per successful approval in same transaction as meal writes and replay receipt; failed approvals/duplicate delivery add no learning; bounded bonus preserves variety; chosen-before explanation never implies cooking",
+      "guide": "docs/PLANNING_PREFERENCES.md"
     }
   },
   "accessibility": {
@@ -366,7 +383,7 @@
   "review": {
     "initial": "docs/validation/pwa-visual-review.md",
     "verdict": "docs/validation/pwa-visual-verdict.md",
-    "disposition": "Newest review docs/validation/reminders-review.md: ship at the tested reminder UI scope, with no required UI fixes. The name-only review docs/validation/mealf-name-review.md remains limited to that change; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
+    "disposition": "Newest review docs/validation/planning-preferences-review.md: ship at the tested shared-planning UI scope; rapid-activation and recovery wording findings resolved, with no required UI fixes remaining. Reminder and name-only reviews retain their bounded scopes; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
     "reminders": {
       "report": "docs/validation/reminders-review.md",
       "guide": "docs/REMINDERS.md",
@@ -414,7 +431,7 @@
       "captured-screen Axe WCAG2 A/AA +2.1AA",
       "exact accessible dialog name and focus-return assertion"
     ],
-    "handoffVerification": "Manual source/document inspection, fresh reminder UI review record and unchanged complete token/schema/direction comparison; browser checks not rerun. Context launcher/detector, cloud resources and specialist definition unavailable; no plugin schema validation or specialist pass claimed.",
+    "handoffVerification": "Manual source/document inspection, fresh shared-planning review record, capture hash comparison and unchanged complete token/schema/direction comparison; browser checks not rerun. Context launcher/detector, cloud resources and specialist definition unavailable; no plugin schema validation or specialist pass claimed.",
     "unclaimed": [
       "plugin schema validation",
       "automated design detector",
@@ -428,7 +445,29 @@
       "QR UI",
       "live Bring!",
       "live AI"
-    ]
+    ],
+    "planning": {
+      "report": "docs/validation/planning-preferences-review.md",
+      "guide": "docs/PLANNING_PREFERENCES.md",
+      "scope": "fresh manual source/capture review and bounded guard/copy confirmation; ship at the tested shared-planning UI scope",
+      "findings": {
+        "rapidActivation": "resolved",
+        "recoveryWording": "resolved",
+        "requiredFixesRemaining": 0
+      },
+      "captures": [
+        "docs/screenshots/pwa-planning-settings-desktop.png",
+        "docs/screenshots/pwa-planning-settings-phone-de-dark.png",
+        "docs/screenshots/pwa-planning-preview-phone.png"
+      ],
+      "captureHashesSHA256": {
+        "pwa-planning-settings-desktop.png": "64f7c9597fcdcf0d26b4fb2f0dc08264a3877be9bab277ed369c66d03a49f74c",
+        "pwa-planning-settings-phone-de-dark.png": "e247b27591912a795d8b0d0a26712412e06cf60cdb6f29e06109cd4adb8707e7",
+        "pwa-planning-preview-phone.png": "2b5101539f872be41b415d7ab2ca431f50e32c1a9a2e32210a6e36446caac12a"
+      },
+      "browserEvidence": "review records supplied real Chromium first-party API flow for shared settings/offline drafts/21-meal approval; same-turn double activation yields exactly one 21-mutation approval group in IndexedDB and once-only server learning; reviewer and documentation handoff did not rerun it",
+      "evidenceLimits": "captures show saved EN/light desktop and DE/dark phone controls plus offline EN/dark scrolling preview; idle hashes unchanged by busy/error fix; failure/dismissal and other states inspected in source; no injected failure, screen-reader, full keyboard/text-enlargement/all-state contrast/motion, physical Safari/iPhone, native parity, complete product or original-artwork acceptance"
+    }
   },
   "sourceReferences": [
     "frontend/src/tokens.css",
@@ -449,7 +488,10 @@
     "docs/validation/mealf-name-review.md",
     "docs/REMINDERS.md",
     "docs/validation/reminders-review.md",
-    "docs/BRANDING.md"
+    "docs/BRANDING.md",
+    "frontend/src/PlanningSettings.tsx",
+    "docs/PLANNING_PREFERENCES.md",
+    "docs/validation/planning-preferences-review.md"
   ],
   "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
 }

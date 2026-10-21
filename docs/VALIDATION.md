@@ -238,3 +238,17 @@ Reminder implementation source 8c946b6 passed all six GitHub jobs in run 3959634
 browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
 See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
 limits. This verifies the development implementation, not live vendor/device delivery.
+
+## Shared planning defaults and explicit-approval learning, 2026-10-21
+
+187 backend and 39 web tests pass locally, including server-ordered/replay-safe preference
+saves, once-only atomic learning, strict variety, leftover choice, snapshot/draft validation
+and export/restore rollback. Actual Chromium covers two independent cookie sessions, saved
+household choices, offline draft/reload and 21-meal local approval/learning. Two same-turn
+activations create exactly one 21-mutation IndexedDB approval group. Stated settings/preview
+Axe checks, notification/console regressions and Docker restart/JSON+ZIP preference/learning
+restore pass. The manual UI reviewer scored its duplicate-approval/recovery-copy findings
+resolved at this scope. Exact local evidence/capture hashes: validation/planning-preferences-local.json;
+review: validation/planning-preferences-review.md. CI for this source is recorded separately;
+prior reminder green evidence does not certify this newer tree. No full product, original
+artwork, physical browser or live external-service acceptance is claimed.

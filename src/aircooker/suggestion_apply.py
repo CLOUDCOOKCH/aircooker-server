@@ -37,6 +37,7 @@ def apply_preview(database, body, device_id):
             meal = Meal.model_validate(raw)
             occupied.update((day, meal.category) for day in occurrences(meal, body.monday, end))
         results = []
+        accepted_recipes = set()
         for mutation in body.mutations:
             if (
                 mutation.kind != "meal"
@@ -54,6 +55,13 @@ def apply_preview(database, body, device_id):
                 raise DomainError("suggestion_slot_occupied", 409)
             occupied.add((meal.date, meal.category))
             results.append(apply_mutation(db, mutation, device_id).model_dump(mode="json"))
+            accepted_recipes.add(str(meal.recipe_id))
+        for recipe_id in accepted_recipes:
+            db.execute(
+                """INSERT INTO suggestion_acceptance VALUES (?,1) ON CONFLICT(recipe_id)
+                DO UPDATE SET count=MIN(1000000,suggestion_acceptance.count+1)""",
+                (recipe_id,),
+            )
         db.execute(
             "INSERT INTO suggestion_application VALUES (?,?,?,?,?)",
             (str(body.request_id), device_id, fingerprint, json.dumps(results), time.time()),

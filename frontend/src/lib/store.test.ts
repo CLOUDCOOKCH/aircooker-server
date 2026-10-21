@@ -368,3 +368,25 @@ test('equal-revision deltas canonicalise accepted payloads and edits preserve th
   assert.equal((await store.entities('recipe'))[0].payload.title, 'Canonical server');
   store.close();
 });
+
+test('preference drafts survive restart and enter recovery exports without dumping unrelated metadata', async () => {
+  const instance = uuid(),
+    store = await LocalStore.open(instance);
+  const planning = {
+    request_id: uuid(),
+    base_revision: 2,
+    preferences: { categories: ['lunch'], allow_repeats: false, servings: '', use_leftovers: true },
+  };
+  await store.setSetting('planning:preferences-draft', planning);
+  await store.setSetting('push:preferences-draft', { enabled: false, dinner: '19:00' });
+  await store.setSetting('unrelated:private-config', 'synthetic-metadata-excluded-from-export');
+  store.close();
+  const reopened = await LocalStore.open(instance);
+  const exported = (await reopened.localExport()) as {
+    settings_drafts: { planning: unknown; reminders: unknown };
+  };
+  assert.deepEqual(exported.settings_drafts.planning, planning);
+  assert.deepEqual(exported.settings_drafts.reminders, { enabled: false, dinner: '19:00' });
+  assert.ok(!JSON.stringify(exported).includes('synthetic-metadata-excluded-from-export'));
+  reopened.close();
+});
