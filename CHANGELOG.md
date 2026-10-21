@@ -1,5 +1,9 @@
 # Changelog
 
+- Edit saved weekly templates offline: rename and add/remove/change meal slots, with
+  decimal-comma portions, input validation, cancellation and reload persistence. Applying
+  a template uses the selected calendar week; editing it preserves existing meals.
+
 - Bind temporary pantry shopping inclusions to a household civil week, preserving offline
   intent and legacy replay receipts. Migrate old overrides transactionally using their
   previous server acceptance time without rewriting sync history.

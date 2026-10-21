@@ -1,0 +1,44 @@
+{
+  "format": "aircooker-pwa-template-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "source_status": "validated working tree; exact commit CI recorded separately",
+  "web_core_tests": 32,
+  "typescript_and_prettier": "passed",
+  "production_build": "passed",
+  "backend_source": "unchanged since 0e0c692 (151 tests passed locally and on AMD64/ARM64 CI)",
+  "browser": {
+    "engine": "Chromium on Linux",
+    "result": "passed",
+    "targeted_cases": [
+      "Save current week as template",
+      "Rename offline; edit weekday, category, recipe and portions",
+      "Add/remove slots; reject zero portions; accept decimal comma",
+      "Offline reload retains saved template and outgoing work",
+      "Cancel preserves previous saved template",
+      "Reconnect sends exact edited template without changing existing meals",
+      "Explicit apply to next week creates the selected Friday lunch and portions",
+      "Phone editor: named native dialog and labelled fieldsets, no horizontal overflow, Axe WCAG2 A/AA and 2.1AA"
+    ]
+  },
+  "capture": {
+    "path": "docs/screenshots/pwa-template-editor-phone.png",
+    "sha256": "39f92354f7b519cbd90149f203a6b6d9c11391c6bad67fa54f8d5ce292daf3aa",
+    "data": "Genuine Chromium phone render with synthetic household; not physical iPhone or fresh independent specialist review"
+  },
+  "assets": [
+    {
+      "path": "frontend/dist/assets/index-BJwTilT9.css",
+      "sha256": "7f2884b91456ed4d82149b221ce7682a04b39070f9183bb6c5a2d9666a72218e"
+    },
+    {
+      "path": "frontend/dist/assets/index-aRTog6tH.js",
+      "sha256": "85d53ae6b91e95ecf3dacdc7e0df69d6df4809859b668682dceda591da23e284"
+    }
+  ],
+  "limits": [
+    "Physical iPhone/Safari/VoiceOver not tested",
+    "Later code needs its own exact-commit CI",
+    "No full-product or release acceptance"
+  ]
+}

@@ -58,12 +58,25 @@ def main():
 
                 axe = Path("frontend/node_modules/axe-core/axe.min.js").read_text()
 
-                def audit(name):
-                    page.evaluate(axe)
-                    result = page.evaluate(
+                def audit(name, screen=page):
+                    screen.evaluate(axe)
+                    result = screen.evaluate(
                         "async()=> (await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)}))"
                     )
                     assert result == [], (name, result)
+
+                def wait_server_rows(screen, path, ready):
+                    deadline = time.monotonic() + 20
+                    rows = []
+                    while time.monotonic() < deadline:
+                        rows = screen.evaluate(
+                            "async path => (await (await fetch(path, {headers:{'X-Aircooker-Client':'pwa'}})).json()).items",
+                            path,
+                        )
+                        if ready(rows):
+                            return rows
+                        screen.wait_for_timeout(200)
+                    raise AssertionError((path, rows))
 
                 def capture(name):
                     if os.environ.get("AIRCOOKER_CAPTURE") == "1":
@@ -286,31 +299,25 @@ def main():
                 override.click()
                 expect(override).to_be_checked()
                 # Wait for the committed payload, rather than a possibly stale status label.
-                second.wait_for_function(
-                    """async()=> {
-                        const rows = (await (await fetch('/api/v1/pantry', {
-                            headers: {'X-Aircooker-Client': 'pwa'}
-                        })).json()).items;
-                        return rows.length === 1 && rows[0].payload.include_this_week === true
-                            && rows[0].payload.include_week_start !== null;
-                    }"""
+                included = wait_server_rows(
+                    second,
+                    "/api/v1/pantry",
+                    lambda rows: len(rows) == 1
+                    and rows[0]["payload"]["include_this_week"] is True
+                    and rows[0]["payload"]["include_week_start"] is not None,
                 )
-                period = second.evaluate(
-                    "async()=> (await (await fetch('/api/v1/pantry',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items[0].payload.include_week_start"
-                )
+                period = included[0]["payload"]["include_week_start"]
                 # The assignment date and pantry period use the same household civil calendar.
                 day = date.fromisoformat(planned_day)
                 assert period == (day - timedelta(days=day.weekday())).isoformat()
                 override.click()
                 expect(override).not_to_be_checked()
-                second.wait_for_function(
-                    """async()=> {
-                        const rows = (await (await fetch('/api/v1/pantry', {
-                            headers: {'X-Aircooker-Client': 'pwa'}
-                        })).json()).items;
-                        return rows.length === 1 && rows[0].payload.include_this_week === false
-                            && rows[0].payload.include_week_start === null;
-                    }"""
+                wait_server_rows(
+                    second,
+                    "/api/v1/pantry",
+                    lambda rows: len(rows) == 1
+                    and rows[0]["payload"]["include_this_week"] is False
+                    and rows[0]["payload"]["include_week_start"] is None,
                 )
                 server_meals = second.evaluate(
                     "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
@@ -369,6 +376,108 @@ def main():
                 assert len(final_rows) == 2 and any(
                     row["payload"]["title"] == "Explicitly reviewed beans" for row in final_rows
                 )
+                # Editing a reusable week is offline-safe and never rewrites existing meals.
+                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                second.get_by_role("button", name="Week options", exact=True).click()
+                second.get_by_role("textbox", name="Template name", exact=True).fill(
+                    "Everyday week"
+                )
+                second.get_by_role("button", name="Save this week", exact=True).click()
+                expect(second.get_by_role("dialog")).not_to_be_visible()
+                second.get_by_role("button", name="Week options", exact=True).click()
+                second.get_by_role("button", name="Edit template Everyday week", exact=True).click()
+                template_editor = second.get_by_role("dialog", name="Edit template", exact=True)
+                second_context.set_offline(True)
+                template_editor.get_by_role("textbox", name="Template name", exact=True).fill(
+                    "Quick lunches"
+                )
+                template_editor.get_by_role(
+                    "combobox", name="Day of the week", exact=True
+                ).select_option("4")
+                template_editor.get_by_role(
+                    "combobox", name="Meal category", exact=True
+                ).select_option("lunch")
+                template_editor.get_by_role("combobox", name="Recipe", exact=True).select_option(
+                    label="Explicitly reviewed beans"
+                )
+                template_editor.get_by_role("button", name="Add a meal", exact=True).click()
+                expect(template_editor.locator(".template-slot")).to_have_count(2)
+                template_editor.get_by_role("button", name="Remove meal 2", exact=True).click()
+                template_editor.get_by_role("textbox", name="Servings", exact=True).fill("0")
+                template_editor.get_by_role("button", name="Save", exact=True).click()
+                expect(template_editor.get_by_role("alert")).to_be_visible()
+                template_editor.get_by_role("textbox", name="Servings", exact=True).fill("3,5")
+                second.set_viewport_size({"width": 390, "height": 844})
+                audit("template editor phone", second)
+                assert template_editor.evaluate("el=>el.scrollWidth <= el.clientWidth")
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    second.screenshot(
+                        path=str(captures / "pwa-template-editor.png"),
+                        animations="disabled",
+                        full_page=True,
+                    )
+                template_editor.get_by_role("button", name="Save", exact=True).click()
+                expect(
+                    second.get_by_role("dialog", name="Week options", exact=True)
+                ).to_be_visible()
+                second.get_by_role("button", name="Close", exact=True).click()
+                second.reload()
+                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                second.get_by_role("button", name="Week options", exact=True).click()
+                second.get_by_role("button", name="Edit template Quick lunches", exact=True).click()
+                expect(
+                    template_editor.get_by_role("textbox", name="Servings", exact=True)
+                ).to_have_value("3.5")
+                expect(
+                    template_editor.get_by_role("combobox", name="Day of the week", exact=True)
+                ).to_have_value("4")
+                template_editor.get_by_role("textbox", name="Template name", exact=True).fill(
+                    "Not saved"
+                )
+                template_editor.get_by_role("button", name="Cancel", exact=True).click()
+                expect(
+                    second.get_by_role("button", name="Edit template Quick lunches", exact=True)
+                ).to_be_visible()
+                second.get_by_role("button", name="Close", exact=True).click()
+                second_context.set_offline(False)
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                server_templates = wait_server_rows(
+                    second,
+                    "/api/v1/templates",
+                    lambda rows: len(rows) == 1 and rows[0]["payload"]["name"] == "Quick lunches",
+                )
+                slot = server_templates[0]["payload"]["meals"][0]
+                assert (
+                    slot["weekday"] == 4
+                    and slot["category"] == "lunch"
+                    and slot["servings"] == "3.5"
+                )
+                assert slot["recipe_id"] == next(
+                    row["id"]
+                    for row in final_rows
+                    if row["payload"]["title"] == "Explicitly reviewed beans"
+                )
+                assert (
+                    second.evaluate(
+                        "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                    )
+                    == 1
+                )
+                second.get_by_role("button", name="Next week", exact=True).click()
+                second.get_by_role("button", name="Week options", exact=True).click()
+                second.get_by_role("button", name="Apply template", exact=True).click()
+                applied = wait_server_rows(
+                    second, "/api/v1/calendar/meals", lambda rows: len(rows) == 2
+                )
+                expected_day = (
+                    day - timedelta(days=day.weekday()) + timedelta(days=11)
+                ).isoformat()
+                assert any(
+                    row["payload"]["date"] == expected_day
+                    and row["payload"]["servings"] == "3.5"
+                    and row["payload"]["category"] == "lunch"
+                    for row in applied
+                ), (expected_day, applied)
                 second_context.close()
                 # Worker cache contains public shell assets, never authenticated API/media.
                 cached = page.evaluate(
@@ -380,7 +489,7 @@ def main():
                 context.close()
                 browser.close()
                 print(
-                    "PWA real-browser smoke passed: isolated demo, English/German dark/mobile, setup, offline edit/reload, exact fractions, independent cookie sessions, commit-ordered conflicts, deletion/rejected-copy recovery, meal assignment, cooked leftovers, pantry, explicit import review, axe WCAG checks and public-shell-only cache."
+                    "PWA real-browser smoke passed: isolated demo, English/German dark/mobile, setup, offline edit/reload, exact fractions, independent cookie sessions, commit-ordered conflicts, deletion/rejected-copy recovery, meal assignment, cooked leftovers, week-bound pantry overrides, explicit import review, offline template editing/reload/cancel and next-week application, axe WCAG checks and public-shell-only cache."
                 )
         finally:
             server.should_exit = True

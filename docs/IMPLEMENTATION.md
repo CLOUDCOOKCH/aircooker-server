@@ -71,7 +71,9 @@ Python licence baseline and full npm advisory audit (zero known advisories obser
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
 recipe save/reload, independent cookie sessions, server-ordered conflicts, deletion with
 rejected-edit recovery, calendar assignment, cooked leftovers, pantry and explicit import
-review/confirmation. Axe checks pass on the stated Home/Recipes/Settings/Calendar screens;
+review/confirmation. The expanded flow covers offline template editing/reload, validation,
+cancellation and next-week application. Axe checks pass on the stated Home/Recipes/Settings/
+Calendar screens and the phone template editor;
 full manual accessibility and real iPhone/Safari are separate gates.
 
 An independent visual/source review and one bounded fix pass scored dialog naming and
@@ -86,3 +88,8 @@ complete archive reconstruction, broader source/media import,
 admin deletion/destructive replacement, safe cleanup and release validation remain engineering
 work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
 No stable release or protected release acceptance is enabled by these development results.
+
+Published PWA ff48270 and pantry-period correction 0e0c692 each passed all six GitHub CI
+jobs, including native AMD64/ARM64 test/Docker/security jobs and Chromium. Exact source and
+job IDs are in validation/github-pwa.json and validation/github-pantry-period.json. These
+results do not automatically validate newer template-editor source changes.

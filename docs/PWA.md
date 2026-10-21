@@ -78,6 +78,12 @@ shopping this week” overrides that exclusion for the current Monday–Sunday w
 household time zone. It expires automatically for the following week. An offline change
 keeps the week you selected, even if it reaches the server after rollover.
 
+Calendar → Week options saves the selected week as a reusable template. Use its edit button
+to rename it or add, remove and change meals, weekdays, recipes and portions. Saved edits
+work offline and survive reload. Cancel leaves the saved template unchanged. Applying a
+template adds its meals to the currently selected week; editing the template itself never
+changes existing calendar meals. Templates cannot copy already cooked leftover portions.
+
 ## Offline operation and recovery
 
 Open online once so the public application shell can finish caching. Recipes, meals, pantry,

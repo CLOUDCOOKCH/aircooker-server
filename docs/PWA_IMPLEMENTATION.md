@@ -17,6 +17,9 @@ client, not a declaration that the entire project or release checklist is finish
   optional nutrition editing. Nutrition is preserved as supplied, not inferred or rescaled.
 - Civil-week planning, accessible assignment/move/duplicate/remove/cooked controls, drag
   alternative, bounded recurrence/exceptions, day/week copy, saved templates and leftovers.
+- Saved-template rename and meal-slot editing (weekday/category/recipe/portions, add/remove),
+  with offline save/reload and explicit application to the selected week. Template edits
+  leave existing calendar meals unchanged; decimal points and commas are accepted in the editor.
 - Basic pantry with period-bound shopping overrides and local ratings/history/variety/leftover
   recommendations with preview approval. Offline overrides retain their intended civil week.
 - Durable import requests, polling, editable previews, explicit AI content consent, manual
@@ -36,6 +39,8 @@ Evidence: **151 backend tests**, **32 web core tests**, lint/types/format/OpenAP
 and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
 save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
 assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
+The expanded flow also checks offline template editing/reload, validation, cancellation,
+and next-week application, plus the phone template editor's named controls/Axe checks.
 The same script passes Axe WCAG2 A/AA and 2.1AA checks on its stated screens. Domain/unit
 tests cover recurrence/copy/templates/suggestions; not every source control has browser E2E.
 
@@ -53,7 +58,7 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
 - [ ] Shared household recommendation preferences and acceptance learning.
 - [ ] Guided non-recipe archive reconstruction and automatic browser-recovery JSON import;
       current archives/exports preserve data but these recovery paths remain manual.
-- [ ] Template rename/slot editing, full recurrence browser acceptance and expanded suggestion
+- [ ] Full recurrence browser acceptance and expanded suggestion
       collision UX/testing beyond tested atomic grouping/recovery.
 - [ ] Source-photo import, broader HTML/caption/transcript extraction, language/quantity cases.
       Unsupported sources retain manual/AI fallback; no access-control bypasses are implemented.
@@ -63,7 +68,8 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
       remaining typed API/quotas/security/load review, backups/release compatibility and docs.
 - [ ] Stable image/release and reproducibility acceptance. PWA commit ff48270 passed all six
       AMD64/ARM64/security/browser/core CI jobs in run 39584288763 (see validation/github-pwa.json).
-      Later pantry changes require their own exact-commit results.
+      Pantry commit 0e0c692 also passed all six jobs in run 39586102045 (see
+      validation/github-pantry-period.json). Later template changes need their own CI result.
 
 iPhone incoming Web Share Target, native local notifications/biometric lock and WidgetKit
 are deferred native capabilities, not promised pure-PWA functions. Foreground/reopen sync

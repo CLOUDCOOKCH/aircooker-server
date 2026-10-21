@@ -12,9 +12,11 @@ import {
   Trash2,
   Upload,
   ShoppingBag,
+  Pencil,
 } from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useApp } from './model';
+import { TemplateEditor } from './TemplateEditor';
 import { Empty, IconButton, PageHeader, Photo, Sheet, WeekStrip } from './components';
 import {
   addDays,
@@ -26,7 +28,7 @@ import {
   today,
   uuid,
 } from './lib/domain';
-import type { Category, Meal } from './lib/domain';
+import type { Category, Entity, Meal } from './lib/domain';
 import {
   applyTemplate,
   availablePortions,
@@ -868,6 +870,7 @@ function WeekTools({ day, onClose }: { day: string; onClose: () => void }) {
   const [destination, setDestination] = useState(addDays(day, 7)),
     [name, setName] = useState(''),
     [error, setError] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Entity<'template'> | null>(null);
   const items = occurrences(app.entities('meal'), monday(day), addDays(monday(day), 6));
   const run = async (work: () => Edit[]) => {
     try {
@@ -883,6 +886,7 @@ function WeekTools({ day, onClose }: { day: string; onClose: () => void }) {
       );
     }
   };
+  if (editing) return <TemplateEditor template={editing} onClose={() => setEditing(null)} />;
   return (
     <Sheet title={t('weekTools')} onClose={onClose}>
       <label>
@@ -933,8 +937,14 @@ function WeekTools({ day, onClose }: { day: string; onClose: () => void }) {
         </button>
       </form>
       {app.entities('template').map((row) => (
-        <div className="settings-row" key={row.id}>
+        <div className="settings-row template-row" key={row.id}>
           <strong>{row.payload.name}</strong>
+          <IconButton
+            label={`${t('editTemplate')} ${row.payload.name}`}
+            onClick={() => setEditing(row)}
+          >
+            <Pencil size={16} />
+          </IconButton>
           <button
             className="text-button"
             onClick={() => void run(() => applyTemplate(row.payload, day, app.entities('recipe')))}

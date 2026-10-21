@@ -1,0 +1,56 @@
+{
+  "format": "aircooker-pantry-period-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "0e0c6929ad67dbe5fdacd0be1c2923152671e5b5",
+  "run_id": 39586102045,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39586102045",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 151,
+  "web_core_tests": 32,
+  "jobs": [
+    {
+      "id": 119175260807,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119175260973,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119175261055,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119175261120,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119175261148,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119175261308,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "verified": [
+    "AMD64/ARM64 backend tests, migrations, OpenAPI, types, licences and real-HTTP Docker smoke",
+    "PWA generated contract, types, format, 32 core tests, build and npm audit gate",
+    "Real Chromium offline/two-device/import/pantry week commit and clear flows plus existing console workflows",
+    "Source secrets, runtime dependency and HIGH/CRITICAL container security gates on both architectures"
+  ],
+  "limits": [
+    "Template editor source changes postdate this commit",
+    "Physical iPhone/Safari and live external services remain unverified",
+    "A passing container severity gate is not a count of all vulnerabilities",
+    "No stable release or complete product acceptance"
+  ]
+}
