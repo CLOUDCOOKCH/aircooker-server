@@ -40,5 +40,10 @@
     "Linux engine tests inject notch values; physical Safari/iPhone finger, Home Screen and keyboard behavior unverified",
     "WebKit CI must pass before release; no local WebKit claim",
     "Native code, external-service verification and full-product acceptance unchanged"
-  ]
+  ],
+  "webkit_followup": {
+    "run_id": 39643751455,
+    "finding": "WebKit completed pointer move/persistence but suppressed the compatibility click after a captured grip tap.",
+    "fix": "Handle pointer taps directly on pointerup; consume follow-up pointer clicks while retaining native keyboard activation. New Chromium touch/move/cancel/tap suite passes; WebKit rerun required."
+  }
 }
