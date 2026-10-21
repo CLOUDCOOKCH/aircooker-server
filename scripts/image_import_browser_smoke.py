@@ -30,14 +30,23 @@ def main():
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             port = probe.getsockname()[1]
-        base = f"http://127.0.0.1:{port}"
+        tls_root = os.environ.get("MEALF_BROWSER_TEST_TLS")
+        if engine == "webkit" and not tls_root:
+            raise RuntimeError("WebKit authenticated flow requires a trusted HTTPS test fixture")
+        base = f"{'https' if tls_root else 'http'}://127.0.0.1:{port}"
         os.environ["BASE_URL"] = base
 
         def start_backend():
             app = create_app(root, run_worker=True)
             server = uvicorn.Server(
                 uvicorn.Config(
-                    app, host="127.0.0.1", port=port, log_level="error", access_log=False
+                    app,
+                    host="127.0.0.1",
+                    port=port,
+                    log_level="error",
+                    access_log=False,
+                    ssl_certfile=str(Path(tls_root) / "server.crt") if tls_root else None,
+                    ssl_keyfile=str(Path(tls_root) / "server.key") if tls_root else None,
                 )
             )
             thread = threading.Thread(target=server.run, daemon=True)
@@ -65,6 +74,14 @@ def main():
                 page = context.new_page()
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
+                page.on(
+                    "response",
+                    lambda response: print(
+                        f"Test API status: {response.status} {response.url.split('/api/v1/', 1)[1].split('?')[0]}"
+                    )
+                    if response.status >= 400 and "/api/v1/" in response.url
+                    else None,
+                )
                 axe = Path("frontend/node_modules/axe-core/axe.min.js").read_text()
 
                 def audit():
@@ -116,7 +133,7 @@ def main():
                 page.get_by_label("Kitchen name", exact=True).fill("Image test kitchen")
                 page.get_by_label("Household time zone", exact=True).fill("Europe/Zurich")
                 page.get_by_role("button", name="Set up your kitchen", exact=True).click()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible(
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible(
                     timeout=15000
                 )
                 import_page()
@@ -130,7 +147,7 @@ def main():
                 expect(page.locator(".import-job")).to_contain_text("Queued")
                 expect(page.locator(".import-job img")).to_be_visible()
                 page.reload()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 import_page()
                 expect(page.locator(".import-job")).to_contain_text("Queued")
                 expect(page.locator(".import-job img")).to_be_visible()
@@ -211,6 +228,7 @@ def main():
                         "engine": engine,
                         "backend": "real",
                         "ocr": "real Tesseract eng+deu",
+                        "transport": "trusted HTTPS" if tls_root else "HTTP loopback Chromium",
                         "offline": "browser offline flag"
                         if engine == "chromium"
                         else "actual backend outage",
