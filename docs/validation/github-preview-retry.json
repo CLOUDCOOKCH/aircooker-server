@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-21",
+  "source_commit": "82bc41e46760978b043f30a12d98023511f6dda2",
+  "scope": [
+    "Mealf palette and console design",
+    "PWA gesture/text selection policy",
+    "completed preview retry no-op and immutable image guard"
+  ],
+  "local_tests": {
+    "backend": 225,
+    "frontend": 39,
+    "release_retry_and_source_gate": 21,
+    "ruff": "passed",
+    "mypy": "passed",
+    "actionlint": "passed",
+    "openapi": "unchanged"
+  },
+  "prior_attempt": {
+    "run": 39620210006,
+    "attempt": 2,
+    "tag": "poc-20261021.4",
+    "source": "9d73633612786bbaf7975465061fd6d281443752",
+    "conclusion": "failed after rebuilding/pushing old source and attempting duplicate release creation",
+    "rebuilt_digest": "sha256:45df776761e17fbbea13ff5552c0be2b8917bf27b51bd793c4147d4e21bd8e67"
+  },
+  "planned_publication": {
+    "tag": "poc-20261021.5",
+    "status": "pending exact combined-source CI and fresh dual-architecture image gates"
+  },
+  "limits": [
+    "Physical iPhone/Safari and live external accounts remain unverified",
+    "Existing .4 Git tag and release assets are preserved; immutable digest recommended for historical builds"
+  ]
+}
