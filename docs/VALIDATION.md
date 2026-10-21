@@ -18,6 +18,12 @@ expanded local Chromium test passes EN/DE switching and proves private markers/U
 not appear in the document. Genuine desktop/light/dark and German phone captures were
 regenerated and visually inspected. Later console changes await their own remote CI.
 
+Console run 39567118930 at 17f4b9e passes all five remote jobs, including the new browser
+diagnostics/language/redaction checks. The wheel-licence inventory now runs locally against
+all 34 locked runtime packages with installed attribution files; a deliberately changed
+approval baseline is rejected. Ruff checks pass. This is metadata/attribution evidence,
+not full container/native-library or legal clearance; see DEPENDENCY_LICENSES.md.
+
 | Check | Executed result | Limit |
 | --- | --- | --- |
 | Backend tests against hashed runtime dependencies | **129 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |

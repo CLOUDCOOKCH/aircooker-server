@@ -29,6 +29,7 @@ jobs:
           python -m pip install --no-deps -e .
           python -m pytest -q
           python scripts/export_contract.py --check
+          python scripts/license_inventory.py --check
       - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
       - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
@@ -59,4 +60,4 @@ jobs:
       - name: Publish contract and generated release notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" contracts/openapi-v1.json --verify-tag --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" contracts/openapi-v1.json build/runtime-licenses.json --verify-tag --generate-notes

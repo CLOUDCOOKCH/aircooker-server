@@ -8,6 +8,12 @@ No development phase or full-product acceptance set is marked complete. This is 
 implementation across the phase boundaries; later-stage foundations do not imply earlier
 phases have passed every acceptance gate.
 
+The phase-0 dependency review now includes a reproducible 34-wheel licence/attribution
+inventory and CI drift gate. Full OS/bundled-library/source-distribution review remains a
+release gate; the wheel metadata baseline does not establish legal clearance. See
+DEPENDENCY_LICENSES.md. Phase-1 read-only job/import diagnostics and its localised console
+overview pass backend and Chromium checks on remote run 39567118930 at 17f4b9e.
+
 | Phase | Delivered code / documentation | Status and remaining work |
 | --- | --- | --- |
 | 0 Architecture | ADRs, diagram, schema, sync design, initial threat analysis, OpenAPI and executable Bring probe; two local Git repos | Partial: live Bring feasibility and full dependency license inventory pending; both GitHub repositories published |

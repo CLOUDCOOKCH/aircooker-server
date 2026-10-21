@@ -1,0 +1,138 @@
+{
+  "aiohappyeyeballs": {
+    "license_expression": "PSF-2.0",
+    "version": "2.7.1"
+  },
+  "aiohttp": {
+    "license_expression": "Apache-2.0 AND MIT",
+    "version": "3.14.5"
+  },
+  "aiosignal": {
+    "license_expression": "Apache-2.0",
+    "version": "1.4.0"
+  },
+  "annotated-doc": {
+    "license_expression": "MIT",
+    "version": "0.0.5"
+  },
+  "annotated-types": {
+    "license_expression": "MIT",
+    "version": "0.8.0"
+  },
+  "anyio": {
+    "license_expression": "MIT",
+    "version": "4.15.1"
+  },
+  "argon2-cffi": {
+    "license_expression": "MIT",
+    "version": "25.1.0"
+  },
+  "argon2-cffi-bindings": {
+    "license_expression": "MIT",
+    "version": "26.1.0"
+  },
+  "attrs": {
+    "license_expression": "MIT",
+    "version": "26.1.0"
+  },
+  "bring-api": {
+    "license_expression": "MIT",
+    "version": "1.1.2"
+  },
+  "certifi": {
+    "license_expression": "MPL-2.0",
+    "version": "2026.10.19"
+  },
+  "cffi": {
+    "license_expression": "MIT-0",
+    "version": "2.1.1"
+  },
+  "click": {
+    "license_expression": "BSD-3-Clause",
+    "version": "8.5.0"
+  },
+  "cryptography": {
+    "license_expression": "Apache-2.0 OR BSD-3-Clause",
+    "version": "50.0.0"
+  },
+  "fastapi": {
+    "license_expression": "MIT",
+    "version": "0.141.1"
+  },
+  "frozenlist": {
+    "license_expression": "Apache-2.0",
+    "version": "1.8.0"
+  },
+  "h11": {
+    "license_expression": "MIT",
+    "version": "0.16.0"
+  },
+  "httpcore": {
+    "license_expression": "BSD-3-Clause",
+    "version": "1.0.9"
+  },
+  "httpx": {
+    "license_expression": "BSD-3-Clause",
+    "version": "0.28.1"
+  },
+  "idna": {
+    "license_expression": "BSD-3-Clause",
+    "version": "3.20"
+  },
+  "mashumaro": {
+    "license_expression": "Apache-2.0",
+    "version": "3.23"
+  },
+  "multidict": {
+    "license_expression": "Apache-2.0",
+    "version": "7.1.0"
+  },
+  "orjson": {
+    "license_expression": "MPL-2.0 AND (Apache-2.0 OR MIT)",
+    "version": "3.13.0"
+  },
+  "pillow": {
+    "license_expression": "MIT-CMU",
+    "version": "13.0.0"
+  },
+  "propcache": {
+    "license_expression": "Apache-2.0",
+    "version": "0.5.4"
+  },
+  "pycparser": {
+    "license_expression": "BSD-3-Clause",
+    "version": "3.11"
+  },
+  "pydantic": {
+    "license_expression": "MIT",
+    "version": "2.13.4"
+  },
+  "pydantic-core": {
+    "license_expression": "MIT",
+    "version": "2.46.4"
+  },
+  "python-multipart": {
+    "license_expression": "Apache-2.0",
+    "version": "0.0.32"
+  },
+  "starlette": {
+    "license_expression": "BSD-3-Clause",
+    "version": "1.9.0"
+  },
+  "typing-extensions": {
+    "license_expression": "PSF-2.0",
+    "version": "4.16.0"
+  },
+  "typing-inspection": {
+    "license_expression": "MIT",
+    "version": "0.4.4"
+  },
+  "uvicorn": {
+    "license_expression": "BSD-3-Clause",
+    "version": "0.52.1"
+  },
+  "yarl": {
+    "license_expression": "Apache-2.0",
+    "version": "1.25.1"
+  }
+}

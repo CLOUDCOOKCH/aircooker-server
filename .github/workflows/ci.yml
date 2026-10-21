@@ -26,6 +26,7 @@ jobs:
       - run: python -m ruff check src tests scripts
       - run: python -m ruff format --check src tests scripts
       - run: python -m mypy src/aircooker --ignore-missing-imports
+      - run: python scripts/license_inventory.py --check
       - run: python -m pytest -q --junitxml=build/tests.xml
       - run: python scripts/export_contract.py --check
       - run: docker build -t aircooker-server:development .
@@ -34,7 +35,9 @@ jobs:
         if: always()
         with:
           name: backend-tests-${{ matrix.runner }}
-          path: build/tests.xml
+          path: |
+            build/tests.xml
+            build/runtime-licenses.json
   browser:
     runs-on: ubuntu-24.04
     steps:

@@ -1,5 +1,8 @@
 # Changelog
 
+- Inventory locked Python wheel licence declarations and installed attribution-file hashes;
+  gate dependency/licence drift in CI and attach the report to future protected releases.
+
 - Add authenticated, bounded read-only job/import diagnostics with consistent queue counts
   and explicit error-code redaction. Type and filter the existing recent-jobs endpoint.
 - Show localised queue totals and recent import states in the administration overview;
