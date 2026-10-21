@@ -25,3 +25,9 @@ See the implementation checklist for feature status and verification limits.
 - Exercise operational console workflows in real Chromium with explicit external-service
   doubles; configure a separate browser CI job and optional hashed tooling lock.
 - Upgrade pytest to 9.0.3 to address the reported local temporary-directory advisory.
+
+- Add immutable commit proofs, protected sync state reads and optional transactional anchor
+  checks on pushes/pulls, including detection of reused revisions after a database restore.
+- Add stable paginated history snapshots with tombstones and a soft response payload budget.
+- Return delta/receipt proofs, retain ordinary restart compatibility, and publish a shared
+  Python/Swift wire fixture for the pinned companion contract.

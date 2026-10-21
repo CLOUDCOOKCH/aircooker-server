@@ -5,7 +5,7 @@ Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` v
 No mandatory hosted service, analytics or tracking.
 
 **Development version. The complete product acceptance criteria are not yet met.**
-The executable backend includes secure first-run setup, per-device sessions, versioned sync,
+The executable backend includes secure first-run setup, per-device sessions, versioned sync with restore-aware commit proofs,
 recipe/calendar/pantry/leftover/template storage, bounded recurrence expansion, shopping
 projections, a durable queue, structured recipe previews, optional text AI adapters, a Bring!
 adapter, an administration console, and data export/import. See [status](docs/IMPLEMENTATION.md)
@@ -62,7 +62,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Area | Current status |
 | --- | --- |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
-| SQLite WAL, repeatable migrations, transactional mutation replay/tombstones | Implemented; automated tests |
+| SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
 | Recurrences, serving scaling, pantry-aware aggregation | Implemented; bounded expansion and domain tests |
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared preference learning remains partial |

@@ -9,7 +9,7 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | device / session | Independent sessions; hashed opaque access/refresh tokens, expiry and revocation |
 | refresh_history | Rotated-token replay detection revokes the corresponding session |
 | entity | Atomic canonical snapshots keyed by kind/UUID, revision and tombstone |
-| change_log | Monotonically increasing server-committed delta sequence |
+| change_log | Server-committed delta sequence plus immutable random commit token; sequence alone is not proof of ancestry after restore |
 | mutation | Device-scoped replay result and immutable request fingerprint |
 | recipe_media | Immutable UUID/JPEG BLOBs, source/canonical checksums, 1 MiB per image and 256 MiB household quota |
 | recipe / recipe_ingredient / recipe_step | Normalised domain projections with ingredient ordering and recipe foreign keys |

@@ -56,3 +56,23 @@ volume owned by UID/GID 10001, keep it isolated from public traffic, start the m
 and verify DB health and household data. Revoke sessions using local recovery before public
 exposure. Devices with cursors ahead of the restored server need controlled resync while
 preserving pending changes. Test restoration regularly; an untested archive is not evidence.
+
+## Device recovery after a database rollback
+
+An ordinary container restart preserves commit proofs and does not require a device rebuild.
+Restoring an older database can remove revisions or create a divergent branch after later
+writes reuse revision numbers. The updated native client detects that with persistent commit
+proofs before submitting its queued domain edits; pushes and pulls also check their anchors.
+Older clients without these fields lack that protection. Update both pinned components.
+
+After restore, device sessions may need sign-in again. In Settings → Sync and saved drafts,
+review the recovery explanation and choose Rebuild from server. The app downloads a fixed
+server snapshot into staging; interrupted downloads resume. On completion, all active local
+cached records and their queued edits/deletions are archived on that device before the local
+projection is replaced. Cached photos remain. Restoring an archived recipe makes a fresh UUID
+and requeues available local media; it does not silently redirect old meal/template references.
+Other archived record kinds remain available as text and require manual reconstruction.
+
+These local archives are not in a server export or server backup, and cannot recover content
+that was never cached on a surviving device. They are removed when the app is uninstalled.
+No automatic history compaction/purge or destructive household replacement was added here.

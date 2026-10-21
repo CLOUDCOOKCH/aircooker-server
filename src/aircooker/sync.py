@@ -3,6 +3,7 @@ import json
 import time
 from datetime import UTC, datetime
 from decimal import Decimal
+from uuid import uuid4
 
 from .errors import DomainError
 from .jobs import enqueue
@@ -102,6 +103,7 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
             status="rejected_tombstone",
             revision=revision,
             conflict=True,
+            revision_token=token_at(db, revision),
         )
     else:
         deleted = mutation.operation == "delete"
@@ -127,8 +129,8 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
         stamp = datetime.now(UTC).isoformat()
         encoded = json.dumps(payload, sort_keys=True)
         seq = db.execute(
-            "INSERT INTO change_log(kind,entity_id,deleted,payload,updated_at) VALUES (?,?,?,?,?)",
-            (kind, eid, deleted, encoded, stamp),
+            "INSERT INTO change_log(kind,entity_id,deleted,payload,updated_at,commit_token) VALUES (?,?,?,?,?,?)",
+            (kind, eid, deleted, encoded, stamp, uuid4().hex),
         ).lastrowid
         db.execute(
             "INSERT INTO entity VALUES (?,?,?,?,?,?) ON CONFLICT(kind,id) DO UPDATE SET revision=excluded.revision,deleted=excluded.deleted,payload=excluded.payload,updated_at=excluded.updated_at",
@@ -160,6 +162,7 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
             status="deleted" if deleted else "accepted",
             revision=seq,
             conflict=conflict,
+            revision_token=token_at(db, seq),
         )
     db.execute(
         "INSERT INTO mutation VALUES (?,?,?,?,?)",
@@ -190,4 +193,12 @@ def pull(db, cursor: int, limit: int):
         changes=changes,
         cursor=changes[-1].revision if changes else cursor,
         has_more=len(rows) > limit,
+        cursor_token=token_at(db, changes[-1].revision if changes else cursor),
     )
+
+
+def token_at(db, cursor: int):
+    if cursor == 0:
+        return "root"
+    row = db.execute("SELECT commit_token FROM change_log WHERE sequence=?", (cursor,)).fetchone()
+    return row[0] if row else None

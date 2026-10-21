@@ -129,7 +129,19 @@ class Mutation(Model):
     idempotency_key: UUID
 
 
+class SyncAnchor(Model):
+    cursor: int = Field(ge=0)
+    token: str = Field(pattern=r"^(root|[a-f0-9]{32})$")
+
+
+class SyncState(SyncAnchor):
+    instance_id: UUID
+    requested_cursor: int
+    requested_token: str | None
+
+
 class Push(Model):
+    checkpoint: SyncAnchor | None = None
     mutations: list[Mutation] = Field(min_length=1, max_length=100)
 
 
@@ -147,12 +159,21 @@ class MutationResult(Model):
     status: Literal["accepted", "deleted", "rejected_tombstone"]
     revision: int
     conflict: bool
+    revision_token: str | None = None
 
 
 class Pull(Model):
     changes: list[Change]
     cursor: int
     has_more: bool
+    cursor_token: str
+
+
+class SyncSnapshot(Model):
+    instance_id: UUID
+    checkpoint: SyncAnchor
+    changes: list[Change]
+    next_after: str | None
 
 
 class Credentials(Model):

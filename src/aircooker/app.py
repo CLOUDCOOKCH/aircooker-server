@@ -72,6 +72,9 @@ from .models import (
     Setup,
     SuggestionApply,
     SuggestionPreview,
+    SyncAnchor,
+    SyncSnapshot,
+    SyncState,
     Tokens,
 )
 from .planning import entities, occurrences, shopping_projection, week_start
@@ -79,6 +82,7 @@ from .recommendations import planning_basis, suggest_week
 from .secrets import SecretVault
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
+from .sync_history import snapshot_page, state_for, validate_anchor
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -324,6 +328,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     def capabilities():
         return {
             "sync": True,
+            "sync_history_proof": 1,
             "recipe_crud": True,
             "structured_import_preview": True,
             "bring_automatic_mutations": False,
@@ -404,19 +409,41 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     @app.post("/api/v1/sync/push", response_model=list[MutationResult])
     def push(body: Push, s=Depends(session)):
         with database.transaction() as db:
+            if body.checkpoint is not None:
+                validate_anchor(db, body.checkpoint)
             return [apply_mutation(db, m, s["device_id"]) for m in body.mutations]
 
     @app.get("/api/v1/sync/pull", response_model=Pull)
     def sync_pull(
         cursor: int = Query(default=0, ge=0),
         limit: int = Query(default=100, ge=1, le=500),
+        token: str | None = Query(default=None, pattern=r"^(root|[a-f0-9]{32})$"),
         s=Depends(session),
     ):
         with database.connect() as db:
+            db.execute("BEGIN")
+            if token is not None:
+                validate_anchor(db, SyncAnchor(cursor=cursor, token=token))
             high = db.execute("SELECT COALESCE(MAX(sequence),0) FROM change_log").fetchone()[0]
             if cursor > high:
                 raise DomainError("cursor_ahead_of_server_full_resync_required", 409)
             return pull(db, cursor, limit)
+
+    @app.get("/api/v1/sync/state", response_model=SyncState)
+    def sync_state(cursor: int = Query(default=0, ge=0), s=Depends(session)):
+        with database.connect() as db:
+            return state_for(db, cursor)
+
+    @app.get("/api/v1/sync/snapshot", response_model=SyncSnapshot)
+    def sync_snapshot(
+        cursor: int = Query(ge=0),
+        token: str = Query(pattern=r"^(root|[a-f0-9]{32})$"),
+        after: str = Query(default="", max_length=50),
+        limit: int = Query(default=100, ge=1, le=100),
+        s=Depends(session),
+    ):
+        with database.connect() as db:
+            return snapshot_page(db, SyncAnchor(cursor=cursor, token=token), after, limit)
 
     def resource_routes(kind, route):
         @app.get(route, operation_id=f"list_{kind}")

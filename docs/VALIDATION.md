@@ -1,18 +1,18 @@
-# Validation evidence — 2026-10-20
+# Validation evidence — 2026-10-21
 
 This report describes a development implementation, not completed product acceptance.
 No real household, Bring account, cloud AI credential or Apple signing credential was used.
 
 | Check | Executed result | Limit |
 | --- | --- | --- |
-| Backend tests against hashed runtime dependencies | **81 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
+| Backend tests against hashed runtime dependencies | **92 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
 | Ruff lint and format | Passed | Python source/tests/scripts only |
 | mypy | Passed across 22 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **53 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **65 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 240 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 251 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -26,7 +26,9 @@ Docker E2E verifies non-root/read-only startup, token-protected setup, HTTP auth
 idempotent mutation replay, recipe/meal persistence and scaling projection, server restart,
 replayed offline edit, immutable photo upload/replay, exact photo bytes after restart,
 leftover ingredient exclusion, suggestion approval/replay across server restart,
-encrypted AI configuration/redaction across restart, JSON v2 and streamed ZIP restore into independently configured clean containers. It does not substitute for a physical two-device iOS workflow.
+encrypted AI configuration/redaction across restart, JSON v2 and streamed ZIP restore into independently configured clean containers. The latest
+image also passes stable commit-proof persistence, protected delta/push requests and snapshot
+pagination across restart and later recipe edits. It does not substitute for a physical two-device iOS workflow.
 
 Real Chromium checks exercised first-run setup/login, household settings, unsaved-input
 preservation during EN/DE switching, mobile layout, encrypted AI settings/probe, Bring
@@ -79,9 +81,23 @@ cache bounds. UserNotifications/WidgetKit delivery/rendering and local logout cl
 Apple SDK/device validation work.
 
 See IMPLEMENTATION.md for remaining work: shared recommendation preferences, cross-device
-approval recovery, admin deletion/extended diagnostics, destructive restore, cleanup, controlled full resync and native validation. External credential gaps do not excuse these missing features.
+approval recovery, admin deletion/extended diagnostics, destructive restore, cleanup, non-recipe archive reconstruction and native validation. External credential gaps do not excuse these missing features.
 
 The companion Swift recovery suite now verifies rejected-record isolation, persistent server
 snapshots, transactional multi-edit archives and new recipe identities, later archive
 restoration, stale-review protection, active-sync exclusion, malformed receipts/deltas, and
 local schema-v3 migration replay. Native review/sharing controls remain Apple SDK unverified.
+
+History recovery checks also exercise real SQLite online backup/rollback, reused sequence
+values with different commit proofs, rejected stale-proof pushes/pulls, migration backfill,
+anchored pages during later writes, soft payload budgeting and a shared Python/Swift wire
+fixture. Companion tests cover durable restart/resume, another restore mid-download,
+acknowledged-before-pull proofs, staged/final rollback, malformed payloads, missing-proof
+upgrade and recipe photo/import-attribution restoration. Apple lifecycle checks remain open.
+
+See [history verification record](validation/sync-history.json) for the executed image and
+counts. The last Python dependency audit artifacts are from 2026-10-20; their locks have not
+changed in this increment. Chromium admin workflows were also exercised previously; no
+browser administration UI was changed or revalidated in this increment. An initial final
+build/test launch ran out of Docker storage; obsolete aircooker images/build cache were
+removed without deleting volumes, then affected image and Swift checks passed.

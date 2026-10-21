@@ -16,5 +16,6 @@ tradeoff rather than quietly inventing field-level semantics.
 
 Tombstones are permanent in the development protocol. A stale upsert returns
 `rejected_tombstone`; the client preserves the unsent draft and surfaces an error. A future
-release needs a recovery/export UI and a generation-aware full-resync protocol before
-compacting the change log. Backend identity is pinned locally to prevent mixing households.
+release needs native lifecycle validation and a retention policy before compacting the
+change log. ADR 007 adds commit proofs, anchored snapshots and the companion local archive
+recovery implementation. Backend identity is pinned locally to prevent mixing households.

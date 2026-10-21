@@ -120,3 +120,38 @@ fixed synthetic text, validates a recipe, and returns `validated_probe_response`
 `household_content_sent=false`. It shares the configured hourly budget and is also limited
 to five probes per minute. No persistent live-verification guarantee is implied. See
 [administration](ADMINISTRATION.md) for credentials, environment precedence and UI coverage.
+
+## History proofs and full resynchronisation
+
+The development contract extends sync protocol 1 with `sync_history_proof: 1` in capabilities.
+GET `/sync/state?cursor=N` returns `{instance_id, cursor, token, requested_cursor,
+requested_token}`. `cursor/token` identify the current head; `requested_token=null` means
+that requested revision is absent. Revision zero always uses the sentinel `root`. Other
+tokens are 32 lowercase hexadecimal characters, random per commit and persistent across
+ordinary restarts. They are not credentials. Compare instance identity first, then the
+last **observed** checkpoint, not merely a device clock or an integer cursor.
+
+POST `/sync/push` accepts an optional `checkpoint: {cursor, token}` alongside `mutations`.
+Its anchor is checked inside the write transaction. GET `/sync/pull` accepts optional `token`
+for its requested cursor, checked in the same read transaction as the returned changes.
+A mismatch returns `sync_history_changed` (409) without committing the batch. A valid older
+anchor remains valid after later appends. New mutation receipts include `revision_token`;
+legacy stored receipts can return null. Pull pages now include `cursor_token`. The native
+client stores proof observations from preflights, receipts and deltas, including receipts
+acknowledged before the next delta pull. Legacy clients omitting proofs do not gain restore
+protection simply by upgrading the server.
+
+GET `/sync/snapshot?cursor=N&token=T&limit=100&after=...` returns `{instance_id, checkpoint,
+changes, next_after}`. Start at a current state anchor; omit `after` initially, then use the
+returned value unchanged. It orders the latest snapshot of each `(kind, UUID)` at or before
+that checkpoint, including deletions. Snapshot revisions are not globally ascending because
+records are ordered by identity. `next_after=null` is the terminal page. Limits are 1–100
+records, with a soft 2 MiB payload target; a single record is never split. A changed/missing
+anchor returns 409. No session secrets, jobs or credentials enter snapshot payloads.
+
+The native app stages pages without replacing its working library. Explicit recovery
+confirmation authorises read-only continuation after interruption. Before replacing the
+local projection, it rechecks the anchor and archives all active local records plus queued
+deletions/updates transactionally. Previous outgoing work is retained in local drafts,
+not replayed automatically. See ADR 007 and the companion SYNC_RECOVERY.md. Server history
+compaction and device-archive import are not implemented.

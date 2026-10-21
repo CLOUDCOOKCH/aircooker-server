@@ -1,8 +1,8 @@
 {
-  "verified_at": "2026-10-20T20:12:03.325902971Z",
+  "verified_at": "2026-10-21T04:12:20.352565538Z",
   "scanner": "Trivy 0.67.2",
   "image": "aircooker-server:development",
-  "image_id": "sha256:de6a200710b227c72ed64bdc72a0ea15d849df0718e2d00fef81088369ba5cdf",
+  "image_id": "sha256:8c8e8ee96f9d473ca693a90a2c3cc71ac5c104be3b6b7500827bc53cf02548b5",
   "scan_scope": "HIGH and CRITICAL OS and Python package advisories",
   "package_matches": {
     "HIGH": 44

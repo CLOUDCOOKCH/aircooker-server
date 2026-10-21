@@ -8,7 +8,8 @@ import os
 import subprocess
 import time
 from datetime import UTC, datetime
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from uuid import uuid4
 
@@ -218,6 +219,12 @@ def main():
         )
         assert configured_ai["enabled"] and configured_ai["key_configured"]
         assert ai_credential not in json.dumps(configured_ai)
+        history = request(base, "/api/v1/sync/state", headers=headers)
+        checkpoint = {"cursor": history["cursor"], "token": history["token"]}
+        page = request(
+            base, "/api/v1/sync/snapshot?" + urlencode({**checkpoint, "limit": 1}), headers=headers
+        )
+        snapshot_rows = page["changes"]
         docker("restart", name)
         base = "http://127.0.0.1:" + docker("port", name, "8080/tcp").rsplit(":", 1)[1]
         for _ in range(60):
@@ -233,6 +240,10 @@ def main():
             and restored_ai["origin"] == "saved"
         )
         assert request(base, "/api/v1/suggestions/apply", approval, headers) == applied
+        after_restart = request(
+            base, "/api/v1/sync/state?cursor=" + str(checkpoint["cursor"]), headers=headers
+        )
+        assert after_restart["requested_token"] == checkpoint["token"]
         edit = mutation(
             device,
             "recipe",
@@ -240,7 +251,35 @@ def main():
             eid=recipe["entity_id"],
             base=result[0]["revision"],
         )
-        request(base, "/api/v1/sync/push", {"mutations": [edit]}, headers)
+        accepted = request(
+            base, "/api/v1/sync/push", {"mutations": [edit], "checkpoint": checkpoint}, headers
+        )
+        assert len(accepted[0]["revision_token"]) == 32
+        delta = request(base, "/api/v1/sync/pull?" + urlencode(checkpoint), headers=headers)
+        assert delta["cursor_token"] == accepted[0]["revision_token"]
+        while page["next_after"]:
+            page = request(
+                base,
+                "/api/v1/sync/snapshot?"
+                + urlencode({**checkpoint, "limit": 1, "after": page["next_after"]}),
+                headers=headers,
+            )
+            snapshot_rows.extend(page["changes"])
+        assert (
+            next(row for row in snapshot_rows if row["kind"] == "recipe")["payload"]["title"]
+            == "Smoke soup"
+        )
+        wrong_token = ("0" if checkpoint["token"][0] != "0" else "1") + checkpoint["token"][1:]
+        try:
+            request(
+                base,
+                "/api/v1/sync/push",
+                {"mutations": [edit], "checkpoint": {**checkpoint, "token": wrong_token}},
+                headers,
+            )
+            raise AssertionError("Stale history proof unexpectedly accepted")
+        except HTTPError as failure:
+            assert failure.code == 409
         assert (
             request(base, "/api/v1/recipes/" + recipe["entity_id"], headers=headers)["payload"][
                 "title"
@@ -269,7 +308,7 @@ def main():
         assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, JSON and streamed archive restore."
         )
     finally:
         for name in containers:
