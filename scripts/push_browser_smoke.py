@@ -133,9 +133,9 @@ def main():
                 context.grant_permissions(["notifications"])
                 page.evaluate("localStorage.setItem('TEST-ONLY:permission-ready','1')")
                 page.get_by_role("button", name="Connect notifications", exact=True).click()
-                page.wait_for_function("window.TEST_ONLY_pushReads>0")
                 enabled = page.get_by_label("Enable meal reminders", exact=True)
                 expect(enabled).to_be_visible()
+                assert page.evaluate("window.TEST_ONLY_pushReads") > 0
                 enabled.check()
                 page.locator('input[type="time"]').nth(2).fill("18:45")
                 page.get_by_role("button", name="Save reminder settings", exact=True).click()
