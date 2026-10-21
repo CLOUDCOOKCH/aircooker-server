@@ -147,3 +147,12 @@ Anonymous pull/manifest inspection and a fresh E2E against the pulled AMD64 imag
 Public release assets were downloaded and their checksums verified; scan report identities
 match the published image configurations. See validation/github-poc-preview.json and POC.md.
 This is a prerelease; it does not enable stable acceptance or imply live-service/iPhone testing.
+
+Bash-enabled POC `poc-20261021.2` from 366e391 passed all six source CI jobs in run
+39610992728 and all preview publication jobs in run 39611318654. Both architectures
+exercise `/bin/bash`, a real pseudo-terminal, private setup-token reading and packaged GPL
+notice as the normal non-root account. Fresh release scans retain the unsuppressed gate.
+Anonymous pull and a local .1-to-.2 upgrade on a disposable shared volume passed: the token
+was preserved, the new image served internal port 5152 with a healthy overridden check,
+and setup using that original token succeeded. The user's actual NAS UI/token were not
+accessed. Exact digest/images/jobs/assets and limits: validation/github-bash-preview.json.

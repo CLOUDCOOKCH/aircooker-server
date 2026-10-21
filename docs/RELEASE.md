@@ -17,6 +17,11 @@ publication 39608095928. Both architecture scans and native Docker checks passed
 pull and published-image E2E subsequently passed; exact digest/assets/provenance/evidence
 are in validation/github-poc-preview.json. Full stable acceptance remains open.
 
+Bash compatibility update: `poc-20261021.2` from 366e391 passed exact-source CI 39610992728
+and preview publication 39611318654. Both native images pass terminal/token/runtime checks
+and fresh security scans. Anonymous pull and the published AMD64 .1-to-.2 same-volume
+upgrade on internal port 5152 passed; see validation/github-bash-preview.json.
+
 ## Stable releases
 
 Both repositories and their first CI runs are published. Configure private vulnerability

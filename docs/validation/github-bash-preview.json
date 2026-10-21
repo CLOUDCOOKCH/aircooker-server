@@ -1,0 +1,199 @@
+{
+  "source_commit": "366e391bdbaac5f42aed21203ee24c1230c2706a",
+  "change": "Include unmodified pinned Alpine Bash 5.3.9-r1 for container terminal clients; retain non-root/read-only operation",
+  "source_ci": {
+    "id": 39610992728,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39610992728",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119259476420,
+        "name": "browser",
+        "conclusion": "success"
+      },
+      {
+        "id": 119259476508,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:392a72b21953f4f670eb696186b11702d1784c06fe60c180a1e6290cbb93bc94"
+      },
+      {
+        "id": 119259476515,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:cd80b05e44b0fbd19922f952a99d27574842a808eab0f527cedc194dceff3689"
+      },
+      {
+        "id": 119259476710,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119259476864,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:113cde8bb2a8bf35b2024cf858c8ace130fd926d8905d1a188a6503762247613"
+      },
+      {
+        "id": 119259477131,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:2ea55f1c56b09dcc904cc39bdb9e2f35b36c1b07257c173594281cc8af4c65e1"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12351005300,
+        "name": "console-screenshots",
+        "digest": "sha256:9b621d9193776c3e96e548b3264ea12c2740eae81eda92b393c313bf358a2b54"
+      },
+      {
+        "id": 12350571542,
+        "name": "backend-tests-ubuntu-24.04",
+        "digest": "sha256:1929679a261b5339e0c904dbfcc5add02e0dd1c58c192f4b5e89ca839a1700c8"
+      },
+      {
+        "id": 12350134246,
+        "name": "container-security-ubuntu-24.04-arm",
+        "digest": "sha256:75df784de1a13e9237c125f5ee24e18a2474269caeeed007c41800e675f1fcae"
+      },
+      {
+        "id": 12350119387,
+        "name": "backend-tests-ubuntu-24.04-arm",
+        "digest": "sha256:99a60e44a861e435aac4d422c77493602b97383e7f06b317fb53f1e0a94056ce"
+      },
+      {
+        "id": 12348609915,
+        "name": "container-security-ubuntu-24.04",
+        "digest": "sha256:a5ffbc4b72b906fc61427381f25aead14e0c3c97f95b7d6e59216c52d68aafe0"
+      }
+    ]
+  },
+  "tests": {
+    "backend_each_architecture": 209,
+    "web": 39,
+    "local": "pytest, Ruff lint/format, mypy, OpenAPI drift, licence inventory, Compose validation and workflow lint passed",
+    "docker": "Both native architectures passed actual Bash version, pseudo-terminal, setup-token read and retained GPL notice checks plus full existing Docker E2E",
+    "local_build_limit": "The managed workspace denies the Alpine APK mirror (HTTP 403). Actual image builds ran on GitHub; local runtime verification used the anonymous-pulled published image."
+  },
+  "preview": {
+    "tag": "poc-20261021.2",
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.2",
+    "release_id": 419618785,
+    "prerelease": true,
+    "image": "ghcr.io/cloudcookch/mealf-server",
+    "manifest_digest": "sha256:b1463fab8a9a2a031198d7bab58c7acf5f8ef362628f64fa995cae771b0db260",
+    "architectures": [
+      {
+        "platform": "linux/amd64",
+        "image_config": "sha256:540947acc427d8535273046c52054c201ba90356760815b90473b7d0195f585c",
+        "manifest": "sha256:077848a6a04e303a1014ed327c6818f8a03364a93b05cdf9d52fa3115859e3c2"
+      },
+      {
+        "platform": "linux/arm64",
+        "image_config": "sha256:4b4313da5656760b0050e1dd989662cf4b2f4d60e2d40bfb6e21bc3fc0fbb0d7",
+        "manifest": "sha256:0521f63f1a8ce402fc57d8e531627b670c0ab439e3a171be29de25c820ae81ba"
+      }
+    ],
+    "publication_ci": {
+      "id": 39611318654,
+      "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39611318654",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119260622860,
+          "name": "gate",
+          "conclusion": "success"
+        },
+        {
+          "id": 119260714067,
+          "name": "verify-images (ubuntu-24.04-arm, arm64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119260714070,
+          "name": "verify-images (ubuntu-24.04, amd64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119261470852,
+          "name": "publish",
+          "conclusion": "success"
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12351285387,
+          "name": "verified-preview-amd64",
+          "digest": "sha256:7b4270020311e75df077ecdb773461956f7a0f2ba12d86fb751c3004502b23b6"
+        },
+        {
+          "id": 12350149600,
+          "name": "verified-preview-arm64",
+          "digest": "sha256:e0f3286f6d8b12208a0531600940a85e1933c635546d26ca58b57ba87fd1527b"
+        }
+      ]
+    },
+    "assets": [
+      {
+        "name": "compose.preview.yaml",
+        "size": 629,
+        "digest": "sha256:ca1ce3a34c8050dd3badbe57a86731df3d759ab0f4117c9355aff3455f23a633",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/compose.preview.yaml"
+      },
+      {
+        "name": "container-security-amd64.json",
+        "size": 121732,
+        "digest": "sha256:82199242a18004b6941ce0db0a8fd6859ecb9ce254827b29ff135d1e1f37a7a6",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/container-security-amd64.json"
+      },
+      {
+        "name": "container-security-arm64.json",
+        "size": 121732,
+        "digest": "sha256:42c1328622e76502a2b050c6376d267e006fca7f85d73ca571d731e169a3ea9b",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/container-security-arm64.json"
+      },
+      {
+        "name": "openapi-v1.json",
+        "size": 147158,
+        "digest": "sha256:224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/openapi-v1.json"
+      },
+      {
+        "name": "sbom-amd64.cdx.json",
+        "size": 104087,
+        "digest": "sha256:de346ee94916d91aaccb5849e409198e7adc4302faa5773325146369013b528c",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/sbom-amd64.cdx.json"
+      },
+      {
+        "name": "sbom-arm64.cdx.json",
+        "size": 104284,
+        "digest": "sha256:46a78681bc97eca8615a3be1a2eb060d10aa433d3a4340ba024b8489d07b0098",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.2/sbom-arm64.cdx.json"
+      }
+    ],
+    "provenance_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58229987",
+    "security": {
+      "scanner": "Trivy v0.70.0",
+      "severity_gate": [
+        "HIGH",
+        "CRITICAL"
+      ],
+      "ignore_unfixed": false,
+      "suppressions": false,
+      "findings_at_those_severities": 0,
+      "release_report_image_ids_match_verified_configs": true
+    },
+    "public_verification": {
+      "anonymous_pull": "passed with empty Docker client configuration",
+      "published_amd64_image_matches_verified_config": true,
+      "release_assets": "all six public downloads checksum verified; both reports match image configs; both SBOMs record Bash 5.3.9-r1",
+      "same_volume_upgrade": ".1 stopped then .2 started using that exact disposable volume; original private setup token preserved; default UID 10001 Bash PTY and token read passed; internal port 5152, overridden health check and PWA passed; secure setup with original token succeeded and removed token afterwards"
+    },
+    "limits": [
+      "Synthetic test volume only; no access to the user's actual container or token",
+      "The user's NAS terminal UI was not available for testing",
+      "Development preview only; stable acceptance and previous external-service/device gaps remain open"
+    ]
+  }
+}

@@ -89,7 +89,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
 | Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; deletion/extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
-| Releases | [First POC published](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.1) on GHCR for AMD64/ARM64; anonymous pull and published-image runtime checks passed; stable acceptance remains open |
+| Releases | [Bash-enabled POC .2 published](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.2) on GHCR for AMD64/ARM64; anonymous pull, terminal and same-volume upgrade checks passed; stable acceptance remains open |
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.
