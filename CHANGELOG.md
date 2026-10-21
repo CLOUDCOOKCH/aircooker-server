@@ -1,5 +1,10 @@
 # Changelog
 
+- Add bounded conservative retention and a dry-run/apply administrator CLI. Persist import
+  request fingerprints before pruning terminal source/preview payloads; keep pending work,
+  replay/sync/Bring proofs and offline media dependencies. Clean stale archive transfers
+  at startup, preserve session references, and prevent late workers downgrading confirmation.
+
 - Add shared suggestion categories/portions/repeats/leftover choices with durable offline
   drafts and cached local scoring. Learn only from successful explicit approvals, with
   replay-safe bounded preference and strict variety. Guard rapid duplicate preview approval.

@@ -45,10 +45,12 @@ active legacy overrides, deriving their period from the previous server acceptan
 in the household time zone. It never rewrites old change-log rows, commit proofs or mutation
 receipts. Schema, backfill, new commits and migration marker commit together or roll back.
 
-Retention is intentionally conservative: tombstones, mutation replay records, Bring purchase
-history, suggestion-approval receipts and completed jobs are retained. Rate-limit buckets expire when a subsequent request
-arrives. Session/job/content retention policies and compaction with full-resync recovery must
-be implemented before stable release. No unsafe automatic cleanup is enabled.
+Retention remains conservative. Hourly bounded passes prune eligible terminal import/source
+payloads, old diagnostic rows and unreferenced long-expired sessions, preserving replay
+identities and all pending work. Startup-only cleanup removes stale known transfer ZIPs.
+Canonical tombstones, sync proofs/mutation receipts, Bring ownership/purchases and media
+remain retained for offline safety. Full compaction/quotas are release work. See RETENTION.md.
+
 
 Migration 007 adds device-scoped Web Push state. It does not rewrite sync entities or old
 commits. The VAPID private key is encrypted separately in the config vault; neither
@@ -59,3 +61,8 @@ Migration 008 adds shared planning preferences/replay receipts and accepted-sugg
 It does not add unknown sync entity kinds, rewrite old commits or fabricate legacy learning.
 Approval increments, meal writes and replay receipts commit together. Household export v3
 includes non-secret preferences/counts; see PLANNING_PREFERENCES.md.
+
+Migration 009 adds import request fingerprints and terminal timestamps with indexed retention
+queries. Known source receipts backfill in bounded batches; unknown records stay exempt,
+legacy terminal records receive a fresh grace period, and schema/data/marker commit together.
+Internal retention fields do not become client import response fields.

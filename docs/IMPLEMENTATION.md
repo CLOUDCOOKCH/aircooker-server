@@ -70,7 +70,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-The current PWA integration passes 187 backend tests and 39 web core tests locally,
+The current PWA integration passes 200 backend tests and 39 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -89,7 +89,7 @@ recorded in the PWA validation material. Current Docker smoke/security CI is rec
 separately for the exact image/commit; do not apply earlier green runs to a newer tree.
 
 The overall project remains partial. Live Web Push validation, complete archive reconstruction, broader source/media import,
-admin deletion/destructive replacement, safe cleanup and release validation remain engineering
+admin deletion/destructive replacement, safe media/sync compaction and release validation remain engineering
 work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
 No stable release or protected release acceptance is enabled by these development results.
 
@@ -120,3 +120,9 @@ Shared-planning source 2e7b920 passed all six GitHub jobs in run 39600337201, in
 187 backend tests per AMD64/ARM64 runner, 39 web tests, actual two-device/offline/approval
 browser flows, settings/learning Docker restart/JSON+ZIP restore and unsuppressed security
 gates. Exact source/images/jobs/artifacts and limits: validation/github-planning-preferences.json.
+
+Conservative retention now has bounded hourly terminal import/diagnostic/session cleanup,
+startup-only stale transfer cleanup and local CLI dry-run/apply. Import fingerprints preserve
+request replay after raw-source pruning; late workers preserve terminal confirmation.
+Offline sync/Bring receipts and media stay retained. See RETENTION.md for scope/evidence and
+remaining full deletion/compaction work.

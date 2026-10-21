@@ -31,3 +31,11 @@ confirmation mutation saves it. Tests cover parsing, preserved uncertainty, deci
 scaling, compatible-unit aggregation, pantry exclusions and this confirmation boundary.
 The Docker smoke workflow exercises the durable worker, fraction preview and confirmation
 through real HTTP before backup/restore.
+
+## Terminal source retention
+
+Confirmed/cancelled imports retain minimal replay/provenance metadata. After a 30-day
+completion grace period, maintenance can clear their extraction previews and concluded source
+job payloads while preserving identical-request/confirmation replay and the saved recipe.
+Unreviewed/failed-input drafts and unknown legacy receipts remain intact. A late worker cannot
+downgrade confirmation. Internal receipt/retention fields stay server-side; see RETENTION.md.

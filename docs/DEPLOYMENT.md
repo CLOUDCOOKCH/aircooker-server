@@ -105,3 +105,11 @@ chain and DNS, never add an arbitrary insecure exception. Setup locked: use the 
 account or local recovery. 429: wait for the durable rate-limit bucket to expire.
 Bring capability unverified: run the dedicated-list compatibility probe. Import needs-input:
 retain the URL and provide a structured recipe or manually enter the missing content.
+
+## Routine maintenance
+
+Bounded hourly SQLite retention and startup-only stale transfer cleanup run inside this
+container. Inspect candidates with `docker compose exec aircooker python -m aircooker.cli
+cleanup --dry-run`; apply an extra pass by omitting `--dry-run`. Output contains counts only.
+Offline sync/Bring replay history and uploaded images remain protected. See RETENTION.md
+for windows, upgrade grace, failure logs and remaining compaction limits.

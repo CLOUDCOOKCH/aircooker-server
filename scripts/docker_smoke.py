@@ -127,6 +127,14 @@ def main():
 
     try:
         name, base, device, headers = start()
+        maintenance_preview = json.loads(
+            docker("exec", name, "python", "-m", "aircooker.cli", "cleanup", "--dry-run")
+        )
+        assert maintenance_preview["dry_run"] is True
+        assert (
+            json.loads(docker("exec", name, "python", "-m", "aircooker.cli", "cleanup"))["dry_run"]
+            is False
+        )
         push_before = request(base, "/api/v1/notifications/push", headers=headers)
         assert not push_before["subscribed"] and len(push_before["public_key"]) == 87
         notice = docker(

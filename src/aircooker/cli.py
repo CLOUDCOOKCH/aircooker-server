@@ -1,5 +1,6 @@
 import argparse
 import getpass
+import json
 import os
 import sqlite3
 import sys
@@ -8,18 +9,33 @@ from pathlib import Path
 
 from .auth import hasher
 from .db import Database
+from .retention import cleanup_database
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Local administrator tools; requires access to /data"
     )
-    parser.add_argument("command", choices=["recover", "backup"])
+    parser.add_argument("command", choices=["recover", "backup", "cleanup"])
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Report cleanup candidates without pruning rows"
+    )
     args = parser.parse_args()
+    if args.dry_run and args.command != "cleanup":
+        parser.error("--dry-run only applies to cleanup")
     os.umask(0o077)
     database = Database(Path(os.environ.get("DATA_DIR", "/data")))
-    if args.command == "recover":
+    if args.command == "cleanup":
+        print(
+            json.dumps(
+                {
+                    "dry_run": args.dry_run,
+                    "counts": cleanup_database(database, dry_run=args.dry_run),
+                }
+            )
+        )
+    elif args.command == "recover":
         if not sys.stdin.isatty():
             parser.error("Recovery requires an interactive local terminal")
         password = getpass.getpass("New household password (at least 12 characters): ")

@@ -1,0 +1,43 @@
+{
+  "format": "mealf-retention-local-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "backend": {
+    "pytest_passed": 200,
+    "focused_retention_cases": 13,
+    "focused_latest": "passed strengthened pending/failed/unknown legacy, Bring purchase/unknown-job preservation and CLI dry-run misuse assertions after the complete suite",
+    "ruff_lint_format": "passed",
+    "mypy_modules": 33,
+    "openapi_drift": "passed unchanged contract; private retention fields excluded from import response",
+    "runtime_licence_baseline": "unchanged 40 packages"
+  },
+  "tested": [
+    "Terminal import source/preview pruning with identical/changed request replay, confirmation replay, later recipe editing and unchanged sync proofs",
+    "Pending/needs-input/failed and unknown legacy source preservation",
+    "Bounded 500-candidate passes and non-mutating dry run",
+    "Long-expired session/refresh cleanup preserves referenced subscriptions and device identities",
+    "Accepted notification receipts and active test-request replay; purchased Bring ledger and unrelated job kinds retained",
+    "Startup stale regular transfer cleanup skips symlinks/directories/recent/unrelated files",
+    "Transactional migration from pre-009 schema, multi-batch backfill, fresh legacy grace, repeat startup and rollback after interruption",
+    "Successful/failed late extraction cannot downgrade explicit confirmation",
+    "Maintenance failure redaction and ordinary durable worker continuation",
+    "Packaged CLI dry-run/apply and rejection of dry-run on backup"
+  ],
+  "web": {
+    "core_tests": "unchanged source; 39 tests at previous green planning CI, full current gate runs again on push",
+    "pwa_browser": "passed expanded actual PWA/API/offline/two-device/planning/import/recovery/approval flow and stated Axe checks",
+    "console_browser": "passed; AI/Bring are explicit test-only doubles",
+    "screenshots": "no UI changes/new visual acceptance claimed"
+  },
+  "docker": {
+    "architecture": "linux/amd64",
+    "image_id": "sha256:3b2d181e765230d51191b7e1d3563f299888bd81d11e45ba60bafcaa7e66cbc0",
+    "smoke": "passed non-root/read-only startup, packaged maintenance CLI, restart and JSON/ZIP preference/learning/media/import restore"
+  },
+  "limits": [
+    "Logical pruning is not forensic erasure or immediate file shrinkage",
+    "Offline sync proofs, Bring ownership/purchase receipts, referenced reminder preferences, uploaded media and backups remain retained",
+    "Full account deletion, safe media/sync compaction and broader quotas remain engineering work",
+    "No live external service, physical Safari, original artwork or complete project acceptance"
+  ]
+}

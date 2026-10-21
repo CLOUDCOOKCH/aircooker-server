@@ -257,3 +257,16 @@ Shared-planning source 2e7b920 passed all six GitHub jobs in run 39600337201, in
 187 backend tests per AMD64/ARM64 runner, 39 web tests, actual two-device/offline/approval
 browser flows, settings/learning Docker restart/JSON+ZIP restore and unsuppressed security
 gates. Exact source/images/jobs/artifacts and limits: validation/github-planning-preferences.json.
+
+## Conservative retention and terminal import safety, 2026-10-21
+
+The complete backend suite passes 200 tests; thirteen focused cases cover bounded/dry-run
+cleanup, old import replay/editing/proof preservation, pending/unknown legacy sources, session
+references, notification/Bring receipts, startup file safety, multi-batch migration/rollback,
+late confirmed-worker races and redacted maintenance failure with worker continuation.
+Expanded ordinary PWA and console browser regressions plus non-root/read-only Docker CLI,
+restart and JSON/ZIP restore pass. Types/lint/format/OpenAPI drift and the unchanged 40-package
+licence baseline pass. Frontend source/visual design is unchanged; no new visual or physical
+platform acceptance is inferred. Exact local image/count/scope: validation/retention-local.json.
+Current CI is recorded separately; prior shared-planning green evidence does not certify a
+newer maintenance tree. See RETENTION.md for logical pruning and deliberately retained data.

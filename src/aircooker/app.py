@@ -1,6 +1,7 @@
 import asyncio
 import hmac
 import json
+import logging
 import os
 import secrets
 import shutil
@@ -54,6 +55,7 @@ from .bring_runtime import UnofficialBringConnector
 from .db import Database
 from .diagnostics import diagnostics, recent_jobs
 from .errors import DomainError
+from .import_receipts import fingerprint as import_fingerprint
 from .importing import bounded_fetch_html, extract, platform_for
 from .jobs import claim, enqueue, finish
 from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
@@ -89,6 +91,7 @@ from .pwa_auth import register_routes as register_pwa_auth
 from .recommendations import planning_basis, suggest_week
 from .reminder_routes import register_routes as register_reminders
 from .reminders import Reminders
+from .retention import cleanup_database, cleanup_startup_transfers
 from .secrets import SecretVault
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
@@ -100,6 +103,7 @@ bearer = HTTPBearer(auto_error=False)
 def create_app(data_dir: Path | None = None, run_worker: bool = True):
     data_dir = data_dir or Path(os.environ.get("DATA_DIR", "/data"))
     database = Database(data_dir)
+    cleanup_startup_transfers(data_dir)
     media_slots = asyncio.Semaphore(2)
     archive_slots = asyncio.Semaphore(1)
     SecretVault(data_dir / "config")
@@ -142,7 +146,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             iid = payload["id"]
             with database.connect() as db:
                 draft = db.execute("SELECT * FROM import_draft WHERE id=?", (iid,)).fetchone()
-            if not draft or draft["state"] == "cancelled":
+            if not draft or draft["state"] in ("cancelled", "confirmed"):
                 return
             try:
                 content = payload.get("text")
@@ -174,14 +178,14 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     )
                 with database.transaction() as db:
                     db.execute(
-                        "UPDATE import_draft SET state='preview',recipe=?,warnings=?,error_code=NULL WHERE id=? AND state!='cancelled'",
+                        "UPDATE import_draft SET state='preview',recipe=?,warnings=?,error_code=NULL WHERE id=? AND state NOT IN ('cancelled','confirmed')",
                         (recipe.model_dump_json(), json.dumps(warnings), iid),
                     )
             except (DomainError, ValidationError) as exc:
                 code = exc.code if isinstance(exc, DomainError) else "invalid_extracted_recipe"
                 with database.transaction() as db:
                     db.execute(
-                        "UPDATE import_draft SET state='needs_input',error_code=? WHERE id=? AND state!='cancelled'",
+                        "UPDATE import_draft SET state='needs_input',error_code=? WHERE id=? AND state NOT IN ('cancelled','confirmed')",
                         (code, iid),
                     )
             return
@@ -189,7 +193,18 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
 
     async def worker():
         last_periodic = 0.0
+        last_cleanup = -3600.0
         while True:
+            if time.monotonic() - last_cleanup >= 3600:
+                try:
+                    counts = await asyncio.to_thread(cleanup_database, database)
+                    if any(counts.values()):
+                        logging.getLogger(__name__).info(
+                            json.dumps({"event": "maintenance_cleanup", "counts": counts})
+                        )
+                except Exception:
+                    logging.getLogger(__name__).warning('{"event":"maintenance_cleanup_failed"}')
+                last_cleanup = time.monotonic()
             if time.monotonic() - last_periodic > 60:
                 await asyncio.to_thread(reminders.enqueue_due)
                 with database.transaction() as db:
@@ -721,7 +736,13 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         if not allowed:
             raise DomainError("import_rate_limited", 429)
         with database.transaction() as db:
-            previous = db.execute("SELECT state FROM import_draft WHERE id=?", (iid,)).fetchone()
+            previous = db.execute(
+                "SELECT state,request_fingerprint FROM import_draft WHERE id=?", (iid,)
+            ).fetchone()
+            if previous and previous["request_fingerprint"] is not None:
+                if previous["request_fingerprint"] != import_fingerprint(body.model_dump()):
+                    raise DomainError("idempotency_conflict", 409)
+                return {"id": iid, "state": previous["state"]}
             if previous:
                 job = db.execute(
                     "SELECT payload FROM background_job WHERE dedupe_key=?", ("import:" + iid,)
@@ -739,8 +760,14 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     raise DomainError("idempotency_conflict", 409)
                 return {"id": iid, "state": previous[0]}
             db.execute(
-                "INSERT INTO import_draft VALUES (?,?,?,'queued',NULL,'[]',NULL,NULL,?)",
-                (iid, body.source_url, platform, time.time()),
+                "INSERT INTO import_draft(id,source_url,source_platform,state,recipe,warnings,error_code,confirmed_recipe_id,created_at,request_fingerprint) VALUES (?,?,?,'queued',NULL,'[]',NULL,NULL,?,?)",
+                (
+                    iid,
+                    body.source_url,
+                    platform,
+                    time.time(),
+                    import_fingerprint(body.model_dump()),
+                ),
             )
             enqueue(
                 db,
@@ -763,7 +790,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         if not row:
             raise DomainError("not_found", 404)
         return {
-            **dict(row),
+            **{
+                key: row[key]
+                for key in row.keys()
+                if key not in ("request_fingerprint", "finished_at")
+            },
             "recipe": json.loads(row["recipe"]) if row["recipe"] else None,
             "warnings": json.loads(row["warnings"]),
         }
@@ -772,8 +803,8 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     def cancel_import(import_id: UUID, s=Depends(session)):
         with database.transaction() as db:
             db.execute(
-                "UPDATE import_draft SET state='cancelled' WHERE id=? AND state!='confirmed'",
-                (str(import_id),),
+                "UPDATE import_draft SET state='cancelled',finished_at=COALESCE(finished_at,?) WHERE id=? AND state!='confirmed'",
+                (time.time(), str(import_id)),
             )
 
     @app.post("/api/v1/imports/{import_id}/confirm", response_model=MutationResult)
@@ -800,8 +831,8 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 raise DomainError("import_already_confirmed", 409)
             result = apply_mutation(db, body, s["device_id"])
             db.execute(
-                "UPDATE import_draft SET state='confirmed',confirmed_recipe_id=? WHERE id=?",
-                (str(body.entity_id), str(import_id)),
+                "UPDATE import_draft SET state='confirmed',confirmed_recipe_id=?,finished_at=COALESCE(finished_at,?) WHERE id=?",
+                (str(body.entity_id), time.time(), str(import_id)),
             )
         return result
 

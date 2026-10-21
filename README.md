@@ -77,6 +77,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
 | Recurrences, serving scaling, pantry-aware aggregation | Implemented; bounded expansion and domain tests |
 | PWA reminders | Opt-in controls/offline drafts, durable scheduling/retries and real receiver with synthetic vendor tests; live delivery/iPhone unverified ([guide](docs/REMINDERS.md)) |
+| Retention | Bounded hourly terminal-source/diagnostic/session cleanup, startup transfer cleanup and local dry-run CLI; sync/Bring/media proofs retained ([policy](docs/RETENTION.md)) |
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared defaults and bounded explicit-approval learning have offline/API/browser coverage ([guide](docs/PLANNING_PREFERENCES.md)) |
 | Website recipe import | JSON-LD previews and conservative metric/EN/DE fractions/ranges parsing; images and broader HTML extraction remain partial |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |

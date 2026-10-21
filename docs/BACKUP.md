@@ -32,9 +32,8 @@ Limits: 10,000 entities, 5,000 media records, 8 MiB manifest/JSON, 280 MiB archi
 256 MiB stored-photo quota. Transfers use protected `/data/jobs/.export-*.zip` and
 `.restore-*.zip` files. Successful transfers clean up their files; interrupted process
 termination can leave files. With the container stopped, administrators may remove only
-these transfer files; never delete the durable job database. Automatic retention cleanup,
-an administration import screen, and destructive replacement with explicit confirmation
-remain incomplete. Do not wipe an existing household to work around a merge conflict.
+these transfer files; never delete the durable job database. Startup-only stale transfer cleanup is implemented (RETENTION.md). General backup
+retention and destructive replacement with explicit confirmation remain incomplete. Do not wipe an existing household to work around a merge conflict.
 
 ## Transactionally consistent sensitive backup
 
@@ -84,3 +83,7 @@ after a clean import. A full protected volume recovery must preserve the SQLite 
 vault key and encrypted `/data/config/webpush-vapid.enc` together. If the public VAPID key
 changes, the browser requires explicit disconnect/reconnect. Such volume copies contain
 subscription/auth secrets and must remain private. See REMINDERS.md.
+
+Maintenance prunes eligible terminal source/diagnostic data logically while retaining replay
+proofs and offline media dependencies. It never deletes private backup files or household
+exports. SQLite pages/WAL/volume snapshots can retain older data; see RETENTION.md.

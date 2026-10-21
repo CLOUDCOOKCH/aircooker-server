@@ -38,7 +38,7 @@ client, not a declaration that the entire project or release checklist is finish
   subscription/vendor doubles and a real worker receiving an injected event; live unverified.
 - Browser dependency attribution/version gate; Node remains build-only, not a runtime service.
 
-Evidence: **187 backend tests**, **39 web core tests**, lint/types/format/OpenAPI/licence checks
+Evidence: **200 backend tests**, **39 web core tests**, lint/types/format/OpenAPI/licence checks
 and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
 save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
 assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
@@ -70,7 +70,7 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
       Unsupported sources retain manual/AI fallback; no access-control bypasses are implemented.
 - [ ] Live Bring!/AI compatibility and external response/error verification. Bring mutations
       remain capability-guarded; synthetic tests do not establish live compatibility.
-- [ ] Original master backend work: safe cleanup/retention, admin deletion/destructive replacement,
+- [ ] Original master backend work: safe media/sync compaction and quotas, admin deletion/destructive replacement,
       remaining typed API/quotas/security/load review, backups/release compatibility and docs.
 - [ ] Stable image/release and reproducibility acceptance. PWA commit ff48270 passed all six
       AMD64/ARM64/security/browser/core CI jobs in run 39584288763 (see validation/github-pwa.json).
@@ -100,3 +100,9 @@ Shared-planning source 2e7b920 passed all six GitHub jobs in run 39600337201, in
 187 backend tests per AMD64/ARM64 runner, 39 web tests, actual two-device/offline/approval
 browser flows, settings/learning Docker restart/JSON+ZIP restore and unsuppressed security
 gates. Exact source/images/jobs/artifacts and limits: validation/github-planning-preferences.json.
+
+Conservative retention now has bounded hourly terminal import/diagnostic/session cleanup,
+startup-only stale transfer cleanup and local CLI dry-run/apply. Import fingerprints preserve
+request replay after raw-source pruning; late workers preserve terminal confirmation.
+Offline sync/Bring receipts and media stay retained. See RETENTION.md for scope/evidence and
+remaining full deletion/compaction work.

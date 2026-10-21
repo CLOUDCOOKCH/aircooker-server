@@ -30,6 +30,10 @@ class Database:
                                 from .data_migrations import pantry_periods
 
                                 pantry_periods(db)
+                            if migration.name == "009_import_retention.sql":
+                                from .import_receipts import backfill
+
+                                backfill(db)
                             db.execute("INSERT INTO schema_migration VALUES (?)", (migration.name,))
                         db.commit()
                     except BaseException:

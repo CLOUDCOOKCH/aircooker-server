@@ -32,7 +32,7 @@ def test_diagnostics_counts_filtering_and_redaction(harness):
             iid = str(uuid4())
             imports.append(iid)
             db.execute(
-                "INSERT INTO import_draft VALUES (?,?,?,'needs_input',?,?,?,NULL,?)",
+                "INSERT INTO import_draft(id,source_url,source_platform,state,recipe,warnings,error_code,confirmed_recipe_id,created_at) VALUES (?,?,?,'needs_input',?,?,?,NULL,?)",
                 (
                     iid,
                     "https://private.test",
