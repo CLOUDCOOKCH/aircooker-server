@@ -50,6 +50,12 @@ recognises Alpine 3.24 and uses its vulnerability repository, but warns that its
 table does not list that OS version. This scan is not proof that all vulnerabilities are
 absent. AMD64/ARM64 CI checks and scans now run natively; ARM64 evidence is still pending.
 
+The committed scan omits unrelated ImageConfig environment/build history. Those fields
+contained the official base image's public GPG verification key, which triggered two
+generic-key detections. Image identity, layers, OS, package inventory and vulnerability
+results are retained; no secret-scanner allowlist or vulnerability suppression was added.
+CI archives the complete scanner report separately.
+
 Historical Debian findings follow; they are retained without claiming remediation within
 that old image.
 
