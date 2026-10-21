@@ -73,6 +73,32 @@ def main():
                         color_scheme="dark" if language == "de" else "light",
                     )
                     page = context.new_page()
+                    # Diagnostics are confined to this synthetic browser context. Keep
+                    # native return values/throws; report API errors, never record values.
+                    page.add_init_script("""(() => {
+                        window.__layoutFailures = [];
+                        for (const [proto, names] of [
+                            [IDBFactory.prototype, ['open']],
+                            [IDBDatabase.prototype, ['transaction']],
+                            [IDBObjectStore.prototype, ['put','add']],
+                            [Crypto.prototype, ['randomUUID']]
+                        ]) for (const name of names) {
+                            const original=proto[name];
+                            if (!original) continue;
+                            proto[name]=function(...args) {
+                                try {
+                                    const result=original.apply(this,args);
+                                    if (result instanceof IDBRequest)
+                                        result.addEventListener('error',()=>window.__layoutFailures.push(
+                                            {api:name,name:result.error?.name,message:result.error?.message}));
+                                    return result;
+                                } catch(e) {
+                                    window.__layoutFailures.push({api:name,name:e.name,message:e.message});
+                                    throw e;
+                                }
+                            };
+                        }
+                    })();""")
                     page.goto(base + "/app/")
                     expect(page.locator(".welcome-content")).to_be_visible()
                     # These are simulated safe areas, not OS-provided test evidence.
@@ -130,7 +156,16 @@ def main():
                     page.get_by_role(
                         "button", name="Demo entdecken" if language == "de" else "Explore the demo"
                     ).click()
-                    expect(page.locator(".app-nav")).to_be_visible()
+                    try:
+                        expect(page.locator(".app-nav")).to_be_visible()
+                    except AssertionError:
+                        print(
+                            "Synthetic engine diagnostics:",
+                            page.evaluate("""() => ({secure:isSecureContext,
+                                uuid:typeof crypto.randomUUID, failures:window.__layoutFailures})"""),
+                            flush=True,
+                        )
+                        raise
                     nav = page.locator(".nav-links")
                     if language == "de":
                         nav.get_by_role("button", name="Settings").click()
