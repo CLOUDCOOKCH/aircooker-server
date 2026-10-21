@@ -36,3 +36,7 @@ gates pass. No blocking branding issue was observed and no cosmetic fix loop was
 Physical iPhone/installed-icon refresh, full accessibility, native artwork, live integrations
 and complete-product acceptance remain outside this evidence. Do not clear unsynchronised
 browser data to refresh an OS-cached icon.
+
+Publication gates subsequently passed for exact source 9d73633: source CI 39619768791 and
+preview publication 39620210006. Actual anonymous-pulled .4 artwork hashes and same-volume
+upgrade on internal 5152 passed; see github-mealf-artwork.json for exact identity/evidence.

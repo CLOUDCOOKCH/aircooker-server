@@ -28,6 +28,11 @@ from Docker logs and exclude further token records after setup. Anonymous pull, 
 .2-to-.3 upgrade on internal 5152, token reuse before setup, configured silence and operator
 opt-out passed. See validation/github-setup-token-log-preview.json for exact evidence.
 
+Supplied-artwork update: `poc-20261021.4` from 9d73633 passed source CI 39619768791 and
+publication 39620210006. Both architectures verify original/derived/packaged assets and
+fresh image scans. Anonymous pull and the published AMD64 .3-to-.4 household/session/recipe/
+sync-proof upgrade on internal 5152 passed. See validation/github-mealf-artwork.json.
+
 ## Stable releases
 
 Both repositories and their first CI runs are published. Configure private vulnerability

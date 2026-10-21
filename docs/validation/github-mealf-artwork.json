@@ -1,0 +1,224 @@
+{
+  "source_commit": "9d73633612786bbaf7975465061fd6d281443752",
+  "change": "Install the original user-supplied peach and wordmark in the PWA/console with versioned install icons and byte-verified asset delivery",
+  "source_ci": {
+    "id": 39619768791,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39619768791",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119289885139,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:b76cd8b37f6af155ba7768b17a94ab8a783fd3958452454c0d67b2cc14288b06"
+      },
+      {
+        "id": 119289885634,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:c79fe05db9898a48b2d2878ad26ba6fa7dd8a81b791375113e8b44a9e22794a6"
+      },
+      {
+        "id": 119289885820,
+        "name": "browser",
+        "conclusion": "success"
+      },
+      {
+        "id": 119289885978,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:3f4bd98b8c744fb630ba5adbe82af62812a648a2b9b60246b8df4c5e5413ad06"
+      },
+      {
+        "id": 119289885998,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119289886034,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:5f419730d03bd8341ec963e8c11fb6d8b79560c0527f4edefeb7bb80a307a01d"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12354665957,
+        "name": "backend-tests-ubuntu-24.04",
+        "digest": "sha256:b6d9e063f32d41636bd5b70660e424c78eab0884fa36809e9350915f610e280e"
+      },
+      {
+        "id": 12354616148,
+        "name": "container-security-ubuntu-24.04-arm",
+        "digest": "sha256:c69e8ce10f949329dd92da4726245ea8efb3b1353b4a14d35c31c7745f96c2e5"
+      },
+      {
+        "id": 12354237889,
+        "name": "console-screenshots",
+        "digest": "sha256:44cf3aa799ee868b487e72344cd01071d2e36524ef1a52b6a9878f3bd33c1677"
+      },
+      {
+        "id": 12353559213,
+        "name": "container-security-ubuntu-24.04",
+        "digest": "sha256:65c776b831ccadf8923660afdf17ef576f416299a4803fe4dfd3e835c6d02b27"
+      },
+      {
+        "id": 12353229197,
+        "name": "backend-tests-ubuntu-24.04-arm",
+        "digest": "sha256:43d07b94284dee1bd6b6ac6aed82144c816aa514a22c77fb3d46af22c4c0793b"
+      }
+    ]
+  },
+  "artwork": {
+    "originals": "assets/brand/originals/",
+    "peach_original_sha256": "a3384ae38b80af70aa63400af2f8fc1525e4e5a11370daca3ffc67d0c82aa69e",
+    "wordmark_original_sha256": "dfbba3ebedca96dbc76d7baef7bafad75228f0c90ffdafde234c2ccc02b9d3fb",
+    "processing": "Only transparent outer space, proportional output size and installation canvas are adjusted; original files retained byte-for-byte. No redraw/recolour/regeneration.",
+    "review": "docs/validation/mealf-artwork-review.md",
+    "local_evidence": "docs/validation/mealf-artwork-local.json",
+    "provenance": "frontend/public/brand/provenance.json"
+  },
+  "tests": {
+    "backend_each_architecture": 213,
+    "web": 39,
+    "local": "Lint/format/types, original/derivative drift, contract and licence checks; full PWA/console browser flows and first-party/offline image retrieval passed",
+    "docker": "Both native-architecture checks verify every packaged brand output against the derived manifest and preserve bootstrap/restart/restore behavior"
+  },
+  "prior_attempts": [
+    {
+      "commit": "8af3665b61dbcef111b86e5764c772a3dceff7b5",
+      "run_id": 39619256436,
+      "result": "Failed; test double-decodes an already decoded JSON response; secret scanner flags non-secret CSS snapshot hash under a token-like field name."
+    },
+    {
+      "commit": "0437e0dd5fa2b50dc5bef9713b97701d99c5ca26",
+      "run_id": 39619480953,
+      "result": "Intermediate run failed/cancelled before field-name correction."
+    }
+  ],
+  "corrections": "Consume decoded JSON directly; rename evidence field to css_snapshot_sha256. No secret-scan or vulnerability rule/allowlist weakened.",
+  "preview": {
+    "tag": "poc-20261021.4",
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.4",
+    "release_id": 419684008,
+    "prerelease": true,
+    "image": "ghcr.io/cloudcookch/mealf-server",
+    "manifest_digest": "sha256:15cb248de58ed490d0b893b08832451d144f94e357ed2190d963f852a1a0a410",
+    "architectures": [
+      {
+        "platform": "linux/amd64",
+        "image_config": "sha256:410cab820ad85d72d2f924ff8147e02b0f053c44211edd2c240b62a3a7908a84",
+        "manifest": "sha256:6e3b7d1f179d545f0df5f1ef446041aa01f63d3da5949c08a432bece5c264de7"
+      },
+      {
+        "platform": "linux/arm64",
+        "image_config": "sha256:69e180b97366d04739df53e41ff892c01bff98381105080772f94bbc305c9b45",
+        "manifest": "sha256:4e79940a1a600e90952bfebbad9cb2d2cb1a600aa275d4093e747909389df9a4"
+      }
+    ],
+    "publication_ci": {
+      "id": 39620210006,
+      "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39620210006",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119291349383,
+          "name": "gate",
+          "conclusion": "success"
+        },
+        {
+          "id": 119291446324,
+          "name": "verify-images (ubuntu-24.04, amd64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119291446568,
+          "name": "verify-images (ubuntu-24.04-arm, arm64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119292243793,
+          "name": "publish",
+          "conclusion": "success"
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12354855804,
+          "name": "verified-preview-arm64",
+          "digest": "sha256:56d38cc314f3a34259510ee1f47e4572fcb4ebff94b51fb67bd942556a70d531"
+        },
+        {
+          "id": 12353794589,
+          "name": "verified-preview-amd64",
+          "digest": "sha256:72cc974624b120240e97c26a0c04176ea8d7145ea24373b50af71c4e986257bb"
+        }
+      ]
+    },
+    "assets": [
+      {
+        "name": "compose.preview.yaml",
+        "size": 629,
+        "digest": "sha256:8f35011f51f373748a8c24c43772cf48ff48246566278c4023c8c4062c8e024d",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/compose.preview.yaml"
+      },
+      {
+        "name": "container-security-amd64.json",
+        "size": 121732,
+        "digest": "sha256:3ab4f9765ae64fd3bd61368f53835bfe82b5e73504ba722ef901473821aca57e",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/container-security-amd64.json"
+      },
+      {
+        "name": "container-security-arm64.json",
+        "size": 121733,
+        "digest": "sha256:fac205649d5b9e8cb77f3feab3f762f4aa717ec33c2dd23a26435203853e2da9",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/container-security-arm64.json"
+      },
+      {
+        "name": "openapi-v1.json",
+        "size": 147158,
+        "digest": "sha256:224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/openapi-v1.json"
+      },
+      {
+        "name": "sbom-amd64.cdx.json",
+        "size": 104087,
+        "digest": "sha256:122a70f4acb17bab429236f1f17e85827f2a626d093c5d67fa3ef9ad310a2f85",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/sbom-amd64.cdx.json"
+      },
+      {
+        "name": "sbom-arm64.cdx.json",
+        "size": 104284,
+        "digest": "sha256:86cf4ddb8cd55352ad569b176dc5f7d32e17b123447d696b0a705f6095bfcd4b",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.4/sbom-arm64.cdx.json"
+      }
+    ],
+    "provenance_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58251583",
+    "security": {
+      "scanner": "Trivy v0.70.0",
+      "severity_gate": [
+        "HIGH",
+        "CRITICAL"
+      ],
+      "ignore_unfixed": false,
+      "suppressions": false,
+      "findings_at_those_severities": 0,
+      "release_report_image_ids_match_verified_configs": true,
+      "secret_scan": "Passed without changing scanner rules/allowlists"
+    },
+    "public_verification": {
+      "anonymous_pull": "passed with empty Docker client configuration",
+      "published_amd64_config_and_source_label_match": true,
+      "release_assets": "all six public downloads SHA-256 verified; scan identities match verified image configs",
+      "same_volume_upgrade": ".3 configured synthetic household -> .4 on same disposable volume with internal 5152, default UID 10001 and overridden health check; household identity, existing session, recipe and server sync proof unchanged; configured startup emits no setup token",
+      "artwork": "Every served brand derivative matches provenance; original source hashes match uploaded PNGs; console, favicon/touch/manifest/worker paths use supplied peach/wordmark; manifest ID/start/scope stay /app/"
+    },
+    "limits": [
+      "Primary PWA and console only; native artwork unchanged",
+      "Physical iPhone/Safari and OS installed-icon refresh not verified",
+      "Manual implementation-agent visual review; unavailable launcher/detector/plugin schema/specialist passes not claimed",
+      "Only synthetic household volumes used; no access to the user's actual installation",
+      "Development preview; full product/stable acceptance and existing live-integration gaps remain open"
+    ]
+  }
+}

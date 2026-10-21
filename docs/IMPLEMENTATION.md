@@ -168,3 +168,14 @@ successful setup from that log value, then configured restart with no added toke
 Passwords/session credentials remained absent; LOG_SETUP_TOKEN=false suppressed the event
 while retaining file access. Historical logs remain, with the token invalid after setup.
 Exact digest/images/jobs/artifacts and limits: validation/github-setup-token-log-preview.json.
+
+Original-artwork delivery is published as `poc-20261021.4` from 9d73633. Exact-source CI
+39619768791 passed all six jobs, including 213 backend tests per architecture, 39 web tests,
+source/derived brand checks, offline image delivery and actual packaged output hashes.
+Publication 39620210006 repeated native image scans/Docker checks before publishing verified
+bytes. Anonymous pull and a .3-to-.4 same-volume upgrade on internal 5152 passed: household,
+session, existing recipe and sync proof are preserved, and served artwork matches the
+original-source/derived provenance. No scanner allowlist was weakened. Earlier failed
+test-helper/evidence-field attempts and exact final images/jobs/assets are recorded in
+validation/github-mealf-artwork.json. Physical iPhone icon refresh and native artwork remain
+outside this PWA/console acceptance. Historical screenshot/review records retain their scope.
