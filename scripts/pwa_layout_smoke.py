@@ -304,6 +304,8 @@ def main():
                         )
                         page.keyboard.press("Escape")
                         page.mouse.up()
+                        page.wait_for_timeout(50)
+                        expect(page.locator(".sheet")).to_have_count(0)
                         expect(page.locator(".meal-drag-preview")).to_have_count(0)
                         expect(
                             page.locator(f'[data-date="{target_date}"] [data-meal-id="{meal_id}"]')

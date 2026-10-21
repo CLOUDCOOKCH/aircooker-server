@@ -31,6 +31,9 @@ export function useMealDrag(
     cancelAnimationFrame(frame.current);
     const current = session.current;
     session.current = null;
+    // Some engines emit a compatibility click even after Escape/lost capture.
+    // Eat that pointer click; a later keyboard activation must still work.
+    if (current) consume.current = current.source.key;
     if (current?.handle.hasPointerCapture(current.pointer))
       current.handle.releasePointerCapture(current.pointer);
     document.documentElement.classList.remove('meal-is-dragging');
@@ -101,7 +104,6 @@ export function useMealDrag(
       else if (tapped) current.tap();
     };
     const cancel = () => {
-      consume.current = null;
       stop();
     };
     const escape = (event: KeyboardEvent) => {
