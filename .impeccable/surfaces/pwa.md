@@ -1,8 +1,9 @@
-# aircooker PWA operating surface
+# mealf PWA operating surface
 
 Mode: Operate. Approved purpose/platform: PWA-first, retaining native code; user confirmation
 on 2026-10-21. Preserve the approved native concept and product requirements. Stack choice
-is delegated by the master prompt. This adapts an established visual world, not a rebrand.
+is delegated by the master prompt. The confirmed mealf name/asset rebrand applies to the
+established glass interface; it does not replace that approved visual world.
 
 Visual authority: existing SwiftUI KitchenStyle/components and the user-approved glass
 concept at /workspace/generated_images/exec-d61616a4-31c5-4cbf-8f34-24d3ed52d35f.png.
@@ -30,3 +31,15 @@ Browser limitations are disclosed in PRODUCT/ADR 010. Build the functioning app,
 desktop/mobile together and run the skill finish review/documentation after the bounded
 implementation/verification passes. Context launcher is unavailable; existing project
 sources and skill resources are the fallback. No design selection is reopened.
+
+Brand delivery, 2026-10-21: display names now use mealf. The supplied flirty peach icon
+(`mealf-flirty-peach-logo.png`) and lowercase wordmark (`mealf-flirty-peach-wortmarke.png`)
+are visible only as conversation previews; exact source PNGs are not mounted or downloadable.
+Install the supplied originals exactly once available, without recreating them. The old
+generated icons, crossed-utensil marks and plain mealf text remain interim treatments.
+Artwork installation and the complete branding request remain blocked and incomplete.
+See [branding](../../docs/BRANDING.md) and the newest
+[name-only review](../../docs/validation/mealf-name-review.md): ship at name-only scope,
+with no original-artwork or complete-product acceptance. Historical PWA reviews/captures
+retain their original scope. This manual handoff claims no launcher/detector, schema,
+design-hook or specialist pass.

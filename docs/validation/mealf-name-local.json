@@ -1,0 +1,85 @@
+{
+  "format": "mealf-name-local-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "scope": "Name-only partial delivery; original supplied logo and icon installation remains blocked",
+  "backend": {
+    "pytest_passed": 151,
+    "warnings": 1,
+    "ruff_lint_and_format": "passed",
+    "mypy_modules": 27,
+    "openapi_drift": "passed; only info.title changed",
+    "runtime_wheel_licences": "34-wheel baseline passed"
+  },
+  "web": {
+    "core_tests_passed": 32,
+    "typescript": "passed",
+    "prettier": "passed",
+    "production_build": "passed",
+    "pwa_browser_smoke": "passed including existing offline/reload/two-device/tombstone/planning/import/template scenarios and new mealf title/navigation assertions",
+    "console_browser_smoke": "passed including new mealf title/link assertions; external services use explicit test doubles"
+  },
+  "compatibility": "Manifest id/start/scope, storage names, cookies, headers, archive markers, Bring ownership, native bundle/App Group/Keychain/deep links retained; no data migration",
+  "native": {
+    "source_commit": "4b62f11f339396d808c8afaa6cd4a9ba3b820b47",
+    "local_contract_pin_check": "passed unchanged",
+    "local_en_de_keys": 296,
+    "local_localisation_check": "passed",
+    "ci_run": 39588842276,
+    "ci_status_at_record": "pending; current Apple result must be read separately"
+  },
+  "review": {
+    "type": "fresh independent manual source/screenshot review",
+    "path": "docs/validation/mealf-name-review.md",
+    "disposition": "ship at name-only scope",
+    "detector": "unavailable (launcher exit 127); no automated pass claimed",
+    "documentation_handoff": "fresh manual documenter; preserves tokens and existing project-owned schema"
+  },
+  "captures": [
+    {
+      "path": "docs/screenshots/mealf-name-welcome-desktop.png",
+      "sha256": "3c1f1915df6266625a4738bd63daff3f40258dee87acd5c9ff5f4bf3b4ef67b1"
+    },
+    {
+      "path": "docs/screenshots/mealf-name-home-desktop.png",
+      "sha256": "4f5f2cb8a44ed8699d8f175c909d3e480d1a6a68ff74a111e76fb21b22dd9987"
+    },
+    {
+      "path": "docs/screenshots/mealf-name-home-phone-dark.png",
+      "sha256": "550521df1fdab6038d04538c45f773fe370cbd9f04f427c1489ae65800595d52"
+    },
+    {
+      "path": "docs/screenshots/mealf-name-welcome-phone-dark.png",
+      "sha256": "6e5bbf09335b784f32364fe825fda5cd1f350ed5088c4de72de5faf58a3927c7"
+    },
+    {
+      "path": "docs/screenshots/mealf-name-console-phone-dark.png",
+      "sha256": "bf3ceb30ed487ef9164f3f1038920ff46d3f03e8cf9d625abdfc8537c0e097bf"
+    }
+  ],
+  "assets": [
+    {
+      "path": "frontend/dist/assets/index-B-TwcmQT.js",
+      "sha256": "b494e26f3debf22a9f48a316483ced5030ca2bdb67ed352f56a577a9551927a5"
+    },
+    {
+      "path": "frontend/dist/assets/index-BJwTilT9.css",
+      "sha256": "7f2884b91456ed4d82149b221ce7682a04b39070f9183bb6c5a2d9666a72218e"
+    }
+  ],
+  "blocked": [
+    {
+      "file": "mealf-flirty-peach-logo.png",
+      "reason": "Preview visible, original PNG bytes not available in workspace; downloadable original requested"
+    },
+    {
+      "file": "mealf-flirty-peach-wortmarke.png",
+      "reason": "Preview visible, original PNG bytes not available in workspace; downloadable original requested"
+    }
+  ],
+  "limits": [
+    "Previous generated icon and utensil marks remain interim; no supplied artwork was redrawn or installed",
+    "Physical iPhone/Safari and OS label refresh not exercised",
+    "No complete rebrand, live Bring/AI, stable release or full product acceptance"
+  ]
+}

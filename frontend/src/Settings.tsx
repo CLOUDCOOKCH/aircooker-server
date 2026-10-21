@@ -71,7 +71,7 @@ export function Settings({
   const exportLocal = async () => {
     try {
       const value = await app.store.localExport();
-      download(value, 'aircooker-pending-work.json');
+      download(value, 'mealf-pending-work.json');
     } catch {
       setError(true);
     }

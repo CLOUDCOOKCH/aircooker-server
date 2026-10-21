@@ -2,11 +2,11 @@
   "schema": {
     "id": "aircooker.design-snapshot",
     "version": 1,
-    "owner": "aircooker project",
+    "owner": "mealf project",
     "status": "project-owned documentation snapshot; not a plugin/vendor contract",
     "pluginSchemaValidation": "not performed: plugin schema and cloud resources unavailable"
   },
-  "project": "aircooker",
+  "project": "mealf",
   "surface": "PWA frontend/",
   "snapshotDate": "2026-10-21",
   "authority": [
@@ -351,12 +351,12 @@
       "generationID": "exec-349b86a6-9e88-4e5a-98ad-a03789dd7b31"
     },
     "prompts": "original prompts unavailable; none reconstructed",
-    "concept": "User-approved illustrative concept supplied in conversation; not a running app capture or published repository artifact"
+    "concept": "User-approved illustrative glass concept supplied in conversation; not a running app capture or published repository artifact. The mealf name/asset rebrand preserves this established visual world. Supplied previews show a flirty peach icon (mealf-flirty-peach-logo.png) and lowercase mealf wordmark (mealf-flirty-peach-wortmarke.png); exact source PNGs are not mounted or downloadable. Installation is blocked pending originals; no recreation is permitted. Existing generated icons retain the provenance above, and crossed-utensil marks/text-rendered mealf remain interim treatments; the artwork request is incomplete."
   },
   "review": {
     "initial": "docs/validation/pwa-visual-review.md",
     "verdict": "docs/validation/pwa-visual-verdict.md",
-    "disposition": "ship only within listed-fix and reviewed screenshot/source scope",
+    "disposition": "Newest review docs/validation/mealf-name-review.md: ship the reviewed name-only change; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
     "fixScore": {
       "resolved": 2,
       "partial": 0,
@@ -392,7 +392,7 @@
       "captured-screen Axe WCAG2 A/AA +2.1AA",
       "exact accessible dialog name and focus-return assertion"
     ],
-    "handoffVerification": "source/document inspection and JSON/source token consistency only; browser checks not rerun",
+    "handoffVerification": "Manual source/document inspection, fresh name-only review record and unchanged token/schema-structure comparison; browser checks not rerun. Context launcher/detector, cloud resources and specialist definition unavailable; no specialist pass claimed.",
     "unclaimed": [
       "plugin schema validation",
       "automated design detector",
@@ -422,7 +422,9 @@
     "scripts/pwa_browser_smoke.py:257",
     "frontend/public/art/provenance.json",
     "docs/validation/pwa-visual-review.md",
-    "docs/validation/pwa-visual-verdict.md"
+    "docs/validation/pwa-visual-verdict.md",
+    "docs/validation/mealf-name-review.md",
+    "docs/BRANDING.md"
   ],
   "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
 }

@@ -70,7 +70,7 @@ def fetch_html(url: str):
                 "GET",
                 parsed.path + ("?" + parsed.query if parsed.query else "") or "/",
                 headers={
-                    "User-Agent": "aircooker/0.1 recipe-import",
+                    "User-Agent": "mealf/0.1 recipe-import",
                     "Accept": "text/html, application/ld+json",
                     "Accept-Encoding": "identity",
                 },

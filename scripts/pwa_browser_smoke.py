@@ -88,12 +88,15 @@ def main():
                         )
 
                 page.goto(base + "/app/")
+                expect(page).to_have_title("mealf — Your kitchen")
+                expect(page.locator(".wordmark")).to_have_text("mealf")
                 expect(
                     page.get_by_role("heading", name="A calmer kind of meal planning.")
                 ).to_be_visible()
                 capture("pwa-welcome-desktop.png")
                 page.get_by_role("button", name="Explore the demo").click()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("navigation", name="mealf", exact=True)).to_be_visible()
                 expect(page.locator(".featured-meal img")).to_be_visible()
                 audit("home desktop")
                 capture("pwa-home-desktop.png")

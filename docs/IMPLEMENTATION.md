@@ -1,5 +1,10 @@
 # Implementation checklist and evidence
 
+**Brand update, 2026-10-21:** the product name is mealf. Display names and copy are updated;
+the original supplied peach/wordmark PNG files are not accessible in this cloud workspace.
+Installing those exact assets remains blocked on receiving downloadable originals. Existing
+icons and all storage/session/API identifiers are preserved. See BRANDING.md.
+
 **Delivery update, 2026-10-21:** the user chose PWA-first and retained native code for later.
 The primary client is `frontend/`, served by this same container at `/app/`; no third
 repository/service is required. See PWA.md and PWA_IMPLEMENTATION.md for current browser

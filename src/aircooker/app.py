@@ -212,7 +212,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 await task
 
     app = FastAPI(
-        title="aircooker server",
+        title="mealf server",
         version=__version__,
         openapi_url="/api/v1/openapi.json",
         docs_url="/api/v1/docs",
@@ -312,7 +312,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         with database.connect() as db:
             h = db.execute("SELECT name,instance_id FROM household").fetchone()
         return {
-            "name": h["name"] if h else "aircooker",
+            "name": h["name"] if h else "mealf",
             "instance_id": h["instance_id"] if h else None,
             "version": __version__,
             "api_major": 1,
@@ -930,7 +930,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         return FileResponse(
             path,
             media_type="application/zip",
-            filename="aircooker-household.zip",
+            filename="mealf-household.zip",
             background=BackgroundTask(path.unlink, missing_ok=True),
         )
 

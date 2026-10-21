@@ -1,5 +1,9 @@
 # Changelog
 
+- Rename the product to mealf across the PWA, console, install metadata and download names.
+  Keep existing sessions, offline stores, API headers and archive formats compatible. Original
+  supplied peach/wordmark PNG installation is pending access to the attachment files.
+
 - Edit saved weekly templates offline: rename and add/remove/change meal slots, with
   decimal-comma portions, input validation, cancellation and reload persistence. Applying
   a template uses the selected calendar week; editing it preserves existing meals.

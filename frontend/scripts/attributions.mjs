@@ -16,7 +16,7 @@ while (pending.length) {
 }
 const records = [];
 let notices =
-  'aircooker browser dependency notices\n\nOriginal application code: Apache-2.0. The following code retains its own licences.\nVite is included for the generated module-preload helper. Type-only packages are not bundled.\n\n';
+  'mealf browser dependency notices\n\nOriginal application code: Apache-2.0. The following code retains its own licences.\nVite is included for the generated module-preload helper. Type-only packages are not bundled.\n\n';
 for (const [name, baseline] of Object.entries(approved)) {
   const directory = 'node_modules/' + name,
     pkg = JSON.parse(await readFile(directory + '/package.json', 'utf8'));

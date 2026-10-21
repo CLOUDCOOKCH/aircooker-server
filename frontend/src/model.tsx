@@ -193,7 +193,7 @@ export async function restoreRuntime(): Promise<Runtime | null> {
   }
   const store = await LocalStore.open(connection.instance);
   const household = await store.setting<Household>('household', {
-    name: 'aircooker',
+    name: 'mealf',
     timezone: 'UTC',
     language: 'en',
   });

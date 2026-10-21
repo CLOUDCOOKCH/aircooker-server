@@ -57,9 +57,9 @@ export default function App() {
   if (loading)
     return (
       <div className="boot-screen">
-        <img src="/app/icon-192.png" alt="aircooker" />
+        <img src="/app/icon-192.png" alt="mealf" />
         <div className="loading-line" />
-        <p>aircooker</p>
+        <p>mealf</p>
       </div>
     );
   return runtime ? (
@@ -162,7 +162,7 @@ function Welcome({
       <header className="welcome-header">
         <a href="/app/" className="wordmark">
           <UtensilsCrossed size={20} />
-          aircooker
+          mealf
         </a>
         <select
           aria-label={t('language')}
@@ -385,10 +385,10 @@ function Kitchen({
       <a className="skip-link" href="#main">
         {t('kitchen')}
       </a>
-      <nav className="app-nav" aria-label="aircooker">
+      <nav className="app-nav" aria-label="mealf">
         <div className="nav-brand">
           <UtensilsCrossed size={23} />
-          <span>aircooker</span>
+          <span>mealf</span>
         </div>
         <div className="nav-links">
           {tabs.map(({ id, icon: Icon }) => (
@@ -487,7 +487,7 @@ function Kitchen({
         </main>
         <footer className="app-footer">
           <UtensilsCrossed size={15} />
-          <span>aircooker</span>
+          <span>mealf</span>
         </footer>
       </div>
       {app.notice && (

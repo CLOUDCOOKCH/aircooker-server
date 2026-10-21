@@ -104,6 +104,8 @@ def main():
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 page.on("dialog", lambda dialog: dialog.accept())
                 page.goto(base)
+                expect(page).to_have_title("mealf · household console")
+                expect(page.get_by_role("link", name="mealf", exact=True)).to_be_visible()
                 login = page.locator("#login")
                 expect(login.locator('[name="username"]')).to_be_visible()
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))

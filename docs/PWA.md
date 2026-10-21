@@ -1,4 +1,7 @@
-# Use aircooker as a PWA
+# Use mealf as a PWA
+
+mealf is the new product name, formerly aircooker. Existing installation and storage
+identities are preserved. See BRANDING.md for compatibility and the pending original icon files.
 
 The primary client is the browser application in this repository. The native SwiftUI code
 is retained in aircooker-ios for a future release. A Mac, Apple Developer membership,

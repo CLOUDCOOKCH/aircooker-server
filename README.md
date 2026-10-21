@@ -1,4 +1,7 @@
-# aircooker-server
+# mealf server
+
+Formerly aircooker. The product name is **mealf**. Existing repository/package identifiers
+remain compatible; see [branding and migration](docs/BRANDING.md).
 
 **PWA-first delivery.** Open `/app/` on the configured HTTPS backend to use the primary
 installable browser application. Home, Calendar, Recipes, Pantry, Settings, offline editing,

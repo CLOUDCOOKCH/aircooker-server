@@ -41,7 +41,9 @@ account, payments, analytics or tracking. Third-party AI is optional and needs e
 
 ## Brand Commitments
 
-aircooker. The user approved an iOS-like glass design and requested the same design in the
+mealf (formerly aircooker). The user supplied a flirty peach icon and a lowercase mealf
+wordmark on 2026-10-21. Use the supplied artwork exactly once original files are available;
+never redraw or regenerate it as a substitute. The user approved an iOS-like glass design and requested the same design in the
 PWA: effortless controls, food-led content and uncluttered navigation. Preserve the approved
 visual decisions; the private design references were supplied for the conversation only.
 
@@ -58,7 +60,7 @@ illustrative food only in a clearly separated demo, never seed household data im
 
 - Preserve unsynchronised local work and make its status visible.
 - Preview imports and suggestions before explicit approval.
-- Modify only identifiable aircooker-owned Bring! items.
+- Modify only identifiable mealf-owned Bring! items.
 - Keep deployment simple and external dependencies replaceable.
 - Distinguish tested code, external verification and unfinished work.
 

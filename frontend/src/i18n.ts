@@ -124,7 +124,7 @@ export const en = {
   tryDemo: 'Explore the demo',
   selfHosted: 'Private by design. Hosted by you.',
   connectHint:
-    'Open aircooker at your own server’s HTTPS address. No App Store, subscription or Mac required.',
+    'Open mealf at your own server’s HTTPS address. No App Store, subscription or Mac required.',
   username: 'Username',
   password: 'Password',
   login: 'Sign in',
@@ -404,8 +404,7 @@ export const de: Record<Key, string> = {
   connect: 'Deine Küche öffnen',
   tryDemo: 'Demo entdecken',
   selfHosted: 'Privat. Bei dir zu Hause.',
-  connectHint:
-    'Öffne aircooker über die HTTPS-Adresse deines Servers. Ohne App Store, Abo oder Mac.',
+  connectHint: 'Öffne mealf über die HTTPS-Adresse deines Servers. Ohne App Store, Abo oder Mac.',
   username: 'Benutzername',
   password: 'Passwort',
   login: 'Anmelden',
