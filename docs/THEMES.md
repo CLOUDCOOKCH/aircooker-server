@@ -49,7 +49,9 @@ Preview miniatures use the same token sets and are decorative, not actual screen
 demo work with a disposable real backend/profile. It checks radio arrow navigation,
 three themes under light and dark device modes, metadata/native controls, offline
 selection/reload, cross-tab console reuse, selection before React loads, invalid stored
-IDs, read/write storage failures, 320px overflow and EN/DE strings. Computed foreground/
+IDs, read/write storage failures, 320px overflow and EN/DE strings. Settings fieldsets
+and phone grid tracks explicitly shrink below native intrinsic minima, including long
+German labels in WebKit. Computed foreground/
 background pairs meet 4.5:1 and focus/control boundaries 3:1; Axe covers WCAG AA checks.
 CI runs the flow in Chromium and persistent-profile WebKit. Chromium uses browser
 offline emulation; WebKit stops the actual test backend and restores it after two

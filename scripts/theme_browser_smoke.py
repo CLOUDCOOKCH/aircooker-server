@@ -147,11 +147,16 @@ def main():
                         ['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))"""
                     )
                     assert violations == [], (theme, mode, violations)
-                    assert screen.evaluate("document.documentElement.scrollWidth<=innerWidth"), (
-                        theme,
-                        mode,
-                        "page overflow",
-                    )
+                    layout = screen.evaluate("""() => ({
+                      width: innerWidth, scroll: document.documentElement.scrollWidth,
+                      overflowing: [...document.querySelectorAll('body *')].filter(e=>{
+                        const r=e.getBoundingClientRect();return r.width && r.right>innerWidth+.5;
+                      }).slice(0,12).map(e=>({tag:e.tagName,classes:e.className,
+                        right:e.getBoundingClientRect().right,scroll:e.scrollWidth}))
+                    })""")
+                    if layout["scroll"] > layout["width"]:
+                        screen.screenshot(path=str(captures / "overflow-failure.png"))
+                    assert layout["scroll"] <= layout["width"], (theme, mode, layout)
                     evidence.append({"theme": theme, "mode": mode, "ratios": ratios})
 
                 page.goto(base + "/app/")

@@ -1355,6 +1355,11 @@ input::-webkit-date-and-time-value {
   color: var(--muted);
   font-size: 0.75rem;
 }
+.settings-columns > div,
+.settings-group fieldset {
+  min-width: 0;
+  min-inline-size: 0;
+}
 .settings-columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -2032,7 +2037,7 @@ a.settings-row:hover {
     padding-bottom: 22px;
   }
   .settings-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0;
   }
   .settings-group {

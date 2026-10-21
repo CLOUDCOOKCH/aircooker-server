@@ -350,6 +350,9 @@
     "verification": "fresh full exact-source CI required; no WebKit pass claimed yet",
     "second_run_id": 39650395108,
     "second_result": "five jobs passed; WebKit OS-change checks passed, then browser automation offline reload reported internal engine error",
-    "outage_change": "WebKit now tests actual backend shutdown/connection refusal, two real service-worker cached reloads and backend recovery; same path passes locally in Chromium"
+    "outage_change": "WebKit now tests actual backend shutdown/connection refusal, two real service-worker cached reloads and backend recovery; same path passes locally in Chromium",
+    "third_run_id": 39651095914,
+    "third_result": "WebKit actual backend-outage cached reloads passed; German Settings at 320px exposed intrinsic fieldset/grid overflow",
+    "layout_change": "bound Settings column and fieldset intrinsic minima, with a minmax(0,1fr) phone track; keep root-width check and include element diagnostics on failure"
   }
 }
