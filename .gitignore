@@ -12,6 +12,9 @@ __pycache__/
 build/
 dist/
 /data/
+node_modules/
+frontend/.vite/
+.impeccable/review/
 .env
 *.p12
 *.mobileprovision

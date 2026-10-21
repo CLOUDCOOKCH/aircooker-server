@@ -1,5 +1,10 @@
 # aircooker-server
 
+**PWA-first delivery is now user-confirmed.** The primary web client is being implemented
+in `frontend/` and will ship inside this container. Its browser authentication and offline
+core are tested; the visible/installable PWA is still in development. The native iOS
+repository is retained for later. See [PWA progress and limits](docs/PWA_IMPLEMENTATION.md).
+
 Self-hosted household meal planning, with an independent native iOS companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.

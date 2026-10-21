@@ -1,5 +1,9 @@
 # Changelog
 
+- Record the user-confirmed PWA-first delivery decision while retaining native iOS code.
+- Add isolated HttpOnly browser sessions/bootstrap, transactional import history checks and
+  a typed IndexedDB/outbox/sync foundation with authentication and offline safety tests.
+
 - Inventory locked Python wheel licence declarations and installed attribution-file hashes;
   gate dependency/licence drift in CI and attach the report to future protected releases.
 

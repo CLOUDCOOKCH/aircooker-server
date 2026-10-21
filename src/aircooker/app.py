@@ -82,6 +82,8 @@ from .models import (
     Tokens,
 )
 from .planning import entities, occurrences, shopping_projection, week_start
+from .pwa_auth import ACCESS_COOKIE, is_pwa, require_csrf
+from .pwa_auth import register_routes as register_pwa_auth
 from .recommendations import planning_basis, suggest_week
 from .secrets import SecretVault
 from .suggestion_apply import apply_preview
@@ -293,17 +295,15 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     def session(
         request: Request, credentials: HTTPAuthorizationCredentials | None = Depends(bearer)
     ):
-        token = credentials.credentials if credentials else request.cookies.get("aircooker_session")
+        token = (
+            credentials.credentials
+            if credentials
+            else request.cookies.get(ACCESS_COOKIE if is_pwa(request) else "aircooker_session")
+        )
         if not token:
             raise DomainError("authentication_required", 401)
         if not credentials and request.method not in ("GET", "HEAD", "OPTIONS"):
-            csrf_cookie = request.cookies.get("aircooker_csrf", "")
-            csrf_header = request.headers.get("x-csrf-token", "")
-            if not csrf_cookie or not hmac.compare_digest(csrf_cookie, csrf_header):
-                raise DomainError("csrf_failed", 403)
-            expected = os.environ.get("BASE_URL", "https://localhost").rstrip("/")
-            if request.headers.get("origin") != expected:
-                raise DomainError("origin_forbidden", 403)
+            require_csrf(request, pwa=is_pwa(request))
         with database.connect() as db:
             return authenticate(db, token)
 
@@ -382,7 +382,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         with database.transaction() as db:
             h = db.execute("SELECT * FROM household").fetchone()
             valid = verify_password(body.password, h["password_hash"] if h else DUMMY_HASH)
-            if not h or not valid or not hmac.compare_digest(body.username, h["username"]):
+            if (
+                not h
+                or not valid
+                or not hmac.compare_digest(body.username.encode(), h["username"].encode())
+            ):
                 raise DomainError("invalid_credentials", 401)
             return new_session(db, str(body.device_id))
 
@@ -749,10 +753,22 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             )
 
     @app.post("/api/v1/imports/{import_id}/confirm", response_model=MutationResult)
-    def confirm_import(import_id: UUID, body: Mutation, s=Depends(session)):
+    def confirm_import(
+        import_id: UUID,
+        body: Mutation,
+        x_aircooker_sync_cursor: int | None = Header(default=None, ge=0),
+        x_aircooker_sync_token: str | None = Header(default=None, pattern=r"^(root|[a-f0-9]{32})$"),
+        s=Depends(session),
+    ):
         if body.kind != "recipe" or body.operation != "upsert":
             raise DomainError("recipe_mutation_required")
         with database.transaction() as db:
+            if (x_aircooker_sync_cursor is None) != (x_aircooker_sync_token is None):
+                raise DomainError("sync_checkpoint_required", 422)
+            if x_aircooker_sync_cursor is not None and x_aircooker_sync_token is not None:
+                validate_anchor(
+                    db, SyncAnchor(cursor=x_aircooker_sync_cursor, token=x_aircooker_sync_token)
+                )
             row = db.execute("SELECT * FROM import_draft WHERE id=?", (str(import_id),)).fetchone()
             if not row or row["state"] not in ("preview", "confirmed"):
                 raise DomainError("import_not_ready", 409)
@@ -991,4 +1007,5 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 ("password_changed", time.time()),
             )
 
+    register_pwa_auth(app, database, login, setup)
     return app
