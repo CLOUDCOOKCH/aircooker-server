@@ -1,5 +1,9 @@
 # AI Recipe Import
 
+For a new server, complete [Installation](Installation) and [First-run setup](First-Run-Setup)
+first. See [Configuration](Configuration) for container settings and
+[Troubleshooting](Troubleshooting) for deployment/login problems.
+
 MealF imports recipes from photographs, screenshots, PDFs, public recipe pages, supplied
 text, and supported cooking videos. Cloud vision performs OCR and recipe understanding;
 no OCR daemon, separate worker service, GPU, or additional Docker container is needed.

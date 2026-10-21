@@ -22,9 +22,11 @@ Authenticated API operations:
 4. Verify the SDK and dedicated selected test list with the compatibility experiment.
 5. POST `/api/v1/integrations/bring/reconcile` queues work; inspect jobs/status for the result.
 
-There is no configuration screen for all of these operations yet. Do not put passwords in
-shell history. Use a local client or secret-aware administrator tool. Disconnect deletes
-the saved credential and compatibility report, without deleting external list content.
+The administration console's Bring! section supports connection, existing-list selection,
+status, reconciliation and disconnection. See the [Wiki setup guide](wiki/Bring-Integration.md).
+Do not put passwords in shell history. Use the console or a secret-aware administrator tool.
+Disconnect deletes the saved credential and compatibility report, without deleting external
+list content.
 
 ## Compatibility experiment
 

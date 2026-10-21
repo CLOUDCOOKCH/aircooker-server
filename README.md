@@ -13,6 +13,10 @@ Self-hosted household meal planning with a primary PWA and a retained native com
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
 
+For step-by-step operator guides, start with the [Wiki guide index](docs/WIKI.md):
+installation, first-run setup, Cloudflare Tunnel, HTTPS, configuration, backups and recovery.
+These maintained Wiki sources are prepared for publication in the separate GitHub Wiki.
+
 **Development version. The complete product acceptance criteria are not yet met.**
 The executable backend includes secure first-run setup, per-device sessions and durable sign-out support, versioned sync with restore-aware commit proofs,
 recipe/calendar/pantry/leftover/template storage, bounded recurrence expansion, shopping

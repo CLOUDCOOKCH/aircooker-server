@@ -81,9 +81,10 @@ no subscriptions; reconnect each device. If a restored/new installation changes 
 key, Settings detects the browser key mismatch and requires disconnect/reconnect, rather
 than claiming it is connected. Ordinary container upgrades preserve the key in `/data`.
 
-Delivery receipts and jobs are conservatively retained with existing queue history; bounded
-retention/quotas remain a release task. A shared-account user has household privileges; the
-app does not claim separate account roles or remote deletion of offline site data.
+Required delivery receipts remain retained; eligible completed jobs have bounded cleanup
+under [the retention policy](RETENTION.md). Broader quotas remain a release task. A shared
+account user has household privileges; the app does not claim separate account roles or
+remote deletion of offline site data.
 
 ## Evidence and limits
 

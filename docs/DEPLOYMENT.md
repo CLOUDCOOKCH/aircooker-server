@@ -3,6 +3,9 @@
 This development image is not yet a production release. All examples require review of
 `IMPLEMENTATION.md` and an HTTPS ingress. One container contains API, console, worker and DB.
 
+For step-by-step instructions, see the [Wiki installation guide](wiki/Installation.md),
+[Cloudflare Tunnel guide](wiki/Cloudflare-Tunnel.md) and [complete guide index](WIKI.md).
+
 ## Build and first run
 
 Use Docker Engine with Compose v2 and a local filesystem-backed named volume:
@@ -42,10 +45,11 @@ be read-only; `/tmp` is a bounded tmpfs. Keep the single-worker process model.
 | LOG_SETUP_TOKEN | true | Print the one-time setup token at unconfigured startup; false disables it, with file access retained |
 | TRUSTED_PROXY_CIDRS | empty | Uvicorn trusted proxy addresses/CIDRs; never `*` on public ingress |
 | TZ | image setting | Process time zone only; household IANA zone controls planning |
-| AI_PROVIDER | unset | Optional openai/openai-compatible/anthropic/ollama/openwebui |
+| AI_PROVIDER | unset | Optional gemini/openai/openrouter/openai-compatible/anthropic/ollama/openwebui |
 | AI_BASE_URL | provider default | Administrator-selected API base; imported content cannot change it |
 | AI_MODEL | unset | Required when configuring AI; no guessed model name |
 | AI_API_KEY_FILE | unset | Restricted regular file, no group/world access, not a symlink |
+| AI_INPUT_FORMATS | text | Comma-separated model capabilities, e.g. `text,image,pdf`; supported formats depend on provider |
 | AI_TIMEOUT | 30 | 1–120 seconds |
 | AI_MAX_CONTENT | 50000 | 100–100000 UTF-8 bytes |
 | AI_REQUESTS_PER_HOUR | 20 | Shared durable hourly budget for AI imports and connection probes |
@@ -78,9 +82,9 @@ meals.example.com {
     request_body @archive { max_size 280MiB }
     @jsonRestore path /api/v1/admin/import
     request_body @jsonRestore { max_size 8MiB }
-    @media path /api/v1/media/*
+    @media path /api/v1/media/* /api/v1/import-sources/*
     request_body @media { max_size 9MiB }
-    @ordinary not path /api/v1/admin/import/archive /api/v1/admin/import /api/v1/media/*
+    @ordinary not path /api/v1/admin/import/archive /api/v1/admin/import /api/v1/media/* /api/v1/import-sources/*
     request_body @ordinary { max_size 1500000 }
     reverse_proxy 127.0.0.1:8080
 }
