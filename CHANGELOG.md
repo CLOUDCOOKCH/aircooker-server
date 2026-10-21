@@ -4,7 +4,9 @@
   target feedback, edge scrolling, cancellation and tap/keyboard move forms. Preserve
   offline durability, existing desktop drops and occurrence exceptions. Stack narrow
   dialog fields and constrain native date controls to prevent the reported overlap.
-  Local checks pass; WebKit CI and publication evidence tracked separately.
+  Published `poc-20261021.8`: all six source CI jobs, Chromium/WebKit interaction checks,
+  both fresh image gates and public pull/checksum/5152 same-volume upgrade checks pass.
+  WebKit tap/cancellation compatibility-click findings are fixed; physical iOS unverified.
 
 - Fix phone PWA enlargement/clipping risks: minimum 16px mobile form fields, explicit
   Safari text autosizing, all-edge safe-area layout, short touch-landscape navigation and

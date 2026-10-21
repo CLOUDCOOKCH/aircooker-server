@@ -128,3 +128,15 @@ published `.6` → `.7` same-volume upgrade on internal 5152 passed. Packaged CS
 the minimum mobile font, text autosizing and safe-area rules. Original assets, sessions
 and household data remain intact. See [exact evidence](validation/github-phone-viewport-preview.json).
 The reported physical-phone installation/keyboard behavior still needs operator confirmation.
+
+## Mobile calendar preview
+
+`poc-20261021.8` from `4d614b0e21b9393db00d1fcd98108b9ca529e7d6` passed all six
+CI jobs in 39645754201, including Chromium/WebKit calendar interaction and form-geometry
+checks. Publication 39646222333 passed fresh native AMD64/ARM64 security and runtime
+checks. The image index is `sha256:211e26f02798b199f1606b0417847dc7d52400e0108a4ca00672e088ee552fe2`.
+Public pull, six asset checksums, build/config/report identities and the published
+`.7` → `.8` disposable same-volume 5152 upgrade pass. New calendar/pointer/grid code
+ships; household/session/recipe/sync proof and original assets persist. Duplicate tag
+event 39646224899 succeeded at the release gate and skipped verify-images/publish.
+Physical iPhone gestures/keyboard remain unverified. See [exact evidence](validation/github-mobile-calendar-preview.json).

@@ -58,3 +58,8 @@ scope after confirming the narrow form and interaction states. No independent sp
 unavailable plugin-schema or full-product acceptance pass is claimed. Linux engine tests
 inject notch geometry and cannot establish actual iOS Home Screen, keyboard or finger
 behavior. Physical phone confirmation remains necessary. Native iOS code is unchanged.
+
+Published in `poc-20261021.8`: all six exact-source CI jobs and both native image
+gates pass. Chromium and WebKit complete the extended script, including tap and Escape
+regressions. Public pull, release/config identities and a disposable same-volume upgrade
+on internal 5152 pass. See [exact release evidence](validation/github-mobile-calendar-preview.json).

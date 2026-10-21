@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "implemented and locally tested; exact-source CI/WebKit/publication pending",
+  "status": "implemented and tested locally and in Chromium/WebKit CI; published poc-20261021.8 verified; physical phone pending",
   "scope": "PWA mobile calendar views, grip-driven moves and native paired-field alignment",
   "backend_tests": 226,
   "frontend_tests": 39,
@@ -50,5 +50,6 @@
     "run_id": 39644781319,
     "finding": "Drag persistence and grip tap passed; a compatibility click after Escape could open the move form.",
     "fix": "All session-ending paths consume a follow-up pointer click while retaining keyboard activation. Add an explicit no-dialog assertion after Escape."
-  }
+  },
+  "release_evidence": "github-mobile-calendar-preview.json"
 }

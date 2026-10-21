@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-21",
+  "status": "published and verified",
+  "source": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+  "scope": "PWA switchable day/three-day/week calendar, pointer/touch drag moves and paired native field alignment; API, database and retained native code unchanged",
+  "ci": {
+    "run_id": 39645754201,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39645754201",
+    "backend_tests_per_architecture": 226,
+    "frontend_tests": 39,
+    "jobs": [
+      {
+        "id": 119380756005,
+        "name": "pwa-core",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      },
+      {
+        "id": 119380756197,
+        "name": "browser",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      },
+      {
+        "id": 119380756219,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      },
+      {
+        "id": 119380756444,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      },
+      {
+        "id": 119380756479,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      },
+      {
+        "id": 119380756624,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "4d614b0e21b9393db00d1fcd98108b9ca529e7d6",
+        "conclusion": "success"
+      }
+    ],
+    "browser": {
+      "job_id": 119380756197,
+      "chromium": "trusted touch offline date/category move, offline reload and saved view, tap/keyboard form, edge scrolling, Escape and touch cancel, native horizontal swipe, six variant geometry assertions",
+      "webkit": "persistent profile with real storage; pointer move and reload, touch tap/keyboard alternative, edge scrolling, Escape/no follow-up form, six variant native-control geometry assertions",
+      "fixtures": "synthetic household/demo data; no fake DOM drops or mocked local storage"
+    },
+    "resolved": [
+      "WebKit suppresses compatibility click after captured touch; handle tap directly on pointerup",
+      "Consume pointer compatibility clicks on all cancellation paths, preserving keyboard activation"
+    ]
+  },
+  "publication": {
+    "run_id": 39646222333,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39646222333",
+    "jobs": [
+      {
+        "id": 119382391377,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119382484648,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119382484789,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119383269153,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.8",
+    "release_id": 419867541,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.8",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58315961",
+    "index_digest": "sha256:211e26f02798b199f1606b0417847dc7d52400e0108a4ca00672e088ee552fe2",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "cf70b47048262b2e7f015c07eb70ca460242fa1b426ab86db9775b6b0e08fd2d"
+      },
+      "container-security-amd64.json": {
+        "sha256": "03705e6babc4a92a0ae8dbda65a6ab63a7aa43f389922294666788be79db640e"
+      },
+      "container-security-arm64.json": {
+        "sha256": "28a6460040e285c4434a63d49e816747ab3378303d3768a90d4c2d58d2375159"
+      },
+      "openapi-v1.json": {
+        "sha256": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "645f848a929348f77c17fcc2d50b8dcd65416b8b3468a209ea25f0df3ad9b794"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "e27595cb2a44b915b4b8de41781d800d5973dcc36728e278cf81284f74b1e6e2"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:dc538ed1f367cb9d329d63ad4ef7accd8e4e5c59b3b119c0d1875b72f0ce84ec",
+        "config": "sha256:03373224e80a66de45302839972a8ac5599f7cfe879dfe1da8176e8134912a71",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:2f49e408ce4d84997ae2cd305eea664b558689a3571b3c89268f75516398c4f1",
+        "config": "sha256:25746611942436b04829c209a193571faaafad9d62cd5251aa9e6df938cd6fec",
+        "high_critical": 0
+      }
+    }
+  },
+  "duplicate_event": {
+    "run_id": 39646224899,
+    "jobs": [
+      {
+        "id": 119383743186,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119383809400,
+        "name": "verify-images",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 119383810104,
+        "name": "publish",
+        "conclusion": "skipped"
+      }
+    ],
+    "result": "Completed release detected; gate succeeds, image verification/publication skipped without another push."
+  },
+  "verification": {
+    "anonymous_pull": "passed using an empty command-scoped Docker configuration",
+    "assets": "all six public release SHA-256 values match; source Compose/OpenAPI bytes match",
+    "image_identity": "both OCI platform configs equal report ImageID and native build logs; exactly AMD64/ARM64; zero HIGH/CRITICAL; Trivy v0.70.0 without suppressions",
+    "same_volume_upgrade": "passed: published .7 -> .8, disposable same volume, internal 5152, read-only/non-root; household/session/recipe/sync proof and manifest identity preserved; new calendar/view/pointer and paired-grid code packaged; source theme/shared assets/artwork hashes match; configured startup emits no token"
+  },
+  "limits": [
+    "Physical iPhone/Safari Home Screen, software keyboard and finger behavior remain unverified; Linux notch geometry is injected",
+    "Synthetic disposable upgrade only; operator host/data not accessed",
+    "No new live Bring/AI/push/native or complete-product acceptance claim"
+  ]
+}
