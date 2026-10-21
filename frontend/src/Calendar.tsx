@@ -13,6 +13,7 @@ import {
   Upload,
   ShoppingBag,
   Pencil,
+  GripVertical,
 } from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useApp } from './model';
@@ -41,6 +42,8 @@ import {
 } from './lib/planning';
 import type { Occurrence, Suggestion } from './lib/planning';
 import type { Edit } from './lib/store';
+import { useMealDrag } from './useMealDrag';
+import type { MealDragSource } from './useMealDrag';
 export type PlanningTarget = {
   day: string;
   category: Category;
@@ -51,19 +54,26 @@ export function MealRow({
   item,
   open,
   manage,
+  drag,
 }: {
   item: Occurrence;
   open: (id: string) => void;
   manage: (item: Occurrence) => void;
+  drag?: ReturnType<typeof useMealDrag>;
 }) {
   const { entities, t } = useApp();
   const meal = item.entity.payload;
   const recipe = entities('recipe').find((row) => row.id === meal.recipe_id);
   return (
     <div
-      className="meal-row"
-      draggable
+      className={'meal-row' + (drag?.drag?.source.key === item.key ? ' is-drag-source' : '')}
+      data-meal-id={item.entity.id}
+      draggable={!drag?.disabled}
       onDragStart={(e) => {
+        if ((e.target as Element).closest('.meal-drag-handle')) {
+          e.preventDefault();
+          return;
+        }
         e.dataTransfer.setData(
           'application/aircooker-meal',
           JSON.stringify({ id: item.entity.id, day: item.day }),
@@ -82,8 +92,32 @@ export function MealRow({
           </small>
         </span>
       </button>
+      {drag && (
+        <button
+          type="button"
+          className="meal-drag-handle icon-button"
+          aria-label={`${t('moveMeal')} · ${recipe?.payload.title ?? t('meals')}`}
+          title={t('calendarDragHint')}
+          disabled={drag.disabled}
+          onContextMenu={(event) => event.preventDefault()}
+          onPointerDown={(event) =>
+            drag.begin(event, {
+              id: item.entity.id,
+              day: item.day,
+              key: item.key,
+              title: recipe?.payload.title ?? t('meals'),
+            })
+          }
+          onClick={(event) => {
+            if (!drag.consumeClick(item.key, event.detail)) manage(item);
+          }}
+        >
+          <GripVertical size={19} />
+        </button>
+      )}
       <IconButton
         label={`${t('edit')} ${recipe?.payload.title ?? t('meals')}`}
+        disabled={drag?.disabled}
         onClick={() => manage(item)}
       >
         <Ellipsis size={20} />
@@ -341,16 +375,92 @@ export function Calendar({
   const app = useApp(),
     { t } = app;
   const [tools, setTools] = useState(false),
-    [error, setError] = useState<string | null>(null);
+    [error, setError] = useState<string | null>(null),
+    [moving, setMoving] = useState(false);
+  const [view, setView] = useState<'day' | 'three' | 'week'>(() =>
+    matchMedia('(max-width:800px), (hover:none) and (pointer:coarse) and (max-height:500px)')
+      .matches
+      ? 'day'
+      : 'week',
+  );
+  const grid = useRef<HTMLDivElement>(null);
+  const busy = useRef(false);
+  const preferenceChanged = useRef(false);
+  useEffect(() => {
+    let alive = true;
+    void app.store
+      .setting<string>('calendar:view', '')
+      .then((saved) => {
+        if (alive && !preferenceChanged.current && ['day', 'three', 'week'].includes(saved))
+          setView(saved as typeof view);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [app.store]);
   const meals = app.entities('meal');
   const items = occurrences(meals, monday(day), addDays(monday(day), 6));
+  const move = async (
+    value: Pick<MealDragSource, 'id' | 'day'>,
+    date: string,
+    category: Category,
+  ) => {
+    if (busy.current) return;
+    const source = items.find((item) => item.entity.id === value.id && item.day === value.day);
+    if (!source) {
+      setError(t('calendarMoveFailed'));
+      return;
+    }
+    if (source.day === date && source.entity.payload.category === category) return;
+    busy.current = true;
+    setMoving(true);
+    setError(null);
+    try {
+      await app.save(changeOccurrence(source, { date, category }));
+    } catch {
+      setError(t('calendarMoveFailed'));
+    } finally {
+      busy.current = false;
+      setMoving(false);
+    }
+  };
+  const drag = useMealDrag(
+    grid,
+    (source, target) => move(source, target.date, target.category),
+    moving,
+  );
+  useEffect(() => {
+    drag.cancel();
+    const region = grid.current;
+    const active = region?.querySelector<HTMLElement>('.active-day');
+    if (region && active && view !== 'day') {
+      const a = active.getBoundingClientRect(),
+        b = region.getBoundingClientRect();
+      if (a.left < b.left || a.right > b.right) region.scrollLeft += a.left - b.left;
+    }
+  }, [day, view]);
+  const chooseView = (value: typeof view) => {
+    preferenceChanged.current = true;
+    setView(value);
+    void app.store
+      .setSetting('calendar:view', value)
+      .catch(() => setError(t('calendarViewFailed')));
+  };
+  const start =
+    view === 'day'
+      ? day
+      : view === 'three'
+        ? addDays(monday(day), Math.min(distance(monday(day), day), 4))
+        : monday(day);
+  const dates = Array.from({ length: view === 'day' ? 1 : view === 'three' ? 3 : 7 }, (_, i) =>
+    addDays(start, i),
+  );
   const drop = async (e: React.DragEvent, date: string, category: Category) => {
     e.preventDefault();
     try {
       const value = JSON.parse(e.dataTransfer.getData('application/aircooker-meal'));
-      const source = items.find((item) => item.entity.id === value.id && item.day === value.day);
-      if (!source) return;
-      await app.save(changeOccurrence(source, { date, category }));
+      await move(value, date, category);
     } catch {
       setError(t('invalid'));
     }
@@ -367,13 +477,35 @@ export function Calendar({
         </button>
       </PageHeader>
       <WeekStrip day={day} onChange={setDay} />
+      <div className="calendar-view-switch" role="group" aria-label={t('calendarView')}>
+        {(['day', 'three', 'week'] as const).map((value) => (
+          <button
+            type="button"
+            key={value}
+            aria-pressed={view === value}
+            onClick={() => chooseView(value)}
+          >
+            {t(
+              value === 'day'
+                ? 'calendarDay'
+                : value === 'three'
+                  ? 'calendarThreeDays'
+                  : 'calendarWeek',
+            )}
+          </button>
+        ))}
+      </div>
+      <p className="calendar-drag-hint">
+        {t('calendarDragHint')}
+        {view !== 'day' && <> {t('calendarScrollHint')}</>}
+      </p>
       {error && (
         <p role="alert" className="error-note">
           {error}
         </p>
       )}
-      <div className="calendar-week">
-        {Array.from({ length: 7 }, (_, i) => addDays(monday(day), i)).map((date) => (
+      <div className="calendar-week" data-view={view} ref={grid} aria-busy={moving}>
+        {dates.map((date) => (
           <section className={'calendar-day ' + (date === day ? 'active-day' : '')} key={date}>
             <h2>
               <button onClick={() => setDay(date)}>
@@ -384,7 +516,15 @@ export function Calendar({
             {categories.map((category) => (
               <div
                 key={category}
-                className="calendar-slot"
+                className={
+                  'calendar-slot' +
+                  (drag.drag?.target?.date === date && drag.drag.target.category === category
+                    ? ' is-drop-target'
+                    : '')
+                }
+                data-meal-slot=""
+                data-date={date}
+                data-category={category}
                 onDragOver={(e) => {
                   if (e.dataTransfer.types.includes('application/aircooker-meal'))
                     e.preventDefault();
@@ -403,7 +543,7 @@ export function Calendar({
                 {items
                   .filter((item) => item.day === date && item.entity.payload.category === category)
                   .map((item) => (
-                    <MealRow key={item.key} item={item} open={open} manage={manage} />
+                    <MealRow key={item.key} item={item} open={open} manage={manage} drag={drag} />
                   ))}
                 {!items.some(
                   (item) => item.day === date && item.entity.payload.category === category,
@@ -418,6 +558,23 @@ export function Calendar({
           </section>
         ))}
       </div>
+      <div className="sr-only" role="status" aria-live="polite">
+        {drag.drag &&
+          `${t('moveMeal')} · ${drag.drag.source.title}${drag.drag.target ? ` · ${displayDate(drag.drag.target.date, app.language)} · ${t(drag.drag.target.category)}` : ''}`}
+      </div>
+      {drag.drag && (
+        <div
+          className="meal-drag-preview"
+          aria-hidden="true"
+          style={{
+            left: Math.max(12, Math.min(innerWidth - 192, drag.drag.x - 90)),
+            top: Math.max(12, Math.min(innerHeight - 64, drag.drag.y - 70)),
+          }}
+        >
+          <GripVertical size={18} />
+          {drag.drag.source.title}
+        </div>
+      )}
       <Leftovers plan={plan} />
       {tools && <WeekTools day={day} onClose={() => setTools(false)} />}
     </>

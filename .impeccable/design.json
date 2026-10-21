@@ -716,5 +716,27 @@
     "viewportMetadata": "existing device width, initial scale 1, viewport-fit cover; accessibility zoom preserved",
     "evidence": "docs/validation/mealf-phone-layout-local.json",
     "limits": "simulated insets in Linux engines; actual iOS Home Screen/keyboard/status bar unverified"
+  },
+  "mobileCalendar": {
+    "source": [
+      "frontend/src/Calendar.tsx",
+      "frontend/src/useMealDrag.ts",
+      "frontend/src/styles.css"
+    ],
+    "views": [
+      "day",
+      "three",
+      "week"
+    ],
+    "persistence": "device-local calendar:view setting; no household API change",
+    "columns": "160px minimum, horizontal overflow contained in grid; subgrid category rows",
+    "targets": "44px grips, menus and segmented controls",
+    "interaction": "explicit grip Pointer Events, 8px intent threshold, preview/target feedback, page/grid edge scrolling; original card/native desktop behavior retained",
+    "cancellation": "Escape, pointer cancel, lost capture, hide, blur, resize and view/date change; no commit",
+    "alternative": "tap/Enter/Space opens existing date/category form",
+    "data": "existing changeOccurrence and durable transactional save path",
+    "forms": "<=480px sheets stack paired fields; two-column minmax grid with constrained 48px date/select controls",
+    "evidence": "docs/MOBILE_CALENDAR.md",
+    "limits": "Linux browser behavior only; physical iOS unverified"
   }
 }

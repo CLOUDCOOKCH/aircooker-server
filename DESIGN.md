@@ -278,3 +278,15 @@ safe-area insets. Shells, navigation and dialogs reserve those edges; short touc
 uses bottom navigation. No overflow hiding or viewport-reset script masks layout errors.
 Chromium focus/geometry checks use injected notch values; CI also runs WebKit. Physical
 iOS installation/keyboard and status-bar behavior remain outside Linux engine evidence.
+
+Mobile calendar update, 2026-10-21: add a 44px-target segmented Day/3 days/Week choice
+below the anchored week strip. Preserve readable 160px-minimum multi-day columns with
+horizontal scrolling, aligned category rows and the selected day visible. Explicit
+44px grips move meals using Pointer Events; card taps and ordinary scrolling retain
+their roles. Show an inverse-ink drag preview, accent-soft target and faded source.
+Direct manipulation has no decorative transition. Cancellation never commits; taps
+and keyboard activation open the existing date/category form. Retain native desktop
+drops, offline transactions and occurrence exceptions. Narrow <=480px dialogs stack
+paired fields; two-column rows use minmax(0,1fr), constrained date controls and 48px
+paired-field heights. Original art and palette tokens stay intact. Chromium captures/
+behavior are genuine synthetic-data evidence; physical iPhone remains unverified.

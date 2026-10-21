@@ -60,6 +60,7 @@ def main():
                 browser = playwright.chromium.launch(**options) if engine == "chromium" else None
                 for name, width, height, safe, language in [
                     ("phone", 390, 844, [59, 0, 34, 0], "en"),
+                    ("phone-dark", 390, 844, [59, 0, 34, 0], "de"),
                     ("small-phone", 320, 568, [20, 0, 0, 0], "en"),
                     ("landscape", 844, 390, [0, 59, 21, 59], "de"),
                     ("asymmetric-landscape", 852, 393, [0, 0, 21, 59], "en"),
@@ -172,6 +173,205 @@ def main():
                     nav.get_by_role(
                         "button", name="Kalender" if language == "de" else "Calendar"
                     ).click()
+                    views = page.locator(".calendar-view-switch")
+                    views.get_by_role(
+                        "button", name="3 Tage" if language == "de" else "3 days", exact=True
+                    ).click()
+                    expect(page.locator(".calendar-day")).to_have_count(3)
+                    check("three-day view")
+                    page.screenshot(path=str(captures / f"{name}-three-days.png"))
+                    # Actual narrow Plan a meal form, including WebKit's native date input.
+                    page.locator(".calendar-slot .slot-heading button").first.click()
+                    dialog = page.locator(".sheet")
+                    expect(dialog).to_be_visible()
+                    check("plan meal", ".sheet")
+                    assert dialog.locator(".form-row").evaluate("""row => {
+                        const labels=[...row.querySelectorAll('label')];
+                        const controls=labels.map(l=>l.querySelector('input,select'));
+                        const a=controls[0].getBoundingClientRect(), b=controls[1].getBoundingClientRect();
+                        return controls.every((c,i)=>{const r=c.getBoundingClientRect(),l=labels[i].getBoundingClientRect();
+                            return r.left>=l.left-1 && r.right<=l.right+1;}) &&
+                            (a.bottom<=b.top || a.right<=b.left);
+                    }""")
+                    page.screenshot(path=str(captures / f"{name}-plan-meal.png"))
+                    dialog.locator(".sheet-heading button").click()
+                    if name == "phone":
+                        # Trusted touch events in Chromium; real mouse PointerEvents in WebKit.
+                        # Both exercise the same grip/capture/drop path without dispatching fake DOM drops.
+                        source = page.locator(".calendar-week .meal-row").first
+                        meal_id = source.get_attribute("data-meal-id")
+                        grip = source.locator(".meal-drag-handle")
+                        grip.evaluate(
+                            "e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'})"
+                        )
+                        target = (
+                            page.locator(".calendar-day").nth(1).locator('[data-category="lunch"]')
+                        )
+                        source_date = source.locator("xpath=..").get_attribute("data-date")
+                        target_date = target.get_attribute("data-date")
+                        a = grip.bounding_box()
+                        b = target.bounding_box()
+                        sx, sy = a["x"] + a["width"] / 2, a["y"] + a["height"] / 2
+                        dx, dy = b["x"] + b["width"] / 2, b["y"] + 40
+                        if engine == "chromium":
+                            page.wait_for_function("!!navigator.serviceWorker.controller")
+                            context.set_offline(True)
+                            session = context.new_cdp_session(page)
+                            session.send(
+                                "Input.dispatchTouchEvent",
+                                {"type": "touchStart", "touchPoints": [{"x": sx, "y": sy}]},
+                            )
+                            for step in range(1, 11):
+                                session.send(
+                                    "Input.dispatchTouchEvent",
+                                    {
+                                        "type": "touchMove",
+                                        "touchPoints": [
+                                            {
+                                                "x": sx + (dx - sx) * step / 10,
+                                                "y": sy + (dy - sy) * step / 10,
+                                            }
+                                        ],
+                                    },
+                                )
+                                page.wait_for_timeout(30)
+                            expect(page.locator(".is-drop-target")).to_have_attribute(
+                                "data-date", target_date
+                            )
+                            page.screenshot(path=str(captures / "phone-dragging.png"))
+                            session.send(
+                                "Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []}
+                            )
+                        else:
+                            page.mouse.move(sx, sy)
+                            page.mouse.down()
+                            page.mouse.move(dx, dy, steps=12)
+                            expect(page.locator(".is-drop-target")).to_have_attribute(
+                                "data-date", target_date
+                            )
+                            page.mouse.up()
+                        moved = page.locator(
+                            f'[data-date="{target_date}"][data-category="lunch"] [data-meal-id="{meal_id}"]'
+                        )
+                        expect(moved).to_be_visible()
+                        expect(page.locator(".meal-drag-preview")).to_have_count(0)
+                        expect(page.locator(".sheet")).to_have_count(0)
+                        expect(
+                            page.locator(f'[data-date="{source_date}"] [data-meal-id="{meal_id}"]')
+                        ).to_have_count(0)
+                        page.reload()
+                        expect(page.locator(".app-nav")).to_be_visible()
+                        page.locator(".nav-links").get_by_role(
+                            "button", name="Calendar", exact=True
+                        ).click()
+                        expect(page.locator(".calendar-week")).to_have_attribute(
+                            "data-view", "three"
+                        )
+                        expect(moved).to_be_visible()
+                        context.set_offline(False)
+                        moved.locator(".meal-drag-handle").tap()
+                        expect(page.locator(".sheet")).to_be_visible()
+                        page.locator(".sheet .sheet-heading button").click()
+                        # Keyboard-accessible move form remains available on the grip.
+                        moved.locator(".meal-drag-handle").focus()
+                        moved.locator(".meal-drag-handle").press("Enter")
+                        expect(page.locator(".sheet")).to_be_visible()
+                        page.locator(".sheet .sheet-heading button").click()
+                    views.get_by_role(
+                        "button", name="Woche" if language == "de" else "Week", exact=True
+                    ).click()
+                    expect(page.locator(".calendar-day")).to_have_count(7)
+                    check("week view")
+                    page.screenshot(path=str(captures / f"{name}-week.png"))
+                    if name == "phone":
+                        # Hold a grip near the scroll edge, then cancel; no meal write may occur.
+                        row = page.locator(f'[data-meal-id="{meal_id}"]')
+                        handle = row.locator(".meal-drag-handle")
+                        handle.evaluate(
+                            "e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'})"
+                        )
+                        a = handle.bounding_box()
+                        g = page.locator(".calendar-week").bounding_box()
+                        before = page.locator(".calendar-week").evaluate("e=>e.scrollLeft")
+                        page.mouse.move(a["x"] + 22, a["y"] + 22)
+                        page.mouse.down()
+                        page.mouse.move(
+                            min(width - 24, g["x"] + g["width"] - 8), a["y"] + 22, steps=10
+                        )
+                        page.wait_for_timeout(500)
+                        assert (
+                            page.locator(".calendar-week").evaluate("e=>e.scrollLeft") > before + 20
+                        )
+                        page.keyboard.press("Escape")
+                        page.mouse.up()
+                        expect(page.locator(".meal-drag-preview")).to_have_count(0)
+                        expect(
+                            page.locator(f'[data-date="{target_date}"] [data-meal-id="{meal_id}"]')
+                        ).to_have_count(1)
+                        if engine == "chromium":
+                            # Ordinary finger scrolling stays native outside the grips.
+                            page.locator(".calendar-week").evaluate("e=>e.scrollLeft=0")
+                            g = page.locator(".calendar-week").bounding_box()
+                            y = max(90, g["y"] + 28)
+                            session.send(
+                                "Input.dispatchTouchEvent",
+                                {"type": "touchStart", "touchPoints": [{"x": width - 65, "y": y}]},
+                            )
+                            for x in range(width - 85, 65, -20):
+                                session.send(
+                                    "Input.dispatchTouchEvent",
+                                    {"type": "touchMove", "touchPoints": [{"x": x, "y": y}]},
+                                )
+                                page.wait_for_timeout(25)
+                            session.send(
+                                "Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []}
+                            )
+                            page.wait_for_function(
+                                "document.querySelector('.calendar-week').scrollLeft>20"
+                            )
+                            # Native cancellation must clear the drag without moving the meal.
+                            handle.evaluate(
+                                "e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'})"
+                            )
+                            a = handle.bounding_box()
+                            page.wait_for_timeout(250)
+                            a = handle.bounding_box()
+                            session.send(
+                                "Input.dispatchTouchEvent",
+                                {
+                                    "type": "touchStart",
+                                    "touchPoints": [{"x": a["x"] + 22, "y": a["y"] + 22}],
+                                },
+                            )
+                            for step in range(1, 4):
+                                session.send(
+                                    "Input.dispatchTouchEvent",
+                                    {
+                                        "type": "touchMove",
+                                        "touchPoints": [
+                                            {
+                                                "x": a["x"] + 22 + step * 10,
+                                                "y": a["y"] + 22 - step * 4,
+                                            }
+                                        ],
+                                    },
+                                )
+                                page.wait_for_timeout(30)
+                            expect(page.locator(".meal-drag-preview")).to_be_visible()
+                            session.send(
+                                "Input.dispatchTouchEvent",
+                                {"type": "touchCancel", "touchPoints": []},
+                            )
+                            expect(page.locator(".meal-drag-preview")).to_have_count(0)
+                            expect(
+                                page.locator(
+                                    f'[data-date="{target_date}"] [data-meal-id="{meal_id}"]'
+                                )
+                            ).to_have_count(1)
+                    views.get_by_role(
+                        "button", name="Tag" if language == "de" else "Day", exact=True
+                    ).click()
+                    expect(page.locator(".calendar-day")).to_have_count(1)
                     page.get_by_role(
                         "button", name="Wochenoptionen" if language == "de" else "Week options"
                     ).click()

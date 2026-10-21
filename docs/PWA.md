@@ -41,9 +41,13 @@ fractions and ranges; leave unquantified amounts blank and use preparation text 
 Serving changes in details recalculate ingredient quantities, not source nutrition values.
 The editor retains an unfinished draft on this device, including its selected image.
 
-Calendar has Monday–Sunday navigation and breakfast/lunch/dinner. On narrow screens, select
-a day in the anchored week strip; wide screens show the week in a horizontally scrollable
-planning grid. A meal's menu provides a non-drag move/duplicate/remove/cooked alternative.
+Calendar has Monday–Sunday navigation and breakfast/lunch/dinner. Switch between Day,
+3 days and Week; the choice is remembered on this device. Multi-day columns scroll
+horizontally and keep the selected day in view. Drag a meal by its grip to another
+date/category; the grid and page scroll near their edges. Tap the grip or use the meal
+menu for an explicit move form. Escape, touch cancellation, leaving the page or resizing
+cancels an active pointer drag without saving it. A meal's menu also provides duplicate/
+remove/cooked actions. See [mobile calendar](MOBILE_CALENDAR.md) for tested scope.
 Dragging is an additional control, not the only way to move meals. Week options copy a day
 or week, save/apply templates and remove saved templates. Repeat settings edit bounded rules;
 individual occurrence changes add exceptions and detached entries. Existing leftovers are

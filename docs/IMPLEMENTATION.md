@@ -1,5 +1,16 @@
 # Implementation checklist and evidence
 
+**Mobile calendar and form alignment, 2026-10-21 — implemented, local verification:**
+Day/3 days/Week selection persists per device. Multi-day columns remain readable and
+scroll horizontally. Explicit pointer/touch grips highlight destinations, scroll at
+edges and cancel on Escape, pointer cancellation, blur, hide or resize. Tap/keyboard
+activation opens the existing move form. Committed moves reuse transactional offline
+mutations and recurrence exceptions. Narrow dialog fields stack and date/select widths
+are constrained. Local 226 backend/39 frontend tests and full PWA flows pass; Chromium
+layout checks exercise actual offline touch moves/reload, pointer edge scrolling,
+cancellation, native scrolling and paired control bounds. WebKit CI/publication pending;
+physical iPhone remains unverified. See MOBILE_CALENDAR.md.
+
 **Phone PWA viewport fix, 2026-10-21 — published and verified in `poc-20261021.7`:**
 mobile fields no longer inherit 12–14px label text, which can trigger iOS focus zoom.
 Safari text autosizing and all-edge safe-area layout are explicit. Navigation handles

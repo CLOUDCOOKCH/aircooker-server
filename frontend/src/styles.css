@@ -1050,12 +1050,27 @@ details label:first-of-type {
   font-size: 0.75rem;
 }
 .form-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 14px;
 }
 .form-row > label {
-  flex: 1;
   min-width: 0;
+}
+.form-row input,
+.form-row select {
+  max-width: 100%;
+  height: 48px;
+}
+input[type='date'],
+input[type='time'] {
+  max-width: 100%;
+  min-width: 0;
+}
+input::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: start;
 }
 .step-editor {
   display: flex;
@@ -2243,6 +2258,153 @@ a.settings-row:hover {
   align-items: center;
   min-width: 0;
   min-height: 44px;
+}
+
+/* Explicit calendar views take precedence over the historical phone-only day view. */
+.calendar-view-switch {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  max-width: 100%;
+  background: var(--soft);
+  border-radius: 12px;
+  padding: 4px;
+  margin-top: 24px;
+}
+.calendar-view-switch button {
+  min-height: 44px;
+  min-width: 72px;
+  padding: 8px 16px;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.calendar-view-switch button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--accent-ink);
+}
+.calendar-drag-hint {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 12px;
+  max-width: 65ch;
+}
+.calendar-week[data-view] {
+  display: grid;
+  grid-template-rows: auto repeat(3, auto);
+  overflow-x: auto;
+  padding: 20px 2px 12px;
+  overscroll-behavior-x: contain;
+}
+.calendar-week[data-view='day'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.calendar-week[data-view='three'] {
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+}
+.calendar-week[data-view='week'] {
+  grid-template-columns: repeat(7, minmax(160px, 1fr));
+}
+.calendar-week[data-view] > .calendar-day {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 4;
+  padding: 12px;
+}
+.calendar-week[data-view] .calendar-slot {
+  min-width: 0;
+  min-height: 150px;
+  border-radius: 9px;
+}
+.calendar-week[data-view='day'] .calendar-slot {
+  min-height: 100px;
+}
+.calendar-slot.is-drop-target {
+  background: var(--accent-soft);
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.calendar-week[data-view] .meal-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 0;
+  padding: 8px 0;
+}
+.calendar-week[data-view] .meal-open {
+  grid-column: 1 / -1;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+}
+.calendar-week[data-view] .meal-open > .food-photo,
+.calendar-week[data-view] .meal-open > .photo-placeholder {
+  width: 100%;
+  height: 80px;
+}
+.calendar-week[data-view] .meal-open strong {
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+.calendar-week[data-view] .meal-row > .icon-button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  margin-top: 4px;
+}
+.calendar-week[data-view='day'] .meal-open {
+  flex-direction: row;
+  align-items: center;
+}
+.calendar-week[data-view='day'] .meal-open > .food-photo,
+.calendar-week[data-view='day'] .meal-open > .photo-placeholder {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+}
+.meal-drag-handle {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  cursor: grab;
+  color: var(--muted);
+}
+.meal-row.is-drag-source {
+  opacity: 0.45;
+}
+.meal-is-dragging,
+.meal-is-dragging * {
+  cursor: grabbing;
+}
+.meal-is-dragging .calendar-week {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+.meal-drag-preview {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 180px;
+  max-height: 54px;
+  overflow: hidden;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  box-shadow: var(--sheet-shadow);
+}
+@media (max-width: 480px) {
+  .sheet .form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
 }
 
 /* iOS focuses smaller fields by zooming the visual viewport. Keep every mobile

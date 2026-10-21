@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.7`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.8`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -72,6 +72,14 @@ respect notch/home-indicator safe areas in portrait and landscape. Retain your v
 and port settings. Save edits, accept the PWA update and close/reopen the installed app.
 No browser-data reset or reinstallation is required. Physical phone confirmation remains
 necessary; Linux engine checks are not an actual Home Screen installation.
+
+The `.8` preview adds Day / 3 days / Week calendar views, remembered per device, with
+horizontally scrollable multi-day columns and explicit touch/pointer drag grips. Move
+meals between dates/categories, scroll at grid/page edges, or tap/focus a grip to use the
+existing move form. Moves use the normal durable offline queue and recurrence exceptions.
+Narrow dialogs stack Date and Meal fields to prevent native date-input overlap. See
+[mobile calendar behavior and evidence](MOBILE_CALENDAR.md). Keep existing data/ports
+when upgrading and save edits before accepting the PWA update.
 
 ## What you can try
 

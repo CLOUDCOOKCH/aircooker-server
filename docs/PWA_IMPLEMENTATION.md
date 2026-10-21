@@ -15,8 +15,11 @@ client, not a declaration that the entire project or release checklist is finish
 - Recipe editor/detail, searchable library, draft persistence, selected photos, fractions/
   decimals/ranges, proportional ingredient scaling, original source/provenance/notes/rating,
   optional nutrition editing. Nutrition is preserved as supplied, not inferred or rescaled.
-- Civil-week planning, accessible assignment/move/duplicate/remove/cooked controls, drag
-  alternative, bounded recurrence/exceptions, day/week copy, saved templates and leftovers.
+- Civil-week planning with per-device Day/3 days/Week selection, scrollable multi-day
+  columns, explicit touch/pointer drag grips and an accessible move-form alternative.
+  Offline moves, cancellation/edge scrolling and native date-field geometry have browser
+  coverage; physical iPhone gestures remain unverified. Bounded recurrence/exceptions,
+  day/week copy, saved templates and leftovers use the existing durable mutation path.
 - Saved-template rename and meal-slot editing (weekday/category/recipe/portions, add/remove),
   with offline save/reload and explicit application to the selected week. Template edits
   leave existing calendar meals unchanged; decimal points and commas are accepted in the editor.
