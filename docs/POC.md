@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.3`. The moving `:preview`
+The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.4`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -46,6 +46,13 @@ at each unconfigured startup, so a terminal is optional. After setup the file is
 the token is invalid and configured starts stop emitting it. Historical log lines remain;
 keep logs private. `LOG_SETUP_TOKEN=false` disables token logging when preferred. Passwords,
 session tokens and AI/Bring credentials do not share this logging exception.
+
+The `.4` preview installs the original supplied peach/wordmark in the PWA/console, favicon,
+Apple touch icon and manifest icons. Retain existing volumes/port settings on upgrade and
+accept the PWA update after finishing an active edit. No browser-data reset is needed.
+An installed OS icon may remain cached longer than the page. Protect/synchronise offline
+work before any OS-level reinstall. See the
+[brand guide](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BRANDING.md).
 
 ## What you can try
 
@@ -70,8 +77,8 @@ The glass-style PWA is the primary client. Native iOS code is retained for later
   but live push vendors and physical iPhone delivery have not been validated. It cannot
   guarantee timed offline reminders. Native share extensions/widgets are not PWA features.
 - Real iPhone/Safari testing is outstanding. Chromium coverage does not prove Safari behavior.
-- The mealf display name is installed; the exact new peach icon/wordmark remain pending
-  access to the original downloadable PNGs. Existing icons are interim.
+- Supplied peach/wordmark artwork is installed in this PWA/console release. Physical iPhone
+  Home Screen icon refresh is unverified; retained native artwork remains separate later work.
 - Full household deletion, destructive restore, broader archive reconstruction, safe media
   compaction, quotas and the remaining security/release review are not delivered by this POC.
 

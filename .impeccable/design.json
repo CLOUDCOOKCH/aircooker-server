@@ -371,19 +371,51 @@
     },
     "icons": {
       "files": [
-        "frontend/public/icon-192.png",
-        "frontend/public/icon-512.png"
+        "frontend/public/brand/icon-192-v1.png",
+        "frontend/public/brand/icon-512-v1.png",
+        "frontend/public/brand/apple-touch-icon-v1.png",
+        "frontend/public/brand/maskable-512-v1.png"
       ],
-      "origin": "aircooker-ios/Design/AppIconSource.png",
-      "generationID": "exec-349b86a6-9e88-4e5a-98ad-a03789dd7b31"
+      "origin": "Original user-supplied mealf-flirty-peach-logo.png, preserved in assets/brand/originals; deterministic size/transparent-margin/canvas derivatives only",
+      "provenance": "frontend/public/brand/provenance.json"
     },
     "prompts": "original prompts unavailable; none reconstructed",
-    "concept": "User-approved illustrative glass concept supplied in conversation; not a running app capture or published repository artifact. The mealf name/asset rebrand preserves this established visual world. Supplied previews show a flirty peach icon (mealf-flirty-peach-logo.png) and lowercase mealf wordmark (mealf-flirty-peach-wortmarke.png); exact source PNGs are not mounted or downloadable. Installation is blocked pending originals; no recreation is permitted. Existing generated icons retain the provenance above, and crossed-utensil marks/text-rendered mealf remain interim treatments; the artwork request is incomplete."
+    "concept": "User-approved illustrative glass concept supplied in conversation; not a running app capture. Both original peach/wordmark PNGs were received in a ZIP and installed in the PWA/console without redrawing or recolouring. Preserve the established green/system-type/glass visual world. Native artwork is unchanged by this server release.",
+    "brandSources": {
+      "peach": {
+        "file": "assets/brand/originals/mealf-flirty-peach-logo.png",
+        "sha256": "a3384ae38b80af70aa63400af2f8fc1525e4e5a11370daca3ffc67d0c82aa69e",
+        "size": [
+          1254,
+          1254
+        ],
+        "transparent_trim": [
+          0,
+          39,
+          1230,
+          1182
+        ]
+      },
+      "wordmark": {
+        "file": "assets/brand/originals/mealf-flirty-peach-wortmarke.png",
+        "sha256": "dfbba3ebedca96dbc76d7baef7bafad75228f0c90ffdafde234c2ccc02b9d3fb",
+        "size": [
+          1774,
+          887
+        ],
+        "transparent_trim": [
+          43,
+          120,
+          1754,
+          820
+        ]
+      }
+    }
   },
   "review": {
     "initial": "docs/validation/pwa-visual-review.md",
     "verdict": "docs/validation/pwa-visual-verdict.md",
-    "disposition": "Newest review docs/validation/planning-preferences-review.md: ship at the tested shared-planning UI scope; rapid-activation and recovery wording findings resolved, with no required UI fixes remaining. Reminder and name-only reviews retain their bounded scopes; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
+    "disposition": "Newest review docs/validation/mealf-artwork-review.md: original supplied artwork delivered at the PWA/console scope, with no observed blocking branding defect. Prior reviews retain their historical source/scope; no full-product or native-artwork acceptance.",
     "reminders": {
       "report": "docs/validation/reminders-review.md",
       "guide": "docs/REMINDERS.md",
@@ -467,6 +499,26 @@
       },
       "browserEvidence": "review records supplied real Chromium first-party API flow for shared settings/offline drafts/21-meal approval; same-turn double activation yields exactly one 21-mutation approval group in IndexedDB and once-only server learning; reviewer and documentation handoff did not rerun it",
       "evidenceLimits": "captures show saved EN/light desktop and DE/dark phone controls plus offline EN/dark scrolling preview; idle hashes unchanged by busy/error fix; failure/dismissal and other states inspected in source; no injected failure, screen-reader, full keyboard/text-enlargement/all-state contrast/motion, physical Safari/iPhone, native parity, complete product or original-artwork acceptance"
+    },
+    "branding": {
+      "report": "docs/validation/mealf-artwork-review.md",
+      "scope": "Implementation-agent manual source/capture review of supplied original artwork in the PWA and console; no independent specialist pass",
+      "captures": [
+        "docs/screenshots/mealf-artwork-welcome-desktop.png",
+        "docs/screenshots/mealf-artwork-welcome-phone-dark.png",
+        "docs/screenshots/mealf-artwork-home-desktop.png",
+        "docs/screenshots/mealf-artwork-home-desktop-dark.png",
+        "docs/screenshots/mealf-artwork-console-phone-de.png"
+      ],
+      "captureHashesSHA256": {
+        "docs/screenshots/mealf-artwork-welcome-desktop.png": "44028814a6e87596023ad0634fc5c08989f8c51bef08637430861e11837bd06b",
+        "docs/screenshots/mealf-artwork-welcome-phone-dark.png": "fbd04714424dd56c5bfb20b7d636da816aca3f1c17bb97822e315e1575294cc9",
+        "docs/screenshots/mealf-artwork-home-desktop.png": "7c214b63d7bd27dd99df231ac74abcac207d4011a3ba1947aaf77d3b3a262863",
+        "docs/screenshots/mealf-artwork-home-desktop-dark.png": "c7f1cc9fcc4ca96722f28e830bbb627f72a5d0fbb4bd26d7b56ec53b6f883833",
+        "docs/screenshots/mealf-artwork-console-phone-de.png": "5e675298bb08567bc8cc15bddaeab7d0a4088234720e1caaead70845ff9e57f5"
+      },
+      "requiredFixesRemaining": 0,
+      "evidenceLimits": "Genuine Chromium desktop/phone EN/DE light/dark renders; offline assets and accessible image names tested. No physical iPhone/OS icon-update, full keyboard/screen-reader/motion or full-product acceptance. Launcher/detector/specialist resources unavailable."
     }
   },
   "sourceReferences": [
@@ -491,7 +543,11 @@
     "docs/BRANDING.md",
     "frontend/src/PlanningSettings.tsx",
     "docs/PLANNING_PREFERENCES.md",
-    "docs/validation/planning-preferences-review.md"
+    "docs/validation/planning-preferences-review.md",
+    "frontend/src/Brand.tsx",
+    "scripts/build_brand_assets.py",
+    "frontend/public/brand/provenance.json",
+    "docs/validation/mealf-artwork-review.md"
   ],
   "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
 }

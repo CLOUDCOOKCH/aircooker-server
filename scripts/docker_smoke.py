@@ -2,6 +2,7 @@
 Only creates/deletes uniquely named test containers and anonymous test volumes.
 """
 
+import hashlib
 import io
 import json
 import os
@@ -129,6 +130,15 @@ def main():
         worker = request(base, "/app/sw.js")
         assert b"aircooker-shell-" in worker and b"/api/v1/" not in worker
         assert request(base, "/app/icon-192.png").startswith(b"\x89PNG")
+        identity = json.loads(request(base, "/app/manifest.webmanifest"))
+        assert identity["id"] == identity["scope"] == "/app/"
+        assert identity["icons"][0]["src"] == "/app/brand/icon-192-v1.png"
+        assert any(icon["purpose"] == "maskable" for icon in identity["icons"])
+        brand = json.loads(request(base, "/app/brand/provenance.json"))
+        for path, expected in brand["outputs"].items():
+            content = request(base, "/app/" + path)
+            assert hashlib.sha256(content).hexdigest() == expected["sha256"]
+        assert b"/app/brand/wordmark-v1.png" in request(base, "/")
         # NAS/container consoles may require Bash. The same non-root account must
         # be able to read its private bootstrap token through an actual Bash process.
         version = docker("exec", name, "/bin/bash", "--version")

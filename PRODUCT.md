@@ -42,8 +42,10 @@ account, payments, analytics or tracking. Third-party AI is optional and needs e
 ## Brand Commitments
 
 mealf (formerly aircooker). The user supplied a flirty peach icon and a lowercase mealf
-wordmark on 2026-10-21. Use the supplied artwork exactly once original files are available;
-never redraw or regenerate it as a substitute. The user approved an iOS-like glass design and requested the same design in the
+wordmark on 2026-10-21. Both original PNGs are now in `assets/brand/originals/` and used in
+the PWA/console. Preserve them byte-for-byte; never redraw or regenerate substitutes.
+Only transparent margins/output sizes and installation-icon canvases are adjusted.
+The user approved an iOS-like glass design and requested the same design in the
 PWA: effortless controls, food-led content and uncluttered navigation. Preserve the approved
 visual decisions; the private design references were supplied for the conversation only.
 

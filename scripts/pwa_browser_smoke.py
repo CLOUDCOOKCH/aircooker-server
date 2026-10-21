@@ -89,17 +89,33 @@ def main():
 
                 page.goto(base + "/app/")
                 expect(page).to_have_title("mealf — Your kitchen")
-                expect(page.locator(".wordmark")).to_have_text("mealf")
+                expect(page.get_by_role("link", name="mealf", exact=True)).to_be_visible()
+                expect(page.locator(".wordmark .brand-wordmark")).to_have_attribute(
+                    "src", "/app/brand/wordmark-v1.png"
+                )
+                page.wait_for_function(
+                    "[...document.querySelectorAll('.wordmark img,.welcome-icon')].every(image=>image.complete&&image.naturalWidth>0)"
+                )
                 expect(
                     page.get_by_role("heading", name="A calmer kind of meal planning.")
                 ).to_be_visible()
                 capture("pwa-welcome-desktop.png")
+                page.set_viewport_size({"width": 390, "height": 844})
+                capture("pwa-welcome-phone.png")
+                page.emulate_media(color_scheme="dark")
+                audit("branded welcome phone dark")
+                capture("pwa-welcome-phone-dark.png")
+                page.emulate_media(color_scheme="light")
+                page.set_viewport_size({"width": 1440, "height": 1000})
                 page.get_by_role("button", name="Explore the demo").click()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
                 expect(page.get_by_role("navigation", name="mealf", exact=True)).to_be_visible()
                 expect(page.locator(".featured-meal img")).to_be_visible()
                 audit("home desktop")
                 capture("pwa-home-desktop.png")
+                page.emulate_media(color_scheme="dark")
+                capture("pwa-home-desktop-dark.png")
+                page.emulate_media(color_scheme="light")
                 page.set_viewport_size({"width": 390, "height": 844})
                 capture("pwa-home-phone.png")
                 page.emulate_media(color_scheme="dark")
@@ -611,6 +627,14 @@ def main():
                     "async()=>{const result=[];for(const key of await caches.keys()){for(const request of await (await caches.open(key)).keys())result.push(new URL(request.url).pathname);}return result;}"
                 )
                 assert cached and all(path.startswith("/app/") for path in cached), cached
+                brand_paths = ["/app/brand/peach-v1.png", "/app/brand/wordmark-v1.png"]
+                assert all(path in cached for path in brand_paths)
+                context.set_offline(True)
+                assert page.evaluate(
+                    "async paths => (await Promise.all(paths.map(async path => (await fetch(path)).ok))).every(Boolean)",
+                    brand_paths,
+                )
+                context.set_offline(False)
                 assert not errors, errors
                 assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
                 context.close()

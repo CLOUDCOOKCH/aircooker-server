@@ -106,6 +106,9 @@ def main():
                 page.goto(base)
                 expect(page).to_have_title("mealf · household console")
                 expect(page.get_by_role("link", name="mealf", exact=True)).to_be_visible()
+                page.wait_for_function(
+                    "[...document.querySelectorAll('.wordmark img')].every(image=>image.complete&&image.naturalWidth>0)"
+                )
                 login = page.locator("#login")
                 expect(login.locator('[name="username"]')).to_be_visible()
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))

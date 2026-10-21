@@ -134,9 +134,18 @@ The published review records report passing Chromium functional smoke and captur
 
 ## Assets and provenance
 
-See [provenance.json](frontend/public/art/provenance.json). `lemon-chicken.png` is original AI-generated project illustration reused from `aircooker-ios/App/Assets/DemoChicken.png`, source commit `f165c362106955db4405b5c4ce9b3fb25fbc3fd9`, generation `exec-b3e6fb11-5c8c-4b69-ae40-eb5dda3a6c00`. It is for the explicitly isolated demo only; it is not a real cooking photograph or product screenshot. PWA icons `icon-192.png`/`icon-512.png` reuse original artwork from `aircooker-ios/Design/AppIconSource.png` at the same commit, generation `exec-349b86a6-9e88-4e5a-98ad-a03789dd7b31`. Original prompts are unavailable and are not reconstructed. Household recipe media requires appropriate rights and remains distinct from demo assets.
+Current artwork delivery: both original PNGs are now available and installed in the PWA
+and console. See the [manual artwork review](docs/validation/mealf-artwork-review.md) and
+[source/derivative hashes](docs/validation/mealf-artwork-local.json). This review is by the
+implementation agent; unavailable launcher/detector/specialist passes are not claimed.
+Original bytes live in `assets/brand/originals/`. Shared `Brand` markup uses a 32px peach,
+8px gap and 104px-wide image wordmark; compact footer variants use 20px/6px/60px. Header
+links have a minimum 44px height. The original system-font, green-control and glass tokens
+are unchanged. Actual wordmark lettering replaces the interim text brand only.
 
-The confirmed product name is **mealf**, formerly aircooker; see [branding and compatibility](docs/BRANDING.md). The user supplied previews of a flirty peach icon (`mealf-flirty-peach-logo.png`) and lowercase mealf wordmark (`mealf-flirty-peach-wortmarke.png`). Their exact source PNGs are not mounted or downloadable here. Installation and artwork acceptance are blocked until those originals are available; do not redraw, trace or regenerate substitutes. The existing generated icons, crossed-utensil marks and text-rendered mealf name are interim assets. The retained icon provenance above describes those existing icons, not the supplied peach artwork. This is a name/asset rebrand on the established glass interface; its green palette, system typography and component measurements remain unchanged.
+See [provenance.json](frontend/public/art/provenance.json). `lemon-chicken.png` remains original AI-generated project illustration reused from `aircooker-ios/App/Assets/DemoChicken.png`, source commit `f165c362106955db4405b5c4ce9b3fb25fbc3fd9`, generation `exec-b3e6fb11-5c8c-4b69-ae40-eb5dda3a6c00`. It is for the isolated demo only, not a real cooking photograph. Its original prompt remains unavailable. PWA icons now derive from the user-supplied peach; [brand provenance](frontend/public/brand/provenance.json) records the originals and every output. Household recipe media remains separate.
+
+The confirmed name is **mealf**, formerly aircooker; see [branding and compatibility](docs/BRANDING.md). The original `mealf-flirty-peach-logo.png` and `mealf-flirty-peach-wortmarke.png` are installed without redrawing, tracing or recolouring. Only transparent margins, output sizes and install canvases change in derivatives. The old generated PWA icon and utensil/text lockups are replaced. Retained native artwork is separate later work. Historical name-only captures/reviews still describe their original scope, not this new artwork delivery.
 
 ## Delivery limits
 

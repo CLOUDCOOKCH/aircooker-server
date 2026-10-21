@@ -1,0 +1,50 @@
+{
+  "scope": "PWA and embedded console supplied-artwork integration",
+  "originals": {
+    "peach": {
+      "file": "assets/brand/originals/mealf-flirty-peach-logo.png",
+      "sha256": "a3384ae38b80af70aa63400af2f8fc1525e4e5a11370daca3ffc67d0c82aa69e",
+      "size": [
+        1254,
+        1254
+      ],
+      "transparent_trim": [
+        0,
+        39,
+        1230,
+        1182
+      ]
+    },
+    "wordmark": {
+      "file": "assets/brand/originals/mealf-flirty-peach-wortmarke.png",
+      "sha256": "dfbba3ebedca96dbc76d7baef7bafad75228f0c90ffdafde234c2ccc02b9d3fb",
+      "size": [
+        1774,
+        887
+      ],
+      "transparent_trim": [
+        43,
+        120,
+        1754,
+        820
+      ]
+    }
+  },
+  "capture_hashes": {
+    "docs/screenshots/mealf-artwork-welcome-desktop.png": "44028814a6e87596023ad0634fc5c08989f8c51bef08637430861e11837bd06b",
+    "docs/screenshots/mealf-artwork-welcome-phone-dark.png": "fbd04714424dd56c5bfb20b7d636da816aca3f1c17bb97822e315e1575294cc9",
+    "docs/screenshots/mealf-artwork-home-desktop.png": "7c214b63d7bd27dd99df231ac74abcac207d4011a3ba1947aaf77d3b3a262863",
+    "docs/screenshots/mealf-artwork-home-desktop-dark.png": "c7f1cc9fcc4ca96722f28e830bbb627f72a5d0fbb4bd26d7b56ec53b6f883833",
+    "docs/screenshots/mealf-artwork-console-phone-de.png": "5e675298bb08567bc8cc15bddaeab7d0a4088234720e1caaead70845ff9e57f5"
+  },
+  "tokens_preserved_sha256": "038d7ce5529490ed92af81f7da6a972687b0aa0e1ccabec0263669d2f88d1f37",
+  "backend_tests": 213,
+  "web_tests": 39,
+  "chromium": "PWA and console functional flows passed; branded welcome phone dark axe check and offline peach/wordmark retrieval passed",
+  "package": "Source package includes web/pwa/brand/*; native-architecture Docker asset hash verification required before publication",
+  "limits": [
+    "Physical iPhone/OS installed-icon refresh not exercised",
+    "Native iOS artwork unchanged",
+    "Manual implementation-agent review; no unavailable launcher/detector/specialist or plugin schema pass"
+  ]
+}

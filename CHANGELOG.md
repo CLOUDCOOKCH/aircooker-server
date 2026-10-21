@@ -1,5 +1,9 @@
 # Changelog
 
+- Install the original supplied mealf peach/wordmark across PWA welcome/loading/navigation,
+  footer and console. Add versioned touch/favicon/manifest/maskable assets, retain original
+  bytes and compatibility IDs, and verify original/derived/offline/packaged asset integrity.
+
 - Show the one-time setup token in an unconfigured startup log entry, as requested by the
   operator. Preserve it across restarts/upgrades, stop emitting it after setup, and support
   `LOG_SETUP_TOKEN=false`. Keep passwords/session/integration secrets out of these logs.

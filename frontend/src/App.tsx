@@ -9,7 +9,6 @@ import {
   Home as HomeIcon,
   Leaf,
   Settings2,
-  UtensilsCrossed,
   X,
 } from 'lucide-react';
 import {
@@ -22,6 +21,7 @@ import {
   useApp,
 } from './model';
 import type { Runtime, SystemInfo, Tab } from './model';
+import { Brand } from './Brand';
 import { translate } from './i18n';
 import type { Language } from './i18n';
 import { LocalStore } from './lib/store';
@@ -59,9 +59,9 @@ export default function App() {
   if (loading)
     return (
       <div className="boot-screen">
-        <img src="/app/icon-192.png" alt="mealf" />
+        <img className="boot-icon" src="/app/brand/peach-v1.png" alt="" width="384" height="384" />
         <div className="loading-line" />
-        <p>mealf</p>
+        <Brand icon={false} />
       </div>
     );
   return runtime ? (
@@ -163,8 +163,7 @@ function Welcome({
     <div className="welcome-shell">
       <header className="welcome-header">
         <a href="/app/" className="wordmark">
-          <UtensilsCrossed size={20} />
-          mealf
+          <Brand />
         </a>
         <select
           aria-label={t('language')}
@@ -176,7 +175,13 @@ function Welcome({
         </select>
       </header>
       <main className="welcome-content">
-        <img className="welcome-icon" src="/app/icon-192.png" alt="" />
+        <img
+          className="welcome-icon"
+          src="/app/brand/peach-v1.png"
+          alt=""
+          width="384"
+          height="384"
+        />
         <h1>{form ? (info?.configured ? info.name : t('setup')) : t('welcome')}</h1>
         <p className="welcome-description">{form ? t('selfHosted') : t('welcomeBody')}</p>
         {!form ? (
@@ -418,8 +423,7 @@ function Kitchen({
       </a>
       <nav className="app-nav" aria-label="mealf">
         <div className="nav-brand">
-          <UtensilsCrossed size={23} />
-          <span>mealf</span>
+          <Brand />
         </div>
         <div className="nav-links">
           {tabs.map(({ id, icon: Icon }) => (
@@ -534,8 +538,7 @@ function Kitchen({
           {content}
         </main>
         <footer className="app-footer">
-          <UtensilsCrossed size={15} />
-          <span>mealf</span>
+          <Brand compact />
         </footer>
       </div>
       {app.notice && (

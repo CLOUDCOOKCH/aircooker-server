@@ -292,14 +292,33 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
   padding: 0 10px;
   margin-bottom: 46px;
 }
-.nav-brand svg {
-  color: var(--green);
+.brand-lockup {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+.brand-peach {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.brand-wordmark {
+  width: 104px;
+  height: auto;
+}
+.brand-lockup--compact {
+  gap: 6px;
+}
+.brand-lockup--compact .brand-peach {
+  width: 20px;
+  height: 20px;
+}
+.brand-lockup--compact .brand-wordmark {
+  width: 60px;
 }
 .nav-links {
   display: flex;
@@ -1544,15 +1563,9 @@ a.settings-row:hover {
 .wordmark {
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-weight: 700;
-  font-size: 1.125rem;
+  min-height: 44px;
   color: var(--ink);
   text-decoration: none;
-  letter-spacing: -0.025em;
-}
-.wordmark svg {
-  color: var(--green);
 }
 .welcome-header > select {
   width: auto;
@@ -1575,7 +1588,6 @@ a.settings-row:hover {
 .welcome-icon {
   height: 86px;
   width: 86px;
-  border-radius: 20px;
   margin-bottom: 36px;
 }
 .welcome-content > h1 {
@@ -1629,14 +1641,9 @@ a.settings-row:hover {
   justify-content: center;
   gap: 24px;
 }
-.boot-screen img {
+.boot-screen > .boot-icon {
   height: 80px;
   width: 80px;
-  border-radius: 18px;
-}
-.boot-screen p {
-  font-size: 0.875rem;
-  color: var(--muted);
 }
 .loading-line {
   width: 80px;

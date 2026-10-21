@@ -24,6 +24,9 @@ for partial features, test evidence and release blockers.
 
 Python 3.12 or newer:
 
+For browser surfaces, first build with Node 24: `npm --prefix frontend ci`, then
+`npm --prefix frontend run build`. Docker performs this automatically.
+
 ```sh
 python -m venv .venv
 . .venv/bin/activate
@@ -78,6 +81,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Area | Current status |
 | --- | --- |
 | PWA | Functional development client, genuine reviewed desktop/phone captures, 39 offline/planning/sync/notification tests and real Chromium flows; physical Safari and remaining features open |
+| Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |

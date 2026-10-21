@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "origin": "Original PNG artwork supplied by the user in mealf-flirty-peach-wortmarke.zip",
+  "sources": {
+    "peach": {
+      "file": "assets/brand/originals/mealf-flirty-peach-logo.png",
+      "sha256": "a3384ae38b80af70aa63400af2f8fc1525e4e5a11370daca3ffc67d0c82aa69e",
+      "size": [
+        1254,
+        1254
+      ],
+      "transparent_trim": [
+        0,
+        39,
+        1230,
+        1182
+      ]
+    },
+    "wordmark": {
+      "file": "assets/brand/originals/mealf-flirty-peach-wortmarke.png",
+      "sha256": "dfbba3ebedca96dbc76d7baef7bafad75228f0c90ffdafde234c2ccc02b9d3fb",
+      "size": [
+        1774,
+        887
+      ],
+      "transparent_trim": [
+        43,
+        120,
+        1754,
+        820
+      ]
+    }
+  },
+  "processing": "Trim fully transparent margins, proportionally resize and centre; preserve artwork colours and alpha. Installation icons have an opaque cream canvas; maskable artwork stays in the safe circle.",
+  "icon_canvas": "#fff7ec",
+  "outputs": {
+    "brand/peach-v1.png": {
+      "sha256": "4e3f12762a25330d51d415fdcb42dffd7a7e36289f925f47bb4d5becbfd1be1d",
+      "bytes": 75019
+    },
+    "brand/wordmark-v1.png": {
+      "sha256": "0fba7ec72c7a2b1642804c52316eff2b01ea4ffa76f50f22b868b58ef21afb19",
+      "bytes": 60455
+    },
+    "brand/icon-64-v1.png": {
+      "sha256": "4523bd45040cf829fe98e07f07e49649d3bbde8672dd571694ebeb5a665ced88",
+      "bytes": 3631
+    },
+    "brand/apple-touch-icon-v1.png": {
+      "sha256": "5c678231123aab610d6c89599745b198873b863120e732806915a1c64d6b284a",
+      "bytes": 16687
+    },
+    "brand/icon-192-v1.png": {
+      "sha256": "f1ec968b67204b80f801167e28f0a5cf43217dd25330f83619865091597ce064",
+      "bytes": 18540
+    },
+    "brand/icon-512-v1.png": {
+      "sha256": "4c3b225e1a016f97b1457d5a779d2cbf7d545b585f222109f1df07121123fc09",
+      "bytes": 105272
+    },
+    "brand/maskable-512-v1.png": {
+      "sha256": "1e0386bb05873d0fda85cacfd99608a98c7b52872de812db011d8988c38c3aa9",
+      "bytes": 41011
+    },
+    "icon-192.png": {
+      "sha256": "f1ec968b67204b80f801167e28f0a5cf43217dd25330f83619865091597ce064",
+      "bytes": 18540
+    },
+    "icon-512.png": {
+      "sha256": "4c3b225e1a016f97b1457d5a779d2cbf7d545b585f222109f1df07121123fc09",
+      "bytes": 105272
+    }
+  }
+}

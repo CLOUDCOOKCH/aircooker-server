@@ -5,10 +5,11 @@ tag-triggered workflow requires all six exact-source CI jobs and fresh native-ar
 image scans/Docker checks before publishing the verified bytes. It creates a POC prerelease,
 not stable acceptance. See POC.md; record actual publication/digest/pull evidence separately.
 
-**Brand update, 2026-10-21:** the product name is mealf. Display names and copy are updated;
-the original supplied peach/wordmark PNG files are not accessible in this cloud workspace.
-Installing those exact assets remains blocked on receiving downloadable originals. Existing
-icons and all storage/session/API identifiers are preserved. See BRANDING.md.
+**Brand update, 2026-10-21:** both original PNGs were received in a ZIP and are preserved
+byte-for-byte. The PWA/console now use the peach and image wordmark, including touch,
+manifest and maskable icons. Source/derived hashes and browser/packaged-asset checks track
+delivery. Storage/session/API identities and the glass UI remain intact. Retained native
+artwork is not changed by this PWA release. See BRANDING.md.
 
 **Delivery update, 2026-10-21:** the user chose PWA-first and retained native code for later.
 The primary client is `frontend/`, served by this same container at `/app/`; no third

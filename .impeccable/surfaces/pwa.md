@@ -32,17 +32,20 @@ desktop/mobile together and run the skill finish review/documentation after the 
 implementation/verification passes. Context launcher is unavailable; existing project
 sources and skill resources are the fallback. No design selection is reopened.
 
-Brand delivery, 2026-10-21: display names now use mealf. The supplied flirty peach icon
-(`mealf-flirty-peach-logo.png`) and lowercase wordmark (`mealf-flirty-peach-wortmarke.png`)
-are visible only as conversation previews; exact source PNGs are not mounted or downloadable.
-Install the supplied originals exactly once available, without recreating them. The old
-generated icons, crossed-utensil marks and plain mealf text remain interim treatments.
-Artwork installation and the complete branding request remain blocked and incomplete.
-See [branding](../../docs/BRANDING.md) and the newest
-[name-only review](../../docs/validation/mealf-name-review.md): ship at name-only scope,
-with no original-artwork or complete-product acceptance. Historical PWA reviews/captures
-retain their original scope. This manual handoff claims no launcher/detector, schema,
-design-hook or specialist pass.
+Brand delivery, 2026-10-21: both original PNGs were received in a ZIP and preserved in
+`assets/brand/originals/`. The supplied peach and lowercase wordmark replace the interim
+utensil/text lockups across the PWA and console. Only fully transparent margins, proportional
+output sizes and installation canvases change; no artwork is redrawn or recoloured.
+`Brand` uses a decorative 32px peach, 8px gap and 104px image wordmark; compact footer
+sizes are 20px/6px/60px. Keep the green controls, system type and glass vocabulary intact.
+Versioned touch/favicon/manifest/maskable icons and old icon URLs use the peach. Stable
+manifest/storage/session identities preserve household/offline work. Native artwork is
+unchanged by this server release. See [branding](../../docs/BRANDING.md) and the
+[manual artwork review](../../docs/validation/mealf-artwork-review.md). Five genuine
+desktop/phone EN/DE light/dark captures record the delivered brand; offline delivery and
+accessible names are tested. Historical name-only/PWA reviews retain their original scope.
+The implementation-agent manual review claims no unavailable launcher/detector, plugin
+schema, design-hook or independent specialist pass. Physical iPhone/icon refresh is unverified.
 
 Reminder handoff, 2026-10-21: Settings includes optional per-device meal reminders within
 the existing solid settings surface and approved green/system-type direction. Preserve the
@@ -63,8 +66,8 @@ data; the handoff banner and other states were inspected in source. This documen
 handoff did not rerun browser checks. The launcher, detector and specialist were unavailable;
 no schema validation or specialist pass is claimed. Real permission prompts, live push,
 Safari/physical iPhone delivery, background OS display, Focus behavior and full-product
-acceptance remain outside the evidence. Exact peach/wordmark artwork remains blocked as
-recorded above; this handoff introduces no new aesthetic direction or replacement artwork.
+acceptance remain outside the evidence. That historical reminder handoff preceded receipt
+of the original brand artwork and introduces no replacement aesthetic direction.
 
 Shared-planning handoff, 2026-10-21: Settings → Meal suggestions uses the established
 solid Settings group, labelled category checkboxes and optional fixed-portions field.
@@ -101,4 +104,4 @@ failure/dismissal branches were inspected in source. This manual documentation h
 not rerun browser checks or claim detector, specialist or plugin-schema validation. Full
 accessibility, physical Safari/iPhone, native parity, complete-product and original-artwork
 acceptance remain outside this scope. Preserve the approved glass/system-type/forest-green
-world and the exact-original-PNG artwork blocker above.
+world. Current supplied-artwork delivery is recorded above and in BRANDING.md.
