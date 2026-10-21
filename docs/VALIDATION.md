@@ -270,3 +270,8 @@ licence baseline pass. Frontend source/visual design is unchanged; no new visual
 platform acceptance is inferred. Exact local image/count/scope: validation/retention-local.json.
 Current CI is recorded separately; prior shared-planning green evidence does not certify a
 newer maintenance tree. See RETENTION.md for logical pruning and deliberately retained data.
+
+Retention source 9fffb7b passed all six GitHub jobs in run 39604741072: 200 backend
+tests per AMD64/ARM64 runner, unchanged 39 web tests, full browser/packaged CLI/Docker
+restart/restore checks and unsuppressed security gates. Exact images/jobs/artifacts and
+limits are in validation/github-retention.json.

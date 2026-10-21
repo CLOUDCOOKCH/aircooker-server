@@ -106,3 +106,8 @@ startup-only stale transfer cleanup and local CLI dry-run/apply. Import fingerpr
 request replay after raw-source pruning; late workers preserve terminal confirmation.
 Offline sync/Bring receipts and media stay retained. See RETENTION.md for scope/evidence and
 remaining full deletion/compaction work.
+
+Retention source 9fffb7b passed all six GitHub jobs in run 39604741072: 200 backend
+tests per AMD64/ARM64 runner, unchanged 39 web tests, full browser/packaged CLI/Docker
+restart/restore checks and unsuppressed security gates. Exact images/jobs/artifacts and
+limits are in validation/github-retention.json.

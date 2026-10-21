@@ -1,0 +1,106 @@
+{
+  "format": "mealf-retention-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "9fffb7b3217c07c65c0cc9fc8cc961a563bf502e",
+  "run_id": 39604741072,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39604741072",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 200,
+  "web_core_tests": 39,
+  "jobs": [
+    {
+      "id": 119237929800,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119237930224,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119237930276,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119237930312,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119237930368,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119237930507,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "runtime_security": {
+    "scanner": "Trivy",
+    "configured_version": "0.70.0",
+    "gate": "HIGH,CRITICAL; exit-code 1; ignore-unfixed false; no suppressions",
+    "architectures": [
+      {
+        "architecture": "linux/amd64",
+        "job_id": 119237929800,
+        "image_id": "sha256:5bde7c62ba367e182439fc287d517bca45557796973b9d23b7ef1acb6f863559",
+        "gate": "passed"
+      },
+      {
+        "architecture": "linux/arm64",
+        "job_id": 119237930507,
+        "image_id": "sha256:b4a8d0989e0549be22b3053a41eb7df56e6ffe39b55fc7ec880e517d2fdfcc27",
+        "gate": "passed"
+      }
+    ],
+    "dependency_audit": "strict runtime audit passed both architectures",
+    "secret_scan": "gitleaks 8.28.0 passed both architectures",
+    "limits": "Passing severity gates do not establish absence of lower-severity issues or legal clearance."
+  },
+  "artifacts": [
+    {
+      "id": 12348390799,
+      "name": "console-screenshots",
+      "archive_digest": "sha256:e1743f58a2e0c3475e5b3682a0a2e327a04f632065e17034c4403e99e4f1bccf"
+    },
+    {
+      "id": 12347817156,
+      "name": "backend-tests-ubuntu-24.04",
+      "archive_digest": "sha256:cb723492f5d8ad839640e7244f4b4d4424c1745ea889c234fea81893c026be33"
+    },
+    {
+      "id": 12347562654,
+      "name": "backend-tests-ubuntu-24.04-arm",
+      "archive_digest": "sha256:5385c534158ce1f6be1957de340f010c9ca9462f95eedff98abc23bdb0a221d4"
+    },
+    {
+      "id": 12347363675,
+      "name": "container-security-ubuntu-24.04",
+      "archive_digest": "sha256:837035ae3002c7cb44cd1e1af42877ed26c02bc507b136431fb243d0049b1a6e"
+    },
+    {
+      "id": 12346853594,
+      "name": "container-security-ubuntu-24.04-arm",
+      "archive_digest": "sha256:80d9d3ecdce44fc21aa473b215bf74b5458af616650894aedb1a597b5bd07fb3"
+    }
+  ],
+  "verified": [
+    "200 backend tests per native architecture including migration/backfill/rollback, bounded dry-run cleanup, terminal replay/edit/proof safety and worker confirmation races",
+    "Unchanged 39 web tests, strict types/format/contract/build/npm audit",
+    "Expanded ordinary PWA, console and labelled notification browser regressions",
+    "Non-root/read-only Docker packaged maintenance CLI, restart, import and JSON/ZIP restore on AMD64/ARM64",
+    "Untouched sync/Bring/purchase/media history and preserved pending/unknown legacy inputs"
+  ],
+  "limits": [
+    "Logical pruning, not forensic erasure or immediate file shrinkage",
+    "Full household deletion, safe media/sync compaction and broader quota gates remain separate engineering work",
+    "No live external service, physical browser, original artwork or complete product acceptance",
+    "A later evidence-only commit does not change this source"
+  ]
+}
