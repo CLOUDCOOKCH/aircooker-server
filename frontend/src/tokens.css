@@ -1,4 +1,6 @@
-:root {
+:root,
+[data-theme-preview='flo'] {
+  color-scheme: light dark;
   --canvas: #fff7ec;
   --surface: #fffdf8;
   --ink: #32221f;
@@ -26,7 +28,8 @@
   --warning-ink: #6d4b16;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root,
+  [data-theme-preview='flo'] {
     --canvas: #201917;
     --surface: #2c2220;
     --ink: #fff2e8;
@@ -53,4 +56,64 @@
     --warning-soft: #42321e;
     --warning-ink: #f0d49f;
   }
+}
+
+/* Explicit choices override the device preference. Flo above remains unchanged. */
+:root[data-theme='after-dark'],
+[data-theme-preview='after-dark'] {
+  color-scheme: dark;
+  --canvas: #171316;
+  --surface: #241c21;
+  --ink: #f7edf0;
+  --muted: #c5acb5;
+  --line: #4d3943;
+  --soft: #33252d;
+  --hover: #48303a;
+  --accent: #e3a2b3;
+  --accent-hover: #efbdc9;
+  --on-accent: #321923;
+  --accent-soft: #432932;
+  --accent-ink: #f5cbd4;
+  --accent-muted: #d2b589;
+  --focus: #e3a2b3;
+  --selection: #69404e;
+  --glass: rgba(36, 28, 33, 0.88);
+  --glass-shadow: 0 10px 36px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(245, 203, 212, 0.08);
+  --sheet-shadow: 0 22px 80px rgba(0, 0, 0, 0.55);
+  --scrim: rgba(11, 7, 10, 0.72);
+  --control-border: #9e7d8c;
+  --danger: #ffa8b6;
+  --danger-soft: #48232e;
+  --danger-ink: #ffc8d4;
+  --warning-soft: #3e3020;
+  --warning-ink: #e2c390;
+}
+:root[data-theme='sunday'],
+[data-theme-preview='sunday'] {
+  color-scheme: light;
+  --canvas: #f4f6f0;
+  --surface: #ffffff;
+  --ink: #23352a;
+  --muted: #596957;
+  --line: #cfd8ca;
+  --soft: #e8eee3;
+  --hover: #dce6d5;
+  --accent: #355e41;
+  --accent-hover: #284c33;
+  --on-accent: #ffffff;
+  --accent-soft: #e0ebd8;
+  --accent-ink: #294b32;
+  --accent-muted: #55634f;
+  --focus: #355e41;
+  --selection: #c4dcb9;
+  --glass: rgba(244, 246, 240, 0.88);
+  --glass-shadow: 0 8px 32px rgba(35, 53, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --sheet-shadow: 0 18px 70px rgba(35, 53, 42, 0.2);
+  --scrim: rgba(24, 36, 28, 0.44);
+  --control-border: #7d8e77;
+  --danger: #9d2944;
+  --danger-soft: #fbe7ec;
+  --danger-ink: #85213a;
+  --warning-soft: #f6edcf;
+  --warning-ink: #6a4b13;
 }

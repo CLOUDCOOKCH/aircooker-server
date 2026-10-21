@@ -1,0 +1,344 @@
+{
+  "date": "2026-10-21",
+  "status": "implemented and tested locally; publication/WebKit CI pending",
+  "backend_tests": 226,
+  "frontend_tests": 39,
+  "themes": [
+    "flo",
+    "after-dark",
+    "sunday"
+  ],
+  "browser": "Chromium installed Linux; persistent disposable profile",
+  "theme_checks": [
+    "native radio keys",
+    "EN/DE",
+    "light/dark OS overrides",
+    "browser metadata and native colour scheme",
+    "offline selection and reload",
+    "cross-tab admin shared preference",
+    "before-React application",
+    "invalid preference fallback",
+    "read/write storage failures",
+    "320px root overflow",
+    "computed text/control contrast and Axe WCAG AA"
+  ],
+  "regressions": [
+    "full PWA offline/sync/recipe/calendar/import flows",
+    "console setup/account/AI/Bring fixture flows",
+    "six-variant mobile calendar layout and touch flows",
+    "push settings/receiver with explicit delivery doubles"
+  ],
+  "captures": {
+    "docs/screenshots/mealf-theme-after-dark-home.png": {
+      "sha256": "35deeb16a30529199d6f353f453b1046628f3c302bee9ea092b4d0a53e0c3a2a"
+    },
+    "docs/screenshots/mealf-theme-sunday-home.png": {
+      "sha256": "cc8ac37fb0c43247be226805c466fbf97996f135d7b049bbc49c0f03e7a64e29"
+    },
+    "docs/screenshots/mealf-theme-after-dark-settings-phone.png": {
+      "sha256": "e550a53773ab137ca302162bcceb7532bed2eeac862c9a2b592b5b6fbff9d17a"
+    },
+    "docs/screenshots/mealf-theme-sunday-settings-phone-de.png": {
+      "sha256": "be1acdf33d218b0d05807b8f56f2102028026a50fb30fb57e0a5ccaefc2d6ed3"
+    },
+    "docs/screenshots/mealf-theme-after-dark-admin-desktop.png": {
+      "sha256": "5c453bb73265882ac9f3eb29227ab3dd79ee91b5632fbdc7ce62c2e8aef5dd11"
+    }
+  },
+  "contrast_evidence": [
+    {
+      "theme": "flo",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 14.281,
+        "ink/surface": 14.924,
+        "ink/soft": 12.72,
+        "muted/canvas": 5.273,
+        "muted/surface": 5.51,
+        "muted/soft": 4.697,
+        "accent/canvas": 5.944,
+        "accent/surface": 6.212,
+        "on-accent/accent": 6.315,
+        "on-accent/accent-hover": 7.617,
+        "accent-ink/accent-soft": 6.841,
+        "accent-muted/accent-soft": 5.369,
+        "danger/surface": 7.3,
+        "danger-ink/danger-soft": 7.77,
+        "warning-ink/warning-soft": 6.482,
+        "ink/selection": 8.513,
+        "control-border/surface": 3.102,
+        "focus/surface": 6.212
+      }
+    },
+    {
+      "theme": "after-dark",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 16.06,
+        "ink/surface": 14.51,
+        "ink/soft": 12.698,
+        "muted/canvas": 8.712,
+        "muted/surface": 7.872,
+        "muted/soft": 6.889,
+        "accent/canvas": 8.838,
+        "accent/surface": 7.985,
+        "on-accent/accent": 7.764,
+        "on-accent/accent-hover": 9.848,
+        "accent-ink/accent-soft": 8.974,
+        "accent-muted/accent-soft": 6.687,
+        "danger/surface": 9.127,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 7.548,
+        "ink/selection": 7.499,
+        "control-border/surface": 4.565,
+        "focus/surface": 7.985
+      }
+    },
+    {
+      "theme": "after-dark",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 16.06,
+        "ink/surface": 14.51,
+        "ink/soft": 12.698,
+        "muted/canvas": 8.712,
+        "muted/surface": 7.872,
+        "muted/soft": 6.889,
+        "accent/canvas": 8.838,
+        "accent/surface": 7.985,
+        "on-accent/accent": 7.764,
+        "on-accent/accent-hover": 9.848,
+        "accent-ink/accent-soft": 8.974,
+        "accent-muted/accent-soft": 6.687,
+        "danger/surface": 9.127,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 7.548,
+        "ink/selection": 7.499,
+        "control-border/surface": 4.565,
+        "focus/surface": 7.985
+      }
+    },
+    {
+      "theme": "sunday",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 11.949,
+        "ink/surface": 13.01,
+        "ink/soft": 11.009,
+        "muted/canvas": 5.383,
+        "muted/surface": 5.861,
+        "muted/soft": 4.96,
+        "accent/canvas": 6.818,
+        "accent/surface": 7.424,
+        "on-accent/accent": 7.424,
+        "on-accent/accent-hover": 9.669,
+        "accent-ink/accent-soft": 7.94,
+        "accent-muted/accent-soft": 5.19,
+        "danger/surface": 7.409,
+        "danger-ink/danger-soft": 7.796,
+        "warning-ink/warning-soft": 6.822,
+        "ink/selection": 8.85,
+        "control-border/surface": 3.496,
+        "focus/surface": 7.424
+      }
+    },
+    {
+      "theme": "sunday",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 11.949,
+        "ink/surface": 13.01,
+        "ink/soft": 11.009,
+        "muted/canvas": 5.383,
+        "muted/surface": 5.861,
+        "muted/soft": 4.96,
+        "accent/canvas": 6.818,
+        "accent/surface": 7.424,
+        "on-accent/accent": 7.424,
+        "on-accent/accent-hover": 9.669,
+        "accent-ink/accent-soft": 7.94,
+        "accent-muted/accent-soft": 5.19,
+        "danger/surface": 7.409,
+        "danger-ink/danger-soft": 7.796,
+        "warning-ink/warning-soft": 6.822,
+        "ink/selection": 8.85,
+        "control-border/surface": 3.496,
+        "focus/surface": 7.424
+      }
+    },
+    {
+      "theme": "flo",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 14.281,
+        "ink/surface": 14.924,
+        "ink/soft": 12.72,
+        "muted/canvas": 5.273,
+        "muted/surface": 5.51,
+        "muted/soft": 4.697,
+        "accent/canvas": 5.944,
+        "accent/surface": 6.212,
+        "on-accent/accent": 6.315,
+        "on-accent/accent-hover": 7.617,
+        "accent-ink/accent-soft": 6.841,
+        "accent-muted/accent-soft": 5.369,
+        "danger/surface": 7.3,
+        "danger-ink/danger-soft": 7.77,
+        "warning-ink/warning-soft": 6.482,
+        "ink/selection": 8.513,
+        "control-border/surface": 3.102,
+        "focus/surface": 6.212
+      }
+    },
+    {
+      "theme": "flo",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 15.763,
+        "ink/surface": 14.091,
+        "ink/soft": 12.344,
+        "muted/canvas": 8.009,
+        "muted/surface": 7.159,
+        "muted/soft": 6.271,
+        "accent/canvas": 9.571,
+        "accent/surface": 8.556,
+        "on-accent/accent": 8.219,
+        "on-accent/accent-hover": 9.876,
+        "accent-ink/accent-soft": 9.004,
+        "accent-muted/accent-soft": 6.382,
+        "danger/surface": 8.414,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 8.568,
+        "ink/selection": 6.765,
+        "control-border/surface": 4.617,
+        "focus/surface": 8.556
+      }
+    },
+    {
+      "theme": "after-dark",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 16.06,
+        "ink/surface": 14.51,
+        "ink/soft": 12.698,
+        "muted/canvas": 8.712,
+        "muted/surface": 7.872,
+        "muted/soft": 6.889,
+        "accent/canvas": 8.838,
+        "accent/surface": 7.985,
+        "on-accent/accent": 7.764,
+        "on-accent/accent-hover": 9.848,
+        "accent-ink/accent-soft": 8.974,
+        "accent-muted/accent-soft": 6.687,
+        "danger/surface": 9.127,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 7.548,
+        "ink/selection": 7.499,
+        "control-border/surface": 4.565,
+        "focus/surface": 7.985
+      }
+    },
+    {
+      "theme": "sunday",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 11.949,
+        "ink/surface": 13.01,
+        "ink/soft": 11.009,
+        "muted/canvas": 5.383,
+        "muted/surface": 5.861,
+        "muted/soft": 4.96,
+        "accent/canvas": 6.818,
+        "accent/surface": 7.424,
+        "on-accent/accent": 7.424,
+        "on-accent/accent-hover": 9.669,
+        "accent-ink/accent-soft": 7.94,
+        "accent-muted/accent-soft": 5.19,
+        "danger/surface": 7.409,
+        "danger-ink/danger-soft": 7.796,
+        "warning-ink/warning-soft": 6.822,
+        "ink/selection": 8.85,
+        "control-border/surface": 3.496,
+        "focus/surface": 7.424
+      }
+    },
+    {
+      "theme": "sunday",
+      "mode": "light",
+      "ratios": {
+        "ink/canvas": 11.949,
+        "ink/surface": 13.01,
+        "ink/soft": 11.009,
+        "muted/canvas": 5.383,
+        "muted/surface": 5.861,
+        "muted/soft": 4.96,
+        "accent/canvas": 6.818,
+        "accent/surface": 7.424,
+        "on-accent/accent": 7.424,
+        "on-accent/accent-hover": 9.669,
+        "accent-ink/accent-soft": 7.94,
+        "accent-muted/accent-soft": 5.19,
+        "danger/surface": 7.409,
+        "danger-ink/danger-soft": 7.796,
+        "warning-ink/warning-soft": 6.822,
+        "ink/selection": 8.85,
+        "control-border/surface": 3.496,
+        "focus/surface": 7.424
+      }
+    },
+    {
+      "theme": "after-dark",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 16.06,
+        "ink/surface": 14.51,
+        "ink/soft": 12.698,
+        "muted/canvas": 8.712,
+        "muted/surface": 7.872,
+        "muted/soft": 6.889,
+        "accent/canvas": 8.838,
+        "accent/surface": 7.985,
+        "on-accent/accent": 7.764,
+        "on-accent/accent-hover": 9.848,
+        "accent-ink/accent-soft": 8.974,
+        "accent-muted/accent-soft": 6.687,
+        "danger/surface": 9.127,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 7.548,
+        "ink/selection": 7.499,
+        "control-border/surface": 4.565,
+        "focus/surface": 7.985
+      }
+    },
+    {
+      "theme": "after-dark",
+      "mode": "dark",
+      "ratios": {
+        "ink/canvas": 16.06,
+        "ink/surface": 14.51,
+        "ink/soft": 12.698,
+        "muted/canvas": 8.712,
+        "muted/surface": 7.872,
+        "muted/soft": 6.889,
+        "accent/canvas": 8.838,
+        "accent/surface": 7.985,
+        "on-accent/accent": 7.764,
+        "on-accent/accent-hover": 9.848,
+        "accent-ink/accent-soft": 8.974,
+        "accent-muted/accent-soft": 6.687,
+        "danger/surface": 9.127,
+        "danger-ink/danger-soft": 9.299,
+        "warning-ink/warning-soft": 7.548,
+        "ink/selection": 7.499,
+        "control-border/surface": 4.565,
+        "focus/surface": 7.985
+      }
+    }
+  ],
+  "review": "bounded implementation-agent capture/source review; no required material findings remaining; no independent specialist/plugin schema validation claimed",
+  "limits": [
+    "physical iPhone Home Screen/keyboard unverified",
+    "live external-service delivery unchanged/unverified",
+    "native iOS repository unchanged; full product acceptance remains open"
+  ]
+}

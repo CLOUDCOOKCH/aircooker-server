@@ -143,6 +143,12 @@ def main():
         # The installed wheel must ship the console's palette, not only the Vite bundle.
         assert request(base, "/app/theme.css") == Path("frontend/src/tokens.css").read_bytes()
         assert b"/app/theme.css" in request(base, "/console.css")
+        assert (
+            request(base, "/app/appearance.js")
+            == Path("frontend/public/appearance.js").read_bytes()
+        )
+        assert b"/app/appearance.js" in request(base, "/app/")
+        assert b"/app/appearance.js" in request(base, "/")
         # Shared peach interaction must ship in the wheel and the installed PWA shell.
         assert b"/app/peach.js" in shell and b"/app/peach.css" in shell
         assert b"/app/peach.js" in request(base, "/")

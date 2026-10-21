@@ -21,3 +21,9 @@ ship in the PWA offline shell and admin console. Existing palette tokens and art
 bytes are unchanged. See [behavior and scoped manual evidence](../../docs/PEACH_EGG.md).
 Chromium click/keyboard/reduced-motion/offline/admin checks pass. Physical Safari/iPhone
 and screen-reader delivery are unverified; no independent specialist/schema pass claimed.
+
+Theme-library refinement, 2026-10-21: Flo preserves the current system palette. The user
+requested a fixed dark-romance palette (After Dark: ink/oxblood/rose/gold) and a fixed
+light palette (Sunday: linen/sage). Both use the same shared semantic tokens and original
+art, with native field colour schemes. Browser-local choice covers PWA/console and
+persists offline; no API/storage identity change. See docs/THEMES.md and DESIGN.md.

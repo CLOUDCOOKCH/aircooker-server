@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.8`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.9`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -130,3 +130,12 @@ a configured workflow alone is not evidence of either.
 
 See the [feature/evidence checklist](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/IMPLEMENTATION.md)
 and [PWA guide](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/PWA.md).
+
+The `.9` preview adds **Settings → Theme library**. **Flo** preserves the existing
+peach/cream appearance and follows the device. **After Dark** stays dark with ink,
+oxblood and dusty rose; **Sunday** stays light with linen whites and sage. The console
+has the same choices in its header. Choices stay on this browser and origin, work
+offline and are separate from shared household data. Original art is unchanged.
+See [theme behavior and testing](THEMES.md). Keep your existing volume, port mapping,
+command and healthcheck, including `5152:5152`; update only the image reference.
+Save edits and accept the PWA update. No browser-data reset or reinstall is required.

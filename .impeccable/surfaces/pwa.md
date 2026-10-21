@@ -143,3 +143,9 @@ drops, offline transactions and occurrence exceptions. Narrow <=480px dialogs st
 paired fields; two-column rows use minmax(0,1fr), constrained date controls and 48px
 paired-field heights. Original art and palette tokens stay intact. Chromium captures/
 behavior are genuine synthetic-data evidence; physical iPhone remains unverified.
+
+Theme-library refinement, 2026-10-21: Flo preserves the current system palette. The user
+requested a fixed dark-romance palette (After Dark: ink/oxblood/rose/gold) and a fixed
+light palette (Sunday: linen/sage). Both use the same shared semantic tokens and original
+art, with native field colour schemes. Browser-local choice covers PWA/console and
+persists offline; no API/storage identity change. See docs/THEMES.md and DESIGN.md.

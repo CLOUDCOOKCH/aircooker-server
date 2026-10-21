@@ -1,6 +1,5 @@
 @import url('/app/theme.css');
 :root {
-  color-scheme: light dark;
   --bg: var(--canvas);
   --fg: var(--ink);
   --panel: var(--surface);

@@ -22,7 +22,12 @@ function diagnosticMessage(code){
   if(["ai_invalid_response","ai_schema_validation_failed","invalid_extracted_recipe","ai_incomplete_recipe_review_manually"].includes(code))return words[locale].diagnostic_invalid;
   return words[locale].diagnostic_generic;
 }
+Object.assign(words.en, {theme:"Theme",theme_flo:"Flo · device",theme_dark:"After Dark · dark",theme_light:"Sunday · light",theme_not_saved:"Theme applied for this tab. Browser storage is unavailable; it may reset when you reopen."});
+Object.assign(words.de, {theme:"Design",theme_flo:"Flo · Gerät",theme_dark:"After Dark · dunkel",theme_light:"Sunday · hell",theme_not_saved:"Design für diesen Tab angewendet. Browserspeicher ist nicht verfügbar; beim erneuten Öffnen kann es zurückgesetzt werden."});
 const $=id=>document.getElementById(id);
+$("appearance").value=window.mealfAppearance.get();
+window.addEventListener("mealf:appearance",()=>{$("appearance").value=window.mealfAppearance.get();});
+$("appearance").onchange=()=>{if(!window.mealfAppearance.set($("appearance").value))message("theme_not_saved");};
 let locale="en", configured=false, storageStatus=null, diagnosticStatus=null, currentPage="overview";
 const pageTitles={overview:"overview",household:"household_settings",security:"security",ai:"ai_settings",bring:"bring_settings",data:"data_management"};
 function selectPage(key, focus=true){

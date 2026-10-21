@@ -1,5 +1,13 @@
 # Changelog
 
+- Add a shared PWA/admin theme library: Flo (existing system appearance), After Dark
+  (fixed dark, ink/oxblood/rose) and Sunday (fixed light, linen/sage). Persist browser-local
+  choice, apply before React starts, match native controls and browser chrome, and keep
+  cross-tab administration and offline reloads in sync. Preserve original brand assets
+  and household/storage/API identities. EN/DE native-radio controls include previews.
+  Browser contrast/Axe, storage-failure, offline and OS-override checks are included.
+  Preview `.9` publication pending; physical iPhone remains unverified.
+
 - Add per-device Day/3 days/Week calendar views and touch/pointer meal drag grips with
   target feedback, edge scrolling, cancellation and tap/keyboard move forms. Preserve
   offline durability, existing desktop drops and occurrence exceptions. Stack narrow

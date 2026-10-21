@@ -290,3 +290,14 @@ drops, offline transactions and occurrence exceptions. Narrow <=480px dialogs st
 paired fields; two-column rows use minmax(0,1fr), constrained date controls and 48px
 paired-field heights. Original art and palette tokens stay intact. Chromium captures/
 behavior are genuine synthetic-data evidence; physical iPhone remains unverified.
+
+
+Theme library update, 2026-10-21: the user named the established appearance **Flo** and
+requested additional dark romance and light themes. Flo retains the exact approved
+system palettes above. **After Dark** uses ink/oxblood/rose, dark elevation and restrained
+gold details; **Sunday** uses linen whites/sage. Shared semantic roles, system type,
+solid forms, glass navigation and original art remain authoritative. Explicit choices
+override system media queries and set native field colour scheme. Settings provides
+native radio previews; the console header provides a select. Device-local persistence,
+metadata, offline shell and accessibility checks are described in [THEMES.md](docs/THEMES.md).
+This extends appearance selection; historical system-only notes above describe Flo.

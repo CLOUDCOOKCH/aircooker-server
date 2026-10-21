@@ -4,6 +4,7 @@ import { useApp } from './model';
 import type { Tab } from './model';
 import { PageHeader, Sheet } from './components';
 import { ReminderSettings } from './ReminderSettings';
+import { ThemeLibrary } from './ThemeLibrary';
 import { PlanningSettings } from './PlanningSettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
@@ -120,7 +121,6 @@ export function Settings({
                   ))}
                 </select>
               </label>
-              <div className="settings-row muted">{t('appearance')}</div>
               {!app.demo && (
                 <a className="settings-row" href="/" target="_blank" rel="noreferrer">
                   {t('openAdmin')}
@@ -129,6 +129,7 @@ export function Settings({
               )}
             </div>
           </section>
+          <ThemeLibrary />
           <PlanningSettings />
           <ReminderSettings />
           <section className="settings-group">
