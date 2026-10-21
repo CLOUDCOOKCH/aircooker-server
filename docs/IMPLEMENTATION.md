@@ -75,7 +75,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-The current PWA integration passes 209 backend tests and 39 web core tests locally,
+The current PWA integration passes 213 backend tests and 39 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -156,3 +156,14 @@ Anonymous pull and a local .1-to-.2 upgrade on a disposable shared volume passed
 was preserved, the new image served internal port 5152 with a healthy overridden check,
 and setup using that original token succeeded. The user's actual NAS UI/token were not
 accessed. Exact digest/images/jobs/assets and limits: validation/github-bash-preview.json.
+
+User-requested setup-token logging is published in `poc-20261021.3` from 1282fa4.
+Source CI 39612946770 passed all six jobs (213 backend tests per architecture, 39 web tests).
+Preview publication 39613320058 passed fresh native image scans/Docker checks, including
+bootstrap using the token read from Docker logs and no added token record on configured
+restart. Anonymous-pulled AMD64 .2-to-.3 upgrade on a disposable shared volume with internal
+port 5152 passed: existing token logged once, same token logged after unconfigured restart,
+successful setup from that log value, then configured restart with no added token record.
+Passwords/session credentials remained absent; LOG_SETUP_TOKEN=false suppressed the event
+while retaining file access. Historical logs remain, with the token invalid after setup.
+Exact digest/images/jobs/artifacts and limits: validation/github-setup-token-log-preview.json.

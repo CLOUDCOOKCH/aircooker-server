@@ -22,6 +22,12 @@ and preview publication 39611318654. Both native images pass terminal/token/runt
 and fresh security scans. Anonymous pull and the published AMD64 .1-to-.2 same-volume
 upgrade on internal port 5152 passed; see validation/github-bash-preview.json.
 
+Startup setup-token log update: `poc-20261021.3` from 1282fa4 passed exact-source CI
+39612946770 and preview publication 39613320058. Both native architecture checks bootstrap
+from Docker logs and exclude further token records after setup. Anonymous pull, same-volume
+.2-to-.3 upgrade on internal 5152, token reuse before setup, configured silence and operator
+opt-out passed. See validation/github-setup-token-log-preview.json for exact evidence.
+
 ## Stable releases
 
 Both repositories and their first CI runs are published. Configure private vulnerability

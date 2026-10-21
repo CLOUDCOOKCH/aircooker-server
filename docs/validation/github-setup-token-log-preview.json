@@ -1,0 +1,213 @@
+{
+  "source_commit": "1282fa420bf37796788c0b02846336290677b82b",
+  "change": "User-requested one-time bootstrap token output in operator container startup logs while unconfigured",
+  "source_ci": {
+    "id": 39612946770,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39612946770",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119266353976,
+        "name": "browser",
+        "conclusion": "success"
+      },
+      {
+        "id": 119266354297,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:7db09ca158616275e3c8989c2dc4a62810063564e37e9745301e78a6e4bc9f4f"
+      },
+      {
+        "id": 119266354442,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119266354496,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:d646ba908c758fde160148a6a9197c365b92eb1e862257818198a009e4c86c54"
+      },
+      {
+        "id": 119266354726,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:35d7e0dcbacd129f2da6820896a2d325ea9efe06764e4c44ce8c7e1275f8d61a"
+      },
+      {
+        "id": 119266354993,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:03e0568e6f74998303683ead8f0cdee37186cc3df81d43a556b465720ac36db5"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12352295068,
+        "name": "backend-tests-ubuntu-24.04",
+        "digest": "sha256:de28ca84a6282c54ac5f3a84691da6df5bd52e8c2055e9fb59992613517b03b1"
+      },
+      {
+        "id": 12351052463,
+        "name": "container-security-ubuntu-24.04",
+        "digest": "sha256:6d668697db292fcf7f9facf572212adecd7a73cb84ffceaa3aa6b577ae7a99a1"
+      },
+      {
+        "id": 12350782923,
+        "name": "container-security-ubuntu-24.04-arm",
+        "digest": "sha256:a7b7efcf60e8797a0725a5099e490c7c22fe5e326cd003e215f78b561867d186"
+      },
+      {
+        "id": 12350598718,
+        "name": "console-screenshots",
+        "digest": "sha256:d6691c48f219bd16525e532a7be100f6dcf784593fa56d85ff991a536c83c4cb"
+      },
+      {
+        "id": 12350553921,
+        "name": "backend-tests-ubuntu-24.04-arm",
+        "digest": "sha256:1312a5a77279b9d1acea25d84f35abd20780d3dc141527084ca2e7fa0886787f"
+      }
+    ]
+  },
+  "tests": {
+    "backend_each_architecture": 213,
+    "web": 39,
+    "local": "pytest, Ruff lint/format, mypy, OpenAPI drift, licence inventory, Compose validation and workflow lint passed",
+    "new_cases": [
+      "No factory/schema-tool emission",
+      "Actual setup from the logged token, without password/session request logging",
+      "Unconfigured restart preserves/re-emits the current token",
+      "Configured startup rechecks database state, including stale file/app construction",
+      "LOG_SETUP_TOKEN=false suppresses output while preserving file-based setup"
+    ],
+    "docker": "Both architecture smoke tests bootstrap using the token read from docker logs and assert a configured restart adds no token records"
+  },
+  "scope": {
+    "exception": "Only the one-time bootstrap token is intentionally logged; passwords, sessions and integration credentials remain excluded",
+    "retained_logs": "Historical records remain; the token cannot bootstrap a configured household",
+    "operator_opt_out": "LOG_SETUP_TOKEN=false"
+  },
+  "preview": {
+    "tag": "poc-20261021.3",
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.3",
+    "release_id": 419634409,
+    "prerelease": true,
+    "image": "ghcr.io/cloudcookch/mealf-server",
+    "manifest_digest": "sha256:c2821a39aea536f7fd53359b1fb0664ec0a3accb90e918d8ae77dd71643df74e",
+    "architectures": [
+      {
+        "platform": "linux/amd64",
+        "image_config": "sha256:68230c389a13b84cd6996eda549d91ae729cdae39b39f3ace21b5767372e5766",
+        "manifest": "sha256:283c40e8cde49293b86d9cc92d76e3881a52921427164550dc86827681efa0bc"
+      },
+      {
+        "platform": "linux/arm64",
+        "image_config": "sha256:962cb231117ca6ee1d0469b7e742f7ba94a7a02502d71947808b305be9543764",
+        "manifest": "sha256:76b0fa089c6c7012370227bf8660c6fad38411877cc1e9dc334280be3d4f6404"
+      }
+    ],
+    "publication_ci": {
+      "id": 39613320058,
+      "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39613320058",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119267653719,
+          "name": "gate",
+          "conclusion": "success"
+        },
+        {
+          "id": 119267732154,
+          "name": "verify-images (ubuntu-24.04, amd64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119267732453,
+          "name": "verify-images (ubuntu-24.04-arm, arm64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119268625706,
+          "name": "publish",
+          "conclusion": "success"
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12350708643,
+          "name": "verified-preview-amd64",
+          "digest": "sha256:0a297c5f5133d8eb4eaa0e030315e84d588824d1c565ec5fc5ecaa7b2259426f"
+        },
+        {
+          "id": 12350614283,
+          "name": "verified-preview-arm64",
+          "digest": "sha256:8825e5a82c76652eb8fa3b15f5f58218beb1e99e2c63405b9d2eb2d1a688a5db"
+        }
+      ]
+    },
+    "assets": [
+      {
+        "name": "compose.preview.yaml",
+        "size": 629,
+        "digest": "sha256:dd6eb2f5b8d846c1061c9de8093a4c68ec08300e4d6be38d35e495391f5af6cc",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/compose.preview.yaml"
+      },
+      {
+        "name": "container-security-amd64.json",
+        "size": 121732,
+        "digest": "sha256:c2517e549a3659960d52b804a602cee3a976bb175af2845746bcf1c77e3ce4cb",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/container-security-amd64.json"
+      },
+      {
+        "name": "container-security-arm64.json",
+        "size": 121733,
+        "digest": "sha256:419299b1fe53d75f231a62cfccc7d528ec329de37baf29757f2d683547c26691",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/container-security-arm64.json"
+      },
+      {
+        "name": "openapi-v1.json",
+        "size": 147158,
+        "digest": "sha256:224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/openapi-v1.json"
+      },
+      {
+        "name": "sbom-amd64.cdx.json",
+        "size": 104087,
+        "digest": "sha256:942a01e45914285cad207a158112a76e9da87b801b842a3bde8c28aa26b8c88a",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/sbom-amd64.cdx.json"
+      },
+      {
+        "name": "sbom-arm64.cdx.json",
+        "size": 104284,
+        "digest": "sha256:e4ec544444c0714f2fb06d879b6ffd78583bb3fe9f9bd88429236903560df4b0",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.3/sbom-arm64.cdx.json"
+      }
+    ],
+    "provenance_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58234246",
+    "security": {
+      "scanner": "Trivy v0.70.0",
+      "severity_gate": [
+        "HIGH",
+        "CRITICAL"
+      ],
+      "ignore_unfixed": false,
+      "suppressions": false,
+      "findings_at_those_severities": 0,
+      "release_report_image_ids_match_verified_configs": true
+    },
+    "public_verification": {
+      "anonymous_pull": "passed using empty Docker client configuration",
+      "published_amd64_config_and_source_label_match": true,
+      "public_assets": "all six downloaded and SHA-256 checked against GitHub metadata; scan identities match verified image configs",
+      "same_volume_upgrade": ".2 stopped, .3 started on the same disposable volume under default UID 10001 with custom internal 5152 and overridden health check; initial startup logged the existing token exactly once; unconfigured restart logged that same token once again; setup using the log token succeeded; configured restart added no token record; PWA served successfully",
+      "credential_scope": "Synthetic household password/access/refresh tokens absent from container logs",
+      "operator_opt_out": "Actual published image with LOG_SETUP_TOKEN=false emitted no setup token event while the protected setup-token file remained available"
+    },
+    "limits": [
+      "Only synthetic disposable volumes were used; the user's actual container and bootstrap token were not accessed",
+      "The user's container-manager Logs UI was not available for direct testing",
+      "Historical Docker log entries remain; completed setup invalidates the token rather than erasing those entries",
+      "Development preview only; stable acceptance and external-service/device gaps remain open"
+    ]
+  }
+}
