@@ -1,5 +1,8 @@
 # Changelog
 
+- Add authenticated, bounded read-only job/import diagnostics with consistent queue counts
+  and explicit error-code redaction. Type and filter the existing recent-jobs endpoint.
+
 - Parse supported metric/English/German ingredient quantities, fractions and ranges before
   import review; preserve uncertain text and disclose omitted/truncated entries.
 - Extend Docker acceptance checks through durable import preview and explicit confirmation.

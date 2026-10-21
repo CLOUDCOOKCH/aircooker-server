@@ -76,6 +76,12 @@ Destructive replacement, account/data deletion controls, adjustable storage quot
 full diagnostic history are remaining work. An export is not a secret-bearing disaster
 recovery backup.
 
+Read-only diagnostics are available through authenticated `/api/v1/admin/diagnostics`
+and the typed `/api/v1/admin/jobs` API. They expose bounded recent job/import states and
+queue totals without content, URLs or provider messages. See API.md for limits and filters.
+The console already displays recent jobs; an expanded import-history interface remains
+unfinished. These endpoints do not retry or mutate work.
+
 ## Browser checks and screenshots
 
 With Chromium or Chrome installed:

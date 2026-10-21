@@ -6,6 +6,21 @@ is `/api/v1/openapi.json`. API-major 1 and sync-protocol 1 are exposed by system
 The current contract describes implemented routes only. Missing operations remain on the
 implementation checklist; the suggested product endpoint list is not falsely advertised.
 
+## Read-only administration diagnostics
+
+Authenticated `GET /api/v1/admin/diagnostics?limit=20` returns a UTC capture timestamp,
+queued/running/done/failed job totals and recent job/import status rows from one SQLite
+read snapshot. `limit` applies separately to each recent list and must be between 1 and
+100. This is a bounded recent view, not a complete audit-history export.
+
+`GET /api/v1/admin/jobs` retains its list response and default limit of 100, now with a
+typed schema, a validated `limit` and an optional `state=queued|running|done|failed` filter.
+Rows sort by descending creation time and stable ID. Neither endpoint changes retries,
+leases or stored imports. No job payload, imported recipe, source URL, external item name,
+deduplication key or credential is returned. Only explicitly allowed public error codes
+are exposed; unknown values become `operation_failed`, including syntactically valid
+provider messages. Unknown job kinds and import states become `unknown`.
+
 All protected endpoints accept `Authorization: Bearer <access token>`. Browser requests may
 use the short-lived secure session cookie with CSRF protection. There is one household and
 no account identifier accepted from the client. Never put credentials or setup tokens in a

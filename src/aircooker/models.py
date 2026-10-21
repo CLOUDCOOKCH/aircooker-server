@@ -286,3 +286,33 @@ class AdministrationStatus(Model):
     disk_free_bytes: int
     pending_jobs: int
     recipes: int
+
+
+class JobInfo(Model):
+    id: UUID
+    kind: Literal["recipe.import", "shopping.reconcile", "unknown"]
+    state: Literal["queued", "running", "done", "failed"]
+    attempts: int = Field(ge=0)
+    error_code: str | None
+    available_at: float
+
+
+class JobCounts(Model):
+    queued: int = Field(default=0, ge=0)
+    running: int = Field(default=0, ge=0)
+    done: int = Field(default=0, ge=0)
+    failed: int = Field(default=0, ge=0)
+
+
+class ImportDiagnostic(Model):
+    id: UUID
+    state: Literal["queued", "preview", "needs_input", "confirmed", "cancelled", "unknown"]
+    error_code: str | None
+    created_at: float
+
+
+class AdministrationDiagnostics(Model):
+    captured_at: datetime
+    job_counts: JobCounts
+    recent_jobs: list[JobInfo] = Field(max_length=100)
+    recent_imports: list[ImportDiagnostic] = Field(max_length=100)

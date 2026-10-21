@@ -3,6 +3,13 @@
 This report describes a development implementation, not completed product acceptance.
 No real household, Bring account, cloud AI credential or Apple signing credential was used.
 
+Latest diagnostics change: **136 pytest tests pass**, including seven authentication,
+bounded-query, queue-count/filter and secret/content redaction checks. Ruff lint/format,
+mypy across 25 modules and generated OpenAPI drift checks pass. This adds read-only typed
+job/import projections, with no migration, worker scheduling or connector mutation changes.
+Current Docker and remote CI checks are pending. The evidence below also retains earlier
+development runs and does not imply all listed platforms validated this newest change.
+
 | Check | Executed result | Limit |
 | --- | --- | --- |
 | Backend tests against hashed runtime dependencies | **129 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |

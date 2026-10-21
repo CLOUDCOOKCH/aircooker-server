@@ -52,17 +52,20 @@ from .backup import (
 from .bring import reconcile
 from .bring_runtime import UnofficialBringConnector
 from .db import Database
+from .diagnostics import diagnostics, recent_jobs
 from .errors import DomainError
 from .importing import bounded_fetch_html, extract, platform_for
 from .jobs import claim, enqueue, finish
 from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
 from .models import (
+    AdministrationDiagnostics,
     AdministrationStatus,
     BringConfiguration,
     BringCredentials,
     Credentials,
     HouseholdSettings,
     ImportRequest,
+    JobInfo,
     Mutation,
     MutationResult,
     PasswordChange,
@@ -790,15 +793,20 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             recipes=recipes,
         )
 
-    @app.get("/api/v1/admin/jobs")
-    def jobs(s=Depends(session)):
+    @app.get("/api/v1/admin/jobs", response_model=list[JobInfo])
+    def jobs(
+        limit: int = Query(default=100, ge=1, le=100),
+        state: Literal["queued", "running", "done", "failed"] | None = None,
+        s=Depends(session),
+    ):
         with database.connect() as db:
-            return [
-                dict(r)
-                for r in db.execute(
-                    "SELECT id,kind,state,attempts,error_code,available_at FROM background_job ORDER BY created_at DESC LIMIT 100"
-                )
-            ]
+            return recent_jobs(db, limit, state)
+
+    @app.get("/api/v1/admin/diagnostics", response_model=AdministrationDiagnostics)
+    def administration_diagnostics(
+        limit: int = Query(default=20, ge=1, le=100), s=Depends(session)
+    ):
+        return diagnostics(database, limit)
 
     @app.get("/", response_class=HTMLResponse, include_in_schema=False)
     def web_console():
