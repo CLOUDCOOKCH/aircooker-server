@@ -232,10 +232,22 @@ def main():
                 assert len(stored) == 1 and stored[0]["payload"]["title"] == "Reviewed photo rice"
                 assert stored[0]["payload"]["image_id"]
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
-                page.get_by_role("radio", name="After Dark", exact=True).evaluate(
-                    "e=>e.scrollIntoView({block:'center',behavior:'instant'})"
+                expect(page.get_by_role("heading", name="Settings", exact=True)).to_be_visible()
+                radio = page.get_by_role("radio", name="After Dark", exact=True)
+                radio.evaluate("e=>e.scrollIntoView({block:'center',behavior:'instant'})")
+                print(
+                    "Image test theme controls:",
+                    page.locator('input[type="radio"]').evaluate_all(
+                        "els=>els.map(e=>({name:e.getAttribute('aria-label'),checked:e.checked}))"
+                    ),
                 )
-                page.get_by_role("radio", name="After Dark", exact=True).check()
+                # Native keyboard activation avoids pointer scroll/target changes while
+                # Settings finishes laying out. Theme switching itself has separate
+                # mouse/touch and radio-arrow acceptance coverage in both engines.
+                radio.focus()
+                radio.press("Space")
+                expect(radio).to_be_checked()
+                expect(page.locator("html")).to_have_attribute("data-theme", "after-dark")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
                 page.get_by_role("navigation").get_by_role(
