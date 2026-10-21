@@ -687,10 +687,10 @@
     "evidence": "scripts/pwa_browser_smoke.py: Chromium pinch/double-tap scale, finger-swipe scroll, unselectable app text, actual recipe word selection and input select/edit. Physical iPhone/Safari unverified."
   },
   "publication": {
-    "tag": "poc-20261021.6",
-    "source": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
-    "evidence": "docs/validation/github-peach-preview.json",
-    "scope": "shared peach interaction and localized food copy; both architecture images verified; physical Safari/iPhone and full-product acceptance unverified"
+    "tag": "poc-20261021.7",
+    "source": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+    "evidence": "docs/validation/github-phone-viewport-preview.json",
+    "scope": "mobile focus/text sizing and safe-area layout; Chromium/WebKit and both image architectures pass; physical installed-phone behavior unverified"
   },
   "peachInteraction": {
     "source": [

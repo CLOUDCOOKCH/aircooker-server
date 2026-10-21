@@ -1,13 +1,16 @@
 # Implementation checklist and evidence
 
-**Phone PWA viewport fix, 2026-10-21 — implemented and locally tested; publication pending:**
+**Phone PWA viewport fix, 2026-10-21 — published and verified in `poc-20261021.7`:**
 mobile fields no longer inherit 12–14px label text, which can trigger iOS focus zoom.
 Safari text autosizing and all-edge safe-area layout are explicit. Navigation handles
 short touch landscape; dialogs remain inside safe bounds. Local Chromium checks cover
 320/390px portrait, symmetric/asymmetric landscape, desktop, field focus, recipe editing
 and sheets. Existing 226 backend/39 frontend tests and PWA flows pass. CI adds WebKit
 engine coverage; physical Home Screen/keyboard confirmation is still unverified.
-See [layout evidence](validation/mealf-phone-layout-local.json).
+All six exact-source CI jobs passed, including Chromium and persistent-profile WebKit
+layout tests. Both image scans/runtime gates, public pull, six release checksums and the
+published .6-to-.7 same-volume 5152 upgrade passed. See [layout evidence](validation/mealf-phone-layout-local.json)
+and [publication evidence](validation/github-phone-viewport-preview.json).
 
 **Peach interaction, 2026-10-21 — tested and published in `poc-20261021.6`:**
 shared PWA/console native peach buttons activate a silent hand-swipe/wobble and rotating

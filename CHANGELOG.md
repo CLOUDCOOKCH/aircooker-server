@@ -4,7 +4,9 @@
   Safari text autosizing, all-edge safe-area layout, short touch-landscape navigation and
   safe dialog bounds. Preserve accessibility zoom, selection, scrolling and stored work.
   Add real-engine layout/focus regressions with simulated notch geometry; physical iOS
-  Home Screen and software-keyboard behavior remains unverified. Publication tracked below.
+  Home Screen and software-keyboard behavior remains unverified. Published `poc-20261021.7`
+  after all six source CI jobs (including Chromium/WebKit), both image gates and public
+  pull/checksum/5152 same-volume upgrade verification. See the exact release evidence.
 
 - Add a silent peach-slap Easter egg in the PWA and admin console: native touch/keyboard
   activation, a hand-swipe and 560ms wobble, localized rotating comebacks and reduced-motion

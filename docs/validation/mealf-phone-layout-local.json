@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "local Chromium passed; WebKit CI/publication pending",
+  "status": "Chromium local and Chromium/WebKit CI passed; published poc-20261021.7 verified; physical device pending",
   "scope": "PWA mobile focus font sizing and safe-area geometry; no storage/API/native changes",
   "reported_behavior": "User reports slight zoom and clipping immediately after adding the PWA to the phone. Exact device/iOS and trigger not yet supplied.",
   "source_findings": [
@@ -1914,5 +1914,6 @@
       }
     }
   ],
-  "webkit_ci_followup": "WebKit ephemeral test sessions rejected staging the real demo image Blob (UnknownError). The layout check now uses disposable persistent WebKit profiles matching installed-app storage, with no production fallback or storage change."
+  "webkit_ci_followup": "WebKit ephemeral test sessions rejected staging the real demo image Blob (UnknownError). The layout check now uses disposable persistent WebKit profiles matching installed-app storage, with no production fallback or storage change.",
+  "publication_evidence": "github-phone-viewport-preview.json"
 }

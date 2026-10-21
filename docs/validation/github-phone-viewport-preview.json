@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-21",
+  "status": "published and verified",
+  "scope": "PWA mobile form zoom, text autosizing and safe-area/landscape layout; no API/storage/native changes",
+  "source": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+  "ci": {
+    "run_id": 39638277178,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39638277178",
+    "jobs": [
+      {
+        "id": 119354742792,
+        "name": "browser",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      },
+      {
+        "id": 119354743233,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      },
+      {
+        "id": 119354743247,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      },
+      {
+        "id": 119354743341,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      },
+      {
+        "id": 119354743525,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      },
+      {
+        "id": 119354743698,
+        "name": "pwa-core",
+        "head_sha": "b8e2b1b3e114df58ca17dcd23c8651342208cc0c",
+        "conclusion": "success"
+      }
+    ],
+    "backend_tests_per_architecture": 226,
+    "frontend_tests": 39,
+    "layout": "Real Chromium and WebKit: all five viewport/inset variants pass width, scale, font-size, field-focus and nav/dialog assertions; screenshots/geometry are CI artifacts",
+    "webkit_profile": "Disposable persistent disk profile; no native API wrappers, mock storage, skipped Blob or disabled security. Initial ephemeral profile rejected Blob staging; diagnostic run established the cause."
+  },
+  "publication": {
+    "run_id": 39638823438,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39638823438",
+    "jobs": [
+      {
+        "id": 119356669233,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119356775656,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119356775746,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119357502429,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "release_id": 419818256,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.7",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.7",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58298643",
+    "index_digest": "sha256:49d8e3eed44a2cd2940eb5b08b6e33b04abf72aefe62eee9df52d439c47355ee",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "bb19c2d19ba1e3da902169f18fa939c4b368c7fe792be174a06f11a356a1176f"
+      },
+      "container-security-amd64.json": {
+        "sha256": "208df8fe948f035254388271d5424ac4d27e3cfb8822fe16ac91fb5b21ac1f86"
+      },
+      "container-security-arm64.json": {
+        "sha256": "d215ec5d8f6c18693b79ab0443cf75684dea890910033f07742e3afa37e3e3f9"
+      },
+      "openapi-v1.json": {
+        "sha256": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "03a6aaef13c488b669c817a1eea960cc6f59ac0676de0aff1cb07d1cc6f28ae6"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "b8e6fe4f1beaf5eedb423d826ec03c71315a736037a1e406fc10b980b5e4680e"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:3c15b0c0e8ec857d728cbe4a2626c61704a661061e6bdc34f6cf5829e5e90cfd",
+        "config": "sha256:ade75262dfb1501791791bcbc06a7c2659f52a6b07a0e3149e9e583e34fbae2e",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:0db53aa4643015228027a5830c8f3e5d3858f5cad48da62f0598b56f97731ada",
+        "config": "sha256:8f76466ca836621d2f1158b8cc918c5ddaf31439f2e2379f23c0680c2f74c22e",
+        "high_critical": 0
+      }
+    }
+  },
+  "verification": {
+    "anonymous_pull": "passed using an empty command-scoped Docker configuration",
+    "release_assets": "all six SHA-256 checksums verified; source Compose/OpenAPI match",
+    "image_identity": "both manifest configs match published Trivy report ImageID and native build logs",
+    "security": "Trivy v0.70.0; zero HIGH/CRITICAL on both; no suppressions",
+    "same_volume_upgrade": "passed: published .6 -> .7, disposable same volume, internal 5152, non-root/read-only; household/session/recipe/sync proof and manifest identity preserved; packaged text-size-adjust/minimum mobile font/safe-area rules verified; brand and shared assets exact; no configured setup-token logging"
+  },
+  "limits": [
+    "Exact user phone, OS and zoom trigger not supplied; actual report is not physically reproduced",
+    "Notch insets injected in Linux engines; no actual iOS Home Screen, software keyboard or status-bar validation",
+    "Synthetic household; operator host/data not accessed",
+    "Live integrations, native parity and complete-product acceptance unchanged"
+  ]
+}

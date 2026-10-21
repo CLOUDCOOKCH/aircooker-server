@@ -114,3 +114,17 @@ published `.5` → `.6` same-volume upgrade on internal 5152 passed. Shared peac
 match source bytes and are precached; original art, manifest identity, household/session/
 recipe/sync proof persist. See [exact evidence](validation/github-peach-preview.json).
 Physical Safari/iPhone and full-product acceptance remain unverified.
+
+## Phone viewport preview
+
+`poc-20261021.7` from `b8e2b1b3e114df58ca17dcd23c8651342208cc0c` passed all six
+exact-source CI jobs in 39638277178, including real Chromium/WebKit layout checks with
+simulated safe areas. WebKit uses disposable persistent profiles because its ephemeral
+session rejected staging the real demo image Blob; production storage is unchanged.
+Publication 39638823438 passed both fresh architecture scans and Docker runtime checks.
+The image index is `sha256:49d8e3eed44a2cd2940eb5b08b6e33b04abf72aefe62eee9df52d439c47355ee`.
+All six release assets, public pull, image config/report/build identities and a disposable
+published `.6` → `.7` same-volume upgrade on internal 5152 passed. Packaged CSS includes
+the minimum mobile font, text autosizing and safe-area rules. Original assets, sessions
+and household data remain intact. See [exact evidence](validation/github-phone-viewport-preview.json).
+The reported physical-phone installation/keyboard behavior still needs operator confirmation.
