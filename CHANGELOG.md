@@ -1,5 +1,9 @@
 # Changelog
 
+- Show the one-time setup token in an unconfigured startup log entry, as requested by the
+  operator. Preserve it across restarts/upgrades, stop emitting it after setup, and support
+  `LOG_SETUP_TOKEN=false`. Keep passwords/session/integration secrets out of these logs.
+
 - Add Bash 5.3.9 for NAS/container terminal clients requiring `/bin/bash`; exercise reading
   the private setup token through Bash as the existing non-root user on both architectures.
 

@@ -13,11 +13,12 @@ valid HTTPS reverse proxy or Cloudflare Tunnel to `127.0.0.1:8080`, then run:
 export BASE_URL=https://meals.example.com
 docker compose -f compose.preview.yaml pull
 docker compose -f compose.preview.yaml up -d
-docker compose -f compose.preview.yaml exec mealf cat /data/config/setup-token
+docker compose -f compose.preview.yaml logs mealf
 ```
 
-Replace the example domain with your HTTPS origin. Open that origin to complete secure
-setup with the one-time token and your own household credentials. Then open `/app/`.
+Replace the example domain with your HTTPS origin. Copy `setup_token` from the startup
+`setup_required` entry in the container's Logs view; no terminal is needed. Open your HTTPS
+origin to complete setup with that token and your own household credentials. Then open `/app/`.
 On iPhone use Safari → Share → Add to Home Screen. Desktop Chromium also supports install.
 Ordinary HTTP is not supported for browser authentication or offline/PWA installation.
 See the [HTTPS/deployment guide](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/DEPLOYMENT.md)
@@ -29,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.2`. The moving `:preview`
+The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.3`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -39,6 +40,12 @@ manager, choose `/bin/bash` and run `cat /data/config/setup-token` before first-
 For an existing installation, update only the image version and recreate the container with
 the same volume and port settings; the token is removed after setup. No default password
 or public bootstrap token is introduced. `/bin/sh` remains available.
+
+The `.3` preview prints the existing one-time setup token to the operator's container logs
+at each unconfigured startup, so a terminal is optional. After setup the file is removed,
+the token is invalid and configured starts stop emitting it. Historical log lines remain;
+keep logs private. `LOG_SETUP_TOKEN=false` disables token logging when preferred. Passwords,
+session tokens and AI/Bring credentials do not share this logging exception.
 
 ## What you can try
 

@@ -32,7 +32,24 @@ def docker(*args):
             "DOCKER_CERT_PATH",
         )
     }
-    return subprocess.check_output(DOCKER + list(args), text=True, env=env).strip()
+    return subprocess.check_output(
+        DOCKER + list(args),
+        text=True,
+        env=env,
+        stderr=subprocess.STDOUT if args[0] == "logs" else None,
+    ).strip()
+
+
+def setup_log_events(name):
+    events = []
+    for line in docker("logs", name).splitlines():
+        try:
+            entry = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(entry, dict) and entry.get("event") == "setup_required":
+            events.append(entry)
+    return events
 
 
 def request(base, path, body=None, headers=None, method=None):
@@ -129,7 +146,10 @@ def main():
             )
             == "mealf-bash-terminal"
         )
-        token = docker("exec", name, "/bin/bash", "-lc", "cat /data/config/setup-token")
+        events = setup_log_events(name)
+        assert len(events) == 1
+        token = events[0]["setup_token"]
+        assert token == docker("exec", name, "/bin/bash", "-lc", "cat /data/config/setup-token")
         assert token == docker("exec", name, "cat", "/data/config/setup-token")
         device = str(uuid4())
         credentials = {
@@ -324,6 +344,8 @@ def main():
                     break
             except (URLError, ConnectionError, TimeoutError):
                 time.sleep(0.25)
+        # Docker retains old log lines. Configured restarts must not add token entries.
+        assert len(setup_log_events(name)) == 1
         try:
             request(
                 base,

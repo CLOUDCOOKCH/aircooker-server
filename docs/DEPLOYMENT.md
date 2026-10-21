@@ -9,17 +9,23 @@ Use Docker Engine with Compose v2 and a local filesystem-backed named volume:
 
 ```sh
 docker compose up --build -d
-docker compose exec aircooker cat /data/config/setup-token
+docker compose logs aircooker
 ```
 
 Set `BASE_URL` in Compose to the external HTTPS origin. Open that origin, enter the one-time
-token and create the household. The token is a random 48-byte URL-safe secret readable only
-from the protected data directory. Setup is transactional and locks after one household.
+token and create the household. Copy `setup_token` from the startup log entry with event
+`setup_required`; a container manager's Logs view works without opening a terminal.
+The token is generated from 48 random bytes and also stored in the protected data directory.
+It is logged once per server startup while unconfigured, including on upgrades/restarts that
+retain an existing token. Setup is transactional and locks after one household. Configured
+starts do not log a token. Old log records remain subject to the container log retention
+policy, but their token cannot be reused after setup. Keep container logs operator-only;
+`LOG_SETUP_TOKEN=false` disables this bootstrap-only disclosure.
 Use `docker compose exec -it aircooker python -m aircooker.cli recover` for local administrator
 password recovery. It revokes all sessions; no public recovery/reset endpoint exists.
 
 For a NAS/container-manager console, use `/bin/bash` (included since POC `.2`) or `/bin/sh`,
-then run `cat /data/config/setup-token`. Never paste the token into issues or logs. Earlier
+then run `cat /data/config/setup-token`. Never paste the token into support issues. Earlier
 POC `.1` has only `/bin/sh`; update the image while retaining the existing volume if your
 terminal client requires Bash. No host root access or extra container privileges are needed.
 
@@ -33,6 +39,7 @@ be read-only; `/tmp` is a bounded tmpfs. Keep the single-worker process model.
 | DATA_DIR | /data | Local persistent state; never use a live SQLite database on NFS/SMB |
 | BASE_URL | https://localhost | Exact allowed browser origin; no trailing application path |
 | LOG_LEVEL | info | Uvicorn level; keep third-party debug logging disabled |
+| LOG_SETUP_TOKEN | true | Print the one-time setup token at unconfigured startup; false disables it, with file access retained |
 | TRUSTED_PROXY_CIDRS | empty | Uvicorn trusted proxy addresses/CIDRs; never `*` on public ingress |
 | TZ | image setting | Process time zone only; household IANA zone controls planning |
 | AI_PROVIDER | unset | Optional openai/openai-compatible/anthropic/ollama/openwebui |

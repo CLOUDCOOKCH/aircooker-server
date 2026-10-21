@@ -13,7 +13,7 @@ have household-wide permission; this is not a multi-tenant role system.
 
 | Threat | Implemented control | Remaining verification |
 | --- | --- | --- |
-| Remote first-run takeover | Restricted random setup-token file, atomic single-row creation, bootstrap rate limit | Concurrent-request acceptance test |
+| Remote first-run takeover | Random setup token in restricted file and operator-only startup log, atomic single-row creation, bootstrap rate limit | Concurrent-request acceptance test |
 | Password guessing | Argon2id, persisted per-source and household rate limits, no default credentials | Resource/load testing |
 | Stolen/replayed refresh | Opaque hashed tokens, expiry, rotation history, replay revokes that session | Device Keychain/expiry UI tests |
 | Browser CSRF/XSS | HttpOnly Secure Strict cookies, CSRF double-submit + exact Origin, CSP, textContent, no remote scripts | Browser accessibility and session expiry workflows |
@@ -29,6 +29,16 @@ Network sources never use configured AI endpoints as fetch targets. Local AI HTT
 explicit operator opt-in; no import can select an internal address. DNS pinning still uses
 normal TLS verification. CORS is not enabled; unrelated browser origins cannot read API
 responses. Reverse proxy trust defaults empty, not universal.
+
+The user explicitly requested the one-time bootstrap token in container startup logs.
+Since POC `.3`, the server emits a `setup_required` JSON line with `setup_token` once per
+unconfigured startup, using the current retained token. It never emits that line after
+household setup, including with a stale token file. The token cannot bootstrap a configured
+instance and its file is removed on success. Historical logs are not erased; log readers
+are therefore trusted bootstrap administrators until setup completes. Operators can set
+`LOG_SETUP_TOKEN=false` and use the restricted file instead. This narrowly scoped exception
+does not cover account passwords, session/refresh tokens or provider credentials. Factory
+construction/OpenAPI generation and ordinary HTTP requests do not emit the token.
 
 Known open risks: request/body parsing still needs load and slow-client testing; there is no
 complete retention policy; image/ZIP decoders need broader adversarial and load validation; filesystem privileges do not defend

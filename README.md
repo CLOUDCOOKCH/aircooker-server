@@ -35,8 +35,10 @@ python -m aircooker
 ```
 
 The API binds port 8080. Use an HTTPS reverse proxy for browser login (cookies are always
-Secure) and for all iOS connections. Read the one-time setup token from
-`data/config/setup-token`; it is not logged and disappears after successful setup.
+Secure) and for all iOS connections. While unconfigured, each server startup prints a
+`setup_required` log entry containing the one-time `setup_token`. It also remains in
+`data/config/setup-token` until successful setup. Set `LOG_SETUP_TOKEN=false` to disable
+this operator-requested bootstrap log entry.
 
 ```sh
 python -m pytest -q
@@ -54,7 +56,7 @@ The source-build development path remains:
 
 ```sh
 docker compose up --build -d
-docker compose exec aircooker cat /data/config/setup-token
+docker compose logs aircooker
 ```
 
 Open the configured HTTPS public URL and complete setup. The username and password must be

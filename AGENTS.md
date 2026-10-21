@@ -3,6 +3,10 @@
 Read README.md and docs/IMPLEMENTATION.md before work. Preserve the user's master product
 requirements and maintain explicit tested/partial/unverified/blocked status.
 
+The user explicitly authorises startup logging of the one-time bootstrap setup token while
+unconfigured (default LOG_SETUP_TOKEN=true). This exception covers only that token, never
+passwords, sessions or integration credentials. Configured starts must not emit it.
+
 Use the existing checkout and Python/FastAPI modular monolith. Keep one SQLite writer
 process, a durable queue, and API contracts owned by this repository. Protect transactional
 sync, replay fingerprints, tombstones and Bring UUID ownership. Never silently enable

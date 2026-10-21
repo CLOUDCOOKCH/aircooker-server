@@ -230,6 +230,27 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
 
     @asynccontextmanager
     async def lifespan(app):
+        # Explicit operator-requested exception to credential redaction: only the
+        # one-time bootstrap token, only on startup while no household exists.
+        # Keep this out of factory construction (e.g. OpenAPI generation) and HTTP logs.
+        if os.environ.get("LOG_SETUP_TOKEN", "true").strip().lower() in {"1", "true", "yes"}:
+            with database.connect() as db:
+                if not db.execute("SELECT 1 FROM household").fetchone():
+                    try:
+                        setup_token = token_file.read_text().strip()
+                    except FileNotFoundError:
+                        setup_token = ""  # Another bootstrap may have just completed.
+                    if setup_token:
+                        print(
+                            json.dumps(
+                                {
+                                    "event": "setup_required",
+                                    "message": "Use this one-time token to finish mealf setup.",
+                                    "setup_token": setup_token,
+                                }
+                            ),
+                            flush=True,
+                        )
         task = asyncio.create_task(worker()) if run_worker else None
         yield
         if task:
