@@ -301,3 +301,10 @@ override system media queries and set native field colour scheme. Settings provi
 native radio previews; the console header provides a select. Device-local persistence,
 metadata, offline shell and accessibility checks are described in [THEMES.md](docs/THEMES.md).
 This extends appearance selection; historical system-only notes above describe Flo.
+
+Theme validation follow-up: filled destructive buttons now use `--on-danger`, preserving
+4.5:1 contrast with pale dark-mode danger backgrounds. At narrow phone widths, German
+Settings navigation displays “Optionen” with the full “Einstellungen” accessible name.
+Equal-width navigation items shrink and connection/demo controls wrap to stay inside the
+viewport. The existing native fieldset/grid minima are bounded; no root overflow hiding
+is used to mask layout faults.

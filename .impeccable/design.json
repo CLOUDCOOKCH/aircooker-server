@@ -52,7 +52,8 @@
         "--danger-soft": "#fbe4e9",
         "--danger-ink": "#851e36",
         "--warning-soft": "#f6e8c8",
-        "--warning-ink": "#6d4b16"
+        "--warning-ink": "#6d4b16",
+        "--on-danger": "#ffffff"
       },
       "dark": {
         "--canvas": "#201917",
@@ -79,7 +80,8 @@
         "--danger-soft": "#48232e",
         "--danger-ink": "#ffc8d4",
         "--warning-soft": "#42321e",
-        "--warning-ink": "#f0d49f"
+        "--warning-ink": "#f0d49f",
+        "--on-danger": "#3a211a"
       },
       "delivery": "Exact frontend/src/tokens.css bytes copied to frontend/dist/theme.css; console imports /app/theme.css"
     },
@@ -767,6 +769,7 @@
         "--scrim": "rgba(11, 7, 10, 0.72)",
         "--control-border": "#9e7d8c",
         "--danger": "#ffa8b6",
+        "--on-danger": "#321923",
         "--danger-soft": "#48232e",
         "--danger-ink": "#ffc8d4",
         "--warning-soft": "#3e3020",
@@ -794,6 +797,7 @@
         "--scrim": "rgba(24, 36, 28, 0.44)",
         "--control-border": "#7d8e77",
         "--danger": "#9d2944",
+        "--on-danger": "#ffffff",
         "--danger-soft": "#fbe7ec",
         "--danger-ink": "#85213a",
         "--warning-soft": "#f6edcf",

@@ -22,6 +22,7 @@
   --scrim: rgba(43, 24, 19, 0.44);
   --control-border: #a88b7e;
   --danger: #a12340;
+  --on-danger: #ffffff;
   --danger-soft: #fbe4e9;
   --danger-ink: #851e36;
   --warning-soft: #f6e8c8;
@@ -51,6 +52,7 @@
     --scrim: rgba(12, 7, 5, 0.64);
     --control-border: #a48679;
     --danger: #ffa6ba;
+    --on-danger: #3a211a;
     --danger-soft: #48232e;
     --danger-ink: #ffc8d4;
     --warning-soft: #42321e;
@@ -83,6 +85,7 @@
   --scrim: rgba(11, 7, 10, 0.72);
   --control-border: #9e7d8c;
   --danger: #ffa8b6;
+  --on-danger: #321923;
   --danger-soft: #48232e;
   --danger-ink: #ffc8d4;
   --warning-soft: #3e3020;
@@ -112,6 +115,7 @@
   --scrim: rgba(24, 36, 28, 0.44);
   --control-border: #7d8e77;
   --danger: #9d2944;
+  --on-danger: #ffffff;
   --danger-soft: #fbe7ec;
   --danger-ink: #85213a;
   --warning-soft: #f6edcf;

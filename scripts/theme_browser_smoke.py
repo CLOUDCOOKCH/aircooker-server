@@ -93,7 +93,7 @@ def main():
                         const s=getComputedStyle(document.documentElement);
                         return Object.fromEntries(['canvas','surface','ink','muted','soft','hover',
                           'accent','accent-hover','on-accent','accent-soft','accent-ink','accent-muted',
-                          'focus','selection','control-border','danger','danger-soft','danger-ink',
+                          'focus','selection','control-border','danger','on-danger','danger-soft','danger-ink',
                           'warning-soft','warning-ink'].map(k=>[k,s.getPropertyValue('--'+k).trim()]));
                         }"""
                     )
@@ -123,6 +123,7 @@ def main():
                         ("accent-ink", "accent-soft", 4.5),
                         ("accent-muted", "accent-soft", 4.5),
                         ("danger", "surface", 4.5),
+                        ("on-danger", "danger", 4.5),
                         ("danger-ink", "danger-soft", 4.5),
                         ("warning-ink", "warning-soft", 4.5),
                         ("ink", "selection", 4.5),
@@ -279,6 +280,7 @@ def main():
                 page.get_by_role("navigation").get_by_role("button", name="Einstellungen").click()
                 page.set_viewport_size({"width": 320, "height": 568})
                 check("after-dark", "dark")
+                page.screenshot(path=str(captures / "after-dark-settings-320-de.png"))
                 # A rejected preference write changes appearance but does not imply persistence.
                 page.evaluate(
                     """() => {

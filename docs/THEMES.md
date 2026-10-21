@@ -13,7 +13,8 @@ Tab and arrow keys work with the native radio group. Each choice describes its m
 
 The administration header offers the same choices, including before login. Original
 supplied peach and wordmark are preserved. Navigation retains glass, forms stay solid,
-and system typography/food photography stay intact. No palette crossfade obscures text.
+and system typography/food photography stay intact. No palette crossfade obscures text. Filled destructive buttons use a dedicated
+foreground token so pale pink dark-mode controls remain readable.
 
 ## Device preference and offline use
 
@@ -51,7 +52,9 @@ three themes under light and dark device modes, metadata/native controls, offlin
 selection/reload, cross-tab console reuse, selection before React loads, invalid stored
 IDs, read/write storage failures, 320px overflow and EN/DE strings. Settings fieldsets
 and phone grid tracks explicitly shrink below native intrinsic minima, including long
-German labels in WebKit. Computed foreground/
+German labels in WebKit. Phone navigation uses the shorter German “Optionen” label
+with the full “Einstellungen” accessible name; narrow connection/demo controls wrap
+instead of widening the page. Computed foreground/
 background pairs meet 4.5:1 and focus/control boundaries 3:1; Axe covers WCAG AA checks.
 CI runs the flow in Chromium and persistent-profile WebKit. Chromium uses browser
 offline emulation; WebKit stops the actual test backend and restores it after two

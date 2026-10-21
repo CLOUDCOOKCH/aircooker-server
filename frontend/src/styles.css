@@ -253,7 +253,7 @@ summary:focus-visible {
 }
 .danger-fill {
   background: var(--danger);
-  color: white;
+  color: var(--on-danger);
 }
 .icon-button {
   width: 44px;
@@ -356,6 +356,9 @@ summary:focus-visible {
 .brand-lockup--compact .brand-wordmark {
   width: 60px;
 }
+.nav-label-short {
+  display: none;
+}
 .nav-links {
   display: flex;
   flex-direction: column;
@@ -401,11 +404,16 @@ summary:focus-visible {
 }
 .connection-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   min-height: 44px;
   margin-bottom: 26px;
   font-size: 0.75rem;
+}
+.connection-bar > .muted {
+  min-width: 0;
+  flex: 1 1 90px;
 }
 .connection-bar > .text-button {
   margin-left: auto;
@@ -1829,8 +1837,15 @@ a.settings-row:hover {
     justify-content: space-between;
     gap: 2px;
   }
+  .nav-label-full {
+    display: none;
+  }
+  .nav-label-short {
+    display: block;
+  }
   .nav-links > button {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
