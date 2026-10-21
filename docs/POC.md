@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.5`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.6`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -67,6 +67,13 @@ behavior is unverified. Publication retries for this version preserve a complete
 do not rerun an older release expecting to publish newer main-branch changes.
 
 ## What you can try
+
+The `.6` preview adds more localized food jokes and a silent peach-slap Easter egg in
+the planner and admin console. Tap a peach, or focus it and press Enter/Space, for a
+hand-swipe, wobble and rotating comeback. Reduced motion keeps feedback without movement.
+The original artwork is unchanged. See [behavior and evidence](PEACH_EGG.md).
+Keep your existing volume and custom port/command/healthcheck settings when upgrading,
+including `5152:5152`. Save active edits before accepting the PWA update.
 
 - Create/edit recipes with structured ingredients, instructions, images and serving scaling.
 - Plan meals in the weekly calendar, use templates, recurrences, pantry and leftovers.

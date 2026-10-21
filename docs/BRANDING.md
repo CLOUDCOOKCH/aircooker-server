@@ -25,7 +25,8 @@ notices, download filenames and native app/extension display copy use mealf. Hou
 names chosen by users are preserved. The PWA manifest's `/app/` identity/start URL stays
 stable. The welcome/header, boot state, desktop navigation, footer and console use the
 actual wordmark and peach. Wordmark images expose the accessible name mealf; adjacent peach
-images are decorative. Favicon, 180px Apple touch icon, 192/512px manifest icons and a
+images have empty alt text inside localized native slap buttons (the boot image remains
+decorative). Wordmark links remain separate. See [interaction behavior](PEACH_EGG.md). Favicon, 180px Apple touch icon, 192/512px manifest icons and a
 separate maskable icon use the peach. Old icon URLs also resolve to the new artwork.
 
 Versioned filenames refresh icon metadata. The worker precaches the public assets and its

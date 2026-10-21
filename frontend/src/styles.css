@@ -2215,3 +2215,19 @@ a.settings-row:hover {
 .bring-status:hover {
   color: var(--accent);
 }
+
+.nav-brand .brand-lockup {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+.brand-wordmark {
+  min-width: 0;
+  object-fit: contain;
+}
+.brand-lockup > a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 44px;
+}

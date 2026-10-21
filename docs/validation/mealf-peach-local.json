@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-21",
+  "status": "implemented and locally tested; publication pending",
+  "scope": "PWA and administration peach Easter egg and localized food voice",
+  "review": "implementation-agent manual source/capture confirmation; no independent specialist or plugin-schema pass",
+  "backend_tests": 226,
+  "frontend_tests": 39,
+  "checks": [
+    "Ruff lint/format",
+    "mypy",
+    "TypeScript/Vite build",
+    "Prettier",
+    "OpenAPI drift",
+    "brand original/derivative hashes",
+    "Chromium PWA workflows",
+    "Chromium administration workflows",
+    "Chromium push-receiver regression"
+  ],
+  "interaction_checks": [
+    "click and repeated activation",
+    "native Enter and Space",
+    "reduced motion without image animations",
+    "English/German responses",
+    "viewport caption bounds",
+    "resize cleanup",
+    "offline PWA reaction"
+  ],
+  "resolved_findings": [
+    "Caption placement could retain stale desktop coordinates after viewport resize; reset measurement, clamp bounds, prefer above and clear on resize."
+  ],
+  "required_findings": 0,
+  "captures": {
+    "docs/screenshots/mealf-peach-contact-desktop.png": "5495eb27b84450cba76ad315a29372a004ba8013c33809ec9bd74b6b8c34cc1b",
+    "docs/screenshots/mealf-peach-reduced-phone-de-dark.png": "30a142ae923e20c7b9cd4fd02b0ff13b5abc145ed8f9f0d0beabe4f611110f54",
+    "docs/screenshots/mealf-peach-admin-phone-de-dark.png": "182957453697fc358452ba5434a33c300c614f24b68d36645b117bf89a2092ca",
+    "docs/screenshots/mealf-peach-home-desktop.png": "354513a58e9d8ac9ae320198a8ec2fd53a5aa7f3f3ba6e76d984faa3182f218b"
+  },
+  "capture_limits": "Contact capture pauses the real browser animation at 168ms. Admin capture records the layout after transient feedback. Still images do not establish movement.",
+  "unverified": [
+    "physical Safari/iPhone",
+    "screen-reader announcement delivery",
+    "complete product acceptance"
+  ],
+  "native": "unchanged"
+}

@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit && vite build && node scripts/attributions.mjs && node scripts/build-worker.mjs",
     "test": "node --experimental-strip-types --test src/lib/*.test.ts",
-    "format:check": "prettier --check src scripts public/push-handler.js index.html licenses vite.config.ts tsconfig.json package.json"
+    "format:check": "prettier --check src scripts public/push-handler.js public/peach.js public/peach.css index.html licenses vite.config.ts tsconfig.json package.json"
   },
   "dependencies": {
     "decimal.js": "10.6.0",

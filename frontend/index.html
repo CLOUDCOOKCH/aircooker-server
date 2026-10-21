@@ -17,9 +17,18 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/app/brand/apple-touch-icon-v1.png" />
     <link rel="manifest" href="/app/manifest.webmanifest" />
     <title>mealf — Your kitchen</title>
+    <link rel="stylesheet" href="/peach.css" />
+    <script src="/peach.js" defer></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <output
+      id="peach-reaction"
+      class="peach-reaction"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></output>
   </body>
 </html>

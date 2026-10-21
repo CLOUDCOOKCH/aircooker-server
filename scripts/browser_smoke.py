@@ -134,6 +134,31 @@ def main():
                     )
                     other.close()
 
+                page.locator(".wordmark [data-peach]").click()
+                expect(page.locator("#peach-reaction")).to_have_text("Oh, fork me.")
+                expect(page.locator("#authentication")).to_be_visible()
+                page.locator("#language").select_option("de")
+                page.set_viewport_size({"width": 390, "height": 844})
+                page.emulate_media(color_scheme="dark", reduced_motion="reduce")
+                page.locator(".auth-peach").click()
+                expect(page.locator("#peach-reaction")).to_have_text(
+                    "Oh, leck mich. Den Löffel natürlich."
+                )
+                assert page.locator(".auth-peach img").evaluate(
+                    "image => image.getAnimations().length === 0"
+                )
+                assert page.locator("#peach-reaction").evaluate(
+                    "e => { const r=e.getBoundingClientRect(); return r.left>=15 && r.right<=innerWidth-15 && r.top>=7 && r.bottom<=innerHeight-7; }"
+                )
+                path = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
+                path.mkdir(parents=True, exist_ok=True)
+                page.screenshot(
+                    path=str(path / "peach-console-reduced-phone-de-dark.png"), full_page=True
+                )
+                page.locator("#language").select_option("en")
+                page.set_viewport_size({"width": 1200, "height": 900})
+                page.emulate_media(color_scheme="light", reduced_motion="no-preference")
+                expect(page.locator("#peach-reaction")).to_be_empty(timeout=5000)
                 login = page.locator("#login")
                 expect(login.locator('[name="username"]')).to_be_visible()
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))

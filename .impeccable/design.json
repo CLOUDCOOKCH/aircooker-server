@@ -203,7 +203,16 @@
         }
       },
       "loading": "1.5s ease-out infinite",
-      "reducedMotion": "disable animations, transitions and smooth scrolling"
+      "reducedMotion": "disable animations, transitions and smooth scrolling",
+      "peachSlap": {
+        "source": "frontend/public/peach.js",
+        "duration": "560ms",
+        "feedbackDuration": "2200ms",
+        "peachEasing": "cubic-bezier(0.16,1,0.3,1)",
+        "handEasing": "ease-out",
+        "reducedMotion": "caption and accent-soft background only; no spatial animation",
+        "lifecycle": "latest activation cancels previous motion; hide/resize clears feedback"
+      }
     }
   },
   "responsive": {
@@ -682,5 +691,20 @@
     "source": "d15b37ad71e14a06186c09163d4b3a71b634877b",
     "evidence": "docs/validation/github-preview-retry.json",
     "scope": "PWA/console palette and confirmed gesture/selection behavior; native and physical iPhone/Safari not verified"
+  },
+  "peachInteraction": {
+    "source": [
+      "frontend/src/Brand.tsx",
+      "frontend/public/peach.css",
+      "frontend/public/peach.js",
+      "src/aircooker/web/index.html"
+    ],
+    "scope": "PWA and administration console; original art unchanged",
+    "target": "native button; at least 44px square; Enter/Space; separate wordmark link",
+    "hero": "86px desktop; 80px at <=600px",
+    "feedback": "polite live output; EN/DE; viewport-clamped inverse ink/canvas caption, 12px radius",
+    "networkOrPersistence": "none",
+    "evidence": "docs/PEACH_EGG.md",
+    "limits": "Chromium tested; physical Safari/iPhone and screen-reader delivery unverified; no independent review"
   }
 }

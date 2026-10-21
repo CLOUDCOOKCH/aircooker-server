@@ -1,5 +1,12 @@
 # Changelog
 
+- Add a silent peach-slap Easter egg in the PWA and admin console: native touch/keyboard
+  activation, a hand-swipe and 560ms wobble, localized rotating comebacks and reduced-motion
+  feedback. Add more English/German food jokes without changing security/help language.
+  Original artwork and persistent identities remain intact. Local 226 backend/39 frontend
+  tests and Chromium interaction/offline/admin regressions pass; physical Safari unverified.
+  See [interaction evidence](docs/PEACH_EGG.md). Preview publication tracked separately.
+
 - Publish `poc-20261021.5` with the shared Mealf palette/admin design, confirmed PWA control
   selection policy and safe release retries. All six exact-source CI jobs pass (226 backend
   tests per architecture, 39 frontend tests); both fresh release images pass security/runtime

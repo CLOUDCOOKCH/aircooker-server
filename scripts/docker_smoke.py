@@ -143,6 +143,11 @@ def main():
         # The installed wheel must ship the console's palette, not only the Vite bundle.
         assert request(base, "/app/theme.css") == Path("frontend/src/tokens.css").read_bytes()
         assert b"/app/theme.css" in request(base, "/console.css")
+        # Shared peach interaction must ship in the wheel and the installed PWA shell.
+        assert b"/app/peach.js" in shell and b"/app/peach.css" in shell
+        assert b"/app/peach.js" in request(base, "/")
+        assert b"peach.animate" in request(base, "/app/peach.js")
+        assert b"prefers-reduced-motion" in request(base, "/app/peach.css")
         # NAS/container consoles may require Bash. The same non-root account must
         # be able to read its private bootstrap token through an actual Bash process.
         version = docker("exec", name, "/bin/bash", "--version")

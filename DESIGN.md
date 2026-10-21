@@ -260,3 +260,13 @@ This is a bounded visual/source documentation handoff. It does not establish com
 - Don't reuse historical green-palette contrast ratios as evidence for the current colours.
 - Don't infer physical iPhone, live-service, complete accessibility or complete-product acceptance from Chromium screenshots.
 - Don't rename persistent storage, session, API, archive or ownership identifiers as part of a visual change.
+
+Peach interaction update, 2026-10-21: the original peach is now a native button with a
+44px minimum hit target; wordmark navigation is a separate link. Tap, Enter or Space
+starts a silent 560ms hand-swipe/squash/wobble and one of four EN/DE comebacks.
+Reduced motion retains a caption and accent-soft feedback without movement. Repeated
+activation cancels prior motion; hiding or resizing clears it. Shared peach.js/peach.css
+ship in the PWA offline shell and admin console. Existing palette tokens and artwork
+bytes are unchanged. See [behavior and scoped manual evidence](docs/PEACH_EGG.md).
+Chromium click/keyboard/reduced-motion/offline/admin checks pass. Physical Safari/iPhone
+and screen-reader delivery are unverified; no independent specialist/schema pass claimed.

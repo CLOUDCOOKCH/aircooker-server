@@ -11,3 +11,13 @@ Desktop uses a sticky 220px glass sidebar in a 1560px shell with 24px gap/paddin
 Voice: localized food innuendo belongs only in welcome/login, empty-state, sidebar and footer contexts. Setup instructions, errors, help, password/session security, consent, destructive confirmations and integration verification stay literal and actionable. Never imply that storing credentials validates Bring!/AI or that a queued job completed externally. Never expose secrets or household content in diagnostics.
 
 Evidence: genuine current [login desktop](../../docs/screenshots/mealf-palette-admin-login-desktop.png), [German dark login phone](../../docs/screenshots/mealf-palette-admin-login-phone-de-dark.png), [overview desktop](../../docs/screenshots/mealf-palette-admin-desktop.png) and [overview dark desktop](../../docs/screenshots/mealf-palette-admin-desktop-dark.png) captures use synthetic data. The implementation handoff reports passing Chromium administration workflows plus Axe on setup/login and all six pages in both themes, and 320px/200% text overflow checks. The documentation handoff preserves captures and extracts sources; it does not rerun browser checks. The [manual palette finish review](../../docs/validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings; publication is verified in `poc-20261021.5`; see the combined release evidence. Launcher/detector/schema validation, physical iPhone/Safari and live external integrations remain unverified. Existing deletion/extended-diagnostics gaps and complete-product limits remain in [IMPLEMENTATION.md](../../docs/IMPLEMENTATION.md).
+
+Peach interaction update, 2026-10-21: the original peach is now a native button with a
+44px minimum hit target; wordmark navigation is a separate link. Tap, Enter or Space
+starts a silent 560ms hand-swipe/squash/wobble and one of four EN/DE comebacks.
+Reduced motion retains a caption and accent-soft feedback without movement. Repeated
+activation cancels prior motion; hiding or resizing clears it. Shared peach.js/peach.css
+ship in the PWA offline shell and admin console. Existing palette tokens and artwork
+bytes are unchanged. See [behavior and scoped manual evidence](../../docs/PEACH_EGG.md).
+Chromium click/keyboard/reduced-motion/offline/admin checks pass. Physical Safari/iPhone
+and screen-reader delivery are unverified; no independent specialist/schema pass claimed.

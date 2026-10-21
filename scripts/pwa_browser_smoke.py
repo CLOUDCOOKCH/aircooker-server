@@ -99,6 +99,54 @@ def main():
                 expect(
                     page.get_by_role("heading", name="Get your hot buns in here.")
                 ).to_be_visible()
+                peach = page.locator(".welcome-content [data-peach]")
+                peach.click()
+                expect(page.locator("#peach-reaction")).to_have_text("Oh, fork me.")
+                assert peach.locator("img").evaluate(
+                    "image => image.getAnimations().some(a => a.effect.getKeyframes().length > 4)"
+                )
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    # A genuine rendered contact frame; animation behavior is asserted above.
+                    peach.evaluate(
+                        "button => { for (const e of button.querySelectorAll('img,.peach-hand')) for (const a of e.getAnimations()) {a.pause();a.currentTime=168;} }"
+                    )
+                    page.screenshot(
+                        path=str(captures / "peach-contact-desktop.png"),
+                        animations="allow",
+                        full_page=True,
+                    )
+                peach.click()
+                expect(page.locator("#peach-reaction")).to_have_text(
+                    "Harder. The dough, you menace."
+                )
+                peach.focus()
+                peach.press("Enter")
+                expect(page.locator("#peach-reaction")).to_have_text(
+                    "Dinner first. Spanking later."
+                )
+                page.emulate_media(reduced_motion="reduce")
+                peach.press("Space")
+                expect(page.locator("#peach-reaction")).to_have_text(
+                    "Tenderise the peach. Respect the chef."
+                )
+                assert peach.locator("img").evaluate("image => image.getAnimations().length === 0")
+                page.get_by_role("combobox", name="Language", exact=True).select_option("de")
+                page.set_viewport_size({"width": 390, "height": 844})
+                page.emulate_media(color_scheme="dark", reduced_motion="reduce")
+                peach.click()
+                expect(page.locator("#peach-reaction")).to_have_text(
+                    "Oh, leck mich. Den Löffel natürlich."
+                )
+                assert page.locator("#peach-reaction").evaluate(
+                    "e => { const r=e.getBoundingClientRect(); return r.left>=15 && r.right<=innerWidth-15 && r.top>=7 && r.bottom<=innerHeight-7; }"
+                )
+                audit("peach reaction German dark reduced motion")
+                capture("peach-reduced-phone-de-dark.png")
+                page.get_by_role("combobox", name="Sprache", exact=True).select_option("en")
+                page.set_viewport_size({"width": 1440, "height": 1000})
+                page.emulate_media(color_scheme="light", reduced_motion="no-preference")
+                expect(page.locator("#peach-reaction")).to_be_empty(timeout=5000)
+                peach.evaluate("button => button.blur()")
                 # App chrome does not accidentally select; recipe reading and inputs opt in.
                 page.locator(".welcome-description").dblclick()
                 assert page.evaluate("!window.getSelection()?.toString().trim()")
@@ -203,6 +251,9 @@ def main():
                 expect(
                     page.get_by_role("button", name="Demo pasta edited offline", exact=False).first
                 ).to_be_visible()
+                # Shared public egg assets are cached; taps never navigate or lose offline work.
+                page.locator(".app-footer [data-peach]").click()
+                expect(page.locator("#peach-reaction")).not_to_be_empty()
                 context.set_offline(False)
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
                 page.get_by_label("Language", exact=True).select_option("de")

@@ -21,7 +21,7 @@ import {
   useApp,
 } from './model';
 import type { Runtime, SystemInfo, Tab } from './model';
-import { Brand } from './Brand';
+import { Brand, Peach } from './Brand';
 import { translate } from './i18n';
 import type { Language } from './i18n';
 import { LocalStore } from './lib/store';
@@ -162,9 +162,7 @@ function Welcome({
   return (
     <div className="welcome-shell">
       <header className="welcome-header">
-        <a href="/app/" className="wordmark">
-          <Brand />
-        </a>
+        <Brand href="/app/" language={language} />
         <select
           aria-label={t('language')}
           value={language}
@@ -175,13 +173,7 @@ function Welcome({
         </select>
       </header>
       <main className="welcome-content">
-        <img
-          className="welcome-icon"
-          src="/app/brand/peach-v1.png"
-          alt=""
-          width="384"
-          height="384"
-        />
+        <Peach language={language} hero />
         <h1>{form ? (info?.configured ? t('loginHeadline') : t('setup')) : t('welcome')}</h1>
         <p className="welcome-description">
           {form ? (info?.configured ? t('loginJoke') : t('selfHosted')) : t('welcomeBody')}
@@ -430,7 +422,7 @@ function Kitchen({
       </a>
       <nav className="app-nav" aria-label="mealf">
         <div className="nav-brand">
-          <Brand />
+          <Brand language={app.language} />
         </div>
         <div className="nav-links">
           {tabs.map(({ id, icon: Icon }) => (
@@ -545,7 +537,7 @@ function Kitchen({
           {content}
         </main>
         <footer className="app-footer">
-          <Brand compact />
+          <Brand compact language={app.language} />
         </footer>
       </div>
       {app.notice && (

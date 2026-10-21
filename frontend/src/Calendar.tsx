@@ -151,7 +151,7 @@ export function Home({
   const upcoming = occurrences(meals, addDays(day, 1), addDays(day, 14)).slice(0, 3);
   return (
     <>
-      <PageHeader title={t('kitchen')}>
+      <PageHeader title={t('kitchen')} subtitle={t('homeJoke')}>
         <IconButton label={t('importRecipe')} onClick={importRecipe}>
           <Upload size={20} />
           <span className="sr-only">{t('importRecipe')}</span>
