@@ -1,5 +1,13 @@
 # Changelog
 
+- Add native camera/image choosing for recipe screenshots and photos of written recipes.
+  Local EN/DE OCR produces a durable editable preview; saving requires explicit review.
+  Persist source images and queued imports atomically offline, strip image metadata,
+  expose correctable recognized text and retain replay/cancellation semantics. Optional
+  configured AI receives only recognized text after consent. Cover real OCR, preview/save,
+  offline reload, lost replies, terminal-history queue starvation and synthetic AI privacy.
+  Physical camera/iPhone and live AI remain unverified; publication evidence is separate.
+
 - Add a shared PWA/admin theme library: Flo (existing system appearance), After Dark
   (fixed dark, ink/oxblood/rose) and Sunday (fixed light, linen/sage). Persist browser-local
   choice, apply before React starts, match native controls and browser chrome, and keep

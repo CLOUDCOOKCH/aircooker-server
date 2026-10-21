@@ -219,6 +219,7 @@ class Refresh(Model):
 
 
 class ImportRequest(Model):
+    image_id: UUID | None = None
     request_id: UUID = Field(default_factory=uuid4)
     use_ai: bool = False
     consent_external_ai: bool = False
@@ -227,9 +228,22 @@ class ImportRequest(Model):
 
     @model_validator(mode="after")
     def has_content(self):
-        if not self.source_url and not self.text:
-            raise ValueError("Provide a URL or source text")
+        if not self.source_url and not self.text and not self.image_id:
+            raise ValueError("Provide a URL, source text or uploaded image")
         return self
+
+
+class RecipeImportStatus(Model):
+    id: UUID
+    source_url: str | None
+    source_platform: str
+    state: Literal["queued", "preview", "needs_input", "confirmed", "cancelled"]
+    recipe: Recipe | None
+    warnings: list[str]
+    error_code: str | None
+    confirmed_recipe_id: UUID | None
+    created_at: float
+    recognized_text: str | None = Field(default=None, max_length=100000)
 
 
 class BringCredentials(Model):

@@ -1460,6 +1460,8 @@ export interface components {
              * @default false
              */
             consent_external_ai: boolean;
+            /** Image Id */
+            image_id?: string | null;
             /**
              * Request Id
              * Format: uuid
@@ -1476,7 +1478,7 @@ export interface components {
             use_ai: boolean;
         };
         /** Ingredient */
-        Ingredient: {
+        "Ingredient-Input": {
             /**
              * Id
              * Format: uuid
@@ -1498,6 +1500,35 @@ export interface components {
             quantity?: number | string | null;
             /** Quantity Max */
             quantity_max?: number | string | null;
+            /**
+             * Unit
+             * @default
+             */
+            unit: string;
+        };
+        /** Ingredient */
+        "Ingredient-Output": {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Original Text
+             * @default
+             */
+            original_text: string;
+            /**
+             * Preparation
+             * @default
+             */
+            preparation: string;
+            /** Quantity */
+            quantity?: string | null;
+            /** Quantity Max */
+            quantity_max?: string | null;
             /**
              * Unit
              * @default
@@ -1670,7 +1701,7 @@ export interface components {
              */
             operation: "upsert" | "delete";
             /** Payload */
-            payload?: components["schemas"]["Recipe"] | components["schemas"]["Meal"] | components["schemas"]["Pantry"] | components["schemas"]["Leftover"] | components["schemas"]["Template"] | null;
+            payload?: components["schemas"]["Recipe-Input"] | components["schemas"]["Meal"] | components["schemas"]["Pantry"] | components["schemas"]["Leftover"] | components["schemas"]["Template"] | null;
         };
         /** MutationResult */
         MutationResult: {
@@ -1884,7 +1915,7 @@ export interface components {
             request_id: string;
         };
         /** Recipe */
-        Recipe: {
+        "Recipe-Input": {
             /**
              * Description
              * @default
@@ -1893,7 +1924,7 @@ export interface components {
             /** Image Id */
             image_id?: string | null;
             /** Ingredients */
-            ingredients?: components["schemas"]["Ingredient"][];
+            ingredients?: components["schemas"]["Ingredient-Input"][];
             /**
              * Notes
              * @default
@@ -1927,6 +1958,79 @@ export interface components {
             steps?: string[];
             /** Title */
             title: string;
+        };
+        /** Recipe */
+        "Recipe-Output": {
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Image Id */
+            image_id?: string | null;
+            /** Ingredients */
+            ingredients?: components["schemas"]["Ingredient-Output"][];
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /** Nutrition */
+            nutrition?: {
+                [key: string]: string;
+            } | null;
+            /** Nutrition Source */
+            nutrition_source?: string | null;
+            /** Provenance */
+            provenance?: {
+                [key: string]: string;
+            };
+            /** Rating */
+            rating?: number | null;
+            /**
+             * Servings
+             * @default 2
+             */
+            servings: string;
+            /**
+             * Source Platform
+             * @default manual
+             */
+            source_platform: string;
+            /** Source Url */
+            source_url?: string | null;
+            /** Steps */
+            steps?: string[];
+            /** Title */
+            title: string;
+        };
+        /** RecipeImportStatus */
+        RecipeImportStatus: {
+            /** Confirmed Recipe Id */
+            confirmed_recipe_id: string | null;
+            /** Created At */
+            created_at: number;
+            /** Error Code */
+            error_code: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            recipe: components["schemas"]["Recipe-Output"] | null;
+            /** Recognized Text */
+            recognized_text?: string | null;
+            /** Source Platform */
+            source_platform: string;
+            /** Source Url */
+            source_url: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "preview" | "needs_input" | "confirmed" | "cancelled";
+            /** Warnings */
+            warnings: string[];
         };
         /** Recurrence */
         Recurrence: {
@@ -3052,7 +3156,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RecipeImportStatus"];
                 };
             };
             /** @description Validation Error */

@@ -9,6 +9,9 @@ reviewed imports and two-device synchronisation have real Chromium acceptance co
 The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
 and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md). Choose Flo, After Dark or
 Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
+Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
+extract English/German text locally and review it before saving. See
+[photo import, privacy and limits](docs/IMAGE_IMPORT.md).
 
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
@@ -27,6 +30,8 @@ Python 3.12 or newer:
 
 For browser surfaces, first build with Node 24: `npm --prefix frontend ci`, then
 `npm --prefix frontend run build`. Docker performs this automatically.
+Source image-import development/tests also require Tesseract with English and German
+language data; [installation and test guidance](docs/IMAGE_IMPORT.md#development-and-evidence).
 
 ```sh
 python -m venv .venv
@@ -91,6 +96,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Retention | Bounded hourly terminal-source/diagnostic/session cleanup, startup transfer cleanup and local dry-run CLI; sync/Bring/media proofs retained ([policy](docs/RETENTION.md)) |
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared defaults and bounded explicit-approval learning have offline/API/browser coverage ([guide](docs/PLANNING_PREFERENCES.md)) |
 | Website recipe import | JSON-LD previews and conservative metric/EN/DE fractions/ranges parsing; images and broader HTML extraction remain partial |
+| Photo/screenshot recipe import | Camera/chooser, local EN/DE OCR, durable offline image queue and editable explicit-save previews; real Chromium tested, physical camera/iPhone unverified ([guide](docs/IMAGE_IMPORT.md)) |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |
 | AI | Encrypted admin configuration, bounded text adapters and synthetic probe tests; no live verification |
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |

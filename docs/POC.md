@@ -106,7 +106,8 @@ The glass-style PWA is the primary client. Native iOS code is retained for later
   synthetic coverage; unsupported Bring! writes remain disabled until compatibility is
   proven. No official Bring! affiliation is implied.
 - Social imports cannot bypass private content, authentication or platform restrictions.
-  Captions/transcripts and image extraction are incomplete; manual content remains available.
+  Captions/transcripts remain incomplete. Written-recipe image OCR is available in English
+  and German; other layouts/languages and handwriting may require correction/manual entry.
 - Web Push is optional and needs connectivity. The receiver/scheduler have automated tests,
   but live push vendors and physical iPhone delivery have not been validated. It cannot
   guarantee timed offline reminders. Native share extensions/widgets are not PWA features.
@@ -139,3 +140,13 @@ offline and are separate from shared household data. Original art is unchanged.
 See [theme behavior and testing](THEMES.md). Keep your existing volume, port mapping,
 command and healthcheck, including `5152:5152`; update only the image reference.
 Save edits and accept the PWA update. No browser-data reset or reinstall is required.
+
+The `.10` preview adds **Import recipe → Photo or screenshot → Take photo / Choose image**.
+Your server recognizes printed English/German text locally and opens an editable preview;
+only Save adds the recipe. Images and jobs persist offline until the server is reachable.
+Optional configured AI receives only recognized text after consent. Clear full-recipe images
+work best; photos of a finished dish do not provide a recipe. Review quantities and
+instructions. See [photo import, privacy and limits](IMAGE_IMPORT.md). Keep the same volume,
+port mapping, command and healthcheck, including `5152:5152`; change only the image reference
+to `ghcr.io/cloudcookch/mealf-server:poc-20261021.10` once published and accept the PWA update.
+Do not clear browser data or reinstall while local work is pending.

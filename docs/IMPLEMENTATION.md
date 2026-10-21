@@ -1,5 +1,16 @@
 # Implementation checklist and evidence
 
+**Photo recipe import, 2026-10-21 — implemented and tested locally; publication pending:**
+PWA Import recipe offers Take photo and Choose image. Atomic local image/job persistence,
+metadata-stripped media upload, durable bounded local EN/DE Tesseract OCR and conservative
+section parsing produce an editable preview. Explicit Save creates the recipe. Unclear
+text stays correctable with manual fallback; optional text AI requires consent and never
+receives the image. Terminal preview OCR text expires after 30 days; replay proofs and
+source media remain under existing retention/quota rules. Local 240 backend/45 web tests,
+real Chromium chooser/OCR/offline-save/reload/Axe and existing PWA regressions pass.
+Fresh native Docker scans/runtime and WebKit CI are pending. Physical camera/iPhone and
+live AI are unverified. See [photo import](IMAGE_IMPORT.md) and local validation evidence.
+
 **Theme library, 2026-10-21 — published and verified in `poc-20261021.9`:** Settings offers Flo
 (existing system light/dark), After Dark (fixed dark romance palette) and Sunday
 (fixed light sage/linen). A shared early controller and semantic CSS cover PWA and

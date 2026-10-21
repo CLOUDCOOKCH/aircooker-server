@@ -442,6 +442,44 @@ def main():
         )
         assert request(base, "/api/v1/media/" + image_id, headers=headers) == canonical_photo
         before_import = request(base, "/api/v1/recipes", headers=headers)["items"]
+        capabilities = request(base, "/api/v1/system/capabilities")
+        assert capabilities["image_recipe_import"] is True
+        assert capabilities["image_import_languages"] == ["en", "de"]
+        # Exercise the packaged native OCR engine/models on both CPU architectures.
+        # Previews remain separate from recipes until explicitly confirmed.
+        for language, title in [("en", "Lemon rice"), ("de", "Tomatenreis")]:
+            document_id = str(uuid4())
+            document = Path("tests/fixtures/recipe-photo-" + language + ".png").read_bytes()
+            multipart = (
+                f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="recipe.png"\r\nContent-Type: image/png\r\n\r\n'.encode()
+                + document
+                + f"\r\n--{boundary}--\r\n".encode()
+            )
+            request(base, "/api/v1/media/" + document_id, multipart, upload_headers, "PUT")
+            pending_image = request(
+                base,
+                "/api/v1/imports",
+                {"request_id": str(uuid4()), "image_id": document_id},
+                headers,
+            )
+            for _ in range(150):
+                image_draft = request(
+                    base, "/api/v1/imports/" + pending_image["id"], headers=headers
+                )
+                if image_draft["state"] == "preview":
+                    break
+                assert image_draft["state"] != "needs_input", image_draft.get("error_code")
+                time.sleep(0.2)
+            else:
+                raise AssertionError("Packaged OCR did not produce a preview")
+            assert image_draft["recipe"]["title"] == title
+            assert image_draft["recipe"]["image_id"] == document_id
+            assert image_draft["recipe"]["ingredients"][0]["quantity"] == "200"
+            assert image_draft["recognized_text"]
+            assert request(base, "/api/v1/recipes", headers=headers)["items"] == before_import
+            request(
+                base, "/api/v1/imports/" + pending_image["id"], headers=headers, method="DELETE"
+            )
         importing = request(
             base,
             "/api/v1/imports",

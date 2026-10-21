@@ -308,3 +308,12 @@ Settings navigation displays “Optionen” with the full “Einstellungen” ac
 Equal-width navigation items shrink and connection/demo controls wrap to stay inside the
 viewport. The existing native fieldset/grid minima are bounded; no root overflow hiding
 is used to mask layout faults.
+
+Photo import extension, 2026-10-21: extend the existing import surface with a native
+Link or text / Photo or screenshot choice and Take photo / Choose image actions. Use
+shared theme roles and solid controls, a contained image preview, visible queue status
+and the existing recipe editor. Review notices explain uncertainty without jokes;
+recognised source text stays selectable. Existing Flo/After Dark/Sunday palettes, PNG
+brand artwork, glass navigation and mobile safe-area/field constraints remain authoritative.
+This is an ordinary task-flow extension, not a new visual world. Browser captures use
+synthetic printed recipes; camera hardware is outside that evidence.

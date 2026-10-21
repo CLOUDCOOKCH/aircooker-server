@@ -378,7 +378,9 @@ function Kitchen({
                 initial: {
                   ...emptyRecipe(),
                   source_url: task.body.source_url ?? null,
-                  notes: task.body.text ?? '',
+                  notes: task.recognizedText ?? task.body.text ?? '',
+                  image_id: task.body.image_id ?? null,
+                  source_platform: task.body.image_id ? 'image' : 'manual',
                   provenance: { fallback: 'manual_review' },
                 },
                 draftID: 'manual-import:' + task.id,

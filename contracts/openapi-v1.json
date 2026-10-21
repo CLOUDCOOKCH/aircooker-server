@@ -763,6 +763,18 @@
             "title": "Consent External Ai",
             "type": "boolean"
           },
+          "image_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Id"
+          },
           "request_id": {
             "format": "uuid",
             "title": "Request Id",
@@ -801,7 +813,7 @@
         "title": "ImportRequest",
         "type": "object"
       },
-      "Ingredient": {
+      "Ingredient-Input": {
         "additionalProperties": false,
         "properties": {
           "id": {
@@ -851,6 +863,70 @@
                 "minimum": 0.0,
                 "type": "number"
               },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Max"
+          },
+          "unit": {
+            "default": "",
+            "maxLength": 30,
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Ingredient",
+        "type": "object"
+      },
+      "Ingredient-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "original_text": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Original Text",
+            "type": "string"
+          },
+          "preparation": {
+            "default": "",
+            "maxLength": 300,
+            "title": "Preparation",
+            "type": "string"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "quantity_max": {
+            "anyOf": [
               {
                 "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
                 "type": "string"
@@ -1193,7 +1269,7 @@
           "payload": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Recipe"
+                "$ref": "#/components/schemas/Recipe-Input"
               },
               {
                 "$ref": "#/components/schemas/Meal"
@@ -1763,7 +1839,7 @@
         "title": "PushTest",
         "type": "object"
       },
-      "Recipe": {
+      "Recipe-Input": {
         "additionalProperties": false,
         "properties": {
           "description": {
@@ -1786,7 +1862,7 @@
           },
           "ingredients": {
             "items": {
-              "$ref": "#/components/schemas/Ingredient"
+              "$ref": "#/components/schemas/Ingredient-Input"
             },
             "maxItems": 300,
             "title": "Ingredients",
@@ -1899,6 +1975,240 @@
           "title"
         ],
         "title": "Recipe",
+        "type": "object"
+      },
+      "Recipe-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Description",
+            "type": "string"
+          },
+          "image_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Id"
+          },
+          "ingredients": {
+            "items": {
+              "$ref": "#/components/schemas/Ingredient-Output"
+            },
+            "maxItems": 300,
+            "title": "Ingredients",
+            "type": "array"
+          },
+          "notes": {
+            "default": "",
+            "maxLength": 10000,
+            "title": "Notes",
+            "type": "string"
+          },
+          "nutrition": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nutrition"
+          },
+          "nutrition_source": {
+            "anyOf": [
+              {
+                "maxLength": 2048,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nutrition Source"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 50,
+            "title": "Provenance",
+            "type": "object"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "maximum": 5.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "servings": {
+            "default": "2",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Servings",
+            "type": "string"
+          },
+          "source_platform": {
+            "default": "manual",
+            "maxLength": 50,
+            "title": "Source Platform",
+            "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "maxLength": 2048,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "steps": {
+            "items": {
+              "maxLength": 5000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 200,
+            "title": "Steps",
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "Recipe",
+        "type": "object"
+      },
+      "RecipeImportStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmed_recipe_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed Recipe Id"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "number"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "recipe": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Recipe-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recognized_text": {
+            "anyOf": [
+              {
+                "maxLength": 100000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recognized Text"
+          },
+          "source_platform": {
+            "title": "Source Platform",
+            "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "state": {
+            "enum": [
+              "queued",
+              "preview",
+              "needs_input",
+              "confirmed",
+              "cancelled"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "source_url",
+          "source_platform",
+          "state",
+          "recipe",
+          "warnings",
+          "error_code",
+          "confirmed_recipe_id",
+          "created_at"
+        ],
+        "title": "RecipeImportStatus",
         "type": "object"
       },
       "Recurrence": {
@@ -3670,7 +3980,9 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/RecipeImportStatus"
+                }
               }
             },
             "description": "Successful Response"

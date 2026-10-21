@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-21",
+  "status": "implemented and tested locally; fresh image/WebKit CI and publication pending",
+  "backend_tests": 240,
+  "frontend_tests": 45,
+  "real_browser": {
+    "engine": "chromium",
+    "backend": "real",
+    "ocr": "real Tesseract eng+deu",
+    "offline": "browser offline flag",
+    "images": "synthetic EN/DE fixtures",
+    "saved_only_after_review": true,
+    "offline_image_and_edit_reload": true,
+    "camera": "capture and native chooser; no physical camera verification",
+    "axe": "desktop EN/light, phone DE/dark and 320px"
+  },
+  "regressions": [
+    "existing full PWA offline/sync/import/calendar workflow",
+    "Ruff lint/format, mypy, OpenAPI drift, frontend format/type/build, original/derived brand assets and runtime licence inventory"
+  ],
+  "additional_checks": [
+    "AI consent before outbound call; mocked provider wire carries only OCR text",
+    "25 identical import retries retain one durable job",
+    "image/source replay survives restart and terminal-source retention",
+    "100 terminal imports cannot starve a new image job",
+    "cancel while upload in flight; stale poll cannot resurrect cancellation"
+  ],
+  "captures": {
+    "docs/screenshots/mealf-image-chooser-desktop.png": {
+      "sha256": "4f52e0fee9c308c47fc4413fb2a6a8f4661b60057f4ef5bc1f7f9a1bd8a050c5"
+    },
+    "docs/screenshots/mealf-image-review-desktop.png": {
+      "sha256": "4f3784c6e8abede9f1d7f9c4187095f23df7342983f72eeab0e443381783adee"
+    },
+    "docs/screenshots/mealf-image-camera-phone-de-dark.png": {
+      "sha256": "38ab9a6b7269b5b1b25293a3895352c2749c77596142a04198eb61ede5e84471"
+    },
+    "docs/screenshots/mealf-image-review-phone-de-dark.png": {
+      "sha256": "8a07f5530e86067e8feb3b86bdf3ccc55923de11183079df0dafd35e31d33835"
+    }
+  },
+  "visual_review": "Batched actual desktop EN/light and phone DE/After Dark captures reviewed against incumbent Mealf surfaces; no further visual changes required. Native fields and recipe text remain selectable. One contrast issue in preview helper copy corrected with existing accent-muted token before these captures.",
+  "limits": [
+    "Physical camera/iPhone not tested",
+    "No live AI/Bring verification",
+    "Clean printed fixtures prove pipeline, not handwriting/arbitrary OCR accuracy",
+    "Local WebKit download blocked by network policy; CI required",
+    "Unused source media remains under existing retained-media quota; no unsafe garbage collection"
+  ],
+  "design_review": {
+    "scope": "fresh read-only review of changed source and supplied actual captures; one queue-history issue fixed with regression",
+    "plugin_schema_or_visual_detector_pass_claimed": false
+  }
+}

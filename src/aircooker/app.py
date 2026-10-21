@@ -55,6 +55,7 @@ from .bring_runtime import UnofficialBringConnector
 from .db import Database
 from .diagnostics import diagnostics, recent_jobs
 from .errors import DomainError
+from .image_import import ocr_available, printed_recipe, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
 from .importing import bounded_fetch_html, extract, platform_for
 from .jobs import claim, enqueue, finish
@@ -73,6 +74,7 @@ from .models import (
     PasswordChange,
     Pull,
     Push,
+    RecipeImportStatus,
     Refresh,
     SessionInfo,
     Setup,
@@ -150,6 +152,23 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 return
             try:
                 content = payload.get("text")
+                image_id = payload.get("image_id")
+                if image_id:
+                    if not content:
+                        with database.connect() as db:
+                            media = db.execute(
+                                "SELECT data FROM recipe_media WHERE id=?", (image_id,)
+                            ).fetchone()
+                        if not media:
+                            raise DomainError("image_not_found", 404)
+                        content = recognise_text(media["data"])
+                    with database.transaction() as db:
+                        updated = db.execute(
+                            "UPDATE import_draft SET recognized_text=? WHERE id=? AND state NOT IN ('cancelled','confirmed')",
+                            (content, iid),
+                        ).rowcount
+                    if not updated:
+                        return
                 if not content:
                     content = bounded_fetch_html(draft["source_url"])
                 if payload.get("use_ai"):
@@ -172,6 +191,16 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     recipe.source_url = draft["source_url"]
                     recipe.source_platform = draft["source_platform"]
                     warnings = ["ai_extracted_review_all_fields"]
+                    if image_id:
+                        recipe.image_id = UUID(image_id)
+                        recipe.provenance["input"] = (
+                            "local-image-ocr"
+                            if not payload.get("text")
+                            else "user_corrected_image_text"
+                        )
+                        warnings.append("image_text_requires_review")
+                elif image_id:
+                    recipe, warnings = printed_recipe(content, image_id, draft["source_url"])
                 else:
                     recipe, warnings = extract(
                         content, draft["source_url"], draft["source_platform"]
@@ -389,6 +418,8 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             "bring_automatic_mutations": False,
             "ai": settings_status(data_dir / "config").enabled,
             "media_upload": True,
+            "image_recipe_import": ocr_available(),
+            "image_import_languages": ["en", "de"] if ocr_available() else [],
         }
 
     @app.post("/api/v1/setup", status_code=201, response_model=Tokens)
@@ -751,11 +782,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     @app.post("/api/v1/imports", status_code=202)
     def start_import(body: ImportRequest, s=Depends(session)):
         iid = str(body.request_id)
-        platform = platform_for(body.source_url) if body.source_url else "supplied_text"
-        with database.transaction() as db:
-            allowed = rate_limit(db, "imports", maximum=20, seconds=3600)
-        if not allowed:
-            raise DomainError("import_rate_limited", 429)
+        platform = (
+            "image"
+            if body.image_id
+            else (platform_for(body.source_url) if body.source_url else "supplied_text")
+        )
         with database.transaction() as db:
             previous = db.execute(
                 "SELECT state,request_fingerprint FROM import_draft WHERE id=?", (iid,)
@@ -776,10 +807,20 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                         "source_url": body.source_url,
                         "use_ai": body.use_ai,
                         "consent_external_ai": body.consent_external_ai,
+                        "image_id": str(body.image_id) if body.image_id else None,
                     }.items()
                 ):
                     raise DomainError("idempotency_conflict", 409)
                 return {"id": iid, "state": previous[0]}
+            if not rate_limit(db, "imports", maximum=20, seconds=3600):
+                raise DomainError("import_rate_limited", 429)
+            if (
+                body.image_id
+                and not db.execute(
+                    "SELECT 1 FROM recipe_media WHERE id=?", (str(body.image_id),)
+                ).fetchone()
+            ):
+                raise DomainError("image_not_found", 404)
             db.execute(
                 "INSERT INTO import_draft(id,source_url,source_platform,state,recipe,warnings,error_code,confirmed_recipe_id,created_at,request_fingerprint) VALUES (?,?,?,'queued',NULL,'[]',NULL,NULL,?,?)",
                 (
@@ -800,11 +841,12 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     "source_url": body.source_url,
                     "use_ai": body.use_ai,
                     "consent_external_ai": body.consent_external_ai,
+                    "image_id": str(body.image_id) if body.image_id else None,
                 },
             )
         return {"id": iid, "state": "queued"}
 
-    @app.get("/api/v1/imports/{import_id}")
+    @app.get("/api/v1/imports/{import_id}", response_model=RecipeImportStatus)
     def get_import(import_id: UUID, s=Depends(session)):
         with database.connect() as db:
             row = db.execute("SELECT * FROM import_draft WHERE id=?", (str(import_id),)).fetchone()

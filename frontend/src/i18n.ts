@@ -1,4 +1,41 @@
 export const en = {
+  importMethod: 'Import from',
+  photoOrScreenshot: 'Photo or screenshot',
+  linkOrText: 'Link or text',
+  takePhoto: 'Take photo',
+  chooseImage: 'Choose image',
+  recipePhoto: 'Recipe photo',
+  selectedRecipeImage: 'Selected recipe photo or screenshot',
+  imageSelected: 'Image ready for import',
+  preparingImage: 'Preparing your image…',
+  recognizedText: 'Recognized text',
+  correctRecognizedText: 'Correct text and retry',
+  imageImportHint:
+    'Photograph a written recipe or choose a screenshot. Include the title, ingredients and instructions in one clear, straight-on image.',
+  imageImportPrivacy:
+    'Text recognition runs on your server in English and German. Optional AI receives only recognized text. The image is kept as the recipe photo; you can remove it in the preview.',
+  imageAIConsent:
+    'I agree to send the recognized recipe text to the administrator’s configured AI provider.',
+  imageInputError:
+    'Could not read this image. Choose a clear JPEG, PNG or WebP up to 25 MB and 32 megapixels. If your browser cannot open HEIC, export it as JPEG first.',
+  imageOCRUnavailable:
+    'Image recognition is unavailable on this server. Ask the administrator to update the container, or enter the recipe manually.',
+  imageOCRFailed:
+    'Could not read this image reliably. Try a closer, sharper photo, or enter the recipe text manually.',
+  imageNoText:
+    'No readable recipe text found. Use a photo of the written recipe, not only the finished dish.',
+  imageLayoutUnclear:
+    'Text was found, but the recipe layout is unclear. Correct the recognized text with Ingredients and Instructions headings, or use optional AI.',
+  imageImportMissing:
+    'The source image is unavailable. Choose it again or enter the recipe manually.',
+  imageStorageFull:
+    'Image storage is full on the server. Ask the administrator to review storage before retrying.',
+  imageAINotConfigured:
+    'Optional AI is not configured. Retry with AI disabled for a recipe with clear ingredient and instruction headings.',
+  warningImageText:
+    'Check every ingredient, quantity and instruction against the original image. Printed text works best; handwriting and complex layouts may need correction.',
+  warningAI: 'AI extracted this draft. Review every field before saving.',
+  importEmpty: 'Your queued imports and editable previews will appear here.',
   planningApplyError:
     'Could not finish adding this preview. Check your calendar before trying another mix.',
   planningPreferences: 'Meal suggestions',
@@ -360,6 +397,43 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  importMethod: 'Importquelle',
+  photoOrScreenshot: 'Foto oder Screenshot',
+  linkOrText: 'Link oder Text',
+  takePhoto: 'Foto aufnehmen',
+  chooseImage: 'Bild auswählen',
+  recipePhoto: 'Rezeptfoto',
+  selectedRecipeImage: 'Ausgewähltes Rezeptfoto oder Screenshot',
+  imageSelected: 'Bild bereit für den Import',
+  preparingImage: 'Bild wird vorbereitet …',
+  recognizedText: 'Erkannter Text',
+  correctRecognizedText: 'Text korrigieren und erneut versuchen',
+  imageImportHint:
+    'Fotografiere ein geschriebenes Rezept oder wähle einen Screenshot. Titel, Zutaten und Zubereitung sollten auf einem klaren, gerade aufgenommenen Bild stehen.',
+  imageImportPrivacy:
+    'Die Texterkennung läuft für Deutsch und Englisch auf deinem Server. Optionale KI erhält nur den erkannten Text. Das Bild bleibt als Rezeptfoto erhalten; du kannst es in der Vorschau entfernen.',
+  imageAIConsent:
+    'Ich stimme zu, den erkannten Rezepttext an den vom Administrator konfigurierten KI-Anbieter zu senden.',
+  imageInputError:
+    'Bild nicht lesbar. Wähle ein klares JPEG, PNG oder WebP mit höchstens 25 MB und 32 Megapixeln. Kann dein Browser HEIC nicht öffnen, exportiere es zuerst als JPEG.',
+  imageOCRUnavailable:
+    'Die Bilderkennung ist auf diesem Server nicht verfügbar. Bitte die Administration um ein Container-Update oder gib das Rezept manuell ein.',
+  imageOCRFailed:
+    'Das Bild konnte nicht zuverlässig gelesen werden. Versuche ein schärferes Foto aus der Nähe oder gib den Rezepttext manuell ein.',
+  imageNoText:
+    'Kein lesbarer Rezepttext gefunden. Verwende ein Bild des geschriebenen Rezepts, nicht nur des fertigen Gerichts.',
+  imageLayoutUnclear:
+    'Text wurde erkannt, der Rezeptaufbau ist aber unklar. Ergänze Überschriften wie Zutaten und Zubereitung oder verwende optionale KI.',
+  imageImportMissing:
+    'Das Ausgangsbild ist nicht verfügbar. Wähle es erneut oder gib das Rezept manuell ein.',
+  imageStorageFull:
+    'Der Bildspeicher auf dem Server ist voll. Bitte die Administration um eine Speicherprüfung und versuche es erneut.',
+  imageAINotConfigured:
+    'Optionale KI ist nicht konfiguriert. Versuche es ohne KI mit klaren Überschriften für Zutaten und Zubereitung.',
+  warningImageText:
+    'Prüfe alle Zutaten, Mengen und Schritte am Originalbild. Drucktext funktioniert am besten; Handschrift und komplexe Layouts können Korrekturen benötigen.',
+  warningAI: 'KI hat diesen Entwurf extrahiert. Prüfe vor dem Speichern alle Felder.',
+  importEmpty: 'Hier erscheinen deine wartenden Importe und bearbeitbaren Vorschauen.',
   planningApplyError:
     'Diese Vorschau konnte nicht vollständig übernommen werden. Prüfe deinen Kalender, bevor du neue Vorschläge versuchst.',
   planningPreferences: 'Mahlzeitenvorschläge',
