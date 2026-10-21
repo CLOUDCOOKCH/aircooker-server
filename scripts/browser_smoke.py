@@ -20,6 +20,7 @@ import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
 import aircooker.app as application
+from aircooker.jobs import enqueue
 from aircooker.models import Ingredient, Recipe
 
 LIST_ID = "11111111-1111-4111-8111-111111111111"
@@ -116,6 +117,35 @@ def main():
                 login.locator('button[type="submit"]').click()
                 expect(page.locator("#dashboard")).to_be_visible(timeout=15000)
                 expect(page.locator("#status")).to_have_text("Ready")
+                expect(page.locator("#recent-imports")).to_have_text("No recipe imports yet.")
+                private_marker = "private_import_content_do_not_display"
+                with app.state.database.transaction() as db:
+                    enqueue(db, "recipe.import", "diagnostics-browser", {"text": private_marker})
+                    db.execute(
+                        "UPDATE background_job SET state='failed',error_code=? WHERE dedupe_key=?",
+                        (private_marker, "diagnostics-browser"),
+                    )
+                    db.execute(
+                        "INSERT INTO import_draft VALUES (?,?,?,'needs_input',NULL,'[]',?,NULL,?)",
+                        (
+                            str(uuid4()),
+                            "https://private.example",
+                            "website",
+                            private_marker,
+                            time.time(),
+                        ),
+                    )
+                page.locator("#reload").click()
+                expect(page.locator("#recent-imports .job")).to_contain_text("Needs your input")
+                expect(page.locator("#queue-counts")).to_contain_text("Failed: 1")
+                assert private_marker not in page.locator("body").inner_text()
+                assert "private.example" not in page.locator("body").inner_text()
+                page.locator("#language").select_option("de")
+                expect(page.locator("#recent-imports .job")).to_contain_text(
+                    "Deine Eingabe wird benötigt"
+                )
+                expect(page.locator("#queue-counts")).to_contain_text("Fehlgeschlagen: 1")
+                page.locator("#language").select_option("en")
                 page.locator('[data-page-link="household"]').click()
                 household = page.locator("#household-form")
                 household.locator('[name="name"]').fill("Test household <safe>")

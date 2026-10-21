@@ -10,6 +10,14 @@ job/import projections, with no migration, worker scheduling or connector mutati
 Current Docker and remote CI checks are pending. The evidence below also retains earlier
 development runs and does not imply all listed platforms validated this newest change.
 
+GitHub run 39565110991 at e10d40d subsequently passes all five jobs: 136 tests and real
+Docker smoke on AMD64/ARM64, both dependency/secret/container security gates and Chromium
+administration workflows. Exact job IDs are in validation/github-diagnostics.json.
+The later console overview now displays bounded import/job rows and queue totals; its
+expanded local Chromium test passes EN/DE switching and proves private markers/URLs do
+not appear in the document. Genuine desktop/light/dark and German phone captures were
+regenerated and visually inspected. Later console changes await their own remote CI.
+
 | Check | Executed result | Limit |
 | --- | --- | --- |
 | Backend tests against hashed runtime dependencies | **129 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |

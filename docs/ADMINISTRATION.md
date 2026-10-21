@@ -79,8 +79,11 @@ recovery backup.
 Read-only diagnostics are available through authenticated `/api/v1/admin/diagnostics`
 and the typed `/api/v1/admin/jobs` API. They expose bounded recent job/import states and
 queue totals without content, URLs or provider messages. See API.md for limits and filters.
-The console already displays recent jobs; an expanded import-history interface remains
-unfinished. These endpoints do not retry or mutate work.
+The overview displays queue totals and the 20 most recent jobs and imports, with localised
+states, dates and useful error explanations. Hovering an error row exposes its redacted
+diagnostic code; machine-readable details remain available through the API. Changing
+language updates these rows without losing form edits. These endpoints do not retry or
+mutate work. Complete audit-history browsing remains unfinished.
 
 ## Browser checks and screenshots
 

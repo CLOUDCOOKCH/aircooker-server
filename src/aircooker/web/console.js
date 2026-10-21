@@ -4,8 +4,24 @@ const additions={"en": {"household_settings": "Household settings", "security": 
 for(const language of ["en","de"]) Object.assign(words[language],additions[language]);
 Object.assign(words.en, {title:"Household console",nav_overview:"Overview",nav_household:"Household",nav_security:"Account",nav_ai:"AI",nav_bring:"Bring!",nav_data:"Data",sidebar_note:"Your kitchen. Your server.",login_hint:"Connect to your household to manage this server and its integrations.",console_footer:"Independent open-source meal planning.",skip_content:"Skip to content",language:"Language"});
 Object.assign(words.de, {title:"Haushaltsverwaltung",nav_overview:"Übersicht",nav_household:"Haushalt",nav_security:"Konto",nav_ai:"KI",nav_bring:"Bring!",nav_data:"Daten",sidebar_note:"Deine Küche. Dein Server.",login_hint:"Melde dich bei deinem Haushalt an, um den Server und seine Integrationen zu verwalten.",console_footer:"Unabhängige Open-Source-Essensplanung.",skip_content:"Zum Inhalt",language:"Sprache"});
+Object.assign(words.en, {recent_imports:"Recent recipe imports",empty_imports:"No recipe imports yet.",kind_import:"Recipe import",kind_shopping:"Bring! reconciliation",kind_unknown:"Background task",job_preview:"Ready to review",job_needs_input:"Needs your input",job_confirmed:"Saved",job_cancelled:"Cancelled",job_unknown:"Status unavailable"});
+Object.assign(words.de, {recent_imports:"Letzte Rezeptimporte",empty_imports:"Noch keine Rezeptimporte.",kind_import:"Rezeptimport",kind_shopping:"Bring!-Abgleich",kind_unknown:"Hintergrundauftrag",job_preview:"Bereit zur Prüfung",job_needs_input:"Deine Eingabe wird benötigt",job_confirmed:"Gespeichert",job_cancelled:"Abgebrochen",job_unknown:"Status nicht verfügbar"});
+Object.assign(words.en, {diagnostic_code:"Diagnostic code: ",diagnostic_generic:"Could not complete. Review settings and try again.",diagnostic_rate_limit:"Request limit reached. Try again later.",diagnostic_auth:"Check the configured provider credentials.",diagnostic_bring_gate:"Verify the dedicated Bring! list before enabling automatic changes.",diagnostic_bring_list:"Select an available Bring! list in settings.",diagnostic_manual:"Paste the recipe text or enter it manually.",diagnostic_network:"Source could not be reached. Try again or paste its text.",diagnostic_invalid:"The source or provider did not return a valid recipe.",diagnostic_consent:"Allow this import to send content to the configured AI provider.",diagnostic_ai_config:"Configure an AI provider before using extraction."});
+Object.assign(words.de, {diagnostic_code:"Diagnosecode: ",diagnostic_generic:"Nicht abgeschlossen. Prüfe die Einstellungen und versuche es erneut.",diagnostic_rate_limit:"Anfragelimit erreicht. Versuche es später erneut.",diagnostic_auth:"Prüfe die Zugangsdaten des konfigurierten Anbieters.",diagnostic_bring_gate:"Prüfe die eigene Bring!-Testliste, bevor automatische Änderungen aktiviert werden.",diagnostic_bring_list:"Wähle eine verfügbare Bring!-Liste in den Einstellungen.",diagnostic_manual:"Füge den Rezepttext ein oder gib das Rezept manuell ein.",diagnostic_network:"Quelle nicht erreichbar. Versuche es erneut oder füge den Text ein.",diagnostic_invalid:"Quelle oder Anbieter hat kein gültiges Rezept geliefert.",diagnostic_consent:"Erlaube für diesen Import die Übertragung an den konfigurierten KI-Anbieter.",diagnostic_ai_config:"Konfiguriere vor der Extraktion einen KI-Anbieter."});
+function diagnosticMessage(code){
+  if(["ai_rate_limited","ai_request_limit"].includes(code))return words[locale].diagnostic_rate_limit;
+  if(code==="ai_authentication_failed")return words[locale].diagnostic_auth;
+  if(code==="bring_capability_unverified")return words[locale].diagnostic_bring_gate;
+  if(["bring_list_not_selected","bring_list_not_found"].includes(code))return words[locale].diagnostic_bring_list;
+  if(code==="ai_content_disclosure_consent_required")return words[locale].diagnostic_consent;
+  if(code==="ai_not_configured")return words[locale].diagnostic_ai_config;
+  if(["structured_recipe_not_found_use_manual_entry","source_unavailable_use_supplied_text","source_address_forbidden","source_url_forbidden"].includes(code))return words[locale].diagnostic_manual;
+  if(["source_network_failed","source_dns_failed","source_timeout"].includes(code))return words[locale].diagnostic_network;
+  if(["ai_invalid_response","ai_schema_validation_failed","invalid_extracted_recipe","ai_incomplete_recipe_review_manually"].includes(code))return words[locale].diagnostic_invalid;
+  return words[locale].diagnostic_generic;
+}
 const $=id=>document.getElementById(id);
-let locale="en", configured=false, storageStatus=null, currentPage="overview";
+let locale="en", configured=false, storageStatus=null, diagnosticStatus=null, currentPage="overview";
 const pageTitles={overview:"overview",household:"household_settings",security:"security",ai:"ai_settings",bring:"bring_settings",data:"data_management"};
 function selectPage(key, focus=true){
   if(!Object.hasOwn(pageTitles,key))return;
@@ -26,7 +42,7 @@ function translate(){
   document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=words[locale][e.dataset.i18n]);
   for(const id of ["status","ai-key-status"]){const e=$(id);if(e.dataset.errorCode)e.textContent+=" · "+e.dataset.errorCode;}
   if($("bring-state").dataset.listId)$("bring-state").textContent+=" · "+$("bring-state").dataset.listId;
-  renderStorage();translateSessions();translateJobs();
+  renderStorage();renderQueueCounts();translateSessions();translateJobs();
 }
 function message(key){$("status").dataset.i18n=key;delete $("status").dataset.errorCode;$("status").textContent=words[locale][key]||key;}
 function showError(code){$("status").dataset.i18n="error";$("status").dataset.errorCode=code;$("status").textContent=words[locale].error+code;}
@@ -41,7 +57,16 @@ function translateSessions(){
     row.querySelector("span").textContent=(d.current==="true"?words[locale].current_session+" · ":"")+d.device+" · "+words[locale][d.revoked==="true"?"revoked":"active"]+" · "+words[locale].expires+" "+new Date(Number(d.expires)*1000).toLocaleString(locale);
   });
 }
-function translateJobs(){document.querySelectorAll(".job").forEach(row=>row.textContent=row.dataset.kind+" · "+(words[locale]["job_"+row.dataset.state]||row.dataset.state)+(row.dataset.error?" · "+row.dataset.error:""));}
+function renderQueueCounts(){
+  if(!diagnosticStatus)return;
+  const numbers=new Intl.NumberFormat(locale);
+  $("queue-counts").textContent=["queued","running","done","failed"].map(state=>words[locale]["job_"+state]+": "+numbers.format(diagnosticStatus.job_counts[state])).join(" · ");
+}
+function translateJobs(){document.querySelectorAll(".job").forEach(row=>{
+  const kind=({"recipe.import":"kind_import","shopping.reconcile":"kind_shopping"})[row.dataset.kind]||"kind_unknown";
+  row.textContent=words[locale][kind]+" · "+(words[locale]["job_"+row.dataset.state]||words[locale].job_unknown)+(row.dataset.error?" · "+diagnosticMessage(row.dataset.error):"")+(row.dataset.created?" · "+new Date(Number(row.dataset.created)*1000).toLocaleString(locale):"");
+  row.title=row.dataset.error?words[locale].diagnostic_code+row.dataset.error:"";
+});}
 function signedOut(){
   $("dashboard").hidden=true; $("authentication").hidden=false;
   $("console-nav").hidden=true; $("logout").hidden=true;
@@ -96,8 +121,8 @@ async function refreshSessions(){
   translateSessions();
 }
 async function refresh(){
-  const [jobs,bring,info,household,ai,status]=await Promise.all([
-    request("/api/v1/admin/jobs"),request("/api/v1/integrations/bring/status"),
+  const [diagnostics,bring,info,household,ai,status]=await Promise.all([
+    request("/api/v1/admin/diagnostics"),request("/api/v1/integrations/bring/status"),
     request("/api/v1/system/info"),request("/api/v1/household"),request("/api/v1/admin/ai"),request("/api/v1/admin/status")]);
   $("identity").textContent=info.name+" · v"+info.version;
   $("authentication").hidden=true;$("dashboard").hidden=false;$("metrics").replaceChildren();
@@ -108,10 +133,15 @@ async function refresh(){
     if(key==="bring")strong.dataset.i18n=bring.state==="configured"?"configured":bring.state==="not_configured"?"disabled":"verification";
     const span=document.createElement("span");span.dataset.i18n=key;span.textContent=words[locale][key];box.append(strong,span);$("metrics").append(box);
   }
-  storageStatus=status;renderStorage();
+  storageStatus=status;renderStorage();diagnosticStatus=diagnostics;renderQueueCounts();
+  const jobs=diagnostics.recent_jobs;
   $("jobs").replaceChildren();
   for(const job of jobs){const row=document.createElement("div");row.className="job";row.dataset.kind=job.kind;row.dataset.state=job.state;row.dataset.error=job.error_code||"";row.textContent=job.kind+" · "+job.state+(job.error_code?" · "+job.error_code:"");$("jobs").append(row);}
   if(!jobs.length){$("jobs").dataset.i18n="empty";$("jobs").textContent=words[locale].empty;}else{delete $("jobs").dataset.i18n;}
+  $("recent-imports").replaceChildren();
+  delete $("recent-imports").dataset.i18n;
+  for(const item of diagnostics.recent_imports){const row=document.createElement("div");row.className="job";row.dataset.kind="recipe.import";row.dataset.state=item.state;row.dataset.error=item.error_code||"";row.dataset.created=item.created_at;$("recent-imports").append(row);}
+  if(!diagnostics.recent_imports.length){$("recent-imports").dataset.i18n="empty_imports";$("recent-imports").textContent=words[locale].empty_imports;}
   translateJobs();
   const h=$("household-form");for(const key of ["name","timezone","language"])field(h,key).value=household[key];
   const form=$("ai-form");field(form,"enabled").checked=ai.enabled;

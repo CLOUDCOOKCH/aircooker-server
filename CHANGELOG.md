@@ -2,6 +2,8 @@
 
 - Add authenticated, bounded read-only job/import diagnostics with consistent queue counts
   and explicit error-code redaction. Type and filter the existing recent-jobs endpoint.
+- Show localised queue totals and recent import states in the administration overview;
+  verify language switching and hidden private content with Chromium.
 
 - Parse supported metric/English/German ingredient quantities, fractions and ranges before
   import review; preserve uncertain text and disclose omitted/truncated entries.

@@ -1,0 +1,46 @@
+{
+  "observed_at": "2026-10-21 08:09:02 UTC",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "e10d40df9baf6f49bcfa04d2376444ef8e1f6c95",
+  "run_id": 39565110991,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39565110991",
+  "conclusion": "success",
+  "tests_per_architecture": 136,
+  "jobs": [
+    {
+      "id": 119105407003,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119105407311,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119105407376,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119105407381,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119105407487,
+      "name": "browser",
+      "conclusion": "success"
+    }
+  ],
+  "verified": [
+    "AMD64 and ARM64 lint, type checks, pytest, OpenAPI drift, Docker build and real-HTTP smoke",
+    "AMD64 and ARM64 runtime dependency, source secrets and HIGH/CRITICAL container security gates",
+    "Chromium administration workflows with explicit AI/Bring test doubles"
+  ],
+  "limits": [
+    "Later console diagnostics presentation changes postdate this run",
+    "No live Bring or AI verification",
+    "No production release or signed multi-architecture image publication"
+  ]
+}
