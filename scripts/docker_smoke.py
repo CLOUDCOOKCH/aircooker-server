@@ -112,7 +112,25 @@ def main():
         worker = request(base, "/app/sw.js")
         assert b"aircooker-shell-" in worker and b"/api/v1/" not in worker
         assert request(base, "/app/icon-192.png").startswith(b"\x89PNG")
-        token = docker("exec", name, "cat", "/data/config/setup-token")
+        # NAS/container consoles may require Bash. The same non-root account must
+        # be able to read its private bootstrap token through an actual Bash process.
+        version = docker("exec", name, "/bin/bash", "--version")
+        assert "GNU bash, version 5.3.9" in version and "Free Software Foundation" in version
+        assert (
+            docker(
+                "exec",
+                "-t",
+                name,
+                "/bin/bash",
+                "--noprofile",
+                "--norc",
+                "-c",
+                "test -t 1 && printf mealf-bash-terminal",
+            )
+            == "mealf-bash-terminal"
+        )
+        token = docker("exec", name, "/bin/bash", "-lc", "cat /data/config/setup-token")
+        assert token == docker("exec", name, "cat", "/data/config/setup-token")
         device = str(uuid4())
         credentials = {
             "username": "cook",
@@ -145,6 +163,14 @@ def main():
             "from importlib.resources import files; print(files('aircooker').joinpath('attributions/http-ece-1.2.1.LICENSE').read_text())",
         )
         assert "Martin Thomson" in notice and "MIT" in notice
+        bash_license = docker(
+            "exec",
+            name,
+            "python",
+            "-c",
+            "from importlib.resources import files; print(files('aircooker').joinpath('attributions/bash-GPL-3.LICENSE').read_text())",
+        )
+        assert "GNU GENERAL PUBLIC LICENSE" in bash_license and "Version 3" in bash_license
         logout_session = request(
             base,
             "/api/v1/auth/login",

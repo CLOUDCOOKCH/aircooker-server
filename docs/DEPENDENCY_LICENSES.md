@@ -50,6 +50,16 @@ Apache-2.0. Supply applicable copyright notices and corresponding source/distrib
 arrangements; an SBOM alone does not satisfy those obligations. No blanket compatibility
 or legal-compliance claim is made by the wheel check.
 
+POC `.2` deliberately adds the unmodified Alpine `bash=5.3.9-r1` package for container
+terminal compatibility. It is GPL-3.0-or-later, separate from the Apache-2.0 application;
+its GPLv3 text is packaged in `aircooker/attributions/bash-GPL-3.LICENSE`, and Bash's own
+version output retains the Free Software Foundation copyright/licence notice. The Alpine
+packaging recipe at `alpinelinux/aports` commit `1522c3193610902d8493f9790a2755c11f21f26d`
+(`main/bash/APKBUILD`, 3.24-stable) records the GNU Bash 5.3 source, vendor patches 001–009,
+Alpine patches and source SHA-512 values. The architecture-specific preview SBOMs record
+the installed package and libraries. The broader OS corresponding-source review above
+remains a stable-release gate; this does not relicense Bash as Apache or claim legal clearance.
+
 The iOS runtime has no external Swift package dependencies; Apple system frameworks and
 SQLite are system components. XcodeGen/Mint and build tooling still require their own
 inventory. AI/Bring service terms, social-source access policies, Apple review requirements

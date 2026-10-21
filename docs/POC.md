@@ -29,10 +29,16 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.1`. The moving `:preview`
+The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.2`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
+
+The `.2` preview adds `/bin/bash` for NAS/container terminal clients. In your container
+manager, choose `/bin/bash` and run `cat /data/config/setup-token` before first-run setup.
+For an existing installation, update only the image version and recreate the container with
+the same volume and port settings; the token is removed after setup. No default password
+or public bootstrap token is introduced. `/bin/sh` remains available.
 
 ## What you can try
 

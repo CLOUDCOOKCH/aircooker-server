@@ -18,6 +18,11 @@ from the protected data directory. Setup is transactional and locks after one ho
 Use `docker compose exec -it aircooker python -m aircooker.cli recover` for local administrator
 password recovery. It revokes all sessions; no public recovery/reset endpoint exists.
 
+For a NAS/container-manager console, use `/bin/bash` (included since POC `.2`) or `/bin/sh`,
+then run `cat /data/config/setup-token`. Never paste the token into issues or logs. Earlier
+POC `.1` has only `/bin/sh`; update the image while retaining the existing volume if your
+terminal client requires Bash. No host root access or extra container privileges are needed.
+
 UID/GID 10001 needs write access to `/data`. A new named volume gets the image's data-directory
 ownership. For a bind mount, create/chown that directory explicitly. Never give the container
 a Docker socket, privileged mode, or host filesystem access. The application filesystem can

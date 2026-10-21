@@ -19,6 +19,8 @@ RUN --mount=type=secret,id=proxy_ca \
     python -m pip wheel --no-deps --wheel-dir /wheels .
 FROM base AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DATA_DIR=/data LOG_LEVEL=info TRUSTED_PROXY_CIDRS=""
+RUN --mount=type=secret,id=proxy_ca,target=/etc/ssl/cert.pem \
+    apk add --no-cache bash=5.3.9-r1
 RUN addgroup -g 10001 aircooker && adduser -u 10001 -G aircooker -D -H aircooker && mkdir /data && chown 10001:10001 /data
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir --no-index --find-links=/wheels aircooker-server && rm -rf /wheels

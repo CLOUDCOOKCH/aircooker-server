@@ -1,5 +1,8 @@
 # Changelog
 
+- Add Bash 5.3.9 for NAS/container terminal clients requiring `/bin/bash`; exercise reading
+  the private setup token through Bash as the existing non-root user on both architectures.
+
 - Publish the first mealf PWA POC (`poc-20261021.1`) to GHCR for AMD64/ARM64, with exact-source
   CI gating, fresh image scans/runtime tests, SBOMs, provenance and a preview Compose file.
   Verify public anonymous pull and E2E against the published image; retain stable-release gates.
