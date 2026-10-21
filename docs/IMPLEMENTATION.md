@@ -1,5 +1,10 @@
 # Implementation checklist and evidence
 
+**POC publication:** the user requested the first installable preview on GHCR. A separate
+tag-triggered workflow requires all six exact-source CI jobs and fresh native-architecture
+image scans/Docker checks before publishing the verified bytes. It creates a POC prerelease,
+not stable acceptance. See POC.md; record actual publication/digest/pull evidence separately.
+
 **Brand update, 2026-10-21:** the product name is mealf. Display names and copy are updated;
 the original supplied peach/wordmark PNG files are not accessible in this cloud workspace.
 Installing those exact assets remains blocked on receiving downloadable originals. Existing

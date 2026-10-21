@@ -48,6 +48,10 @@ PYTHONPATH=src python scripts/export_contract.py --check
 
 ## Docker
 
+For the first prebuilt PWA preview, see [POC installation and limits](docs/POC.md) and
+the [GitHub prereleases](https://github.com/CLOUDCOOKCH/aircooker-server/releases).
+The source-build development path remains:
+
 ```sh
 docker compose up --build -d
 docker compose exec aircooker cat /data/config/setup-token
@@ -85,7 +89,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
 | Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; deletion/extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
-| Releases | Local development only; release CI is configuration, not proof of publication |
+| Releases | POC preview publication configured separately; verify the prerelease and GHCR digest; full stable acceptance remains open |
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.

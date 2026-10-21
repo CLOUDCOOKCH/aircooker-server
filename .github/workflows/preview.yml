@@ -1,0 +1,142 @@
+name: Publish mealf POC preview
+on:
+  push:
+    tags: ['poc-*']
+permissions:
+  contents: read
+concurrency:
+  group: publish-mealf-preview
+  cancel-in-progress: false
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Require complete successful CI on the exact tagged main commit
+        id: ci
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p build
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$GITHUB_SHA" -f branch=main -f event=push -f status=success -f per_page=100 > build/preview-runs.json
+          python3 scripts/preview_gate.py run build/preview-runs.json
+      - name: Reject skipped or incomplete CI matrices
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_RUN: ${{ steps.ci.outputs.run_id }}
+        run: |
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN/jobs?per_page=100" > build/preview-jobs.json
+          python3 scripts/preview_gate.py jobs build/preview-jobs.json
+  verify-images:
+    needs: gate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Build the image that will be scanned, exercised and published
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: |
+          docker build --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" --label "org.opencontainers.image.revision=$GITHUB_SHA" --label "org.opencontainers.image.version=$GITHUB_REF_NAME" --label 'org.opencontainers.image.title=mealf POC preview' --label 'org.opencontainers.image.licenses=Apache-2.0' -t "mealf-verified:$IMAGE_ARCH" .
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        env:
+          TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db:2
+        with:
+          version: v0.70.0
+          image-ref: mealf-verified:${{ matrix.arch }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: false
+          format: json
+          output: container-security.json
+      - name: Exercise this exact image with isolated persistent data
+        env:
+          AIRCOOKER_TEST_IMAGE: mealf-verified:${{ matrix.arch }}
+        run: python scripts/docker_smoke.py
+      - name: Generate software bill of materials
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: trivy image --format cyclonedx --output sbom.cdx.json "mealf-verified:$IMAGE_ARCH"
+      - name: Preserve the verified image without rebuilding
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: docker save "mealf-verified:$IMAGE_ARCH" | gzip > image.tar.gz
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-preview-${{ matrix.arch }}
+          path: |
+            image.tar.gz
+            container-security.json
+            sbom.cdx.json
+          compression-level: 0
+          retention-days: 14
+  publish:
+    needs: [gate, verify-images]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: verified-preview-*
+          path: verified
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push verified bytes and assemble both architectures
+        id: image
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mealf-server"
+          for ARCH in amd64 arm64; do
+            docker load -i "verified/verified-preview-$ARCH/image.tar.gz"
+            docker tag "mealf-verified:$ARCH" "$IMAGE:$GITHUB_REF_NAME-$ARCH"
+            docker push "$IMAGE:$GITHUB_REF_NAME-$ARCH"
+          done
+          docker buildx imagetools create -t "$IMAGE:$GITHUB_REF_NAME" -t "$IMAGE:preview" "$IMAGE:$GITHUB_REF_NAME-amd64" "$IMAGE:$GITHUB_REF_NAME-arm64"
+          docker buildx imagetools inspect "$IMAGE:$GITHUB_REF_NAME" > manifest.txt
+          DIGEST="$(awk '$1 == "Digest:" {print $2; exit}' manifest.txt)"
+          [[ "$DIGEST" =~ ^sha256:[a-f0-9]{64}$ ]]
+          echo "name=$IMAGE" >> "$GITHUB_OUTPUT"
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "Published $IMAGE@$DIGEST" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/attest-build-provenance@96b4a1ef7235a096b17240c259729fdd70c83d45 # v2
+        with:
+          subject-name: ${{ steps.image.outputs.name }}
+          subject-digest: ${{ steps.image.outputs.digest }}
+          push-to-registry: true
+      - name: Publish a prerelease with scope and installation notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISHED_IMAGE: ${{ steps.image.outputs.name }}
+          PUBLISHED_DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          mkdir -p release-assets
+          cp contracts/openapi-v1.json compose.preview.yaml release-assets/
+          for ARCH in amd64 arm64; do
+            cp "verified/verified-preview-$ARCH/container-security.json" "release-assets/container-security-$ARCH.json"
+            cp "verified/verified-preview-$ARCH/sbom.cdx.json" "release-assets/sbom-$ARCH.cdx.json"
+          done
+          printf 'Image: `%s@%s`\n\n' "$PUBLISHED_IMAGE" "$PUBLISHED_DIGEST" > release-assets/NOTES.md
+          cat docs/POC.md >> release-assets/NOTES.md
+          gh release create "$GITHUB_REF_NAME" release-assets/*.json release-assets/*.yaml --verify-tag --prerelease --title "mealf $GITHUB_REF_NAME — PWA preview" --notes-file release-assets/NOTES.md

@@ -1,5 +1,19 @@
 # Release process
 
+## POC previews
+
+User-authorised POC distribution uses the separate `Publish mealf POC preview` workflow,
+triggered by an immutable `poc-YYYYMMDD.N` tag after all six main-branch CI jobs pass on
+that exact commit. It requires no full-product acceptance assertion and cannot publish
+`latest-stable`. Both native-architecture images receive fresh unsuppressed security scans
+and Docker persistence/restore smoke checks; only those saved image bytes are published.
+The resulting manifest has GitHub provenance and a prerelease with scans, SBOMs, Compose
+and OpenAPI. See [installation, scope and limits](POC.md). Do not move a published POC tag.
+Check the resulting GHCR package visibility and verify an anonymous pull before claiming
+public installation works. Repository visibility does not prove package visibility.
+
+## Stable releases
+
 Both repositories and their first CI runs are published. Configure private vulnerability
 reporting and a protected `release` environment before publishing. CI runs locked tests,
 format/type checks, OpenAPI drift, Docker E2E, pip-audit, redacted Gitleaks and Trivy.
