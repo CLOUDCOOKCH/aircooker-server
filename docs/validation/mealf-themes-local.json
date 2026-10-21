@@ -340,5 +340,12 @@
     "physical iPhone Home Screen/keyboard unverified",
     "live external-service delivery unchanged/unverified",
     "native iOS repository unchanged; full product acceptance remains open"
-  ]
+  ],
+  "ci_followup": {
+    "initial_run_id": 39649832524,
+    "initial_source": "0dc9bd779519a9c65bc46fed55b8168070ef62df",
+    "initial_result": "five jobs passed; WebKit theme flow sampled metadata before a native media-query change event settled",
+    "change": "use bounded Playwright attribute expectations for metadata convergence; keep expected palette values and contrast/Axe gates unchanged",
+    "verification": "fresh full exact-source CI required; no WebKit pass claimed yet"
+  }
 }

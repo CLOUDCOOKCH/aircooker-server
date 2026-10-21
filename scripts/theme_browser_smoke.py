@@ -96,12 +96,14 @@ def main():
                           'warning-soft','warning-ink'].map(k=>[k,s.getPropertyValue('--'+k).trim()]));
                         }"""
                     )
-                    assert (
-                        screen.locator('meta[name="theme-color"]').first.get_attribute("content")
-                        == tokens["canvas"]
+                    # Media-query change events are asynchronous in WebKit. Require
+                    # metadata to settle to the actual palette, rather than sample
+                    # it before the browser dispatches that native event.
+                    expect(screen.locator('meta[name="theme-color"]').first).to_have_attribute(
+                        "content", tokens["canvas"]
                     )
-                    assert (
-                        screen.locator('meta[name="color-scheme"]').get_attribute("content") == mode
+                    expect(screen.locator('meta[name="color-scheme"]')).to_have_attribute(
+                        "content", mode
                     )
                     assert screen.locator("html").evaluate(
                         "e=>getComputedStyle(e).colorScheme"
