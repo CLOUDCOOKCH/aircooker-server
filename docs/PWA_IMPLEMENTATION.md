@@ -95,3 +95,8 @@ Shared planning defaults and bounded approval learning are implemented with type
 settings, server-ordered/replay-safe saves, cached offline scoring/drafts and atomic approval
 learning. Household export v3 includes preferences/counts and retains legacy imports. Exact
 source/tests/browser/CI evidence is tracked separately; see PLANNING_PREFERENCES.md.
+
+Shared-planning source 2e7b920 passed all six GitHub jobs in run 39600337201, including
+187 backend tests per AMD64/ARM64 runner, 39 web tests, actual two-device/offline/approval
+browser flows, settings/learning Docker restart/JSON+ZIP restore and unsuppressed security
+gates. Exact source/images/jobs/artifacts and limits: validation/github-planning-preferences.json.

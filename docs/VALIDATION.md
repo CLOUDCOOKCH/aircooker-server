@@ -252,3 +252,8 @@ resolved at this scope. Exact local evidence/capture hashes: validation/planning
 review: validation/planning-preferences-review.md. CI for this source is recorded separately;
 prior reminder green evidence does not certify this newer tree. No full product, original
 artwork, physical browser or live external-service acceptance is claimed.
+
+Shared-planning source 2e7b920 passed all six GitHub jobs in run 39600337201, including
+187 backend tests per AMD64/ARM64 runner, 39 web tests, actual two-device/offline/approval
+browser flows, settings/learning Docker restart/JSON+ZIP restore and unsuppressed security
+gates. Exact source/images/jobs/artifacts and limits: validation/github-planning-preferences.json.

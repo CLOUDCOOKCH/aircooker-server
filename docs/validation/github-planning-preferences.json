@@ -1,0 +1,107 @@
+{
+  "format": "mealf-planning-preferences-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "2e7b920e661d3df7afb7cc705fe996352a9a4035",
+  "run_id": 39600337201,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39600337201",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 187,
+  "web_core_tests": 39,
+  "jobs": [
+    {
+      "id": 119222924392,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119222924459,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119222924498,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119222924576,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119222924727,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119222924768,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "runtime_security": {
+    "scanner": "Trivy",
+    "configured_version": "0.70.0",
+    "gate": "HIGH,CRITICAL; exit-code 1; ignore-unfixed false; no suppressions",
+    "architectures": [
+      {
+        "architecture": "linux/amd64",
+        "job_id": 119222924576,
+        "image_id": "sha256:c8271a22fa3a9f5fb43f216dc3db83a9eec2bdd5ce79bc28ca5e2cf6657cfb3b",
+        "gate": "passed"
+      },
+      {
+        "architecture": "linux/arm64",
+        "job_id": 119222924768,
+        "image_id": "sha256:58f8387d8d6daa8d5ebbb03f8b6e8e8abff5a7a34c3fb846ff0cc71ab3d227ed",
+        "gate": "passed"
+      }
+    ],
+    "dependency_audit": "strict runtime audit passed both architectures",
+    "secret_scan": "gitleaks 8.28.0 passed both architectures",
+    "limits": "Passing severity gates do not mean no vulnerabilities of every severity or full legal clearance."
+  },
+  "artifacts": [
+    {
+      "id": 12346246130,
+      "name": "container-security-ubuntu-24.04-arm",
+      "archive_digest": "sha256:38cad03abd3d0950b64ebddddaaf144ce0ab84db3064ecd344ad06c0d74a74e3"
+    },
+    {
+      "id": 12345772728,
+      "name": "console-screenshots",
+      "archive_digest": "sha256:95f3e9be5f728ef42787f814918597398bd33059f1974fe5e8a9b2e8bdfbd929"
+    },
+    {
+      "id": 12345682792,
+      "name": "backend-tests-ubuntu-24.04",
+      "archive_digest": "sha256:44c1c58480b30115bf44146881f7b673c5b09bdeb4172827f2cc456dc22c2cc0"
+    },
+    {
+      "id": 12345109599,
+      "name": "container-security-ubuntu-24.04",
+      "archive_digest": "sha256:4ac645e62adfb2abdc0e9584beea7b6eeb03982ce7fe6c52d77a3aacce802428"
+    },
+    {
+      "id": 12344939938,
+      "name": "backend-tests-ubuntu-24.04-arm",
+      "archive_digest": "sha256:f2bcf699df42c771e1dd1465c962074ea28ad74dcff471aaec53ffff34102256"
+    }
+  ],
+  "verified": [
+    "187 backend tests per architecture, format/lint/types/contract and unchanged 40-package licence gate",
+    "39 web tests, strict TypeScript/format/generated client, production build and npm advisory gate",
+    "Real first-party PWA cross-device saved preferences, durable offline drafts/reload, cached offline scoring, 21-meal explicit approval and once-only learning",
+    "Same-turn duplicate activation yields exactly one 21-mutation approval group in IndexedDB; busy guard/recovery copy reviewed",
+    "Stated EN desktop / DE dark phone settings and phone preview Axe checks plus full prior PWA/console/notification regressions",
+    "Non-root/read-only Docker settings/learning persistence and JSON+ZIP clean-install restore on AMD64/ARM64"
+  ],
+  "limits": [
+    "Notification and AI/Bring regressions use explicitly labelled external doubles; no live service/platform delivery verified",
+    "No physical Safari/VoiceOver/lifecycle or original artwork acceptance",
+    "No stable release, complete original-master acceptance or identical recommendation-engine output promise",
+    "Later documentation evidence commit does not change application source"
+  ]
+}
