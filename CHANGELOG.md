@@ -6,7 +6,10 @@
   cross-tab administration and offline reloads in sync. Preserve original brand assets
   and household/storage/API identities. EN/DE native-radio controls include previews.
   Browser contrast/Axe, storage-failure, offline and OS-override checks are included.
-  Preview `.9` publication pending; physical iPhone remains unverified.
+  Published `.9`: all six source CI jobs (including Chromium/WebKit), both fresh image
+  gates, public pull/checksums/config identities and .8-to-.9 same-volume 5152 upgrade
+  pass. Narrow German navigation/demo bounds and destructive contrast are corrected;
+  physical iPhone remains unverified.
 
 - Add per-device Day/3 days/Week calendar views and touch/pointer meal drag grips with
   target feedback, edge scrolling, cancellation and tap/keyboard move forms. Preserve

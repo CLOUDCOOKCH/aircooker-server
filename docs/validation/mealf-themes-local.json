@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "implemented and tested locally; publication/WebKit CI pending",
+  "status": "implemented and tested locally and in Chromium/WebKit CI; published poc-20261021.9 verified; physical phone pending",
   "backend_tests": 226,
   "frontend_tests": 39,
   "themes": [
@@ -32,16 +32,16 @@
   ],
   "captures": {
     "docs/screenshots/mealf-theme-after-dark-home.png": {
-      "sha256": "35deeb16a30529199d6f353f453b1046628f3c302bee9ea092b4d0a53e0c3a2a"
+      "sha256": "f9fa9eeb87ecfc58a73d54d98ab507a95c8f18f3dabb6085aab8579fb9d8939c"
     },
     "docs/screenshots/mealf-theme-sunday-home.png": {
-      "sha256": "cc8ac37fb0c43247be226805c466fbf97996f135d7b049bbc49c0f03e7a64e29"
+      "sha256": "fa407988c933ec7e57a22582f34f2d90469311d418a3041da7219ac8121ce980"
     },
     "docs/screenshots/mealf-theme-after-dark-settings-phone.png": {
       "sha256": "e550a53773ab137ca302162bcceb7532bed2eeac862c9a2b592b5b6fbff9d17a"
     },
     "docs/screenshots/mealf-theme-sunday-settings-phone-de.png": {
-      "sha256": "be1acdf33d218b0d05807b8f56f2102028026a50fb30fb57e0a5ccaefc2d6ed3"
+      "sha256": "30195786434e33980931a5997ca097b7b5ba80cf857f6dea6f5020d9d10791c1"
     },
     "docs/screenshots/mealf-theme-after-dark-admin-desktop.png": {
       "sha256": "5c453bb73265882ac9f3eb29227ab3dd79ee91b5632fbdc7ce62c2e8aef5dd11"
@@ -363,7 +363,7 @@
     "initial_source": "0dc9bd779519a9c65bc46fed55b8168070ef62df",
     "initial_result": "five jobs passed; WebKit theme flow sampled metadata before a native media-query change event settled",
     "change": "use bounded Playwright attribute expectations for metadata convergence; keep expected palette values and contrast/Axe gates unchanged",
-    "verification": "fresh full exact-source CI required; no WebKit pass claimed yet",
+    "verification": "all six jobs pass on a9659effcd6bb85b77b37e1a81022fc9bd4c4823 in 39652782031, including the complete Chromium/WebKit theme flows",
     "second_run_id": 39650395108,
     "second_result": "five jobs passed; WebKit OS-change checks passed, then browser automation offline reload reported internal engine error",
     "outage_change": "WebKit now tests actual backend shutdown/connection refusal, two real service-worker cached reloads and backend recovery; same path passes locally in Chromium",
@@ -374,5 +374,6 @@
     "fourth_result": "five jobs passed; WebKit element diagnostics found 334px root width at 320px: German Settings tab and demo-exit label extended outside the viewport",
     "final_layout_change": "phone Settings label is Optionen with full Einstellungen accessible name; equal-width nav items shrink; connection/demo bar wraps controls without hiding overflow",
     "destructive_contrast": "explicit on-danger foreground replaces hardcoded white on pale dark-mode danger fills; each theme pair is now checked at >=4.5:1"
-  }
+  },
+  "publication": "docs/validation/github-themes-preview.json"
 }

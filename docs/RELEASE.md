@@ -140,3 +140,17 @@ Public pull, six asset checksums, build/config/report identities and the publish
 ships; household/session/recipe/sync proof and original assets persist. Duplicate tag
 event 39646224899 succeeded at the release gate and skipped verify-images/publish.
 Physical iPhone gestures/keyboard remain unverified. See [exact evidence](validation/github-mobile-calendar-preview.json).
+
+Theme-library update: `poc-20261021.9` from a9659effcd6bb85b77b37e1a81022fc9bd4c4823
+passed all six source jobs in 39652782031, including complete Chromium/WebKit theme,
+offline, native-control, contrast/Axe and narrow German layout checks. Publication
+39653391814 passed both fresh native scans/runtime gates and published digest
+`sha256:9cc1e8f386c4c47792727b52a0408564c0e1dc486514270167e57eb777ac10e8`.
+Public pull, all six release checksums, native build/scan/published config identities and
+a disposable published .8-to-.9 same-volume upgrade on internal 5152 pass. Both SBOMs
+identify Trivy 0.70.0, with zero HIGH/CRITICAL findings in both reports. Provenance,
+job IDs, intermediate browser findings and platform limits are recorded in
+validation/github-themes-preview.json and validation/mealf-themes-local.json.
+Physical iPhone and full-product acceptance remain open. Keep existing volume and custom
+port/command/healthcheck settings; update only the image and accept the PWA update after
+saving edits. No browser reset or reinstall is required.

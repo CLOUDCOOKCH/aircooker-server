@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-21",
+  "status": "published and verified",
+  "source": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+  "scope": "shared PWA/admin Flo, After Dark and Sunday library; browser-local appearance, offline persistence, native controls/chrome, narrow German controls and semantic destructive foreground; no API/database/native changes",
+  "ci": {
+    "run_id": 39652782031,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39652782031",
+    "backend_tests_per_architecture": 226,
+    "frontend_tests": 39,
+    "jobs": [
+      {
+        "id": 119405158402,
+        "name": "pwa-core",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      },
+      {
+        "id": 119405158522,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      },
+      {
+        "id": 119405158588,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      },
+      {
+        "id": 119405158703,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      },
+      {
+        "id": 119405158798,
+        "name": "browser",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      },
+      {
+        "id": 119405158828,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "a9659effcd6bb85b77b37e1a81022fc9bd4c4823",
+        "conclusion": "success"
+      }
+    ],
+    "browser": {
+      "job_id": 119405158798,
+      "chromium": "all three palettes, opposite OS modes, native radio arrow keys, offline flag reloads, admin sharing, early boot, read/write storage failures, 320px German bounds, contrast/Axe; existing app/layout flows",
+      "webkit": "same real theme controls and state checks; actual backend shutdown/connection refusal with two cached reloads/recovery; persistent profile; metadata native-event convergence and German bounds; existing layout flows"
+    }
+  },
+  "publication": {
+    "run_id": 39653391814,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39653391814",
+    "jobs": [
+      {
+        "id": 119407258129,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119407331005,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119407331044,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119408211312,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.9",
+    "release_id": 419914287,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.9",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58333740",
+    "native_builds": {
+      "amd64": {
+        "job_id": 119407331044,
+        "configs": [
+          "sha256:2681b21e44ecd2465f37345301401268d12046f47d61555da4b6bd1f20bcac5f"
+        ]
+      },
+      "arm64": {
+        "job_id": 119407331005,
+        "configs": [
+          "sha256:cf764c3ec29b6ae35d514c465049070bfe866b1560b05a3a3dd2978c5c787ed2"
+        ]
+      }
+    },
+    "index_digest": "sha256:9cc1e8f386c4c47792727b52a0408564c0e1dc486514270167e57eb777ac10e8",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "3623bf81592a024a9b80a0dcbebcaf672d9924d6eb5a64c64251ff9e25fad957"
+      },
+      "container-security-amd64.json": {
+        "sha256": "2896de0c7c8d4fcb6abd4e2bcb5260ec51f11b4c22c93588f851d294d846fe31"
+      },
+      "container-security-arm64.json": {
+        "sha256": "5b3c87518806b25ccc3a7492ba3f5e6ebd5fb8f9cb6a634e56a65e2525068b0f"
+      },
+      "openapi-v1.json": {
+        "sha256": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "89da1c197b0687693d94699eea53ec0f13facdaebe1a0082fae4817b7189d6af"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "dfab4b694b0f2534d8cc46cc451f223bf000365ac819ae72cc11935203f32c14"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:150e918b5097d1bd3d187ea0bc773305aa6767ff0534bf9e2c64e40c02e4c142",
+        "config": "sha256:2681b21e44ecd2465f37345301401268d12046f47d61555da4b6bd1f20bcac5f",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:30ae63559cb291e4a9a41c7de01f9a183bb2af034814e59b3ec683fcb27e5213",
+        "config": "sha256:cf764c3ec29b6ae35d514c465049070bfe866b1560b05a3a3dd2978c5c787ed2",
+        "high_critical": 0
+      }
+    }
+  },
+  "post_publication": {
+    "anonymous_pull": "passed with an empty temporary client credential configuration",
+    "release_assets": "all six public downloads match release SHA-256; Compose/OpenAPI match tagged source",
+    "image_identity": "both published config IDs match native build logs and Trivy report ImageID",
+    "scanner": "Trivy 0.70.0 from both SBOM metadata tool records; zero HIGH/CRITICAL",
+    "upgrade": "passed disposable published AMD64 .8-to-.9 same-volume upgrade on internal port 5152; household, session, recipe and sync proof preserved; configured startup silent; manifest identity/artwork/shared assets exact",
+    "theme_assets": "served appearance.js/theme.css exact source bytes; three names in bundle; controller and palette included in offline shell",
+    "secret_scan": "Gitleaks v8.28.0 final working-tree scan passed; no suppressions changed"
+  },
+  "limits": [
+    "physical iPhone Home Screen/keyboard/manual screen reader unverified",
+    "WebKit offline navigation uses a real backend outage because its automation offline flag reports an internal engine error",
+    "live integrations, retained native repository and full-product acceptance unchanged"
+  ]
+}

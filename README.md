@@ -7,7 +7,8 @@ remain compatible; see [branding and migration](docs/BRANDING.md).
 installable browser application. Home, Calendar, Recipes, Pantry, Settings, offline editing,
 reviewed imports and two-device synchronisation have real Chromium acceptance coverage.
 The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
-and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md).
+and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md). Choose Flo, After Dark or
+Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
 
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.

@@ -1,14 +1,17 @@
 # Implementation checklist and evidence
 
-**Theme library, 2026-10-21 — implemented; publication pending:** Settings offers Flo
+**Theme library, 2026-10-21 — published and verified in `poc-20261021.9`:** Settings offers Flo
 (existing system light/dark), After Dark (fixed dark romance palette) and Sunday
 (fixed light sage/linen). A shared early controller and semantic CSS cover PWA and
 console, native fields and browser metadata. Browser-local choice persists offline
 and propagates across tabs; storage failures are disclosed. Original PNGs, API and
 local/server database identities are unchanged. Real Chromium checks cover native radio
 keys, opposite OS modes, early boot, offline reload, admin sharing, denied storage,
-contrast and Axe. WebKit CI, publication verification and physical iPhone evidence are
-separate gates. See [theme guide](THEMES.md).
+contrast and Axe. All six exact-source CI jobs pass, including persistent WebKit with
+real backend-outage cached reloads and narrow German controls. Both fresh image gates,
+six public checksums, config identities, anonymous pull and published .8-to-.9 same-volume
+5152 upgrade pass. Physical iPhone remains unverified. See [theme guide](THEMES.md) and
+[release evidence](validation/github-themes-preview.json).
 
 **Mobile calendar and form alignment, 2026-10-21 — published and verified in `poc-20261021.8`:**
 Day/3 days/Week selection persists per device. Multi-day columns remain readable and
