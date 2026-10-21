@@ -69,7 +69,8 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
 - [ ] Stable image/release and reproducibility acceptance. PWA commit ff48270 passed all six
       AMD64/ARM64/security/browser/core CI jobs in run 39584288763 (see validation/github-pwa.json).
       Pantry commit 0e0c692 also passed all six jobs in run 39586102045 (see
-      validation/github-pantry-period.json). Later template changes need their own CI result.
+      validation/github-pantry-period.json). Template commit 48c23e4 passed all six jobs in
+      run 39587189774 (validation/github-template-editor.json), including the expanded browser flow.
 
 iPhone incoming Web Share Target, native local notifications/biometric lock and WidgetKit
 are deferred native capabilities, not promised pure-PWA functions. Foreground/reopen sync

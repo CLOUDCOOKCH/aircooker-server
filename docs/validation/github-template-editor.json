@@ -1,0 +1,91 @@
+{
+  "format": "aircooker-template-editor-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "48c23e4fa1983724db2277e66a32c2d36e3860ee",
+  "run_id": 39587189774,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39587189774",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 151,
+  "web_core_tests": 32,
+  "jobs": [
+    {
+      "id": 119178901472,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119178901776,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119178901838,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119178901937,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119178901960,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119178901973,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    }
+  ],
+  "runtime_security": {
+    "scanner": "Trivy",
+    "configured_version": "0.70.0",
+    "gate": "HIGH,CRITICAL; exit-code 1; ignore-unfixed false; no suppressions",
+    "architectures": [
+      {
+        "architecture": "linux/amd64",
+        "job_id": 119178901776,
+        "image_id": "sha256:0cdf664bfc9bbeb14b2bc7f6fdd83bf78b5046c2d834c08da1de0b419d7291b5",
+        "gate": "passed"
+      },
+      {
+        "architecture": "linux/arm64",
+        "job_id": 119178901838,
+        "image_id": "sha256:0e95bc35c5a2bad30915f6a1609dbcbad15a58d8b5cbe464e22d4cb77c5ffcd6",
+        "gate": "passed"
+      }
+    ],
+    "dependency_audit": "passed",
+    "gitleaks": "8.28.0: no leaks found on both runners",
+    "report_artifacts": [
+      {
+        "id": 12340896225,
+        "name": "container-security-ubuntu-24.04-arm",
+        "archive_digest": "sha256:567b35a4491db0c94052c9605f04837819af0dbb3627fb341c765bb693e487a9"
+      },
+      {
+        "id": 12340361594,
+        "name": "container-security-ubuntu-24.04",
+        "archive_digest": "sha256:7727515c1a485d96f6ccdf466c3d7ccb3c1a83b8fdd24421aac58d012abb3012"
+      }
+    ],
+    "limits": "Passing severity gates do not establish a count of all vulnerabilities; JSON reports remain downloadable CI artifacts."
+  },
+  "verified": [
+    "Generated browser contract, strict TypeScript, Prettier, 32 core tests, production build and npm advisory gate",
+    "Real Chromium setup, offline recipe edits and reload, two-device conflict/tombstone recovery, import preview/save, pantry period commit/clear",
+    "Offline template rename/slot edits, invalid portions and decimal comma, reload persistence, cancel without writes, next-week apply without rewriting prior meals",
+    "Phone template native dialog/labelled controls, no horizontal overflow, stated Axe WCAG tags plus prior PWA and administration acceptance",
+    "151 backend tests per native architecture, schema migrations, Python types/lint, contract/licence checks and read-only Docker HTTP/restart/restore smoke"
+  ],
+  "limits": [
+    "Physical iPhone/Safari, installation lifecycle and VoiceOver not exercised",
+    "Live Bring/AI and Web Push remain unverified or unfinished as documented",
+    "No stable release or complete original-master acceptance",
+    "Subsequent documentation-only evidence commit does not change application source"
+  ]
+}

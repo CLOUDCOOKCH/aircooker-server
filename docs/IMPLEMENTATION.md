@@ -92,4 +92,6 @@ No stable release or protected release acceptance is enabled by these developmen
 Published PWA ff48270 and pantry-period correction 0e0c692 each passed all six GitHub CI
 jobs, including native AMD64/ARM64 test/Docker/security jobs and Chromium. Exact source and
 job IDs are in validation/github-pwa.json and validation/github-pantry-period.json. These
-results do not automatically validate newer template-editor source changes.
+template editor at 48c23e4 also passed all six jobs in run 39587189774. See
+validation/github-template-editor.json for the exact image IDs, scanner, architecture/job
+evidence and limits. Documentation-only follow-ups do not change that application source.

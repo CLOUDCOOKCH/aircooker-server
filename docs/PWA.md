@@ -49,8 +49,8 @@ not duplicated through copy/template operations.
 Record cooked leftovers from a meal and schedule available portions from Calendar. Local
 transactions prevent two browser tabs from overbooking them; the server enforces the same
 constraint between devices. Pantry staples affect the backend's Bring! ingredient projection.
-The existing `include_this_week` boolean still needs a period-bound expiry implementation;
-do not assume it automatically resets at rollover in this development version.
+Temporary pantry inclusions are bound to a Monday–Sunday shopping period and expire for
+the following week, using the household time zone.
 
 Dinner suggestions use local recipes, ratings, cooked history, occupied slots, variety and
 available leftovers without AI. Review before approval. Approval is queued as one immutable
