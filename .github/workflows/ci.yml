@@ -63,6 +63,7 @@ jobs:
             build/runtime-licenses.json
   browser:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -97,7 +98,7 @@ jobs:
           python scripts/pwa_layout_smoke.py
           python scripts/theme_browser_smoke.py
           python scripts/image_import_browser_smoke.py
-          python -m playwright install --with-deps webkit
+          timeout 300s python -m playwright install --with-deps webkit
           AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
           AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
           python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
