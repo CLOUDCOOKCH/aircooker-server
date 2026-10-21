@@ -12,6 +12,27 @@ and OpenAPI. See [installation, scope and limits](POC.md). Do not move a publish
 Check the resulting GHCR package visibility and verify an anonymous pull before claiming
 public installation works. Repository visibility does not prove package visibility.
 
+### Preview retries and version ownership
+
+New preview workflows check for a completed prerelease before any build or registry write.
+A matching completed prerelease with its pinned image digest is a successful no-op on retry;
+its images, release assets and notes are not changed. Only a genuine GitHub 404 permits a
+new publication. Authentication, rate limits and other API failures stop the workflow.
+Draft/stable/mismatched releases and missing immutable image references require inspection.
+If an image tag was partially pushed without a completed release, publication refuses to
+replace its base or architecture tags; use a fresh version after reviewing the failed run.
+All six exact-source CI checks and both fresh image scans/runtime checks still precede every
+new image. The moving `preview` channel alone is intentionally updated.
+
+Rerunning an older workflow uses its historical tagged source and cannot publish newer main
+changes. This guard applies to new tags containing it; the existing `.4` tag is never moved.
+The historical `.4` rerun at 15:20 UTC rebuilt and pushed digest
+`sha256:45df776761e17fbbea13ff5552c0be2b8917bf27b51bd793c4147d4e21bd8e67`
+before duplicate release creation failed. The original `.4` release notes still pin digest
+`sha256:15cb248de58ed490d0b893b08832451d144f94e357ed2190d963f852a1a0a410`.
+Use immutable digests to reproduce either verified build; the old source has neither the new
+palette nor the PWA gesture changes. The new release uses a fresh version.
+
 First publication: `poc-20261021.1` from 4deb195 passed source CI 39607765691 and preview
 publication 39608095928. Both architecture scans and native Docker checks passed. Anonymous
 pull and published-image E2E subsequently passed; exact digest/assets/provenance/evidence

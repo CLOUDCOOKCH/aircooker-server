@@ -193,3 +193,12 @@ accessibility zoom and normal viewport metadata are retained. Full PWA browser f
 213 backend/39 web tests, lint/format/type/build and OpenAPI checks pass. No visual tokens,
 admin behavior, storage or API contracts change. Physical iPhone/Safari is unverified;
 container publication remains blocked pending a successful Actions run on current source.
+
+Preview retry correction: the operator's log is attempt 2 of old publication 39620210006
+at tagged source 9d73633, not a publication of current main. It pushed a rebuilt `.4` image
+then failed creating its existing release. New workflow preflight preserves completed
+previews without builds/writes and refuses reused partial image tags. Added 12 unit cases
+for completed/mismatched releases and API failures; original exact-source/security gates
+remain intact. The palette-only validation commit 5c74bbc now has successful CI 39624790084;
+it cannot validate later gesture/retry commits. Fresh combined-source verification and `.5`
+publication are pending. The existing `.4` Git tag and release assets are not moved/replaced.

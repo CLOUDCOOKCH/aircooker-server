@@ -1,5 +1,9 @@
 # Changelog
 
+- Make completed preview-release retries a read-only no-op before image builds/pushes;
+  fail closed for API errors, unexpected release records or already-used partial image tags.
+  Preserve exact-source CI and fresh dual-architecture security/runtime gates for new versions.
+
 - Block ordinary PWA page pinch/double-tap and trackpad-pinch zoom while explicitly enabling
   text selection. Preserve scrolling, input editing and browser/OS keyboard accessibility
   zoom. Real Chromium gesture/selection and existing PWA flows pass; physical iPhone/Safari

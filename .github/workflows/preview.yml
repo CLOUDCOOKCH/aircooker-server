@@ -10,12 +10,20 @@ concurrency:
 jobs:
   gate:
     runs-on: ubuntu-24.04
+    outputs:
+      already_published: ${{ steps.release.outputs.already_published }}
     permissions:
       contents: read
       actions: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Preserve an already completed release on retry
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/preview_release.py
       - name: Require complete successful CI on the exact tagged main commit
+        if: steps.release.outputs.already_published != 'true'
         id: ci
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -24,6 +32,7 @@ jobs:
           gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$GITHUB_SHA" -f branch=main -f event=push -f status=success -f per_page=100 > build/preview-runs.json
           python3 scripts/preview_gate.py run build/preview-runs.json
       - name: Reject skipped or incomplete CI matrices
+        if: steps.release.outputs.already_published != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_RUN: ${{ steps.ci.outputs.run_id }}
@@ -32,6 +41,7 @@ jobs:
           python3 scripts/preview_gate.py jobs build/preview-jobs.json
   verify-images:
     needs: gate
+    if: needs.gate.outputs.already_published != 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -86,6 +96,7 @@ jobs:
           retention-days: 14
   publish:
     needs: [gate, verify-images]
+    if: needs.gate.outputs.already_published != 'true'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -108,6 +119,16 @@ jobs:
         id: image
         run: |
           IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mealf-server"
+          # A partial earlier push requires a fresh version, never an overwrite.
+          for SUFFIX in "" -amd64 -arm64; do
+            if docker buildx imagetools inspect "$IMAGE:$GITHUB_REF_NAME$SUFFIX" > existing-manifest.txt 2> existing-manifest.err; then
+              echo "Version image already exists without a completed release. Use a fresh poc tag." >&2
+              exit 1
+            elif ! grep -Eq 'manifest unknown|: not found' existing-manifest.err; then
+              cat existing-manifest.err >&2
+              exit 1
+            fi
+          done
           for ARCH in amd64 arm64; do
             docker load -i "verified/verified-preview-$ARCH/image.tar.gz"
             docker tag "mealf-verified:$ARCH" "$IMAGE:$GITHUB_REF_NAME-$ARCH"
