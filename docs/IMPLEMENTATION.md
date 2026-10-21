@@ -10,7 +10,7 @@ phases have passed every acceptance gate.
 
 | Phase | Delivered code / documentation | Status and remaining work |
 | --- | --- | --- |
-| 0 Architecture | ADRs, diagram, schema, sync design, initial threat analysis, OpenAPI and executable Bring probe; two local Git repos | Partial: live Bring feasibility, full dependency license inventory and remote repo publication pending |
+| 0 Architecture | ADRs, diagram, schema, sync design, initial threat analysis, OpenAPI and executable Bring probe; two local Git repos | Partial: live Bring feasibility and full dependency license inventory pending; both GitHub repositories published |
 | 1 Backend | Docker, migrations, setup, sessions, offline-capable revocation, rate limits, local recovery, jobs, admin page navigation and household/session/AI/Bring controls, JSON/ZIP transfer, generated contract | Tested core; partial deletion/diagnostics/storage controls, quotas, remaining typed responses and broader security/load tests |
 | 2 iOS foundation | SwiftUI tabs/onboarding, URL/QR sources, SQLite outbox, URLSession, Keychain, local authentication, localisations | Swift core tested on Linux; native app/extensions unverified on Apple SDK; rejected-change/archive recovery core tested, native recovery unverified; durable full resync core tested; native workflow validation remains |
 | 3 Recipes | Backend typed CRUD and native editor, decimal scaling, notes/ratings, immutable photos, durable offline photo queue | Backend/core tested; native unverified; photo cleanup, fractions/ranges UX, searching API and historical metadata incomplete |
@@ -34,8 +34,9 @@ suppression and new-period identity. No live Bring smoke test was executed.
 
 ## External blockers
 
-- Shell GitHub API returned `Forbidden`; no remote repositories, workflows or releases
-  have been created or executed. Intended owner is CLOUDCOOKCH.
+- Both GitHub repositories are published under CLOUDCOOKCH. Initial backend tests, browser
+  workflows and Docker smoke checks passed on GitHub; native compilation and security
+  scanning encountered CI setup failures now being corrected. No stable release exists.
 - macOS/Xcode 27, iOS simulator/device, Apple developer team, signing profiles and App Store
   Connect credentials are unavailable here.
 - No Bring test account/list or AI endpoint credentials were supplied. Tests use synthetic
@@ -48,7 +49,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-97 backend tests and 76 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. Container security
+97 backend tests and 80 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. Container security
 still fails: 44 high package matches across 8 unique advisories, no critical matches.
 See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected
 environment variable `RELEASE_ACCEPTANCE_VERIFIED=true` and are not enabled by these results.

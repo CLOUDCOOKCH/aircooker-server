@@ -1,6 +1,6 @@
 # Release process
 
-No remote pipelines have run. Configure repository permissions, private vulnerability
+Both repositories and their first CI runs are published. Configure private vulnerability
 reporting and a protected `release` environment before publishing. CI runs locked tests,
 format/type checks, OpenAPI drift, Docker E2E, pip-audit, redacted Gitleaks and Trivy.
 Action references are commit-pinned; Renovate proposes reviewed updates. Scanner databases
@@ -14,7 +14,9 @@ a GitHub release with generated notes and the OpenAPI artifact. `latest-stable` 
 for actual stable releases. Prerelease tags must not be used to trigger this stable-channel
 workflow without first adapting its tag/channel policy.
 
-CI configuration still needs execution on real GitHub runners. Container scanning and
+Initial GitHub backend tests, browser workflows and Docker smoke checks pass. Security
+scanning initially stopped on a removed upstream action dependency; the updated pinned
+action still needs successful execution. Container scanning and
 acceptance gates must be required checks on the release commit before tag creation; the
 workflow is not a substitute for that policy. Reproducible wheel packaging/build-toolchain
 pinning and a complete release attestation review remain outstanding.

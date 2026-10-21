@@ -52,9 +52,10 @@ setup. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYME
 
 ## Repositories
 
-This folder is the root of an independent Git repository, intended for
-`CLOUDCOOKCH/aircooker-server`. `aircooker-ios` is a separate sibling checkout, not a package
-or submodule of this repository. No remote repository has been created or pushed.
+This folder is the root of the independent
+[`CLOUDCOOKCH/aircooker-server`](https://github.com/CLOUDCOOKCH/aircooker-server) repository.
+[`aircooker-ios`](https://github.com/CLOUDCOOKCH/aircooker-ios) is a separate companion,
+not a package or submodule of this repository. Both development histories are published.
 The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy and SHA-256.
 
 ## Feature status
