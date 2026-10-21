@@ -210,3 +210,17 @@ budget 429. Existing preview query parameters override stored defaults when supp
 `/suggestions/apply` learns only within its existing atomic successful approval transaction.
 Household JSON export is v3; old v1/v2 imports remain supported without new metadata.
 See PLANNING_PREFERENCES.md for wire/engine/backup behavior and limits.
+
+## Recipe image imports
+
+Use authenticated multipart `PUT /api/v1/media/{image_id}` with a stable client UUID,
+then `POST /api/v1/imports` with the same optional `image_id` plus a stable `request_id`.
+The request can carry corrected `text`; this skips OCR while retaining the source photo.
+`use_ai` and `consent_external_ai` retain the existing text-only provider semantics.
+
+`GET /api/v1/imports/{import_id}` has a typed response with optional bounded
+`recognized_text` and an editable `recipe` preview. Nothing is added to the recipe
+library before explicit confirmation. The canonical schema distinguishes recipe/ingredient
+input and output serialization for decimal fields; wire field names are unchanged.
+The companion native repository pins the reviewed exact contract bytes while retaining
+its existing client UI. See [photo import](IMAGE_IMPORT.md) for error recovery and limits.

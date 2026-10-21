@@ -23,7 +23,9 @@
     "25 identical import retries retain one durable job",
     "image/source replay survives restart and terminal-source retention",
     "100 terminal imports cannot starve a new image job",
-    "cancel while upload in flight; stale poll cannot resurrect cancellation"
+    "cancel while upload in flight; stale poll cannot resurrect cancellation",
+    "Real backend subprocess termination and same-volume recovery also passed locally in Chromium; no storage/worker doubles",
+    "Synthetic one-day HTTPS chain passes OpenSSL verification for loopback IP; authenticated WebKit requires runner OS trust, with verification enabled"
   ],
   "captures": {
     "docs/screenshots/mealf-image-chooser-desktop.png": {

@@ -66,3 +66,8 @@ Migration 009 adds import request fingerprints and terminal timestamps with inde
 queries. Known source receipts backfill in bounded batches; unknown records stay exempt,
 legacy terminal records receive a fresh grace period, and schema/data/marker commit together.
 Internal retention fields do not become client import response fields.
+
+Migration 010 adds bounded `recognized_text` to import previews. Existing rows remain
+NULL; uploaded image UUIDs use the existing immutable media store and job payload. No
+entity revisions, sync identities, old change logs or request fingerprints are rewritten.
+Terminal OCR text follows preview retention; pending work and media remain retained.

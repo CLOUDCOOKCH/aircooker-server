@@ -8,19 +8,21 @@ import json
 import os
 import shutil
 import socket
-import threading
+import ssl
+import subprocess
+import sys
 import time
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from urllib.error import URLError
+from urllib.request import urlopen
 
-import uvicorn
 from playwright.sync_api import expect, sync_playwright
-
-from aircooker.app import create_app
 
 
 def main():
     engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
+    real_outage = engine == "webkit" or os.environ.get("MEALF_IMAGE_NETWORK_OUTAGE") == "1"
     captures = (
         Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/image-import-browser")) / engine
     )
@@ -37,27 +39,66 @@ def main():
         os.environ["BASE_URL"] = base
 
         def start_backend():
-            app = create_app(root, run_worker=True)
-            server = uvicorn.Server(
-                uvicorn.Config(
-                    app,
-                    host="127.0.0.1",
-                    port=port,
-                    log_level="error",
-                    access_log=False,
-                    ssl_certfile=str(Path(tls_root) / "server.crt") if tls_root else None,
-                    ssl_keyfile=str(Path(tls_root) / "server.key") if tls_root else None,
-                )
+            args = [
+                sys.executable,
+                "-m",
+                "uvicorn",
+                "aircooker.app:create_app",
+                "--factory",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                str(port),
+                "--log-level",
+                "error",
+                "--no-access-log",
+                "--timeout-graceful-shutdown",
+                "2",
+            ]
+            if tls_root:
+                args += [
+                    "--ssl-certfile",
+                    str(Path(tls_root) / "server.crt"),
+                    "--ssl-keyfile",
+                    str(Path(tls_root) / "server.key"),
+                ]
+            server = subprocess.Popen(
+                args,
+                env={**os.environ, "DATA_DIR": str(root), "LOG_SETUP_TOKEN": "false"},
+                stdout=subprocess.DEVNULL,
             )
-            thread = threading.Thread(target=server.run, daemon=True)
-            thread.start()
-            for _ in range(100):
-                if server.started:
-                    return app, server, thread
+            trust = (
+                ssl.create_default_context(cafile=str(Path(tls_root) / "ca.crt"))
+                if tls_root
+                else None
+            )
+            for _ in range(200):
+                if server.poll() is not None:
+                    raise RuntimeError("Image import backend exited before readiness")
+                try:
+                    with urlopen(
+                        base + "/api/v1/system/health", timeout=1, context=trust
+                    ) as response:
+                        if response.status == 200:
+                            return server
+                except (URLError, TimeoutError):
+                    pass
                 time.sleep(0.05)
+            stop_backend(server)
             raise RuntimeError("Image import backend not ready")
 
-        app, server, thread = start_backend()
+        def stop_backend(server):
+            server.terminate()
+            try:
+                server.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                # A real crash/offline fixture: terminate this isolated test process,
+                # including TLS sockets waiting for a close notification. The same
+                # SQLite volume and browser profile survive for the recovery check.
+                server.kill()
+                server.wait(timeout=3)
+
+        server = start_backend()
         try:
             with sync_playwright() as playwright:
                 options = {}
@@ -93,15 +134,14 @@ def main():
                     assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
 
                 def outage(offline):
-                    nonlocal app, server, thread
-                    if engine == "chromium":
+                    nonlocal server
+                    if not real_outage:
                         context.set_offline(offline)
                     elif offline:
-                        server.should_exit = True
-                        thread.join(timeout=10)
-                        assert not thread.is_alive()
+                        stop_backend(server)
+                        assert server.poll() is not None
                     else:
-                        app, server, thread = start_backend()
+                        server = start_backend()
 
                 def import_page():
                     page.get_by_role("button", name="Import recipe", exact=True).click()
@@ -229,9 +269,9 @@ def main():
                         "backend": "real",
                         "ocr": "real Tesseract eng+deu",
                         "transport": "trusted HTTPS" if tls_root else "HTTP loopback Chromium",
-                        "offline": "browser offline flag"
-                        if engine == "chromium"
-                        else "actual backend outage",
+                        "offline": "actual backend outage"
+                        if real_outage
+                        else "browser offline flag",
                         "images": "synthetic EN/DE fixtures",
                         "saved_only_after_review": True,
                         "offline_image_and_edit_reload": True,
@@ -246,8 +286,7 @@ def main():
                 f"PASS: {engine} native image chooser/capture, real local EN/DE OCR, offline image/edit reload, explicit review/save, metadata-safe upload and contrast/Axe"
             )
         finally:
-            server.should_exit = True
-            thread.join(timeout=10)
+            stop_backend(server)
 
 
 if __name__ == "__main__":
