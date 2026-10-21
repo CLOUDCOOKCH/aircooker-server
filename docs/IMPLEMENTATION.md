@@ -75,7 +75,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-The current PWA integration passes 200 backend tests and 39 web core tests locally,
+The current PWA integration passes 209 backend tests and 39 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -136,3 +136,14 @@ Retention source 9fffb7b passed all six GitHub jobs in run 39604741072: 200 back
 tests per AMD64/ARM64 runner, unchanged 39 web tests, full browser/packaged CLI/Docker
 restart/restore checks and unsuppressed security gates. Exact images/jobs/artifacts and
 limits are in validation/github-retention.json.
+
+The first user-authorised POC is published as `poc-20261021.1` from 4deb195.
+All six exact-source CI jobs passed in run 39607765691 (209 backend tests per architecture,
+39 web tests). Preview publication run 39608095928 separately passed fresh native AMD64/ARM64
+image scans and Docker persistence/restore checks, then published those verified bytes to
+`ghcr.io/cloudcookch/mealf-server`. The multi-architecture digest is
+`sha256:b4da38f72b1c7c1548f3058a39319d23b7001ad6a7b74651dccd2fece7a20ecb`.
+Anonymous pull/manifest inspection and a fresh E2E against the pulled AMD64 image passed.
+Public release assets were downloaded and their checksums verified; scan report identities
+match the published image configurations. See validation/github-poc-preview.json and POC.md.
+This is a prerelease; it does not enable stable acceptance or imply live-service/iPhone testing.

@@ -1,5 +1,9 @@
 # Changelog
 
+- Publish the first mealf PWA POC (`poc-20261021.1`) to GHCR for AMD64/ARM64, with exact-source
+  CI gating, fresh image scans/runtime tests, SBOMs, provenance and a preview Compose file.
+  Verify public anonymous pull and E2E against the published image; retain stable-release gates.
+
 - Add bounded conservative retention and a dry-run/apply administrator CLI. Persist import
   request fingerprints before pruning terminal source/preview payloads; keep pending work,
   replay/sync/Bring proofs and offline media dependencies. Clean stale archive transfers

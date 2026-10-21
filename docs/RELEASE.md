@@ -12,6 +12,11 @@ and OpenAPI. See [installation, scope and limits](POC.md). Do not move a publish
 Check the resulting GHCR package visibility and verify an anonymous pull before claiming
 public installation works. Repository visibility does not prove package visibility.
 
+First publication: `poc-20261021.1` from 4deb195 passed source CI 39607765691 and preview
+publication 39608095928. Both architecture scans and native Docker checks passed. Anonymous
+pull and published-image E2E subsequently passed; exact digest/assets/provenance/evidence
+are in validation/github-poc-preview.json. Full stable acceptance remains open.
+
 ## Stable releases
 
 Both repositories and their first CI runs are published. Configure private vulnerability

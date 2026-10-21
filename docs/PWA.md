@@ -59,7 +59,8 @@ Dinner suggestions use local recipes, ratings, cooked history, occupied slots, v
 available leftovers without AI. Review before approval. Approval is queued as one immutable
 batch with a history checkpoint. The backend checks occupied slots transactionally; a
 cross-device collision keeps the local preview blocked for review. Settings can archive it
-and generate a new preview. Shared preferences/acceptance learning remain incomplete.
+and generate a new preview. Shared category/portion/repetition/leftover defaults and bounded
+learning from explicitly approved plans are implemented; see PLANNING_PREFERENCES.md.
 
 Imports accept URLs or supplied content. Structured extraction precedes optional configured
 AI. AI requires an explicit content-disclosure checkbox. Social adapters cannot bypass

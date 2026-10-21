@@ -1,0 +1,202 @@
+{
+  "source_commit": "4deb19552c57383dc08f78ac2c48be1b689971de",
+  "source_ci": {
+    "id": 39607765691,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39607765691",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119248318432,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119248318701,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:164bc9db4d00a7fdc4f45c8e20f566abc17504689fc365363c59e75c595ebc80"
+      },
+      {
+        "id": 119248318755,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:edf22dc5698e1f21eb2ea9e1055c07c4b361630eb15d025067f9a6aa34c040a4"
+      },
+      {
+        "id": 119248318773,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "built_image": "sha256:ed535ebff3b11fc417b99ebeadf8694b6f4349c0d0cb524219566bf450b0f394"
+      },
+      {
+        "id": 119248318931,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "built_image": "sha256:9f0c3b0cda4569ab2e970414dae4c839dfeef3bc136634dcdb73d39c1c5dd98a"
+      },
+      {
+        "id": 119248319023,
+        "name": "browser",
+        "conclusion": "success"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 12350195293,
+        "name": "backend-tests-ubuntu-24.04",
+        "digest": "sha256:7441e2df9858896e945622db6920756afda221f58638f9e776a4f599b379d88c"
+      },
+      {
+        "id": 12350180165,
+        "name": "container-security-ubuntu-24.04-arm",
+        "digest": "sha256:e24a6283f034ccf23ec79444b006d8d598282dcd39da8eb8954e5a473771413a"
+      },
+      {
+        "id": 12349695858,
+        "name": "container-security-ubuntu-24.04",
+        "digest": "sha256:55bb5ab5398e191a68ca2b7509129b4d9409ce48539721188d5ae1b006e2dea7"
+      },
+      {
+        "id": 12349675940,
+        "name": "backend-tests-ubuntu-24.04-arm",
+        "digest": "sha256:c20f6c2f561772672c9269ce756c29c82f1b7a4ee99b2a7004d0ceeb0b48fcad"
+      },
+      {
+        "id": 12349221631,
+        "name": "console-screenshots",
+        "digest": "sha256:fae98e2ce67ee6a25832e126d42bf8bcee14d60cae43689e9893b3820994cd74"
+      }
+    ]
+  },
+  "tests": {
+    "backend_each_architecture": 209,
+    "web": 39,
+    "real_browser": "PWA, optional push receiver using explicit vendor/subscription doubles, and administration",
+    "docker": "non-root/read-only startup, persistent restart and JSON/ZIP restore on each native architecture"
+  },
+  "scope": "Development POC only; stable product acceptance remains open",
+  "preview": {
+    "tag": "poc-20261021.1",
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.1",
+    "release_id": 419595564,
+    "prerelease": true,
+    "image": "ghcr.io/cloudcookch/mealf-server",
+    "manifest_digest": "sha256:b4da38f72b1c7c1548f3058a39319d23b7001ad6a7b74651dccd2fece7a20ecb",
+    "architectures": [
+      {
+        "platform": "linux/amd64",
+        "image_config": "sha256:2dcba934ca630c2d79d46391b61701fc8309203a2b9649504afec8a347167b1c",
+        "manifest": "sha256:f374749ddf937eaab9bd47014c986bb622652b1277717f7502324c59e6fa1335"
+      },
+      {
+        "platform": "linux/arm64",
+        "image_config": "sha256:600fdaae7f6f2ec3e7ff0b44f0701db62b4f471df40db9e250274c14cddac20a",
+        "manifest": "sha256:5982b2b06a19a8de56d94a5933e2a17f765e97d725d99327233958391cb71dbe"
+      }
+    ],
+    "publication_ci": {
+      "id": 39608095928,
+      "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39608095928",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119249473630,
+          "name": "gate",
+          "conclusion": "success"
+        },
+        {
+          "id": 119249564612,
+          "name": "verify-images (ubuntu-24.04-arm, arm64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119249565007,
+          "name": "verify-images (ubuntu-24.04, amd64)",
+          "conclusion": "success"
+        },
+        {
+          "id": 119250494489,
+          "name": "publish",
+          "conclusion": "success"
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12349616437,
+          "name": "verified-preview-arm64",
+          "digest": "sha256:037c5a55a02fb25ed60e2313c39abe8958f831632db3ca0345118ec8d32b41dc"
+        },
+        {
+          "id": 12349356914,
+          "name": "verified-preview-amd64",
+          "digest": "sha256:f63a95c3eb5fe4eb2984cfe604f4d1e1fccec011980846ef6e8b35aa55d3b328"
+        }
+      ]
+    },
+    "assets": [
+      {
+        "name": "compose.preview.yaml",
+        "size": 629,
+        "digest": "sha256:ff96f574b619905b5ddcd53b65ef218dc7b47206f766172a653dfd8fd8524785",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/compose.preview.yaml"
+      },
+      {
+        "name": "container-security-amd64.json",
+        "size": 118846,
+        "digest": "sha256:5c9de7e3d2ed6238621ab272d15feacacb2d225edd2ecf210c9812bc3a784315",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/container-security-amd64.json"
+      },
+      {
+        "name": "container-security-arm64.json",
+        "size": 118846,
+        "digest": "sha256:2bdb3e4c8e0fbbd4be9b8fcbd9d94fbee2fd9616029ab239948a0158290f3e31",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/container-security-arm64.json"
+      },
+      {
+        "name": "openapi-v1.json",
+        "size": 147158,
+        "digest": "sha256:224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/openapi-v1.json"
+      },
+      {
+        "name": "sbom-amd64.cdx.json",
+        "size": 102365,
+        "digest": "sha256:d1c0d2dd12dbf946a5b907d1e8fb74526620b0acda283b234f4564d6b9ec67a6",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/sbom-amd64.cdx.json"
+      },
+      {
+        "name": "sbom-arm64.cdx.json",
+        "size": 102555,
+        "digest": "sha256:e9d8c6942fa7820f4c566d29a33dded750bee40d038905377dff57573484ec3c",
+        "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/download/poc-20261021.1/sbom-arm64.cdx.json"
+      }
+    ],
+    "provenance_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58222223",
+    "security": {
+      "scanner": "Trivy v0.70.0",
+      "severity_gate": [
+        "HIGH",
+        "CRITICAL"
+      ],
+      "ignore_unfixed": false,
+      "suppressions": false,
+      "findings_at_those_severities": 0,
+      "release_report_image_ids_match_published_configs": true
+    },
+    "public_verification": {
+      "anonymous_pull": "passed using an empty Docker client configuration",
+      "manifest_platforms": "linux/amd64 and linux/arm64",
+      "amd64_runtime_image_matches_scanned_config": true,
+      "public_release_assets": "all six downloaded without credentials and SHA-256 checked against GitHub metadata",
+      "compose_and_openapi_match_source": true,
+      "pulled_image_e2e": "passed Docker bootstrap, auth/revocation, persistence/restart, idempotent offline replay, media, planning, imports and JSON/ZIP restore"
+    },
+    "limits": [
+      "Development preview, not stable/full product acceptance",
+      "No live Bring, AI provider or Web Push vendor validation",
+      "No physical iPhone/Safari validation",
+      "Exact supplied peach icon and wordmark still pending downloadable original PNGs",
+      "Native signing/App Store distribution deferred"
+    ]
+  }
+}
