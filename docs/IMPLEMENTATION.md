@@ -11,6 +11,12 @@ manifest and maskable icons. Source/derived hashes and browser/packaged-asset ch
 delivery. Storage/session/API identities and the glass UI remain intact. Retained native
 artwork is not changed by this PWA release. See BRANDING.md.
 
+**Web palette/voice update, 2026-10-21 — tested locally; publication pending:** the user-approved cream/coral/peach light and cocoa/peach dark Mealf direction now covers the PWA and administration console. Shared semantic accent tokens are exported byte-for-byte to `/app/theme.css`; the console reuses them with glass navigation, system headings, solid forms and a direct PWA link. Original PNGs and persistent/API identities are preserved. Localized food innuendo is confined to welcome/login, empty-state, sidebar and footer copy; setup/help, security, errors and recovery stay literal. Native is unchanged.
+
+- **Tested:** 213 backend and 39 web core tests; Ruff lint/format, mypy, contract drift, frontend build/type checks, original/derived asset bytes and licence inventory. Chromium PWA, administration and push-receiver workflows passed with synthetic external-service data. Expanded admin Axe covers setup/login and all six pages in both themes; PWA palette-pair checks and 320px/200% text overflow checks passed.
+- **Partial:** this records the implemented visual scope and local checks. The [manual palette finish review](validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Fresh exact-source CI/image scans/publication have not yet completed for this palette tree. Earlier published POC .4 evidence is historical.
+- **Unverified:** physical iPhone/Safari, live Web Push/Bring!/AI, full manual accessibility and complete-product acceptance. Launcher/detector and plugin-schema validation were unavailable; no pass is claimed. See [DESIGN.md](../DESIGN.md), [BRANDING.md](BRANDING.md) and the [admin surface brief](../.impeccable/surfaces/admin.md).
+
 **Delivery update, 2026-10-21:** the user chose PWA-first and retained native code for later.
 The primary client is `frontend/`, served by this same container at `/app/`; no third
 repository/service is required. See PWA.md and PWA_IMPLEMENTATION.md for current browser

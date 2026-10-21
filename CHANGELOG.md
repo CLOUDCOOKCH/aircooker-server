@@ -1,5 +1,15 @@
 # Changelog
 
+- Apply the approved Mealf cream/coral/peach and cocoa/peach palette throughout the PWA
+  and administration console, with shared exact theme tokens, glass navigation, system
+  headings, solid forms and a direct planner link. Preserve original artwork and compatible
+  storage/session/API identities; native stays deferred. Add localized food innuendo to
+  welcome/login, empty-state, sidebar and footer while retaining literal security/help/errors.
+  Local 213 backend/39 web tests, lint/type/contract/build/asset/licence checks and Chromium
+  flows pass, including expanded admin Axe and narrow/enlarged-text checks. Manual palette
+  review: ship within reviewed scope, zero material findings. Publication pending; physical
+  iPhone/live-service/full-product acceptance unverified.
+
 - Install the original supplied mealf peach/wordmark across PWA welcome/loading/navigation,
   footer and console. Add versioned touch/favicon/manifest/maskable assets, retain original
   bytes and compatibility IDs, and verify original/derived/offline/packaged asset integrity.

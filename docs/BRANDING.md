@@ -3,7 +3,7 @@
 The product was renamed from aircooker to **mealf** on 2026-10-21. Both original PNGs were
 received in `mealf-flirty-peach-wortmarke.zip`. The PWA and administration console now use
 the supplied peach and lowercase image wordmark instead of the interim utensil/text mark.
-Keep the existing glass interface, system appearance, green controls and accessible flows.
+Keep the approved glass interface, system typography, system appearance and accessible flows. The user-approved palette refresh below supersedes the earlier green-control constraint.
 
 Both supplied files remain byte-for-byte intact in `assets/brand/originals/`:
 
@@ -50,3 +50,11 @@ Repository/build identifier renames can be handled separately with explicit migr
 redirect validation. Historical validation records and pinned native OpenAPI files retain
 their exact tested source names. The current server's API documentation title uses mealf;
 that metadata change does not change its wire fields or compatibility version.
+
+## Approved web palette and voice refresh — 2026-10-21
+
+The user explicitly requested the Mealf design throughout the PWA and administration console. Light appearance uses cream, coral and peach; dark appearance uses cocoa and peach. Raspberry danger roles remain distinct. The shared semantic `--accent*` tokens replace the former green-named roles. `frontend/src/tokens.css` is authoritative; the build exports its exact bytes as `/app/theme.css`, imported by the console. See [the exact two-theme design snapshot](../DESIGN.md) and [admin brief](../.impeccable/surfaces/admin.md).
+
+English/German food innuendo is approved for welcome/login, empty-state, sidebar and footer copy, including a playful login headliner. Setup instructions, help, consent/security, errors and recovery remain literal. Preserve solid forms, system headings, the glass navigation material, original artwork bytes and all compatibility identities listed above. Native changes are deferred.
+
+Current genuine [PWA welcome](screenshots/mealf-palette-pwa-welcome-desktop.png), [dark phone welcome](screenshots/mealf-palette-pwa-welcome-phone-dark.png), [console login](screenshots/mealf-palette-admin-login-desktop.png) and [dark console](screenshots/mealf-palette-admin-desktop-dark.png) captures record the implemented web direction. Historical artwork/name/green-palette reviews and published preview evidence retain their original scope. Local automated/browser checks passed as recorded in [IMPLEMENTATION.md](IMPLEMENTATION.md); the [manual palette finish review](validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Publication remains pending. No physical iPhone/live-service or unavailable detector/schema validation is claimed.

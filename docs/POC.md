@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.4`. The moving `:preview`
+The version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261021.5`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -53,6 +53,13 @@ accept the PWA update after finishing an active edit. No browser-data reset is n
 An installed OS icon may remain cached longer than the page. Protect/synchronise offline
 work before any OS-level reinstall. See the
 [brand guide](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BRANDING.md).
+
+The `.5` preview extends the peach identity through the PWA and administration console:
+cream/coral/peach light appearance, cocoa/peach dark appearance, shared theme tokens,
+glass navigation and solid forms. Login and selected empty states include English/German
+food innuendo; setup, security and error instructions remain literal. Update only your image
+reference, retain the volume and existing port/command/healthcheck settings (including a
+custom `5152:5152` installation), then reload and accept the PWA update after saving edits.
 
 ## What you can try
 

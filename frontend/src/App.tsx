@@ -182,8 +182,15 @@ function Welcome({
           width="384"
           height="384"
         />
-        <h1>{form ? (info?.configured ? info.name : t('setup')) : t('welcome')}</h1>
-        <p className="welcome-description">{form ? t('selfHosted') : t('welcomeBody')}</p>
+        <h1>{form ? (info?.configured ? t('loginHeadline') : t('setup')) : t('welcome')}</h1>
+        <p className="welcome-description">
+          {form ? (info?.configured ? t('loginJoke') : t('selfHosted')) : t('welcomeBody')}
+        </p>
+        {form && info?.configured && (
+          <p className="welcome-household">
+            {info.name} · {t('selfHosted')}
+          </p>
+        )}
         {!form ? (
           <>
             <button

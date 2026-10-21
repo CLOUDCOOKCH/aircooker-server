@@ -97,7 +97,7 @@ def main():
                     "[...document.querySelectorAll('.wordmark img,.welcome-icon')].every(image=>image.complete&&image.naturalWidth>0)"
                 )
                 expect(
-                    page.get_by_role("heading", name="A calmer kind of meal planning.")
+                    page.get_by_role("heading", name="Get your hot buns in here.")
                 ).to_be_visible()
                 capture("pwa-welcome-desktop.png")
                 page.set_viewport_size({"width": 390, "height": 844})
@@ -149,7 +149,7 @@ def main():
                 capture("pwa-calendar-phone-de-dark.png")
                 page.get_by_role("button", name="Demo verlassen").first.click()
                 expect(
-                    page.get_by_role("heading", name="A calmer kind of meal planning.")
+                    page.get_by_role("heading", name="Get your hot buns in here.")
                 ).to_be_visible()
                 # Demo never created a server household or library.
                 assert not page.evaluate(
@@ -203,6 +203,13 @@ def main():
                 second.on("pageerror", lambda error: errors.append(str(error)))
                 second.goto(base + "/app/")
                 second.get_by_role("button", name="Open your kitchen").click()
+                expect(
+                    second.get_by_role("heading", name="Get your hot buns in here.")
+                ).to_be_visible()
+                expect(second.locator(".welcome-household")).to_contain_text("Browser kitchen")
+                audit("configured PWA login", second)
+                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    second.screenshot(path=str(captures / "pwa-login-desktop.png"), full_page=True)
                 second.get_by_label("Username", exact=True).fill("cook")
                 second.get_by_label("Password", exact=True).fill("synthetic pwa kitchen password")
                 second.get_by_role("button", name="Sign in", exact=True).click()
@@ -256,9 +263,7 @@ def main():
                 page.locator(".recipe-card").filter(has_text="Device A committed last").click()
                 page.get_by_role("button", name="Delete", exact=True).click()
                 page.get_by_role("dialog").get_by_role("button", name="Delete", exact=True).click()
-                expect(
-                    page.get_by_role("heading", name="Your next favourite starts here.")
-                ).to_be_visible()
+                expect(page.get_by_role("heading", name="Nothing to fork. Yet.")).to_be_visible()
                 expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
                 second_context.set_offline(False)
                 second.get_by_role("button", name="Sync now", exact=True).click()

@@ -49,6 +49,14 @@ The user approved an iOS-like glass design and requested the same design in the
 PWA: effortless controls, food-led content and uncluttered navigation. Preserve the approved
 visual decisions; the private design references were supplied for the conversation only.
 
+Palette/voice update, 2026-10-21: the user explicitly requested the Mealf design across
+the whole PWA and administration console. Cream, coral and peach in light appearance and
+cocoa/peach in dark appearance supersede the earlier forest-green constraint. Keep the
+approved glass navigation, system typography, original artwork and solid readable forms.
+The requested cheeky food innuendo belongs in welcome/login, empty-state, sidebar and footer
+copy in English/German; setup instructions, help, security, recovery and errors stay literal.
+The independent native app is retained unchanged for later.
+
 ## Evidence on Hand
 
 Existing backend has tested real persistence, auth, imports, planning, reconciliation and

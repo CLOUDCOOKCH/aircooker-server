@@ -109,10 +109,37 @@ def main():
                 page.wait_for_function(
                     "[...document.querySelectorAll('.wordmark img')].every(image=>image.complete&&image.naturalWidth>0)"
                 )
+                axe = Path("frontend/node_modules/axe-core/axe.min.js").read_text()
+
+                def audit(name):
+                    page.evaluate(axe)
+                    violations = page.evaluate("""async () => (await axe.run(document, {
+                        runOnly: {type: 'tag', values: ['wcag2a','wcag2aa','wcag21aa']}
+                    })).violations.map(v => ({id:v.id,nodes:v.nodes.map(n=>n.target)}))""")
+                    assert not violations, (name, violations)
+
+                def palette(scheme):
+                    page.emulate_media(color_scheme=scheme)
+                    # Compare all palette values with the actual PWA, not a duplicate fixture.
+                    other = context.new_page()
+                    other.goto(base + "/app/")
+                    expect(other.locator(".welcome-content")).to_be_visible()
+                    values = """() => Object.fromEntries(['--canvas','--surface','--ink',
+                        '--muted','--accent','--accent-soft','--danger'].map(key =>
+                        [key,getComputedStyle(document.documentElement).getPropertyValue(key).trim()]))"""
+                    other.emulate_media(color_scheme=scheme)
+                    assert page.evaluate(values) == other.evaluate(values), (
+                        page.evaluate(values),
+                        other.evaluate(values),
+                    )
+                    other.close()
+
                 login = page.locator("#login")
                 expect(login.locator('[name="username"]')).to_be_visible()
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
                 screenshots.mkdir(parents=True, exist_ok=True)
+                palette("light")
+                audit("setup light")
                 page.screenshot(path=str(screenshots / "admin-setup.png"), full_page=True)
                 login.locator('[name="username"]').fill("cook")
                 login.locator('[name="password"]').fill("synthetic browser household password")
@@ -263,6 +290,12 @@ def main():
                     s["id"] == other["session_id"] and s["revoked"]
                     for s in get("/api/v1/auth/sessions")
                 )
+                for scheme in ["light", "dark"]:
+                    palette(scheme)
+                    for key in ["overview", "household", "security", "ai", "bring", "data"]:
+                        page.locator(f'[data-page-link="{key}"]').click()
+                        audit(f"{key} {scheme}")
+                page.emulate_media(color_scheme="light")
                 # One batched capture pass: real UI, synthetic household, EN/DE and themes.
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
                 screenshots.mkdir(parents=True, exist_ok=True)
@@ -334,6 +367,21 @@ def main():
                         "async () => (await fetch('/api/v1/auth/sessions', {credentials:'same-origin'})).status"
                     )
                     == 401
+                )
+                expect(page.locator("#page-title")).to_have_text("Get your hot buns in here.")
+                page.emulate_media(color_scheme="light")
+                page.set_viewport_size({"width": 1440, "height": 1000})
+                audit("login light")
+                page.screenshot(path=str(screenshots / "admin-login-desktop.png"), full_page=True)
+                page.locator("#language").select_option("de")
+                page.emulate_media(color_scheme="dark")
+                page.set_viewport_size({"width": 390, "height": 844})
+                expect(page.locator("#page-title")).to_have_text("Na, du heißes Früchtchen.")
+                expect(page.locator("#setup-fields")).to_be_hidden()
+                assert page.evaluate("document.documentElement.scrollWidth<=innerWidth+1")
+                audit("login German phone dark")
+                page.screenshot(
+                    path=str(screenshots / "admin-login-phone-de-dark.png"), full_page=True
                 )
                 assert not errors, errors
                 browser.close()

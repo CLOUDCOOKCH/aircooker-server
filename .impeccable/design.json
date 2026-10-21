@@ -7,73 +7,81 @@
     "pluginSchemaValidation": "not performed: plugin schema and cloud resources unavailable"
   },
   "project": "mealf",
-  "surface": "PWA frontend/",
+  "surface": "PWA frontend/ and administration console",
   "snapshotDate": "2026-10-21",
   "authority": [
     "PRODUCT.md",
-    ".impeccable/surfaces/pwa.md"
+    ".impeccable/surfaces/pwa.md",
+    ".impeccable/surfaces/admin.md"
   ],
   "direction": {
     "purpose": "effortless household food planning",
     "appearance": "system light/dark",
     "typography": "approved system UI stack",
-    "accent": "forest green",
+    "accent": "cream/coral/peach light; cocoa/peach dark; separate raspberry danger",
     "glass": "floating navigation; solid reading/editing surfaces",
-    "native": "independent iOS repository retained for later"
+    "native": "independent iOS repository retained for later",
+    "voice": "localized food innuendo in welcome/login, empty, sidebar and footer; literal setup/help/security/error/recovery",
+    "paletteAuthority": "explicit user-approved whole-PWA and admin palette refresh supersedes earlier forest-green constraint"
   },
   "tokens": {
     "cssCustomProperties": {
       "source": "frontend/src/tokens.css",
       "light": {
-        "--canvas": "#f4f5f1",
-        "--surface": "#ffffff",
-        "--ink": "#1c231f",
-        "--muted": "#626b64",
-        "--line": "#dce1d9",
-        "--soft": "#e9ede6",
-        "--hover": "#e1e7dd",
-        "--green": "#28533c",
-        "--green-hover": "#1a3e2a",
-        "--on-green": "#ffffff",
-        "--green-soft": "#e5ede2",
-        "--green-ink": "#264633",
-        "--green-muted": "#52674f",
-        "--focus": "#669967",
-        "--selection": "#cdddc7",
-        "--glass": "rgba(255, 255, 255, 0.76)",
-        "--glass-shadow": "0 8px 32px rgba(24, 44, 27, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
-        "--sheet-shadow": "0 18px 70px rgba(9, 24, 13, 0.2)",
-        "--danger": "#a0322d",
-        "--danger-soft": "#f9e9e6",
-        "--danger-ink": "#79241e",
-        "--warning-soft": "#f0eadc",
-        "--warning-ink": "#695427"
+        "--canvas": "#fff7ec",
+        "--surface": "#fffdf8",
+        "--ink": "#32221f",
+        "--muted": "#79635b",
+        "--line": "#dfc8bb",
+        "--soft": "#f6e9dc",
+        "--hover": "#efdbcd",
+        "--accent": "#a83b2b",
+        "--accent-hover": "#943323",
+        "--on-accent": "#ffffff",
+        "--accent-soft": "#f9e1d7",
+        "--accent-ink": "#813426",
+        "--accent-muted": "#7c5147",
+        "--focus": "#a83b2b",
+        "--selection": "#f2b49c",
+        "--glass": "rgba(255, 247, 236, 0.84)",
+        "--glass-shadow": "0 8px 32px rgba(83, 42, 25, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+        "--sheet-shadow": "0 18px 70px rgba(55, 28, 20, 0.22)",
+        "--scrim": "rgba(43, 24, 19, 0.44)",
+        "--control-border": "#a88b7e",
+        "--danger": "#a12340",
+        "--danger-soft": "#fbe4e9",
+        "--danger-ink": "#851e36",
+        "--warning-soft": "#f6e8c8",
+        "--warning-ink": "#6d4b16"
       },
       "dark": {
-        "--canvas": "#151a17",
-        "--surface": "#202722",
-        "--ink": "#f0f2ec",
-        "--muted": "#a4aea4",
-        "--line": "#39423b",
-        "--soft": "#2a332c",
-        "--hover": "#354137",
-        "--green": "#a9cda8",
-        "--green-hover": "#c6e4c0",
-        "--on-green": "#18301e",
-        "--green-soft": "#273a2c",
-        "--green-ink": "#d2e4ce",
-        "--green-muted": "#acbfa7",
-        "--focus": "#a9cda8",
-        "--selection": "#3b563e",
-        "--glass": "rgba(37, 47, 40, 0.8)",
+        "--canvas": "#201917",
+        "--surface": "#2c2220",
+        "--ink": "#fff2e8",
+        "--muted": "#c8aaa0",
+        "--line": "#54403a",
+        "--soft": "#392b27",
+        "--hover": "#49342e",
+        "--accent": "#ffad8c",
+        "--accent-hover": "#ffc6af",
+        "--on-accent": "#3a211a",
+        "--accent-soft": "#493029",
+        "--accent-ink": "#ffd6c2",
+        "--accent-muted": "#dcb4a2",
+        "--focus": "#ffad8c",
+        "--selection": "#754b3b",
+        "--glass": "rgba(44, 34, 30, 0.86)",
         "--glass-shadow": "0 10px 36px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
         "--sheet-shadow": "0 22px 80px rgba(0, 0, 0, 0.5)",
-        "--danger": "#f2a49b",
-        "--danger-soft": "#482b29",
-        "--danger-ink": "#f4c0b9",
-        "--warning-soft": "#373325",
-        "--warning-ink": "#e4d7af"
-      }
+        "--scrim": "rgba(12, 7, 5, 0.64)",
+        "--control-border": "#a48679",
+        "--danger": "#ffa6ba",
+        "--danger-soft": "#48232e",
+        "--danger-ink": "#ffc8d4",
+        "--warning-soft": "#42321e",
+        "--warning-ink": "#f0d49f"
+      },
+      "delivery": "Exact frontend/src/tokens.css bytes copied to frontend/dist/theme.css; console imports /app/theme.css"
     },
     "typography": {
       "source": "frontend/src/styles.css",
@@ -168,7 +176,7 @@
     },
     "effects": {
       "navigationFilter": "blur(28px) saturate(155%)",
-      "sheetBackdrop": "rgba(15, 22, 17, 0.4)",
+      "sheetBackdrop": "var(--scrim)",
       "sheetBackdropFilter": "blur(5px)",
       "focusOutline": "3px solid var(--focus)",
       "focusOffset": "4px",
@@ -269,8 +277,8 @@
       "selectedSemantics": "aria-pressed",
       "labels": "full localized civil date",
       "selectionColours": [
-        "--green",
-        "--on-green"
+        "--accent",
+        "--on-accent"
       ]
     },
     "Sheet": {
@@ -294,7 +302,7 @@
     },
     "reminders": {
       "source": "frontend/src/ReminderSettings.tsx",
-      "surface": "optional per-device Settings group; existing solid surfaces, system typography and forest-green controls",
+      "surface": "optional per-device Settings group; existing solid surfaces, system typography and semantic accent controls",
       "controls": "household time zone; explicit connect and enable; category checkboxes and distinctly named native time inputs; separate save/test/retry/disconnect actions",
       "drafts": "persist preference edits locally through offline/reload; explicit connected save applies server scheduling; no offline local notification scheduler",
       "availability": "busy disables form; offline disables server actions; unsaved or disabled preferences disable test sending; installation/unsupported/denied/setup/key-change states explain recovery",
@@ -319,7 +327,7 @@
         "frontend/src/PlanningSettings.tsx",
         "frontend/src/Calendar.tsx"
       ],
-      "surface": "shared Meal suggestions group on existing solid Settings surface; system typography and forest-green controls; multi-category preview uses scrolling Sheet",
+      "surface": "shared Meal suggestions group on existing solid Settings surface; system typography and semantic accent controls; multi-category preview uses scrolling Sheet",
       "defaults": "dinner; no repeated recipes; recipe-specific servings; available leftovers enabled",
       "controls": "labelled breakfast/lunch/dinner checkboxes, repeats and leftover choices, optional labelled fixed-portions field; empty categories disable save; busy disables form",
       "drafts": "per-device edits persist immediately through offline/reload separately from validated saved household snapshot; offline previews use last saved choices; refresh preserves unsaved draft; explicit online save shares settings; isolated demo stays local",
@@ -329,6 +337,35 @@
       "recovery": "failure retains selection and releases guard for retry; English/German role=alert asks users to check calendar before another mix, without claiming no write occurred after a later refresh failure",
       "learning": "each distinct chosen recipe increments once per successful approval in same transaction as meal writes and replay receipt; failed approvals/duplicate delivery add no learning; bounded bonus preserves variety; chosen-before explanation never implies cooking",
       "guide": "docs/PLANNING_PREFERENCES.md"
+    },
+    "admin": {
+      "source": "src/aircooker/web/console.css",
+      "aliases": {
+        "--bg": "var(--canvas)",
+        "--fg": "var(--ink)",
+        "--panel": "var(--surface)",
+        "--border": "var(--line)",
+        "--active": "var(--accent-soft)",
+        "--radius": "16px"
+      },
+      "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+      "body": "1rem/1.55",
+      "h1": "700 clamp(1.75rem, 3vw, 2.375rem)/1.15",
+      "h1Tracking": "-.035em",
+      "loginH1": "clamp(2rem, 3.5vw, 3rem)",
+      "shellColumns": "220px minmax(0, 1fr)",
+      "shellMaxWidth": "1560px",
+      "shellPadding": "24px",
+      "shellGap": "24px",
+      "sidebarRadius": "24px",
+      "sidebarFilter": "blur(28px) saturate(155%)",
+      "pageRadius": "16px",
+      "controlRadius": "11px",
+      "controlMinHeight": "44px",
+      "phoneBreakpoint": "760px",
+      "phoneNavigation": "wrapping grid; static glass top region",
+      "fallbacks": "opaque panel when backdrop-filter unsupported or reduced transparency requested",
+      "pwaLink": "/app/"
     }
   },
   "accessibility": {
@@ -357,7 +394,8 @@
       "lightPrimaryText": 8.78,
       "darkPrimaryText": 8.1
     },
-    "acceptance": "incomplete; review and captured-screen automated checks do not establish complete accessibility compliance"
+    "acceptance": "incomplete; review and captured-screen automated checks do not establish complete accessibility compliance",
+    "historicalContrastNotice": "Any prior representative contrast measurements describe the original green palette; current pair and Axe checks are scoped in review.palette and the current manual report."
   },
   "assets": {
     "provenance": "frontend/public/art/provenance.json",
@@ -380,7 +418,7 @@
       "provenance": "frontend/public/brand/provenance.json"
     },
     "prompts": "original prompts unavailable; none reconstructed",
-    "concept": "User-approved illustrative glass concept supplied in conversation; not a running app capture. Both original peach/wordmark PNGs were received in a ZIP and installed in the PWA/console without redrawing or recolouring. Preserve the established green/system-type/glass visual world. Native artwork is unchanged by this server release.",
+    "concept": "User-approved illustrative glass concept supplied in conversation; not a running app capture. Both original peach/wordmark PNGs were received in a ZIP and installed in the PWA/console without redrawing or recolouring. Preserve the established system-type/glass visual world with the explicitly approved cream/coral/peach and cocoa/peach web palette. Native artwork is unchanged by this server release.",
     "brandSources": {
       "peach": {
         "file": "assets/brand/originals/mealf-flirty-peach-logo.png",
@@ -415,7 +453,7 @@
   "review": {
     "initial": "docs/validation/pwa-visual-review.md",
     "verdict": "docs/validation/pwa-visual-verdict.md",
-    "disposition": "Newest review docs/validation/mealf-artwork-review.md: original supplied artwork delivered at the PWA/console scope, with no observed blocking branding defect. Prior reviews retain their historical source/scope; no full-product or native-artwork acceptance.",
+    "disposition": "Current manual review docs/validation/mealf-palette-review.md: ship within the reviewed palette, administration and copy scope; zero required material findings. Publication pending. Prior reviews retain historical source/scope; no complete-product, physical-device or live-service acceptance.",
     "reminders": {
       "report": "docs/validation/reminders-review.md",
       "guide": "docs/REMINDERS.md",
@@ -519,6 +557,43 @@
       },
       "requiredFixesRemaining": 0,
       "evidenceLimits": "Genuine Chromium desktop/phone EN/DE light/dark renders; offline assets and accessible image names tested. No physical iPhone/OS icon-update, full keyboard/screen-reader/motion or full-product acceptance. Launcher/detector/specialist resources unavailable."
+    },
+    "historicalEvidenceNotice": "All existing original PWA/name/reminder/planning/artwork reviews and capture hashes are historical tested-source records. They do not accept the current palette.",
+    "palette": {
+      "report": "docs/validation/mealf-palette-review.md",
+      "status": "independent manual finish: ship within reviewed palette, administration and copy scope; zero required material findings; publication pending",
+      "captures": [
+        "docs/screenshots/mealf-palette-pwa-welcome-desktop.png",
+        "docs/screenshots/mealf-palette-pwa-welcome-phone-dark.png",
+        "docs/screenshots/mealf-palette-pwa-login-desktop.png",
+        "docs/screenshots/mealf-palette-pwa-home-desktop.png",
+        "docs/screenshots/mealf-palette-pwa-home-phone-dark.png",
+        "docs/screenshots/mealf-palette-pwa-recipes-phone-dark.png",
+        "docs/screenshots/mealf-palette-pwa-settings-phone-de-dark.png",
+        "docs/screenshots/mealf-palette-admin-mobile-settings-de.png",
+        "docs/screenshots/mealf-palette-admin-login-desktop.png",
+        "docs/screenshots/mealf-palette-admin-login-phone-de-dark.png",
+        "docs/screenshots/mealf-palette-admin-desktop.png",
+        "docs/screenshots/mealf-palette-admin-desktop-dark.png"
+      ],
+      "captureHashesSHA256": {
+        "docs/screenshots/mealf-palette-pwa-welcome-desktop.png": "539e2f6d5d15129a9d160f6cd687288e016df75126afecfdc09ca7135652940f",
+        "docs/screenshots/mealf-palette-pwa-welcome-phone-dark.png": "b80504bf0c6b5bf913b54ea4e158fc07493a55e9e44090c20d2d97585692e1c2",
+        "docs/screenshots/mealf-palette-pwa-login-desktop.png": "514150652c05edffcfbbd08d44a227e8cdd6cd32fb25d4e99dfee33431181846",
+        "docs/screenshots/mealf-palette-pwa-home-desktop.png": "0c587d56dbc4c6de2074ced5d72fcf9c5c78ba5525aed935508a29a59bcdfa90",
+        "docs/screenshots/mealf-palette-pwa-recipes-phone-dark.png": "dd33e7d0d71e8def91e0f8fa39ed8f6afc1346374774700e82a2e8c49bb70bb9",
+        "docs/screenshots/mealf-palette-pwa-settings-phone-de-dark.png": "3d037944701a19f02cc64ec63597167198530aa0b5fb934a4b5b32eb9106d42d",
+        "docs/screenshots/mealf-palette-admin-login-desktop.png": "2b37e9f3b9d0192f33c065341775c07e6506d23814216b57ae11124e48b23db6",
+        "docs/screenshots/mealf-palette-admin-login-phone-de-dark.png": "d21708b5962ed18377095458adbb62913599dc97c69f1aa1017cf632e0742b65",
+        "docs/screenshots/mealf-palette-admin-desktop.png": "94ef901838bb48af9673d310f6f9a298f2c4378c62b263eb2fd49687c1bc1d96",
+        "docs/screenshots/mealf-palette-admin-desktop-dark.png": "18cae9402c2fb5b667184153747afec4c5ae6432320a1065ac7cece01c0093aa",
+        "docs/screenshots/mealf-palette-pwa-home-phone-dark.png": "edcab979f53300b1b1ffe90b81b8d0faada3fe7207379bb46693d7b36caf721c",
+        "docs/screenshots/mealf-palette-admin-mobile-settings-de.png": "be9f4102f5f9649d593996a4e081802db02ced61308570bc9532adbcfdb9fa35"
+      },
+      "localChecks": "213 backend + 39 web core tests; Ruff lint/format, mypy, contract drift, frontend build/type checks, asset bytes, licence inventory; real Chromium PWA/admin/push-receiver workflows with synthetic external services",
+      "expandedChecks": "admin Axe setup/login plus six pages both themes; PWA palette pairs; 320px/200% text overflow",
+      "limits": "manual screenshots/source scope; no launcher/detector/schema pass; physical iPhone/Safari, live push/Bring/AI and full-product acceptance unverified; publication pending",
+      "requiredMaterialFindings": 0
     }
   },
   "sourceReferences": [
@@ -547,7 +622,15 @@
     "frontend/src/Brand.tsx",
     "scripts/build_brand_assets.py",
     "frontend/public/brand/provenance.json",
-    "docs/validation/mealf-artwork-review.md"
+    "docs/validation/mealf-artwork-review.md",
+    "frontend/scripts/build-worker.mjs",
+    "frontend/index.html",
+    "frontend/public/manifest.webmanifest",
+    "src/aircooker/web/console.css",
+    "src/aircooker/web/index.html",
+    "src/aircooker/web/console.js",
+    ".impeccable/surfaces/admin.md",
+    "docs/validation/mealf-palette-review.md"
   ],
   "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
 }

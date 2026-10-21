@@ -3,7 +3,7 @@
 Mode: Operate. Approved purpose/platform: PWA-first, retaining native code; user confirmation
 on 2026-10-21. Preserve the approved native concept and product requirements. Stack choice
 is delegated by the master prompt. The confirmed mealf name/asset rebrand applies to the
-established glass interface; it does not replace that approved visual world.
+established glass interface. The explicitly approved palette/voice refresh described below supersedes the former green accent constraint while preserving the glass/system-type world.
 
 Visual authority: existing SwiftUI KitchenStyle/components and the user-approved glass
 concept at /workspace/generated_images/exec-d61616a4-31c5-4cbf-8f34-24d3ed52d35f.png.
@@ -15,8 +15,7 @@ strip, today's actual meals with one strong food photo when present, accessible 
 actions and visible offline/demo status. Bottom glass five-destination navigation on phones;
 adapt content density and navigation on desktop. Existing account data never gains samples.
 
-Restrained colour: system-like white/charcoal content, forest-green actions, warm food
-photography. Follow system appearance. System UI typography is intentional continuity with
+Current colour: cream/coral/peach light appearance and cocoa/peach dark appearance, with separate raspberry danger roles and warm food photography. Follow system appearance. System UI typography is intentional continuity with
 the approved Apple-style operating interface. Glass is reserved for floating controls and
 navigation; reading/editing surfaces stay legible. Opaque/reduced-motion fallbacks.
 
@@ -32,12 +31,12 @@ desktop/mobile together and run the skill finish review/documentation after the 
 implementation/verification passes. Context launcher is unavailable; existing project
 sources and skill resources are the fallback. No design selection is reopened.
 
-Brand delivery, 2026-10-21: both original PNGs were received in a ZIP and preserved in
+Historical brand-delivery handoff before the palette refresh, 2026-10-21: both original PNGs were received in a ZIP and preserved in
 `assets/brand/originals/`. The supplied peach and lowercase wordmark replace the interim
 utensil/text lockups across the PWA and console. Only fully transparent margins, proportional
 output sizes and installation canvases change; no artwork is redrawn or recoloured.
 `Brand` uses a decorative 32px peach, 8px gap and 104px image wordmark; compact footer
-sizes are 20px/6px/60px. Keep the green controls, system type and glass vocabulary intact.
+sizes are 20px/6px/60px. At that historical scope, green controls, system type and glass were retained; the later approved palette refresh replaces the green accent roles.
 Versioned touch/favicon/manifest/maskable icons and old icon URLs use the peach. Stable
 manifest/storage/session identities preserve household/offline work. Native artwork is
 unchanged by this server release. See [branding](../../docs/BRANDING.md) and the
@@ -47,7 +46,7 @@ accessible names are tested. Historical name-only/PWA reviews retain their origi
 The implementation-agent manual review claims no unavailable launcher/detector, plugin
 schema, design-hook or independent specialist pass. Physical iPhone/icon refresh is unverified.
 
-Reminder handoff, 2026-10-21: Settings includes optional per-device meal reminders within
+Historical reminder handoff, 2026-10-21: Settings includes optional per-device meal reminders within
 the existing solid settings surface and approved green/system-type direction. Preserve the
 household time zone, explicit connect/enable steps, labelled category/time controls and
 separate save/test/retry/disconnect actions. Local preference drafts survive offline/reload;
@@ -69,7 +68,7 @@ Safari/physical iPhone delivery, background OS display, Focus behavior and full-
 acceptance remain outside the evidence. That historical reminder handoff preceded receipt
 of the original brand artwork and introduces no replacement aesthetic direction.
 
-Shared-planning handoff, 2026-10-21: Settings → Meal suggestions uses the established
+Historical shared-planning handoff, 2026-10-21: Settings → Meal suggestions uses the established
 solid Settings group, labelled category checkboxes and optional fixed-portions field.
 Defaults are dinner, no repeats, each recipe's own servings and available leftovers enabled.
 Explicit online save shares household choices. Per-device drafts persist immediately through
@@ -92,7 +91,7 @@ each distinct recipe once per successful approval, alongside the meal writes/rep
 failed approvals and duplicate delivery add no learning. A bounded bonus preserves variety,
 and approval never implies cooking.
 
-See the [planning guide](../../docs/PLANNING_PREFERENCES.md) and newest
+See the [planning guide](../../docs/PLANNING_PREFERENCES.md) and historical
 [manual shared-planning finish review](../../docs/validation/planning-preferences-review.md):
 **ship at the tested shared-planning UI scope**, with rapid-activation/recovery findings
 resolved and no required UI fixes remaining. Genuine [desktop settings](../../docs/screenshots/pwa-planning-settings-desktop.png),
@@ -103,5 +102,8 @@ one 21-mutation approval group after same-turn double activation and once-only s
 failure/dismissal branches were inspected in source. This manual documentation handoff did
 not rerun browser checks or claim detector, specialist or plugin-schema validation. Full
 accessibility, physical Safari/iPhone, native parity, complete-product and original-artwork
-acceptance remain outside this scope. Preserve the approved glass/system-type/forest-green
-world. Current supplied-artwork delivery is recorded above and in BRANDING.md.
+acceptance remain outside this scope. The then-reviewed glass/system-type/forest-green world is historical palette evidence; current colours follow the approved refresh below. Current supplied-artwork delivery is recorded above and in BRANDING.md.
+
+Current palette/voice handoff, 2026-10-21: the user requested the Mealf design across every PWA and admin surface, with cheeky food innuendo and a login headliner. `frontend/src/tokens.css` owns the shared semantic palette; the build exports exact bytes to `/app/theme.css` for console reuse. `--accent*` replaces green-named roles. Preserve original PNGs byte-for-byte, system typography, solid forms, durable work and explicit import/suggestion approval. English/German welcome/login, empty-state, sidebar and footer copy may be playful. Setup instructions, help, security, error and recovery language stays literal. Current screenshots and exact light/dark tokens are in [DESIGN.md](../../DESIGN.md) and the project-owned [snapshot](../design.json); historical captures above retain their tested-source scope.
+
+Local 213 backend/39 web tests, lint/type/contract/build checks, asset/licence checks and real Chromium PWA/admin/push-receiver flows passed in the implementation handoff. Expanded admin Axe setup/login/six-page theme checks, PWA palette pairs and narrow/enlarged-text overflow checks passed. The [manual palette finish review](../../docs/validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Publication remains pending and complete-product readiness is not claimed. No unavailable launcher/detector/schema pass, physical iPhone/Safari or live-service verification is claimed. Native is unchanged and retained for later.

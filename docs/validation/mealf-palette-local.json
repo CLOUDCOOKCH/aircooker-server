@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-21",
+  "scope": "Mealf PWA and administration palette, localized food innuendo, unchanged original artwork",
+  "tests": {
+    "backend": {
+      "passed": 213
+    },
+    "frontend": {
+      "passed": 39
+    },
+    "pwa_chromium": "passed including offline replay, configured login and Axe checks",
+    "console_chromium": "passed including all six sections in both themes, setup/login Axe, runtime palette comparison, 320px/200% font overflow and existing security/integration workflows",
+    "push_chromium": "passed with explicit subscription/vendor doubles",
+    "ruff": "passed",
+    "mypy": "passed",
+    "typescript_build_prettier": "passed",
+    "openapi_drift": "passed unchanged",
+    "original_artwork_derivatives": "passed",
+    "locked_licence_inventory": "40 wheels passed",
+    "npm_audit": "0 advisories"
+  },
+  "palette_source": "frontend/src/tokens.css",
+  "css_snapshot_sha256": "0cf7f097dc962609c29d703b2f1fa423047992cf614947bc66d3cd60001adc79",
+  "console_theme_export": "build-worker copies exact tokens into /app/theme.css before cache versioning; Docker smoke asserts installed response bytes",
+  "review": "docs/validation/mealf-palette-review.md",
+  "review_disposition": "ship within reviewed scope; no required material findings",
+  "limitations": [
+    "launcher/detector unavailable (attempted exit127), no plugin-schema validation claimed",
+    "No physical iPhone/Safari, native UI, live Bring/AI/vendor push or full-product acceptance",
+    "Local Docker build blocked by pre-existing mirror policy; dual-architecture image verification remains in publication pipeline"
+  ]
+}

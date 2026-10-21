@@ -9,6 +9,7 @@ import os
 import subprocess
 import time
 from datetime import UTC, datetime
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -139,6 +140,9 @@ def main():
             content = request(base, "/app/" + path)
             assert hashlib.sha256(content).hexdigest() == expected["sha256"]
         assert b"/app/brand/wordmark-v1.png" in request(base, "/")
+        # The installed wheel must ship the console's palette, not only the Vite bundle.
+        assert request(base, "/app/theme.css") == Path("frontend/src/tokens.css").read_bytes()
+        assert b"/app/theme.css" in request(base, "/console.css")
         # NAS/container consoles may require Bash. The same non-root account must
         # be able to read its private bootstrap token through an actual Bash process.
         version = docker("exec", name, "/bin/bash", "--version")

@@ -1,5 +1,7 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+// The console and bundled PWA styles derive from the same source palette.
+await writeFile('dist/theme.css', await readFile('src/tokens.css'));
 const files = [];
 async function collect(path) {
   for (const item of await readdir('dist/' + path, { withFileTypes: true })) {

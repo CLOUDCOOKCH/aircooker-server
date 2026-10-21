@@ -8,6 +8,8 @@ Object.assign(words.en, {recent_imports:"Recent recipe imports",empty_imports:"N
 Object.assign(words.de, {recent_imports:"Letzte Rezeptimporte",empty_imports:"Noch keine Rezeptimporte.",kind_import:"Rezeptimport",kind_shopping:"Bring!-Abgleich",kind_unknown:"Hintergrundauftrag",job_preview:"Bereit zur Prüfung",job_needs_input:"Deine Eingabe wird benötigt",job_confirmed:"Gespeichert",job_cancelled:"Abgebrochen",job_unknown:"Status nicht verfügbar"});
 Object.assign(words.en, {diagnostic_code:"Diagnostic code: ",diagnostic_generic:"Could not complete. Review settings and try again.",diagnostic_rate_limit:"Request limit reached. Try again later.",diagnostic_auth:"Check the configured provider credentials.",diagnostic_bring_gate:"Verify the dedicated Bring! list before enabling automatic changes.",diagnostic_bring_list:"Select an available Bring! list in settings.",diagnostic_manual:"Paste the recipe text or enter it manually.",diagnostic_network:"Source could not be reached. Try again or paste its text.",diagnostic_invalid:"The source or provider did not return a valid recipe.",diagnostic_consent:"Allow this import to send content to the configured AI provider.",diagnostic_ai_config:"Configure an AI provider before using extraction."});
 Object.assign(words.de, {diagnostic_code:"Diagnosecode: ",diagnostic_generic:"Nicht abgeschlossen. Prüfe die Einstellungen und versuche es erneut.",diagnostic_rate_limit:"Anfragelimit erreicht. Versuche es später erneut.",diagnostic_auth:"Prüfe die Zugangsdaten des konfigurierten Anbieters.",diagnostic_bring_gate:"Prüfe die eigene Bring!-Testliste, bevor automatische Änderungen aktiviert werden.",diagnostic_bring_list:"Wähle eine verfügbare Bring!-Liste in den Einstellungen.",diagnostic_manual:"Füge den Rezepttext ein oder gib das Rezept manuell ein.",diagnostic_network:"Quelle nicht erreichbar. Versuche es erneut oder füge den Text ein.",diagnostic_invalid:"Quelle oder Anbieter hat kein gültiges Rezept geliefert.",diagnostic_consent:"Erlaube für diesen Import die Übertragung an den konfigurierten KI-Anbieter.",diagnostic_ai_config:"Konfiguriere vor der Extraktion einen KI-Anbieter."});
+Object.assign(words.en, {login_headline:"Get your hot buns in here.",setup_headline:"Set up your kitchen",login_joke:"We like it hot. Your dinner, obviously.",setup_joke:"Good food starts here. Bad jokes are already included.",open_app:"Open meal planner",connect:"Your household account",console_footer:"Meal plans with benefits. Independently self-hosted.",sidebar_note:"Your kitchen. No strings attached."});
+Object.assign(words.de, {login_headline:"Na, du heißes Früchtchen.",setup_headline:"Deine Küche einrichten",login_joke:"Wir mögen’s heiß. Dein Abendessen natürlich.",setup_joke:"Hier beginnt gutes Essen. Schlechte Witze sind inklusive.",open_app:"Essensplaner öffnen",connect:"Dein Haushaltskonto",console_footer:"Essensplanung mit gewissen Vorzügen. Unabhängig selbst gehostet.",sidebar_note:"Deine Küche. Ganz ohne Verpflichtungen."});
 function diagnosticMessage(code){
   if(["ai_rate_limited","ai_request_limit"].includes(code))return words[locale].diagnostic_rate_limit;
   if(code==="ai_authentication_failed")return words[locale].diagnostic_auth;
@@ -67,10 +69,14 @@ function translateJobs(){document.querySelectorAll(".job").forEach(row=>{
   row.textContent=words[locale][kind]+" · "+(words[locale]["job_"+row.dataset.state]||words[locale].job_unknown)+(row.dataset.error?" · "+diagnosticMessage(row.dataset.error):"")+(row.dataset.created?" · "+new Date(Number(row.dataset.created)*1000).toLocaleString(locale):"");
   row.title=row.dataset.error?words[locale].diagnostic_code+row.dataset.error:"";
 });}
+function authenticationCopy(){
+  $("page-title").dataset.i18n=configured?"login_headline":"setup_headline";
+  document.querySelector(".auth-intro [data-i18n$='_joke']").dataset.i18n=configured?"login_joke":"setup_joke";
+}
 function signedOut(){
   $("dashboard").hidden=true; $("authentication").hidden=false;
   $("console-nav").hidden=true; $("logout").hidden=true;
-  $("page-title").dataset.i18n="title";$("page-title").textContent=words[locale].title;
+  authenticationCopy();translate();
   document.body.classList.remove("authenticated");
   document.querySelectorAll('input[type="password"]').forEach(e=>e.value="");
 }
@@ -226,6 +232,6 @@ $("logout").onclick=()=>action($("logout"),async()=>{await post("/api/v1/admin/l
 $("reload").onclick=()=>action($("reload"),refresh);
 $("export").onclick=()=>{window.location.assign("/api/v1/admin/export/archive");};
 (async()=>{try{
-  const info=await request("/api/v1/system/info");configured=info.configured;$("setup-fields").hidden=configured;
+  const info=await request("/api/v1/system/info");configured=info.configured;$("setup-fields").hidden=configured;authenticationCopy();
   $("identity").textContent=info.name+" · v"+info.version;translate();if(configured)await refresh();
 }catch(err){showError(err.message);}})();
