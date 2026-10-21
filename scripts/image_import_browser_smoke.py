@@ -116,6 +116,12 @@ def main():
                 context = getattr(playwright, engine).launch_persistent_context(
                     str(root / "profile"), viewport={"width": 1440, "height": 1000}, **options
                 )
+                if engine == "webkit":
+                    # WebKitGTK's headless runner has no OS push service. This image
+                    # acceptance test models that optional capability as unavailable;
+                    # auth, OCR, media, storage, network loss and recipe saves stay real.
+                    # Push behavior has its own explicit subscription/vendor fixtures.
+                    context.add_init_script("Reflect.deleteProperty(window, 'PushManager')")
                 page = context.new_page()
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
@@ -242,9 +248,12 @@ def main():
                 assert stored[0]["payload"]["image_id"]
                 phase("server confirmation after restart")
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                phase("Settings clicked")
                 expect(page.get_by_role("heading", name="Settings", exact=True)).to_be_visible()
+                phase("Settings ready")
                 radio = page.get_by_role("radio", name="After Dark", exact=True)
                 radio.evaluate("e=>e.scrollIntoView({block:'center',behavior:'instant'})")
+                phase("theme radio in view")
                 print(
                     "Image test theme controls:",
                     page.locator('input[type="radio"]').evaluate_all(
@@ -294,6 +303,9 @@ def main():
                         "engine": engine,
                         "backend": "real",
                         "ocr": "real Tesseract eng+deu",
+                        "native_push": "unavailable OS capability fixture"
+                        if engine == "webkit"
+                        else "native capability; no subscription requested",
                         "transport": "trusted HTTPS" if tls_root else "HTTP loopback Chromium",
                         "offline": "actual backend outage"
                         if real_outage

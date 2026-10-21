@@ -6,7 +6,10 @@
   expose correctable recognized text and retain replay/cancellation semantics. Optional
   configured AI receives only recognized text after consent. Cover real OCR, preview/save,
   offline reload, lost replies, terminal-history queue starvation and synthetic AI privacy.
-  Physical camera/iPhone and live AI remain unverified; publication evidence is separate.
+  Settings avoids native push subscription discovery before notification permission;
+  synthetic opt-in boundary and existing reminder flows pass. Headless WebKit image tests
+  explicitly model OS push as unavailable; the photo pipeline stays real.
+  Physical camera/iPhone and live AI/push remain unverified; publication evidence is separate.
 
 - Add a shared PWA/admin theme library: Flo (existing system appearance), After Dark
   (fixed dark, ink/oxblood/rose) and Sunday (fixed light, linen/sage). Persist browser-local
