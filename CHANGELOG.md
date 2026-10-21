@@ -1,5 +1,9 @@
 # Changelog
 
+- Parse supported metric/English/German ingredient quantities, fractions and ranges before
+  import review; preserve uncertain text and disclose omitted/truncated entries.
+- Extend Docker acceptance checks through durable import preview and explicit confirmation.
+
 - Replace Debian runtime packaging with pinned official Python/Alpine to remove unused
   util-linux packages; full Docker smoke and a zero HIGH/CRITICAL AMD64 scan pass.
 - Repair the scanner action/release pins and add native AMD64/ARM64 CI test/scan jobs.

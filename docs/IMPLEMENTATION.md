@@ -16,9 +16,9 @@ phases have passed every acceptance gate.
 | 3 Recipes | Backend typed CRUD and native editor, decimal scaling, notes/ratings, immutable photos, durable offline photo queue | Backend/core tested; native unverified; photo cleanup, fractions/ranges UX, searching API and historical metadata incomplete |
 | 4 Planning | Meal CRUD, bounded recurrence, template records, leftovers validation, pantry, rated/history/leftover-aware local suggestions, replay-safe live approval, native calendar/drag/move, day/week copy, template previews, recurrence, leftover and review interfaces | Backend/core tested; native unverified; arbitrary copy destinations, shared household preferences, acceptance learning and cross-device approval collision UX remain partial |
 | 5 Bring | SDK adapter, encrypted credentials, list selection API, projection, UUID ownership/replay/purchase/rollover tests, durable retries | Synthetic connector tests; live unverified; browser configuration tested with doubles; additional purchased requirement semantics incomplete |
-| 6 Imports/AI | Public HTTPS safety, JSON-LD drafts, import review confirmation, idempotent requests, encrypted admin configuration, synthetic connection probes, request budgets, text AI provider adapters, share inbox and review UI sources | Partial: source-specific captions/transcripts, ingredient parsing, live providers, image extraction, native lifecycle validation |
+| 6 Imports/AI | Public HTTPS safety, JSON-LD drafts, conservative metric/EN/DE ingredient parsing, import review confirmation, idempotent requests, encrypted admin configuration, synthetic connection probes, request budgets, text AI provider adapters, share inbox and review UI sources | Partial: source-specific captions/transcripts, broader ingredient-language parsing, live providers, image extraction, native lifecycle validation |
 | 7 UX | Dashboard/start-screen settings, system appearance, native components, localisation, 14-day widget cache/deep links and opt-in local reminder settings/reconciliation | Core dates/DST/cache/links tested; native delivery/rendering/permission/lock lifecycle, accessibility, photography and UI performance unverified |
-| 8 Release | Local backup, media-aware JSON/ZIP restore, independent CI configuration, governance and release instructions | Partial: Apple build/signing/TestFlight, demo, screenshots/icons, remaining container advisory triage, full security review, ARM64 CI verification, stable releases |
+| 8 Release | Local backup, media-aware JSON/ZIP restore, independent CI configuration, governance and release instructions | Partial: Apple build/signing/TestFlight, demo, screenshots/icons, ongoing dependency monitoring, full security review, stable releases |
 
 ## Executed evidence
 
@@ -51,9 +51,9 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-97 backend tests and 80 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. The new Alpine runtime passed real-HTTP Docker smoke checks and Trivy 0.70.0 reports
-zero HIGH/CRITICAL findings without ignoring unfixed issues. Native AMD64/ARM64 CI checks
-are configured; ARM64 validation is still pending. The previous Debian image retained
+129 backend tests and 80 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. The new Alpine runtime passed real-HTTP Docker smoke checks and Trivy 0.70.0 reports
+zero HIGH/CRITICAL findings without ignoring unfixed issues. Native AMD64/ARM64 tests, Docker smoke checks, secret scans and vulnerability scans
+passed on GitHub run 39558393279 for commit e55e008; current parser changes await their run. The previous Debian image retained
 44 high matches across eight advisories and is preserved as historical evidence.
 See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected
 environment variable `RELEASE_ACCEPTANCE_VERIFIED=true` and are not enabled by these results.

@@ -5,14 +5,14 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 
 | Check | Executed result | Limit |
 | --- | --- | --- |
-| Backend tests against hashed runtime dependencies | **97 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
+| Backend tests against hashed runtime dependencies | **129 passed** | One upstream Starlette TestClient/httpx deprecation warning; no failure |
 | Ruff lint and format | Passed | Python source/tests/scripts only |
 | mypy | Passed across 23 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
 | Swift core compile and tests | **80 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 277 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 283 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -177,3 +177,24 @@ remain unverified against an Apple SDK. No release gate is cleared by UI changes
 The exact server source changes are `web/index.html`, `web/console.css`, `web/console.js`,
 `scripts/browser_smoke.py`, documentation and six genuine browser captures. Runtime
 schemas, migrations, dependency locks and the canonical API contract are unchanged.
+
+
+## Published foundation and deterministic ingredient import
+
+GitHub [run 39558393279](https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39558393279)
+passed all five jobs at e55e008: native AMD64/ARM64 tests, real-HTTP Docker smoke and security
+gates, plus Chromium workflows. See [job identities](validation/github-foundation.json).
+Security no longer depends on suppressing the historical Debian matches.
+
+The subsequent ingredient parser adds 32 tests for metric units, ordinary/mixed/Unicode
+fractions, ranges, decimal commas, preserved ambiguity, non-numeric scaling, malformed source
+entries and truncation warnings. Full backend total: 129 passing tests, with Ruff, mypy
+(24 modules) and unchanged OpenAPI checks passing. A reviewed import is additionally tested
+through servings scaling, compatible-unit aggregation and pantry exclusion.
+
+Docker image sha256:2682f75dfbd094eec3563d61bdec8c302ac2729b722a73933d5cc5be1316e59d
+passes the expanded smoke script: its durable worker produces a fractional-ingredient
+preview, the library remains unchanged before explicit confirmation, and the confirmed
+recipe participates in JSON/ZIP export and clean-install restore. No live source account
+or AI provider was used. The API schema/pin is unchanged. Native translated review notices
+are implemented sources; their editor lifecycle remains unverified until Apple UI tests.

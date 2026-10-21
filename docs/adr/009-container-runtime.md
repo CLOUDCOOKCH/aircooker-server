@@ -24,6 +24,7 @@ It warns that Alpine 3.24 is absent from its static EOL table; OS/package detect
 3.24 vulnerability repository are used. Keep scanner and base versions under review.
 
 Native AMD64/ARM64 test, Docker smoke and security matrix jobs now validate the packaging.
-ARM64 is not claimed verified until those jobs pass. Future dependencies must supply
+Both architectures passed the test/smoke/security matrix on GitHub run 39558393279
+(commit e55e008); future commits still require their own green results. Future dependencies must supply
 compatible wheels on both architectures or receive an explicit build/deployment decision;
 do not introduce unreviewed compilers/downloads into the production image.

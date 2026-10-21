@@ -6,10 +6,10 @@ import ssl
 from decimal import Decimal
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlsplit
-from uuid import uuid4
 
 from .errors import DomainError
-from .models import Ingredient, Recipe
+from .ingredients import parse_ingredient
+from .models import Recipe
 
 MAX_BYTES = 1_000_000
 
@@ -155,9 +155,11 @@ def extract(content: str, source_url=None, platform="website"):
             break
     if not found:
         raise DomainError("structured_recipe_not_found_use_manual_entry", 422)
+    raw_ingredients = found.get("recipeIngredient", [])
     ingredients = [
-        Ingredient(id=uuid4(), name=str(text)[:200], original_text=str(text)[:500])
-        for text in found.get("recipeIngredient", [])[:300]
+        parse_ingredient(text)
+        for text in (raw_ingredients[:300] if isinstance(raw_ingredients, list) else [])
+        if isinstance(text, str) and text.strip()
     ]
     steps: list[str] = []
 
@@ -196,15 +198,26 @@ def extract(content: str, source_url=None, platform="website"):
         servings=servings,
         provenance={
             "extractor": "schema.org-jsonld",
-            "quantities": "unparsed",
+            "quantities": "deterministic_requires_review",
+            "ingredient_parser": "metric-en-de-v1",
             "servings": "source" if str(servings) == str(raw) else "default_requires_review",
         },
     )
-    return recipe, [
+    warnings = [
         "review_ingredient_quantities",
         "review_servings",
         "image_import_not_yet_available",
     ]
+    if not isinstance(raw_ingredients, list) or any(
+        not isinstance(text, str) or not text.strip() for text in raw_ingredients
+    ):
+        warnings.append("ingredient_entries_omitted")
+    if isinstance(raw_ingredients, list) and (
+        len(raw_ingredients) > 300
+        or any(isinstance(text, str) and len(text.strip()) > 500 for text in raw_ingredients)
+    ):
+        warnings.append("ingredient_text_truncated")
+    return recipe, warnings
 
 
 def platform_for(url):

@@ -325,6 +325,39 @@ def main():
             == "Offline edit replayed"
         )
         assert request(base, "/api/v1/media/" + image_id, headers=headers) == canonical_photo
+        before_import = request(base, "/api/v1/recipes", headers=headers)["items"]
+        importing = request(
+            base,
+            "/api/v1/imports",
+            {
+                "request_id": str(uuid4()),
+                "text": json.dumps(
+                    {
+                        "@type": "Recipe",
+                        "name": "Imported bread",
+                        "recipeYield": "2",
+                        "recipeIngredient": ["½ kg flour", "salt to taste"],
+                        "recipeInstructions": ["Mix and bake"],
+                    }
+                ),
+            },
+            headers,
+        )
+        for _ in range(80):
+            draft = request(base, "/api/v1/imports/" + importing["id"], headers=headers)
+            if draft["state"] == "preview":
+                break
+            assert draft["state"] not in ("needs_input", "failed"), draft
+            time.sleep(0.2)
+        else:
+            raise AssertionError("Import worker did not produce a reviewable preview")
+        assert request(base, "/api/v1/recipes", headers=headers)["items"] == before_import
+        assert draft["recipe"]["ingredients"][0]["quantity"] == "0.5"
+        assert draft["recipe"]["ingredients"][0]["original_text"] == "½ kg flour"
+        reviewed = mutation(device, "recipe", draft["recipe"])
+        request(base, "/api/v1/imports/" + importing["id"] + "/confirm", reviewed, headers)
+        imported = request(base, "/api/v1/recipes/" + reviewed["entity_id"], headers=headers)
+        assert imported["payload"]["title"] == "Imported bread"
         exported = request(base, "/api/v1/admin/export", headers=headers)
         assert ai_credential not in json.dumps(exported)
         _, other, _, other_headers = start()
@@ -346,7 +379,7 @@ def main():
         assert restored_archive == {"imported": len(exported["entities"]), "media_imported": 1}
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

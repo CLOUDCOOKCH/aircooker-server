@@ -22,7 +22,9 @@ def test_structured_extraction_preserves_unparsed_ingredients():
     )
     assert recipe.title == "Soup" and recipe.steps == ["Cook"]
     assert recipe.ingredients[1].original_text == "200 g carrots"
-    assert recipe.ingredients[1].quantity is None
+    assert recipe.ingredients[1].quantity == 200
+    assert recipe.ingredients[1].unit == "g"
+    assert recipe.ingredients[1].name == "carrots"
     assert warnings
 
 

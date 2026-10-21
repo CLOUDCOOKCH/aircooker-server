@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-10-21T07:04:08.266024+00:00",
+  "source": "GitHub Actions run/jobs/artifacts APIs",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "e55e0083d003fd19f2979b1191f762a4f0cb5a1d",
+  "run_id": 39558393279,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39558393279",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 119083517681,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119083518076,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119083518144,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119083518154,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119083518221,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "verification": [
+    "97 backend tests on each native architecture",
+    "AMD64 and ARM64 Docker real-HTTP smoke scenarios",
+    "pip-audit, source secret scan, HIGH/CRITICAL Trivy gate without exclusions on both architectures",
+    "Chromium administration workflow"
+  ],
+  "limits": [
+    "Does not validate live Bring or AI",
+    "Does not validate physical iOS devices",
+    "Parser changes after this commit need their own CI result"
+  ]
+}
