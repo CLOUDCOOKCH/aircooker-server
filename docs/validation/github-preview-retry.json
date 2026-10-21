@@ -4,16 +4,19 @@
   "scope": [
     "Mealf palette and console design",
     "PWA gesture/text selection policy",
-    "completed preview retry no-op and immutable image guard"
+    "completed preview retry no-op and immutable image guard",
+    "confirmed recipe/input-only text selection",
+    "manual full-matrix main CI with unchanged SHA/repository/branch checks"
   ],
   "local_tests": {
-    "backend": 225,
+    "backend": 226,
     "frontend": 39,
-    "release_retry_and_source_gate": 21,
+    "release_retry_and_source_gate": 22,
     "ruff": "passed",
     "mypy": "passed",
     "actionlint": "passed",
-    "openapi": "unchanged"
+    "openapi": "unchanged",
+    "pwa_browser": "passed including control selection suppression, actual recipe word/input selection, pinch/double-tap, scroll and existing offline flows"
   },
   "prior_attempt": {
     "run": 39620210006,
@@ -25,10 +28,11 @@
   },
   "planned_publication": {
     "tag": "poc-20261021.5",
-    "status": "pending exact combined-source CI and fresh dual-architecture image gates"
+    "status": "pending final-source CI; delayed prior main push runs are now starting"
   },
   "limits": [
     "Physical iPhone/Safari and live external accounts remain unverified",
     "Existing .4 Git tag and release assets are preserved; immutable digest recommended for historical builds"
-  ]
+  ],
+  "final_implementation_commit": "333360e"
 }
