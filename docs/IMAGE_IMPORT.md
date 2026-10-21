@@ -128,3 +128,12 @@ Linux runner has no OS push service. Authentication, media, OCR, local persisten
 backend outages and recipe confirmation remain real. Push has separate explicit
 subscription/vendor fixture coverage; no live push claim follows from the photo tests.
 Settings now avoids reading native subscriptions before notification permission is granted.
+
+Published preview `poc-20261021.10` passed all six exact-source CI jobs, both fresh native
+image security/runtime gates, public asset/config checks and anonymous pull. A disposable
+published .9-to-.10 same-volume upgrade on internal 5152 preserves identity/session/recipe/
+sync proof and performs actual English/German OCR. The retained native contract pin also
+passes its separate Linux/macOS/Xcode/simulator pipeline; no native photo/OCR UI is added.
+See [release evidence](validation/github-image-import-preview.json) for exact scope and
+the preceding test-harness corrections. Physical camera/iPhone and live services remain
+unverified.

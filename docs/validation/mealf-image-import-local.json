@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "implemented and tested locally; fresh image/WebKit CI and publication pending",
+  "status": "implemented and tested locally; Chromium/WebKit CI and published poc-20261021.10 verified; physical camera/iPhone pending",
   "backend_tests": 240,
   "frontend_tests": 45,
   "real_browser": {
@@ -46,11 +46,12 @@
     "Physical camera/iPhone not tested",
     "No live AI/Bring verification",
     "Clean printed fixtures prove pipeline, not handwriting/arbitrary OCR accuracy",
-    "Local WebKit download blocked by network policy; CI required",
-    "Unused source media remains under existing retained-media quota; no unsafe garbage collection"
+    "Unused source media remains under existing retained-media quota; no unsafe garbage collection",
+    "Headless WebKit image flow models native push unavailable; push has separate synthetic opt-in/vendor fixtures"
   ],
   "design_review": {
     "scope": "fresh read-only review of changed source and supplied actual captures; one queue-history issue fixed with regression",
     "plugin_schema_or_visual_detector_pass_claimed": false
-  }
+  },
+  "release_evidence": "github-image-import-preview.json"
 }

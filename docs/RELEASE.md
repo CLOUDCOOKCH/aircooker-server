@@ -154,3 +154,15 @@ validation/github-themes-preview.json and validation/mealf-themes-local.json.
 Physical iPhone and full-product acceptance remain open. Keep existing volume and custom
 port/command/healthcheck settings; update only the image and accept the PWA update after
 saving edits. No browser reset or reinstall is required.
+
+Photo import is published in `poc-20261021.10` from db207a2. Exact-source CI 39665948052
+passes all six jobs with 240 backend tests per architecture and 45 web tests; browser
+coverage includes actual OCR, offline image/edit reload and explicit save in Chromium
+and trusted-HTTPS WebKit. Headless WebKit explicitly models native push unavailable;
+push opt-in behavior retains separate synthetic fixtures and live delivery is unverified.
+Publication 39666575713 passes both fresh native image scans/runtime gates. Public asset
+checksums, native-build/config/scan identities, anonymous pull and the published AMD64
+.9-to-.10 same-volume 5152 upgrade plus real EN/DE OCR pass. Preserve user volumes,
+custom command/healthcheck and 5152:5152; accept the PWA update without clearing storage.
+Exact digest, jobs, prior failed test-helper attempts, attestation, assets and limits:
+validation/github-image-import-preview.json. This remains a development preview.

@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-21",
+  "status": "published and verified",
+  "source": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+  "scope": "PWA native camera/image picker and durable photo/screenshot recipe imports; local EN/DE OCR, editable explicit-save preview, optional consented text-only AI; backwards-compatible media/API/retention extension",
+  "ci": {
+    "run_id": 39665948052,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39665948052",
+    "backend_tests_per_architecture": 240,
+    "frontend_tests": 45,
+    "jobs": [
+      {
+        "id": 119451067951,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      },
+      {
+        "id": 119451068297,
+        "name": "pwa-core",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      },
+      {
+        "id": 119451068337,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      },
+      {
+        "id": 119451068396,
+        "name": "browser",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      },
+      {
+        "id": 119451068536,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      },
+      {
+        "id": 119451068555,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "db207a21dd60f17ed47f17284f3dba9bacd80eda",
+        "conclusion": "success"
+      }
+    ],
+    "browser": {
+      "job_id": 119451068396,
+      "chromium": "real chooser/capture semantics, English/German OCR, queued image and reviewed-save offline reload, explicit approval boundary, metadata normalization, phone320/390 and desktop Axe; existing app/layout/theme/admin/push regressions",
+      "webkit": "trusted HTTPS with ordinary Secure cookies/certificate validation; real backend-process outage and same-volume restart; persistent browser profile; real image chooser/OCR/offline/save and German dark phone checks; native PushManager explicitly unavailable as a headless OS capability fixture, with separate synthetic push opt-in tests"
+    },
+    "prior_attempts": [
+      {
+        "run_id": 39660200196,
+        "source": "c97bf16a7ee7ce10cc5af5d18ca3b1c0ca1f2f2c",
+        "result": "failed new WebKit authenticated HTTP-loopback fixture before import; other five jobs passed; no publication"
+      },
+      {
+        "run_id": 39661155085,
+        "source": "40d65eb0c221d381b14ff32cde72873d82b03dde",
+        "result": "authenticated trusted HTTPS passed; threaded test-backend TLS shutdown exceeded outage timeout; other five jobs passed; no publication"
+      },
+      {
+        "run_id": 39665663545,
+        "source": "86c1901b2d8a3c382eb03ad6e7c9d1e74e3a03ba",
+        "result": "new push opt-in test predicate hit Chrome unsafe-eval CSP; replaced only the predicate with the actual visible connected-state assertion; CSP unchanged; no publication"
+      },
+      {
+        "run_id": 39664086710,
+        "source": "ef602aaabec075b0657adcd095d3d410a9ef9e58",
+        "result": "bounded diagnostics verified photo/OCR/offline-save and isolated the stall to entering live Settings in headless WebKit; no publication. Native push discovery now waits for granted permission; image fixture explicitly models unconfigured OS push capability unavailable"
+      },
+      {
+        "run_id": 39662762437,
+        "source": "387e41eff1d014a719781f473c75432cfcd97dc3",
+        "result": "stalled new WebKit fixture; cancelled by later exact-source CI; other five jobs passed; added stage diagnostics and strict runtime bounds; no publication"
+      },
+      {
+        "run_id": 39663921261,
+        "source": "28cf5758822199a2b9b876ca4a93a78d47d1dd4c",
+        "result": "superseded/cancelled while adding the overall browser/install bounds; no publication"
+      },
+      {
+        "run_id": 39661854661,
+        "source": "e5e9f1e3e83efdbdb8b44dfa99b5e4f2271cd265",
+        "result": "WebKit real photo/OCR/offline-save path passed before theme radio pointer interaction timed out; replaced that fixture interaction with native keyboard and checked resulting selection; other five jobs passed; no publication"
+      }
+    ]
+  },
+  "publication": {
+    "run_id": 39666575713,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39666575713",
+    "jobs": [
+      {
+        "id": 119453095572,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119453180729,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119453180877,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119454375628,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.10",
+    "release_id": 420002448,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.10",
+    "index_digest": "sha256:5c74e7a77c91109a8b8293b947b97cbb147bea730f153b0a4f4360eaccafd861",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "e4d4decd18862299a3024e3d0f647a77ee3e7b42a36181671851d0be22661b3b"
+      },
+      "container-security-amd64.json": {
+        "sha256": "73cf21914bbf50860b9943c08d80a71f79c31c1366a7a3b79847b7d084309d4e"
+      },
+      "container-security-arm64.json": {
+        "sha256": "ecffe2c42a358dab2c3560ca55d2da3f87576cb4d1e62d2f2a1b8dbf03222c2a"
+      },
+      "openapi-v1.json": {
+        "sha256": "487e01e15229a8b2fe85c55c08e2c7f3801b6eefc13d93481f578bb499d0a3e7"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "a25b440fadc47f61b8bffbe77bfc88fa2d57d38254e50361d09c10abc85423cf"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "e1b74f3db8a8f236e90f422e76cdbc2ff5b7c0ba5f2241d0ee4c9e1c8cb8f980"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:67c8207d4041aeaab07fabe40048c30113fe20a0558bde90b06b60db9dc7025c",
+        "config": "sha256:0aa40c6df030564229e7d37de0faaa8d9ccfe77a0ad9e9c6348191b2884520b7",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:56960607891177d9915024f835323934e87eff32207b6364216e5358416fed9e",
+        "config": "sha256:d2c773d0b901186f9b0da69da183f65209a194055bdfad5ccc7c89a480d59e72",
+        "high_critical": 0
+      }
+    },
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58366107",
+    "native_builds": {
+      "amd64": {
+        "job_id": 119453180729,
+        "configs": [
+          "sha256:0aa40c6df030564229e7d37de0faaa8d9ccfe77a0ad9e9c6348191b2884520b7"
+        ]
+      },
+      "arm64": {
+        "job_id": 119453180877,
+        "configs": [
+          "sha256:d2c773d0b901186f9b0da69da183f65209a194055bdfad5ccc7c89a480d59e72"
+        ]
+      }
+    }
+  },
+  "post_publication": {
+    "anonymous_pull": "passed with empty temporary client credential configuration",
+    "release_assets": "all six public downloads match GitHub SHA-256; Compose/OpenAPI equal tagged source",
+    "image_identity": "published configs match native build log image IDs and architecture Trivy report ImageID",
+    "scanner": "Trivy 0.70.0; zero HIGH/CRITICAL; no suppressions changed",
+    "upgrade": "passed disposable published AMD64 .9-to-.10 same-volume upgrade on internal 5152; existing household/session/recipe/sync proof preserved; real English/German image imports remain previews before Save",
+    "assets": "original peach/wordmark provenance and every derived asset match; shared theme/appearance and offline shell retained",
+    "secret_scan": "Gitleaks v8.28.0 working-tree scan passed; no suppressions changed",
+    "ocr_packages": "Both SBOMs identify tesseract-ocr, data-eng and data-deu at 5.5.2-r0; both native Docker gates and the public AMD64 upgrade run real OCR",
+    "upgrade_helper_correction": "First local upgrade-helper attempt reached packaged assets then rejected minifier quote spelling for the capture attribute; removed that implementation-detail assertion. Source CI verifies real DOM capture/chooser semantics; repeated published-image upgrade and real EN/DE OCR passed."
+  },
+  "native_contract": {
+    "repository": "CLOUDCOOKCH/aircooker-ios",
+    "commit": "32604a1544a79c7bde65dd1ec6080c9903146447",
+    "server_contract_source": "c97bf16a7ee7ce10cc5af5d18ca3b1c0ca1f2f2c",
+    "sha256": "487e01e15229a8b2fe85c55c08e2c7f3801b6eefc13d93481f578bb499d0a3e7",
+    "local_checks": "exact wire sets, additive optional compatibility and 296 EN/DE localisation keys passed",
+    "ci_run_id": 39660428236,
+    "native_photo_import_UI_added": false,
+    "ci_conclusion": "success",
+    "ci_jobs": [
+      {
+        "id": 119431671494,
+        "name": "core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119431671845,
+        "name": "native",
+        "conclusion": "success"
+      }
+    ],
+    "core_tests_each_platform": 90,
+    "xcode": "26.6",
+    "apple_scope": "all native targets and existing onboarding/demo/DE light-dark simulator workflows pass; no native OCR UI added"
+  },
+  "limits": [
+    "Headless WebKit photo acceptance explicitly models native push unavailable; no live OS push verification is claimed",
+    "physical camera/iPhone hardware and handwritten/complex-layout accuracy unverified",
+    "AI test uses a synthetic provider transport; no live AI or Bring verification",
+    "Unused source media retained under existing quota, not unsafe automatically deleted",
+    "Complete-product/stable release acceptance remains open; native feature work deferred"
+  ]
+}

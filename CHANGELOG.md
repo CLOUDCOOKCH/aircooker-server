@@ -9,7 +9,10 @@
   Settings avoids native push subscription discovery before notification permission;
   synthetic opt-in boundary and existing reminder flows pass. Headless WebKit image tests
   explicitly model OS push as unavailable; the photo pipeline stays real.
-  Physical camera/iPhone and live AI/push remain unverified; publication evidence is separate.
+  Published `.10`: all six exact-source checks, both fresh image gates, public pull,
+  checksums/config identities and same-volume 5152 upgrade with real EN/DE OCR pass.
+  Physical camera/iPhone and live AI/push remain unverified.
+  See docs/validation/github-image-import-preview.json.
 
 - Add a shared PWA/admin theme library: Flo (existing system appearance), After Dark
   (fixed dark, ink/oxblood/rose) and Sunday (fixed light, linen/sage). Persist browser-local

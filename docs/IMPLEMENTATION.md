@@ -1,15 +1,21 @@
 # Implementation checklist and evidence
 
-**Photo recipe import, 2026-10-21 — implemented and tested locally; publication pending:**
-PWA Import recipe offers Take photo and Choose image. Atomic local image/job persistence,
-metadata-stripped media upload, durable bounded local EN/DE Tesseract OCR and conservative
-section parsing produce an editable preview. Explicit Save creates the recipe. Unclear
-text stays correctable with manual fallback; optional text AI requires consent and never
-receives the image. Terminal preview OCR text expires after 30 days; replay proofs and
-source media remain under existing retention/quota rules. Local 240 backend/45 web tests,
-real Chromium chooser/OCR/offline-save/reload/Axe and existing PWA regressions pass.
-Fresh native Docker scans/runtime and WebKit CI are pending. Physical camera/iPhone and
-live AI are unverified. See [photo import](IMAGE_IMPORT.md) and local validation evidence.
+**Photo recipe import, 2026-10-21 — published and verified in `poc-20261021.10`:**
+PWA Import recipe offers Take photo and Choose image. Atomic image/job persistence,
+metadata-stripped upload and bounded local EN/DE OCR produce editable previews; only
+explicit Save creates a recipe. Unclear text stays correctable, with manual fallback.
+Optional text AI requires consent and never receives image bytes. Terminal-source
+retention preserves replay proofs; unused media remains under the existing quota.
+All six source CI jobs pass at db207a2: 240 backend tests per architecture, 45 web tests,
+real Chromium/WebKit OCR/offline-save/reload and Axe. The headless WebKit photo test
+explicitly models OS push unavailable; separate synthetic reminder tests verify the
+permission boundary, and Settings avoids native subscription discovery before consent.
+Both fresh native image scans/runtime gates, six public checksums/config identities,
+anonymous pull and published .9-to-.10 same-volume 5152 upgrade plus real EN/DE OCR pass.
+Native contract pin 32604a1 passes 90 core tests on each platform, Xcode 26.6 builds and
+existing simulator flows. Physical camera/iPhone and live AI/push remain unverified;
+full product acceptance remains open. See [photo import](IMAGE_IMPORT.md) and
+[exact release evidence](validation/github-image-import-preview.json).
 
 **Theme library, 2026-10-21 — published and verified in `poc-20261021.9`:** Settings offers Flo
 (existing system light/dark), After Dark (fixed dark romance palette) and Sunday

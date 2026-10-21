@@ -148,5 +148,5 @@ Optional configured AI receives only recognized text after consent. Clear full-r
 work best; photos of a finished dish do not provide a recipe. Review quantities and
 instructions. See [photo import, privacy and limits](IMAGE_IMPORT.md). Keep the same volume,
 port mapping, command and healthcheck, including `5152:5152`; change only the image reference
-to `ghcr.io/cloudcookch/mealf-server:poc-20261021.10` once published and accept the PWA update.
+to `ghcr.io/cloudcookch/mealf-server:poc-20261021.10` and accept the PWA update.
 Do not clear browser data or reinstall while local work is pending.
