@@ -1,5 +1,9 @@
 # Changelog
 
+- Bind temporary pantry shopping inclusions to a household civil week, preserving offline
+  intent and legacy replay receipts. Migrate old overrides transactionally using their
+  previous server acceptance time without rewriting sync history.
+
 - Deliver the primary installable PWA at `/app/` in the existing container, with the approved
   food/glass visual direction, system light/dark appearance and English/German controls.
 - Add recipe editing/drafts/photos/scaling/nutrition, calendar/recurrence/copy/templates,

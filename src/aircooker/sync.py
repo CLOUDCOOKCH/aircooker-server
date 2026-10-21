@@ -4,6 +4,7 @@ import time
 from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import uuid4
+from zoneinfo import ZoneInfo
 
 from .errors import DomainError
 from .jobs import enqueue
@@ -83,6 +84,13 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
     if mutation.idempotency_key != mutation.mutation_id:
         raise DomainError("idempotency_key_must_equal_mutation_id")
     raw = mutation.model_dump(mode="json")
+    # Preserve fingerprints produced before the additive period field existed.
+    if (
+        mutation.kind == "pantry"
+        and raw.get("payload")
+        and raw["payload"].get("include_week_start") is None
+    ):
+        raw["payload"].pop("include_week_start", None)
     fingerprint = hashlib.sha256(json.dumps(raw, sort_keys=True).encode()).hexdigest()
     previous = db.execute(
         "SELECT * FROM mutation WHERE id=?", (str(mutation.mutation_id),)
@@ -114,6 +122,19 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
                 .model_validate(mutation.payload.model_dump() if mutation.payload else None)
                 .model_dump(mode="json")
             )
+            if kind == "pantry":
+                if not payload["include_this_week"]:
+                    payload["include_week_start"] = None
+                elif payload["include_week_start"] is None:
+                    if restoring:
+                        payload["include_this_week"] = False
+                    else:
+                        from .planning import week_start
+
+                        zone = db.execute("SELECT timezone FROM household WHERE id=1").fetchone()[0]
+                        payload["include_week_start"] = week_start(
+                            datetime.now(ZoneInfo(zone)).date()
+                        ).isoformat()
             # Exclude this entity's former allocation while validating replacements.
             if kind == "meal" and existing:
                 db.execute("UPDATE entity SET deleted=1 WHERE kind=? AND id=?", (kind, eid))

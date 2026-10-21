@@ -1,0 +1,50 @@
+{
+  "format": "aircooker-pantry-period-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "source_status": "validated working tree; exact published commit/remote CI recorded separately",
+  "backend_tests_passed": 151,
+  "web_tests_passed": 32,
+  "checks": [
+    "Ruff lint/format",
+    "mypy: 27 modules",
+    "OpenAPI drift",
+    "34-wheel licence baseline",
+    "strict TypeScript",
+    "Prettier",
+    "production build",
+    "npm audit: zero known advisories",
+    "git diff whitespace"
+  ],
+  "targeted_cases": [
+    "Household-time-zone Monday and legacy receipt replay without extending period",
+    "Prior/current/next-week shopping projections",
+    "Offline selected period preserved at acceptance",
+    "Legacy undated restore does not reactivate override",
+    "Migration publishes a new canonical revision without rewriting commit history",
+    "Migration interruption rolls back schema, commits and marker",
+    "Real Chromium pantry checkbox commits exact week and clears it"
+  ],
+  "browser": "Full existing PWA smoke including targeted pantry commit assertions passed; no new visual review claimed",
+  "docker": {
+    "image_id": "sha256:14e47181237863e9818671bf73832a0acfa5fc77de4d3fb67231531472769648",
+    "architecture": "local amd64",
+    "smoke": "passed real HTTP non-root/read-only container, restart, sync, imports, photos and JSON/ZIP restore"
+  },
+  "contract_sha256": "7053e4afbc859673f6fe842239d496d261b59e60dea9b1645f6421644285b0fd",
+  "assets": [
+    {
+      "path": "frontend/dist/assets/index-Dtf9w1XH.js",
+      "sha256": "0b74f813052bb33188a7a857c15afef3a36b7789e5da9ca67203eaf072f5c258"
+    },
+    {
+      "path": "frontend/dist/assets/index-xsZ2DTdl.css",
+      "sha256": "ccfe5df9783719b06be48ca849e90290b2f4697ef972fd4ae8edacb802a08492"
+    }
+  ],
+  "limits": [
+    "Exact-commit multi-architecture/security CI pending at local validation",
+    "Physical iPhone/Safari and live Bring/AI not exercised",
+    "No complete product/release acceptance"
+  ]
+}

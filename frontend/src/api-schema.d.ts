@@ -1566,6 +1566,8 @@ export interface components {
              * @default false
              */
             include_this_week: boolean;
+            /** Include Week Start */
+            include_week_start?: string | null;
             /** Name */
             name: string;
         };

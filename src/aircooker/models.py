@@ -86,6 +86,14 @@ class Pantry(Model):
     name: str = Field(min_length=1, max_length=200)
     available: bool = True
     include_this_week: bool = False
+    include_week_start: date | None = None
+
+    @field_validator("include_week_start")
+    @classmethod
+    def monday_period(cls, value):
+        if value is not None and value.weekday() != 0:
+            raise ValueError("Pantry period must start on Monday")
+        return value
 
 
 class Leftover(Model):

@@ -82,7 +82,8 @@ def shopping_projection(db, monday: date):
     pantry = {
         normalise(p["name"])
         for p in entities(db, "pantry").values()
-        if p["available"] and not p["include_this_week"]
+        if p["available"]
+        and not (p["include_this_week"] and p.get("include_week_start") == monday.isoformat())
     }
     requirements: dict[str, dict] = {}
     for mid, raw in entities(db, "meal").items():

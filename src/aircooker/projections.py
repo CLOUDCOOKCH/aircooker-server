@@ -60,6 +60,12 @@ def project(db, kind, eid, payload, deleted):
         )
     elif kind == "pantry":
         db.execute(
-            "INSERT INTO pantry_item VALUES (?,?,?,?,0) ON CONFLICT(id) DO UPDATE SET name=excluded.name,available=excluded.available,include_this_week=excluded.include_this_week,deleted=0",
-            (eid, payload["name"], payload["available"], payload["include_this_week"]),
+            "INSERT INTO pantry_item(id,name,available,include_this_week,deleted,include_week_start) VALUES (?,?,?,?,0,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,available=excluded.available,include_this_week=excluded.include_this_week,include_week_start=excluded.include_week_start,deleted=0",
+            (
+                eid,
+                payload["name"],
+                payload["available"],
+                payload["include_this_week"],
+                payload.get("include_week_start"),
+            ),
         )

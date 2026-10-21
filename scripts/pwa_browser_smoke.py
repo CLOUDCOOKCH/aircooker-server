@@ -9,6 +9,7 @@ import shutil
 import socket
 import threading
 import time
+from datetime import date, timedelta
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -280,6 +281,36 @@ def main():
                 expect(second.locator(".pantry-item")).to_contain_text("Carrots")
                 expect(second.locator(".connection-status")).to_have_text(
                     "Up to date", timeout=15000
+                )
+                override = second.get_by_role("checkbox", name="Include in shopping this week")
+                override.click()
+                expect(override).to_be_checked()
+                # Wait for the committed payload, rather than a possibly stale status label.
+                second.wait_for_function(
+                    """async()=> {
+                        const rows = (await (await fetch('/api/v1/pantry', {
+                            headers: {'X-Aircooker-Client': 'pwa'}
+                        })).json()).items;
+                        return rows.length === 1 && rows[0].payload.include_this_week === true
+                            && rows[0].payload.include_week_start !== null;
+                    }"""
+                )
+                period = second.evaluate(
+                    "async()=> (await (await fetch('/api/v1/pantry',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items[0].payload.include_week_start"
+                )
+                # The assignment date and pantry period use the same household civil calendar.
+                day = date.fromisoformat(planned_day)
+                assert period == (day - timedelta(days=day.weekday())).isoformat()
+                override.click()
+                expect(override).not_to_be_checked()
+                second.wait_for_function(
+                    """async()=> {
+                        const rows = (await (await fetch('/api/v1/pantry', {
+                            headers: {'X-Aircooker-Client': 'pwa'}
+                        })).json()).items;
+                        return rows.length === 1 && rows[0].payload.include_this_week === false
+                            && rows[0].payload.include_week_start === null;
+                    }"""
                 )
                 server_meals = second.evaluate(
                     "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"

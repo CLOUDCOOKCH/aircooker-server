@@ -240,6 +240,8 @@ export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
       recurrence: rule,
     };
   } else if (kind === 'pantry') {
+    const period = row.include_week_start == null ? null : text(row.include_week_start, 10);
+    if (period !== null && monday(period) !== period) throw new Error('invalid_pantry_period');
     if (
       (row.available !== undefined && typeof row.available !== 'boolean') ||
       (row.include_this_week !== undefined && typeof row.include_this_week !== 'boolean')
@@ -249,6 +251,7 @@ export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
       name: required(row.name, 200),
       available: row.available !== false,
       include_this_week: row.include_this_week === true,
+      include_week_start: period,
     };
   } else if (kind === 'leftover') {
     const produced = text(row.produced_on, 10);
@@ -285,6 +288,10 @@ export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
     throw new Error('invalid_kind');
   }
   return result as Payloads[K];
+}
+
+export function pantryIncludedThisWeek(item: Pantry, day: string): boolean {
+  return item.include_this_week && item.include_week_start === monday(day);
 }
 
 export function validateChange(input: Change): Change {

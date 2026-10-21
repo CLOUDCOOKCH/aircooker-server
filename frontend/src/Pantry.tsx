@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { Plus, Search, Trash2 } from 'lucide-react';
 import { useApp } from './model';
 import { Empty, IconButton, PageHeader } from './components';
-import { uuid } from './lib/domain';
+import { monday, pantryIncludedThisWeek, today, uuid } from './lib/domain';
 export function Pantry() {
   const app = useApp(),
     { t } = app;
   const [name, setName] = useState(''),
     [query, setQuery] = useState(''),
     [error, setError] = useState(false);
+  const day = today(app.household.timezone);
+  const period = monday(day);
   const items = app
     .entities('pantry')
     .filter((row) => row.payload.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
@@ -92,14 +94,18 @@ export function Pantry() {
               <label className="check-row pantry-override">
                 <input
                   type="checkbox"
-                  checked={row.payload.include_this_week}
+                  checked={pantryIncludedThisWeek(row.payload, day)}
                   onChange={(e) =>
                     void app
                       .save([
                         {
                           kind: 'pantry',
                           id: row.id,
-                          value: { ...row.payload, include_this_week: e.target.checked },
+                          value: {
+                            ...row.payload,
+                            include_this_week: e.target.checked,
+                            include_week_start: e.target.checked ? period : null,
+                          },
                         },
                       ])
                       .catch(() => setError(true))

@@ -26,6 +26,10 @@ class Database:
                             for sql in migration.read_text().split(";"):
                                 if sql.strip():
                                     db.execute(sql)
+                            if migration.name == "006_pantry_period.sql":
+                                from .data_migrations import pantry_periods
+
+                                pantry_periods(db)
                             db.execute("INSERT INTO schema_migration VALUES (?)", (migration.name,))
                         db.commit()
                     except BaseException:

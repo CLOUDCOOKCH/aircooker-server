@@ -73,6 +73,11 @@ connector capabilities keep automatic mutations disabled. Home/Settings expose t
 configuration state. Manual reconciliation is offered only when the connector reports
 safe automatic mutation support. No live Bring!/AI integration is claimed.
 
+Pantry staples marked available are excluded from ingredient requirements. “Include in
+shopping this week” overrides that exclusion for the current Monday–Sunday week in the
+household time zone. It expires automatically for the following week. An offline change
+keeps the week you selected, even if it reaches the server after rollover.
+
 ## Offline operation and recovery
 
 Open online once so the public application shell can finish caching. Recipes, meals, pantry,

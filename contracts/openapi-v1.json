@@ -1191,6 +1191,18 @@
             "title": "Include This Week",
             "type": "boolean"
           },
+          "include_week_start": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include Week Start"
+          },
           "name": {
             "maxLength": 200,
             "minLength": 1,

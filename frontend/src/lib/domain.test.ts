@@ -8,6 +8,7 @@ import {
   emptyRecipe,
   monday,
   payload,
+  pantryIncludedThisWeek,
   today,
   uuid,
 } from './domain.ts';
@@ -45,5 +46,26 @@ test('full recipe snapshots retain attribution and validate ranges and identitie
   assert.throws(() => payload('recipe', { ...recipe, ingredients: [ingredient, ingredient] }));
   assert.throws(() =>
     payload('leftover', { recipe_id: uuid(), portions: '0', produced_on: '2026-10-21' }),
+  );
+});
+
+test('temporary pantry overrides retain their civil week and expire across Monday rollover', () => {
+  const pantry = payload('pantry', {
+    name: 'Salt',
+    available: true,
+    include_this_week: true,
+    include_week_start: '2026-10-19',
+  });
+  assert.equal(pantryIncludedThisWeek(pantry, '2026-10-25'), true);
+  assert.equal(pantryIncludedThisWeek(pantry, '2026-10-26'), false);
+  assert.equal(pantryIncludedThisWeek(pantry, '2026-10-18'), false);
+  assert.equal(payload('pantry', pantry).include_week_start, '2026-10-19');
+  assert.throws(() => payload('pantry', { ...pantry, include_week_start: '2026-10-20' }));
+  assert.equal(
+    pantryIncludedThisWeek(
+      payload('pantry', { name: 'Salt', include_this_week: true }),
+      '2026-10-19',
+    ),
+    false,
   );
 });

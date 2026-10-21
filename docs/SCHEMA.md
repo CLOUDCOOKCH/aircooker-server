@@ -30,6 +30,17 @@ Numbers are decimal text. UUIDs have no business meaning. Meal dates are ISO dat
 strings; timestamps are UTC. A recipe soft deletion preserves foreign key targets. Queue
 payloads can include household source content and must stay inside protected `/data`.
 
+Pantry shopping overrides carry `include_week_start`, a Monday-only civil date. An available
+staple is included only in that period; another week's projection automatically excludes it.
+Clients should send the intended week, including while offline. Legacy undated writes are
+bound to the household's current week on first acceptance; retries retain their original
+receipt and cannot extend it. Undated archive restores disable the temporary override.
+
+Migration 006 adds the projection column and publishes new canonical pantry revisions for
+active legacy overrides, deriving their period from the previous server acceptance timestamp
+in the household time zone. It never rewrites old change-log rows, commit proofs or mutation
+receipts. Schema, backfill, new commits and migration marker commit together or roll back.
+
 Retention is intentionally conservative: tombstones, mutation replay records, Bring purchase
 history, suggestion-approval receipts and completed jobs are retained. Rate-limit buckets expire when a subsequent request
 arrives. Session/job/content retention policies and compaction with full-resync recovery must

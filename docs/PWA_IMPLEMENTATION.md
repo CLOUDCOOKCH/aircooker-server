@@ -17,7 +17,8 @@ client, not a declaration that the entire project or release checklist is finish
   optional nutrition editing. Nutrition is preserved as supplied, not inferred or rescaled.
 - Civil-week planning, accessible assignment/move/duplicate/remove/cooked controls, drag
   alternative, bounded recurrence/exceptions, day/week copy, saved templates and leftovers.
-- Basic pantry and local ratings/history/variety/leftover recommendations with preview approval.
+- Basic pantry with period-bound shopping overrides and local ratings/history/variety/leftover
+  recommendations with preview approval. Offline overrides retain their intended civil week.
 - Durable import requests, polling, editable previews, explicit AI content consent, manual
   source/text fallback and cancellation delivery. No auto-save of extraction results.
 - IndexedDB records/outbox/photos/draft removal commit atomically. Web Locks serialise sync
@@ -31,7 +32,7 @@ client, not a declaration that the entire project or release checklist is finish
 - English/German, light/dark, keyboard focus, named dialogs, reduced-motion and opaque fallbacks.
 - Browser dependency attribution/version gate; Node remains build-only, not a runtime service.
 
-Evidence: **146 backend tests**, **31 web core tests**, lint/types/format/OpenAPI/licence checks
+Evidence: **151 backend tests**, **32 web core tests**, lint/types/format/OpenAPI/licence checks
 and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
 save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
 assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
@@ -50,7 +51,6 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
 - [ ] Opt-in Web Push reminders and delivery/retry/permission management. No notification
       settings pretend this exists. Passkeys are also not implemented.
 - [ ] Shared household recommendation preferences and acceptance learning.
-- [ ] Week-bound pantry shopping overrides: the existing boolean does not expire itself.
 - [ ] Guided non-recipe archive reconstruction and automatic browser-recovery JSON import;
       current archives/exports preserve data but these recovery paths remain manual.
 - [ ] Template rename/slot editing, full recurrence browser acceptance and expanded suggestion
@@ -61,8 +61,9 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
       remain capability-guarded; synthetic tests do not establish live compatibility.
 - [ ] Original master backend work: safe cleanup/retention, admin deletion/destructive replacement,
       remaining typed API/quotas/security/load review, backups/release compatibility and docs.
-- [ ] Exact-commit AMD64/ARM64/security/browser CI evidence, stable image/release and reproducibility
-      acceptance. Earlier green native/backend runs are historical, not current PWA proof.
+- [ ] Stable image/release and reproducibility acceptance. PWA commit ff48270 passed all six
+      AMD64/ARM64/security/browser/core CI jobs in run 39584288763 (see validation/github-pwa.json).
+      Later pantry changes require their own exact-commit results.
 
 iPhone incoming Web Share Target, native local notifications/biometric lock and WidgetKit
 are deferred native capabilities, not promised pure-PWA functions. Foreground/reopen sync

@@ -1,0 +1,56 @@
+{
+  "format": "aircooker-github-pwa-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "ff482705eb8e8edbae2c5fe9f2f448138d947e6c",
+  "run_id": 39584288763,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39584288763",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 146,
+  "web_core_tests": 31,
+  "jobs": [
+    {
+      "id": 119169223492,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119169223653,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119169223686,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119169223789,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119169223824,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119169223871,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "verified": [
+    "Native AMD64 and ARM64 backend tests, lint, types, OpenAPI drift, Docker build and real-HTTP smoke",
+    "Browser generated-contract drift, strict TypeScript, format, 31 unit tests, build and npm audit gate",
+    "Chromium PWA offline/two-device/import/planning workflows, stated Axe checks and administration flows",
+    "Runtime dependency audit, source secrets scan and HIGH/CRITICAL container gates on both architectures"
+  ],
+  "limits": [
+    "Pantry period migration changes postdate this exact commit and need independent validation",
+    "No count of all severities inferred from the passing container scan gate",
+    "Physical iPhone/Safari and live Bring!/AI not exercised",
+    "No stable release, signed image publication or full product acceptance"
+  ]
+}

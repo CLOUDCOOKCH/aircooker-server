@@ -65,7 +65,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-The current PWA integration passes 146 backend tests and 31 web core tests locally,
+The current PWA integration passes 151 backend tests and 32 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -82,7 +82,7 @@ recorded in the PWA validation material. Current Docker smoke/security CI is rec
 separately for the exact image/commit; do not apply earlier green runs to a newer tree.
 
 The overall project remains partial. Web Push, shared recommendation preferences/learning,
-period-bound pantry overrides, complete archive reconstruction, broader source/media import,
+complete archive reconstruction, broader source/media import,
 admin deletion/destructive replacement, safe cleanup and release validation remain engineering
 work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
 No stable release or protected release acceptance is enabled by these development results.

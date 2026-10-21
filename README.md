@@ -68,7 +68,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional development client, genuine reviewed desktop/phone captures, 31 offline/planning/sync tests and real Chromium flows; physical Safari and remaining features open |
+| PWA | Functional development client, genuine reviewed desktop/phone captures, 32 offline/planning/sync tests and real Chromium flows; physical Safari and remaining features open |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
