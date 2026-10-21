@@ -125,12 +125,24 @@
     "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58273603",
     "index_digest": "sha256:269302c1e209d2a8d93834450c6a0af7aea242a6005a4240e8683d1475d62d0b",
     "assets": {
-      "compose.preview.yaml": "44d7bc61ddd5fce26189125105dd1f8416d518e7a3252f14424319de89965216",
-      "container-security-amd64.json": "549efc3ea6dbfd97022f3c7d13ed25775ced0fff452763a31ac1d5b91e8ea40a",
-      "container-security-arm64.json": "b06038f85604d3a6be0dac88833defd767fa969b3d77fa27b447d050ef953b8a",
-      "openapi-v1.json": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
-      "sbom-amd64.cdx.json": "f41bacde5a50019f8e2f3385190b61fda6dde2ba6d88a1589a1fc472472e0112",
-      "sbom-arm64.cdx.json": "b565dbdc2f3db3c3face85d9c4fbaa671d8155e45689658afb4bab50c9382fe8"
+      "compose.preview.yaml": {
+        "sha256": "44d7bc61ddd5fce26189125105dd1f8416d518e7a3252f14424319de89965216"
+      },
+      "container-security-amd64.json": {
+        "sha256": "549efc3ea6dbfd97022f3c7d13ed25775ced0fff452763a31ac1d5b91e8ea40a"
+      },
+      "container-security-arm64.json": {
+        "sha256": "b06038f85604d3a6be0dac88833defd767fa969b3d77fa27b447d050ef953b8a"
+      },
+      "openapi-v1.json": {
+        "sha256": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "f41bacde5a50019f8e2f3385190b61fda6dde2ba6d88a1589a1fc472472e0112"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "b565dbdc2f3db3c3face85d9c4fbaa671d8155e45689658afb4bab50c9382fe8"
+      }
     },
     "architectures": {
       "amd64": {

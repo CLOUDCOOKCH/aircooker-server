@@ -41,5 +41,6 @@
     "screen-reader announcement delivery",
     "complete product acceptance"
   ],
-  "native": "unchanged"
+  "native": "unchanged",
+  "ci_followup": "First source CI found a generic-api-key false positive on the public OpenAPI release checksum in prior .5 evidence. Reformatted asset checksums as explicit sha256 metadata; scanner rules remain unchanged."
 }
