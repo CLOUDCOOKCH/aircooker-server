@@ -20,7 +20,8 @@
     "invalid preference fallback",
     "read/write storage failures",
     "320px root overflow",
-    "computed text/control contrast and Axe WCAG AA"
+    "computed text/control contrast and Axe WCAG AA",
+    "actual stopped-backend outage/recovery path also passed locally in Chromium"
   ],
   "regressions": [
     "full PWA offline/sync/recipe/calendar/import flows",
@@ -346,6 +347,9 @@
     "initial_source": "0dc9bd779519a9c65bc46fed55b8168070ef62df",
     "initial_result": "five jobs passed; WebKit theme flow sampled metadata before a native media-query change event settled",
     "change": "use bounded Playwright attribute expectations for metadata convergence; keep expected palette values and contrast/Axe gates unchanged",
-    "verification": "fresh full exact-source CI required; no WebKit pass claimed yet"
+    "verification": "fresh full exact-source CI required; no WebKit pass claimed yet",
+    "second_run_id": 39650395108,
+    "second_result": "five jobs passed; WebKit OS-change checks passed, then browser automation offline reload reported internal engine error",
+    "outage_change": "WebKit now tests actual backend shutdown/connection refusal, two real service-worker cached reloads and backend recovery; same path passes locally in Chromium"
   }
 }

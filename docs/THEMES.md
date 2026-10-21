@@ -51,7 +51,12 @@ three themes under light and dark device modes, metadata/native controls, offlin
 selection/reload, cross-tab console reuse, selection before React loads, invalid stored
 IDs, read/write storage failures, 320px overflow and EN/DE strings. Computed foreground/
 background pairs meet 4.5:1 and focus/control boundaries 3:1; Axe covers WCAG AA checks.
-CI runs the same flow in Chromium and persistent-profile WebKit. These engines do not
+CI runs the flow in Chromium and persistent-profile WebKit. Chromium uses browser
+offline emulation; WebKit stops the actual test backend and restores it after two
+cache-backed reloads. The automation offline flag on the CI WebKit build reports an
+internal engine error for service-worker navigation. Neither test substitutes a worker
+or cache implementation. Run `MEALF_THEME_NETWORK_OUTAGE=1 python scripts/theme_browser_smoke.py`
+to exercise the real-outage path locally in Chromium as well. These engines do not
 prove physical iOS Home Screen, software keyboard or complete manual accessibility.
 
 Existing recipe/sync/planning/import, mobile calendar/layout and console/push tests

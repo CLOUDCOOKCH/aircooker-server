@@ -33,6 +33,7 @@ def contrast(first, second):
 
 def main():
     engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
+    outage = engine == "webkit" or os.environ.get("MEALF_THEME_NETWORK_OUTAGE") == "1"
     captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/theme-browser")) / engine
     captures.mkdir(parents=True, exist_ok=True)
     evidence = []
@@ -195,7 +196,15 @@ def main():
                 ).scroll_into_view_if_needed()
                 page.screenshot(path=str(captures / "after-dark-settings-phone.png"))
                 page.wait_for_function("!!navigator.serviceWorker.controller")
-                context.set_offline(True)
+                if outage:
+                    # This WebKit build reports an internal engine error on
+                    # automation-offline reload. Exercise real connection
+                    # refusal instead; never mock or replace the worker cache.
+                    server.should_exit = True
+                    thread.join(timeout=10)
+                    assert not thread.is_alive(), "Backend outage was not established"
+                else:
+                    context.set_offline(True)
                 page.reload()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
@@ -209,7 +218,26 @@ def main():
                 check("sunday", "light")
                 page.get_by_role("radio", name="Sunday", exact=True).scroll_into_view_if_needed()
                 page.screenshot(path=str(captures / "sunday-settings-phone-de.png"))
-                context.set_offline(False)
+                if outage:
+                    server = uvicorn.Server(
+                        uvicorn.Config(
+                            create_app(Path(temporary), run_worker=False),
+                            host="127.0.0.1",
+                            port=port,
+                            log_level="error",
+                            access_log=False,
+                        )
+                    )
+                    thread = threading.Thread(target=server.run, daemon=True)
+                    thread.start()
+                    for _ in range(100):
+                        if server.started:
+                            break
+                        time.sleep(0.05)
+                    else:
+                        raise RuntimeError("Backend did not recover after outage")
+                else:
+                    context.set_offline(False)
                 admin = context.new_page()
                 admin.goto(base)
                 check("sunday", "light", admin)
