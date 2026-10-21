@@ -37,7 +37,6 @@
     "docs/screenshots/mealf-artwork-home-desktop-dark.png": "c7f1cc9fcc4ca96722f28e830bbb627f72a5d0fbb4bd26d7b56ec53b6f883833",
     "docs/screenshots/mealf-artwork-console-phone-de.png": "5e675298bb08567bc8cc15bddaeab7d0a4088234720e1caaead70845ff9e57f5"
   },
-  "tokens_preserved_sha256": "038d7ce5529490ed92af81f7da6a972687b0aa0e1ccabec0263669d2f88d1f37",
   "backend_tests": 213,
   "web_tests": 39,
   "chromium": "PWA and console functional flows passed; branded welcome phone dark axe check and offline peach/wordmark retrieval passed",
@@ -46,5 +45,6 @@
     "Physical iPhone/OS installed-icon refresh not exercised",
     "Native iOS artwork unchanged",
     "Manual implementation-agent review; no unavailable launcher/detector/specialist or plugin schema pass"
-  ]
+  ],
+  "css_snapshot_sha256": "038d7ce5529490ed92af81f7da6a972687b0aa0e1ccabec0263669d2f88d1f37"
 }
