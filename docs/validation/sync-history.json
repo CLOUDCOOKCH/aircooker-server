@@ -1,15 +1,19 @@
 {
   "date": "2026-10-21",
   "backend_tests": 92,
-  "swift_core_tests": 65,
+  "swift_core_tests": 66,
   "swift_toolchain": "6.2.1 Linux",
   "localisation_keys_per_language": 251,
-  "languages": ["en", "de"],
+  "languages": [
+    "en",
+    "de"
+  ],
   "docker_image_id": "sha256:8c8e8ee96f9d473ca693a90a2c3cc71ac5c104be3b6b7500827bc53cf02548b5",
   "docker_http_smoke": "passed: commit proofs, protected pushes/pulls, immutable snapshot pages across restart and later edits, existing media/restore paths",
   "restore_tests": "real SQLite online backup/rollback with divergent reused revision numbers; native engine uses explicit synthetic transports",
   "apple_sdk_build": "not executed",
   "native_ui_lifecycle": "not executed",
   "live_bring_or_ai": "not executed",
-  "remote_publication": "not executed"
+  "remote_publication": "not executed",
+  "swift_execution": "65-test Docker pass, then final 66-test Linux host pass using hash-verified binaries from the same pinned Swift OCI image and verified Debian SQLite headers"
 }

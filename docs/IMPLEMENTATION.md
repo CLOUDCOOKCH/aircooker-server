@@ -48,7 +48,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-92 backend tests and 65 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. Container security
+92 backend tests and 66 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. Container security
 still fails: 44 high package matches across 8 unique advisories, no critical matches.
 See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected
 environment variable `RELEASE_ACCEPTANCE_VERIFIED=true` and are not enabled by these results.

@@ -10,7 +10,7 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | mypy | Passed across 22 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **65 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **66 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
 | Localisation parity | 251 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
@@ -101,3 +101,15 @@ changed in this increment. Chromium admin workflows were also exercised previous
 browser administration UI was changed or revalidated in this increment. An initial final
 build/test launch ran out of Docker storage; obsolete aircooker images/build cache were
 removed without deleting volumes, then affected image and Swift checks passed.
+
+The final 66-test Swift run used the compiler extracted from the same pinned Swift 6.2.1
+OCI image after VFS container allocation exhausted local Docker storage. Manifest and layer
+SHA-256 digests were verified; Debian SQLite headers were checked against package metadata.
+An earlier 65-test run passed inside Docker. Final lint/native syntax checks passed; Apple
+framework type checking remains unavailable. Only reconstructible compiler images/build
+cache were retired; no household volume was removed.
+
+Latest source map: `migrations/005_sync_history.sql`, `sync_history.py`, `sync.py`, `models.py`
+and `app.py`; OpenAPI and `sync-history-v1.json`; `test_sync_history.py` and extended Docker
+smoke; API/backup/schema/ADR/checklist documentation. Companion code and controls are listed
+in its independent validation report.
