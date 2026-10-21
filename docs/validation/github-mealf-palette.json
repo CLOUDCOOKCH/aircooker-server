@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-21",
+  "implementation_commit": "749f477016c195b36db622ffdc3e7279ca589d30",
+  "scope": "PWA/admin shared Mealf palette, glass console navigation, localized food innuendo",
+  "local_evidence": "docs/validation/mealf-palette-local.json",
+  "review": "docs/validation/mealf-palette-review.md",
+  "publication": {
+    "status": "pending",
+    "planned_tag": "poc-20261021.5",
+    "reason": "The Git push was accepted but no Actions run has appeared for the implementation commit. This reviewed validation record is committed through the connected GitHub account to request the normal main-branch checks. Exact-source dual-architecture CI and fresh release-image security/runtime gates remain required."
+  }
+}
