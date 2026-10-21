@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "implemented and locally tested; publication pending",
+  "status": "implemented, tested and published in poc-20261021.6; exact release evidence in github-peach-preview.json",
   "scope": "PWA and administration peach Easter egg and localized food voice",
   "review": "implementation-agent manual source/capture confirmation; no independent specialist or plugin-schema pass",
   "backend_tests": 226,

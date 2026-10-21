@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-21",
+  "status": "published and verified",
+  "scope": "localized food jokes and silent peach-slap Easter egg across PWA/admin; native unchanged",
+  "source": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+  "ci": {
+    "run_id": 39634556996,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39634556996",
+    "event": "push",
+    "branch": "main",
+    "backend_tests_per_architecture": 226,
+    "frontend_tests": 39,
+    "jobs": [
+      {
+        "id": 119341443810,
+        "name": "browser",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119341444260,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119341444571,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119341444584,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119341444714,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119341444718,
+        "name": "pwa-core",
+        "head_sha": "183c91f19f984a33aeec4fb31d5497f82fd3e0bf",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publication": {
+    "run_id": 39635000477,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39635000477",
+    "jobs": [
+      {
+        "id": 119342974676,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119343056506,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119343056754,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119343852502,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "release_id": 419793407,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.6",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.6",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58288933",
+    "index_digest": "sha256:6b5963edc90c4943cbaa351f7f491b60cb8c905196c73433d4f065cc00c31740",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "a92c1638050d86041a4285af3975a55559c7edff1f664f71e0d8e56bd42c558e"
+      },
+      "container-security-amd64.json": {
+        "sha256": "75a364f20cd356913fd95351763466ac661d1a976cbfd6e7789f7f286afd4b6a"
+      },
+      "container-security-arm64.json": {
+        "sha256": "0a33c5ef4fa98d4333f6d25d8816e6c565d038ba206e7b864b23abf4338942af"
+      },
+      "openapi-v1.json": {
+        "sha256": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "d9f44816da94cc9d3e081d480925bdcf9536a1d0e0a2b88ad825dffcd9684fb8"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "8d5d0d605e3ec431234f0241476faa58d672cfa414bd53f8deab18d3004b5ba0"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:aac98265feb884a10ec5715a3c9217f72fa24cbac2670904dae43f2b9612f501",
+        "config": "sha256:e3c347c22094a46177549efb2041f400a6a5ae250564a78197c0cf88b44114bb",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:6b8f63bbeaa4dbd018dbeca113c951cf30c958fb6fcb5958a6a52d925c1ec1d1",
+        "config": "sha256:72a4a42aad5a2d52197224d2ac8cca9e423c2fa37eeb35da651977082ff8a28c",
+        "high_critical": 0
+      }
+    }
+  },
+  "verification": {
+    "anonymous_pull": "passed with an empty command-scoped Docker config",
+    "release_assets": "all six downloaded SHA-256 values match GitHub; Compose and OpenAPI match source",
+    "platforms": "exactly linux/amd64 and linux/arm64",
+    "image_identity": "each manifest config equals its published Trivy ImageID and the native build log image ID",
+    "scanner": "Trivy v0.70.0; zero HIGH/CRITICAL on both; no suppressions",
+    "same_volume_upgrade": "passed: published .5 -> .6; disposable same volume retains household identity, session, recipe and sync proof on internal 5152; non-root/read-only; no configured bootstrap log; shared theme/peach assets exact; original/derived artwork hashes and manifest identity preserved"
+  },
+  "limits": [
+    "Synthetic disposable household only; no access to operator data or host",
+    "Physical iPhone/Safari and screen-reader announcement delivery unverified",
+    "External Bring/AI/push delivery and complete-product acceptance unchanged"
+  ]
+}

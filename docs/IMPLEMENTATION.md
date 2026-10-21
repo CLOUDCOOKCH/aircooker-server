@@ -1,12 +1,14 @@
 # Implementation checklist and evidence
 
-**Peach interaction, 2026-10-21 — implemented and locally tested; publication pending:**
+**Peach interaction, 2026-10-21 — tested and published in `poc-20261021.6`:**
 shared PWA/console native peach buttons activate a silent hand-swipe/wobble and rotating
 EN/DE reactions. Wordmark navigation is separate. Reduced motion, repeated taps, keyboard,
 caption bounds and offline use pass Chromium checks. More food innuendo appears in login,
 Home and selected empty states; security/help/errors stay literal. Local 226 backend and
 39 frontend tests, lint/type/build/contract/brand checks and PWA/admin/push browser flows
-pass. Physical Safari/iPhone is unverified; native remains unchanged. See PEACH_EGG.md.
+pass. Physical Safari/iPhone is unverified; native remains unchanged. See PEACH_EGG.md. All six exact-source CI jobs and both fresh
+image gates pass. Public pull, asset/config identities and the published .5-to-.6 same-volume
+5152 upgrade pass; see [release evidence](validation/github-peach-preview.json).
 
 **POC publication:** the user requested the first installable preview on GHCR. A separate
 tag-triggered workflow requires all six exact-source CI jobs and fresh native-architecture

@@ -5,7 +5,9 @@
   feedback. Add more English/German food jokes without changing security/help language.
   Original artwork and persistent identities remain intact. Local 226 backend/39 frontend
   tests and Chromium interaction/offline/admin regressions pass; physical Safari unverified.
-  See [interaction evidence](docs/PEACH_EGG.md). Preview publication tracked separately.
+  Published `poc-20261021.6`: all six source CI jobs and both fresh image gates pass; public
+  pull and same-volume 5152 upgrade pass. See [interaction evidence](docs/PEACH_EGG.md) and
+  [exact release evidence](docs/validation/github-peach-preview.json).
 
 - Publish `poc-20261021.5` with the shared Mealf palette/admin design, confirmed PWA control
   selection policy and safe release retries. All six exact-source CI jobs pass (226 backend

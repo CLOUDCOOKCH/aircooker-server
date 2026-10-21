@@ -102,3 +102,15 @@ pinning and a complete release attestation review remain outstanding.
 The protected distribution environment must define `RELEASE_ACCEPTANCE_VERIFIED=true`
 only after documented product, security and release acceptance is actually complete.
 It is intentionally unset for this development implementation.
+
+## Peach interaction preview
+
+`poc-20261021.6` from `183c91f19f984a33aeec4fb31d5497f82fd3e0bf` passed all six
+exact-source CI jobs in run 39634556996 (226 backend tests per architecture and 39 frontend
+tests). Publication 39635000477 passed fresh native AMD64/ARM64 Docker and security checks.
+The image index is `sha256:6b5963edc90c4943cbaa351f7f491b60cb8c905196c73433d4f065cc00c31740`.
+Anonymous pull, all six asset checksums, report/config/build identities and a disposable
+published `.5` → `.6` same-volume upgrade on internal 5152 passed. Shared peach assets
+match source bytes and are precached; original art, manifest identity, household/session/
+recipe/sync proof persist. See [exact evidence](validation/github-peach-preview.json).
+Physical Safari/iPhone and full-product acceptance remain unverified.
