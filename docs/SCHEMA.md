@@ -18,6 +18,8 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | background_job | Deduplicated jobs, leases, fencing token, generation, retries, redacted error code |
 | import_draft | Pending/preview/needs-input/confirmed/cancelled state, warnings and provenance |
 | bring_owned_item | Period/requirement/list ownership ledger, external UUID, applied state and purchase history |
+| push_subscription | Per-device/session notification credentials encrypted with the vault; endpoint hash unique, bounded preferences and safe health fields |
+| push_delivery | Accepted receipt unique by subscription/civil date/category; subscription deletion cascades |
 | rate_limit / audit_event | Durable request buckets and local security-operation audit events |
 
 Templates and recurrence rules are represented in typed entity snapshots. Recommendation
@@ -45,3 +47,8 @@ Retention is intentionally conservative: tombstones, mutation replay records, Br
 history, suggestion-approval receipts and completed jobs are retained. Rate-limit buckets expire when a subsequent request
 arrives. Session/job/content retention policies and compaction with full-resync recovery must
 be implemented before stable release. No unsafe automatic cleanup is enabled.
+
+Migration 007 adds device-scoped Web Push state. It does not rewrite sync entities or old
+commits. The VAPID private key is encrypted separately in the config vault; neither
+subscriptions nor delivery secrets enter household exports. Job payloads refer to subscription
+UUID/date/category, never the endpoint/key. See REMINDERS.md for delivery invariants.

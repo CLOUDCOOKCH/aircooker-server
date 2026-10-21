@@ -7,14 +7,14 @@ version = "0.1.0"
 requires-python = ">=3.12"
 description = "mealf self-hosted household meal planning"
 license = "Apache-2.0"
-dependencies = ["fastapi==0.141.1", "pydantic==2.13.4", "uvicorn==0.52.1", "argon2-cffi==25.1.0", "httpx==0.28.1", "bring-api==1.1.2", "cryptography==50.0.0", "Pillow==13.0.0", "python-multipart==0.0.32"]
+dependencies = ["fastapi==0.141.1", "pydantic==2.13.4", "uvicorn==0.52.1", "argon2-cffi==25.1.0", "httpx==0.28.1", "bring-api==1.1.2", "cryptography==50.0.0", "Pillow==13.0.0", "python-multipart==0.0.32", "pywebpush==2.5.0"]
 [project.optional-dependencies]
 dev = ["pytest==9.0.3", "ruff==0.14.1", "mypy==1.18.2"]
 browser = ["playwright==1.62.0"]
 [tool.setuptools.packages.find]
 where = ["src"]
 [tool.setuptools.package-data]
-aircooker = ["migrations/*.sql", "web/*", "web/pwa/*", "web/pwa/assets/*", "web/pwa/art/*"]
+aircooker = ["migrations/*.sql", "attributions/*", "web/*", "web/pwa/*", "web/pwa/assets/*", "web/pwa/art/*"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]

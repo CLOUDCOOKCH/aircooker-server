@@ -93,14 +93,18 @@ def main():
         containers.append(name)
         port = docker("port", name, "8080/tcp").rsplit(":", 1)[1]
         base = "http://127.0.0.1:" + port
-        for _ in range(60):
+        deadline = time.monotonic() + 45
+        while time.monotonic() < deadline:
             try:
                 if request(base, "/api/v1/system/health")["status"] == "ok":
                     break
             except (URLError, ConnectionError, TimeoutError):
                 time.sleep(0.25)
         else:
-            raise RuntimeError("Container readiness timed out")
+            # Only synthetic test containers: preserve bounded startup diagnostics on failure.
+            raise RuntimeError(
+                "Container readiness timed out: " + docker("logs", "--tail", "40", name)
+            )
         assert docker("inspect", "--format", "{{.Config.User}}", name) == "10001:10001"
         shell = request(base, "/app/")
         assert b"manifest.webmanifest" in shell and b"/app/assets/" in shell
@@ -123,6 +127,16 @@ def main():
 
     try:
         name, base, device, headers = start()
+        push_before = request(base, "/api/v1/notifications/push", headers=headers)
+        assert not push_before["subscribed"] and len(push_before["public_key"]) == 87
+        notice = docker(
+            "exec",
+            name,
+            "python",
+            "-c",
+            "from importlib.resources import files; print(files('aircooker').joinpath('attributions/http-ece-1.2.1.LICENSE').read_text())",
+        )
+        assert "Martin Thomson" in notice and "MIT" in notice
         logout_session = request(
             base,
             "/api/v1/auth/login",
@@ -278,6 +292,10 @@ def main():
         except HTTPError as failure:
             assert failure.code == 401
         restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
+        assert (
+            request(base, "/api/v1/notifications/push", headers=headers)["public_key"]
+            == push_before["public_key"]
+        )
         assert (
             restored_ai["enabled"]
             and restored_ai["key_configured"]

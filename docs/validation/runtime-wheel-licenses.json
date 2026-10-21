@@ -137,6 +137,17 @@
       "version": "2.1.1"
     },
     {
+      "license_expression": "MIT",
+      "name": "charset-normalizer",
+      "notices": [
+        {
+          "path": "licenses/LICENSE",
+          "sha256": "6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887"
+        }
+      ],
+      "version": "3.5.2"
+    },
+    {
       "license_expression": "BSD-3-Clause",
       "name": "click",
       "notices": [
@@ -198,6 +209,17 @@
         }
       ],
       "version": "0.16.0"
+    },
+    {
+      "license_expression": "MIT",
+      "name": "http-ece",
+      "notices": [
+        {
+          "path": "aircooker:attributions/http-ece-1.2.1.LICENSE",
+          "sha256": "7d71f48c474da1de82fbdaac7fea5a1eaa41e4ac998dd44fd2897812812138d9"
+        }
+      ],
+      "version": "1.2.1"
     },
     {
       "license_expression": "BSD-3-Clause",
@@ -300,6 +322,17 @@
       "version": "0.5.4"
     },
     {
+      "license_expression": "MPL-2.0",
+      "name": "py-vapid",
+      "notices": [
+        {
+          "path": "licenses/LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+        }
+      ],
+      "version": "1.9.6"
+    },
+    {
       "license_expression": "BSD-3-Clause",
       "name": "pycparser",
       "notices": [
@@ -344,6 +377,32 @@
       "version": "0.0.32"
     },
     {
+      "license_expression": "MPL-2.0",
+      "name": "pywebpush",
+      "notices": [
+        {
+          "path": "licenses/LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+        }
+      ],
+      "version": "2.5.0"
+    },
+    {
+      "license_expression": "Apache-2.0",
+      "name": "requests",
+      "notices": [
+        {
+          "path": "licenses/LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+        },
+        {
+          "path": "licenses/NOTICE",
+          "sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc"
+        }
+      ],
+      "version": "2.34.2"
+    },
+    {
       "license_expression": "BSD-3-Clause",
       "name": "starlette",
       "notices": [
@@ -377,6 +436,17 @@
       "version": "0.4.4"
     },
     {
+      "license_expression": "MIT",
+      "name": "urllib3",
+      "notices": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686"
+        }
+      ],
+      "version": "2.8.0"
+    },
+    {
       "license_expression": "BSD-3-Clause",
       "name": "uvicorn",
       "notices": [
@@ -404,7 +474,7 @@
     }
   ],
   "format": "aircooker-runtime-wheel-licenses",
-  "lock_sha256": "e0b7d90ace2d8c385c43ce569e13b84a518922afe6f55e2aaf7ebd1be217a98b",
-  "scope": "Installed Python runtime wheels only; not OS or bundled native-library clearance",
+  "lock_sha256": "6f8fdc48e6a1f8f92c008c086c416b1db4b06394709b65a752e80ec5d7360468",
+  "scope": "Installed Python runtime wheels and explicitly pinned app-shipped supplemental notices; not OS or native-library clearance",
   "version": 1
 }

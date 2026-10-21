@@ -3,6 +3,7 @@ import { ArrowUpRight, Download, LogOut, RefreshCw, ShieldCheck, Smartphone } fr
 import { useApp } from './model';
 import type { Tab } from './model';
 import { PageHeader, Sheet } from './components';
+import { ReminderSettings } from './ReminderSettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
 import { cloneRecipe } from './lib/planning';
@@ -127,6 +128,7 @@ export function Settings({
               )}
             </div>
           </section>
+          <ReminderSettings />
           <section className="settings-group">
             <h2>{t('bring')}</h2>
             <div className="settings-surface">

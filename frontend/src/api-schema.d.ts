@@ -609,6 +609,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/notifications/push": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Status */
+        get: operations["status_api_v1_notifications_push_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/push/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Preferences */
+        put: operations["preferences_api_v1_notifications_push_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/push/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry */
+        post: operations["retry_api_v1_notifications_push_retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/push/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Subscribe */
+        put: operations["subscribe_api_v1_notifications_push_subscription_put"];
+        post?: never;
+        /** Unsubscribe */
+        delete: operations["unsubscribe_api_v1_notifications_push_subscription_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/push/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test */
+        post: operations["test_api_v1_notifications_push_test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/pantry": {
         parameters: {
             query?: never;
@@ -1595,6 +1681,90 @@ export interface components {
             /** Mutations */
             mutations: components["schemas"]["Mutation"][];
         };
+        /** PushKeys */
+        PushKeys: {
+            /** Auth */
+            auth: string;
+            /** P256Dh */
+            p256dh: string;
+        };
+        /** PushQueued */
+        PushQueued: {
+            /**
+             * State
+             * @default queued
+             * @constant
+             */
+            state: "queued";
+        };
+        /** PushRegistration */
+        PushRegistration: {
+            /** Endpoint */
+            endpoint: string;
+            keys: components["schemas"]["PushKeys"];
+            /**
+             * Language
+             * @default en
+             * @enum {string}
+             */
+            language: "en" | "de";
+            preferences?: components["schemas"]["ReminderPreferences"];
+        };
+        /** PushRetried */
+        PushRetried: {
+            /** Count */
+            count: number;
+            /**
+             * State
+             * @default queued
+             * @constant
+             */
+            state: "queued";
+        };
+        /** PushSettings */
+        PushSettings: {
+            /**
+             * Language
+             * @default en
+             * @enum {string}
+             */
+            language: "en" | "de";
+            preferences: components["schemas"]["ReminderPreferences"];
+        };
+        /** PushStatus */
+        PushStatus: {
+            /** Available */
+            available: boolean;
+            /** Error Code */
+            error_code?: string | null;
+            /**
+             * Failed Jobs
+             * @default 0
+             */
+            failed_jobs: number;
+            /** Last Success */
+            last_success?: number | null;
+            /**
+             * Pending Jobs
+             * @default 0
+             */
+            pending_jobs: number;
+            preferences: components["schemas"]["ReminderPreferences"];
+            /** Public Key */
+            public_key: string;
+            /** Subscribed */
+            subscribed: boolean;
+            /** Subscription Fingerprint */
+            subscription_fingerprint?: string | null;
+        };
+        /** PushTest */
+        PushTest: {
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+        };
         /** Recipe */
         Recipe: {
             /**
@@ -1659,6 +1829,29 @@ export interface components {
         Refresh: {
             /** Refresh Token */
             refresh_token: string;
+        };
+        /** ReminderPreferences */
+        ReminderPreferences: {
+            /**
+             * Breakfast
+             * @default 07:30
+             */
+            breakfast: string | null;
+            /**
+             * Dinner
+             * @default 18:00
+             */
+            dinner: string | null;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Lunch
+             * @default 12:00
+             */
+            lunch: string | null;
         };
         /** SessionInfo */
         SessionInfo: {
@@ -3163,6 +3356,163 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MediaInfo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    status_api_v1_notifications_push_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushStatus"];
+                };
+            };
+        };
+    };
+    preferences_api_v1_notifications_push_preferences_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushSettings"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_api_v1_notifications_push_retry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushRetried"];
+                };
+            };
+        };
+    };
+    subscribe_api_v1_notifications_push_subscription_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushRegistration"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unsubscribe_api_v1_notifications_push_subscription_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    test_api_v1_notifications_push_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushTest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushQueued"];
                 };
             };
             /** @description Validation Error */

@@ -66,4 +66,8 @@ links permit HTTP(S) only. No imported HTML or AI output is executed by the clie
 
 Browser recovery exports include private content and photos, with no session/integration
 secrets. They are separate from server household archives and require private handling.
-Web Push/passkeys are not yet implemented; no claim about their security or delivery is made.
+Passkeys remain unimplemented. Optional Web Push uses device-authenticated/CSRF-protected
+controls, encrypted subscription/VAPID credentials, an explicit vendor allowlist and public
+DNS/socket pinning with verified TLS/no redirects. Generic payloads omit household content.
+Consent, metadata exposure, replay/window/retry behavior, key recovery and live platform
+limitations are documented in REMINDERS.md. No live vendor/device-delivery claim is made.

@@ -1,0 +1,71 @@
+{
+  "format": "mealf-name-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "6957d94ef189667251cafce3cbe3bfd25d84cf66",
+  "run_id": 39589393570,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39589393570",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 151,
+  "web_core_tests": 32,
+  "jobs": [
+    {
+      "id": 119186247750,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119186248034,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119186248082,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119186248143,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119186248229,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119186248333,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    }
+  ],
+  "runtime_security": {
+    "scanner": "Trivy",
+    "configured_version": "0.70.0",
+    "gate": "HIGH,CRITICAL; exit-code 1; ignore-unfixed false; no suppressions",
+    "architectures": [
+      {
+        "architecture": "linux/amd64",
+        "job_id": 119186247750,
+        "image_id": "sha256:09a00c42cd01ad6e7bcf949ed0cd6b818557472342d3684a92bd529a6533e0cf",
+        "gate": "passed"
+      },
+      {
+        "architecture": "linux/arm64",
+        "job_id": 119186248082,
+        "image_id": "sha256:18a51f5ff42fe6e3196dd0a73ebb8d622145acf2b57286a022ff809c29d5585e",
+        "gate": "passed"
+      }
+    ],
+    "dependency_audit": "passed",
+    "secret_scan": "passed"
+  },
+  "scope": "Name-only delivery with preserved storage/session/API identities. Original peach/wordmark PNG artwork unavailable, not recreated. Does not cover subsequent Web Push source.",
+  "limits": [
+    "No original artwork or complete product acceptance",
+    "Physical browser and live external integrations unverified",
+    "See github-native-mealf-name.json for independent Apple CI"
+  ]
+}

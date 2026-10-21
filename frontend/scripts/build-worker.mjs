@@ -16,7 +16,8 @@ const version = digest.digest('hex').slice(0, 16);
 const assets = ['/app/', ...files.map((name) => '/app/' + name)];
 await writeFile(
   'dist/sw.js',
-  `const CACHE='aircooker-shell-${version}';
+  `importScripts('/app/push-handler.js');
+const CACHE='aircooker-shell-${version}';
 const ASSETS=${JSON.stringify(assets)};
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS);})()));
 self.addEventListener('message',event=>{if(event.data?.type==='ACTIVATE')self.skipWaiting();});

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { APIClient, APIError } from './lib/api';
 import { LocalStore } from './lib/store';
 import { SyncEngine } from './lib/sync';
+import { reminderTarget } from './lib/notifications';
 import { openDemo, DEMO_ID } from './lib/demo';
 import { translate } from './i18n';
 import type { Key, Language } from './i18n';
@@ -78,7 +79,7 @@ function useRuntime(runtime: Runtime) {
         store.setting<Language>('language', runtime.household.language),
       ]);
       if (alive) {
-        setTabState(savedTab);
+        setTabState(reminderTarget(location.search)?.tab ?? savedTab);
         setLanguageState(savedLanguage);
         setReady(true);
         await sync();

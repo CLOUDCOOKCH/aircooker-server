@@ -1,4 +1,43 @@
 export const en = {
+  pushReminders: 'Meal reminders',
+  pushHeading: 'A gentle nudge at mealtime',
+  pushBody:
+    'Connect notifications, then enable your meals and times. Reminders follow your household time zone and need connectivity.',
+  pushInstall:
+    'Add mealf to your iPhone or iPad Home Screen, then open it there to connect reminders.',
+  pushUnsupported:
+    'This browser does not support Web Push. Use a supported browser or your installed Home Screen app.',
+  pushDenied:
+    'Notifications are blocked. Allow them in your browser or device notification settings, then return here.',
+  pushVendorUnsupported:
+    'This browser uses an unsupported delivery service. Use Safari, Chrome or Firefox on a supported device.',
+  pushHttps: 'Configure a public HTTPS server URL before connecting notifications.',
+  pushOffline:
+    'Offline: changes stay as a draft here. Save them when connected to apply them on your server.',
+  pushConnect: 'Connect notifications',
+  pushEnabled: 'Enable meal reminders',
+  pushTime: 'Reminder time',
+  pushSaveHint: 'Save to apply changes. Times follow the household time zone.',
+  pushSave: 'Save reminder settings',
+  pushTest: 'Send a test reminder',
+  pushRetry: 'Retry failed deliveries',
+  pushDisconnect: 'Disconnect notifications',
+  pushExpired: 'This notification connection expired. Reconnect it to resume reminders.',
+  pushDeliveryError:
+    'The delivery service could not accept a reminder. Temporary failures retry automatically.',
+  pushSaved: 'Reminder settings saved.',
+  pushQueued: 'Delivery queued.',
+  pushError:
+    'Could not update reminders. Your settings draft remains here; check the connection and try again.',
+  pushPrivacy:
+    'Your browser’s delivery service carries encrypted reminders. Recipe names, ingredients and household names are excluded.',
+  pushReminderReady: 'Your meal reminder is ready. Finish your current edit before opening it.',
+  pushOpenReminder: 'Open reminder',
+  pushKeyChanged:
+    'Your server’s notification key changed. Disconnect notifications here, then reconnect.',
+  pushPending: 'deliveries pending',
+  pushLastAccepted: 'Last accepted by delivery service:',
+
   rejectedPlan:
     'This suggested plan could not be applied. A meal slot may have changed on another device. Archive this preview and generate a new one.',
   archivePlan: 'Archive rejected plan',
@@ -265,7 +304,7 @@ export const en = {
   update: 'An update is ready',
   applyUpdate: 'Reload app',
   reminderLimits:
-    'Reminders need connected Web Push; this build does not yet schedule them. iPhone widgets and incoming Share Extension remain native-only.',
+    'Meal reminders use opt-in Web Push and need connectivity. iPhone widgets and incoming Share Extension remain native-only.',
   all: 'All recipes',
   weekOf: 'Week of',
   name: 'Name',
@@ -279,6 +318,47 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  pushReminders: 'Mahlzeitenerinnerungen',
+  pushHeading: 'Ein kleiner Anstupser zur Essenszeit',
+  pushBody:
+    'Verbinde Mitteilungen und aktiviere deine Mahlzeiten und Uhrzeiten. Erinnerungen nutzen die Haushaltszeitzone und benötigen eine Verbindung.',
+  pushInstall:
+    'Füge mealf auf dem iPhone oder iPad zum Home-Bildschirm hinzu und öffne es dort, um Erinnerungen zu verbinden.',
+  pushUnsupported:
+    'Dieser Browser unterstützt Web Push nicht. Nutze einen unterstützten Browser oder die installierte Home-Bildschirm-App.',
+  pushDenied:
+    'Mitteilungen sind blockiert. Erlaube sie in den Browser- oder Geräteeinstellungen und kehre hierher zurück.',
+  pushVendorUnsupported:
+    'Dieser Browser nutzt einen nicht unterstützten Zustelldienst. Nutze Safari, Chrome oder Firefox auf einem unterstützten Gerät.',
+  pushHttps: 'Richte zuerst eine öffentliche HTTPS-Serveradresse für Mitteilungen ein.',
+  pushOffline:
+    'Offline: Änderungen bleiben hier als Entwurf. Speichere sie mit Verbindung, um sie auf dem Server anzuwenden.',
+  pushConnect: 'Mitteilungen verbinden',
+  pushEnabled: 'Mahlzeitenerinnerungen aktivieren',
+  pushTime: 'Erinnerungszeit',
+  pushSaveHint: 'Speichere, um Änderungen anzuwenden. Die Zeiten folgen der Haushaltszeitzone.',
+  pushSave: 'Erinnerungen speichern',
+  pushTest: 'Testerinnerung senden',
+  pushRetry: 'Fehlgeschlagene Zustellungen wiederholen',
+  pushDisconnect: 'Mitteilungen trennen',
+  pushExpired:
+    'Diese Mitteilungsverbindung ist abgelaufen. Verbinde sie erneut, um Erinnerungen fortzusetzen.',
+  pushDeliveryError:
+    'Der Zustelldienst konnte eine Erinnerung nicht annehmen. Vorübergehende Fehler werden automatisch erneut versucht.',
+  pushSaved: 'Erinnerungseinstellungen gespeichert.',
+  pushQueued: 'Zustellung eingereiht.',
+  pushError:
+    'Erinnerungen konnten nicht aktualisiert werden. Dein Entwurf bleibt erhalten. Prüfe die Verbindung und versuche es erneut.',
+  pushPrivacy:
+    'Der Zustelldienst deines Browsers übermittelt verschlüsselte Erinnerungen. Rezeptnamen, Zutaten und Haushaltsnamen werden nicht mitgesendet.',
+  pushReminderReady:
+    'Deine Mahlzeitenerinnerung ist bereit. Beende deine aktuelle Bearbeitung, um sie zu öffnen.',
+  pushOpenReminder: 'Erinnerung öffnen',
+  pushKeyChanged:
+    'Der Mitteilungsschlüssel deines Servers hat sich geändert. Trenne Mitteilungen hier und verbinde sie erneut.',
+  pushPending: 'Zustellungen ausstehend',
+  pushLastAccepted: 'Zuletzt vom Zustelldienst angenommen:',
+
   rejectedPlan:
     'Dieser Vorschlag konnte nicht übernommen werden. Ein Termin wurde möglicherweise auf einem anderen Gerät geändert. Archiviere die Vorschau und erstelle einen neuen Vorschlag.',
   archivePlan: 'Abgelehnten Plan archivieren',
@@ -550,7 +630,7 @@ export const de: Record<Key, string> = {
   update: 'Ein Update ist bereit',
   applyUpdate: 'App neu laden',
   reminderLimits:
-    'Erinnerungen benötigen Web Push mit Internet. Diese Version plant sie noch nicht. iPhone-Widgets und eingehendes Teilen bleiben nativ.',
+    'Mahlzeitenerinnerungen nutzen freiwilliges Web Push und benötigen Internet. iPhone-Widgets und eingehendes Teilen bleiben nativ.',
   all: 'Alle Rezepte',
   weekOf: 'Woche ab',
   name: 'Name',

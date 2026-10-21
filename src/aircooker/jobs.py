@@ -37,7 +37,7 @@ def claim(database, lease_seconds=60):
         return dict(db.execute("SELECT * FROM background_job WHERE id=?", (row["id"],)).fetchone())
 
 
-def finish(database, job, error_code=None):
+def finish(database, job, error_code=None, *, retry_after: int | None = None):
     with database.transaction() as db:
         current = db.execute(
             "SELECT * FROM background_job WHERE id=? AND lease_token=? AND state='running'",
@@ -56,6 +56,8 @@ def finish(database, job, error_code=None):
             )
         )
         delay = 0 if newer or error_code is None else min(3600, 2 ** current["attempts"])
+        if not newer and error_code is not None and retry_after is not None:
+            delay = max(delay, min(3600, max(0, retry_after)))
         db.execute(
             "UPDATE background_job SET state=?,available_at=?,lease_until=NULL,lease_token=NULL,error_code=? WHERE id=?",
             (state, time.time() + delay, error_code, job["id"]),

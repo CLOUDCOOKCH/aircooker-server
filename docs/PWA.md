@@ -129,9 +129,10 @@ Incoming iPhone Share Target, WidgetKit widgets and native local biometric locki
 available in this PWA. Paste a URL/text to import; use normal camera scanning to open a URL.
 Passkeys would provide a different Face ID-assisted sign-in and are not implemented here.
 
-Web Push reminders are still planned. They need opt-in permission, an installed Home Screen
-app on iPhone and connectivity; offline native scheduled notifications cannot be reproduced
-by a pure PWA. Do not enable imaginary reminder toggles or assume delivery is implemented.
+Opt-in Web Push reminder controls, durable scheduling/retries and offline settings drafts
+are implemented. See [setup, privacy, delivery limits and evidence](REMINDERS.md). They need
+permission, an installed Home Screen app on iPhone and connectivity; the PWA does not schedule
+offline local notifications. Live vendor/physical iPhone delivery remains unverified.
 
 Actual iPhone/Safari Home Screen, storage lifecycle, passkeys and vendor push delivery need
 platform testing. Chromium phone emulation is not an iPhone test. See PWA_IMPLEMENTATION.md

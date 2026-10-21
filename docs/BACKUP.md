@@ -76,3 +76,9 @@ Other archived record kinds remain available as text and require manual reconstr
 These local archives are not in a server export or server backup, and cannot recover content
 that was never cached on a surviving device. They are removed when the app is uninstalled.
 No automatic history compaction/purge or destructive household replacement was added here.
+
+Optional Web Push state is excluded from household JSON/ZIP transfer: reconnect each browser
+after a clean import. A full protected volume recovery must preserve the SQLite database,
+vault key and encrypted `/data/config/webpush-vapid.enc` together. If the public VAPID key
+changes, the browser requires explicit disconnect/reconnect. Such volume copies contain
+subscription/auth secrets and must remain private. See REMINDERS.md.

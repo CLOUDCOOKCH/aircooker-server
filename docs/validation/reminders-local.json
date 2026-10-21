@@ -1,0 +1,54 @@
+{
+  "format": "mealf-reminders-local-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "scope": "Implemented and tested with explicit subscription/vendor doubles; live delivery unverified",
+  "backend": {
+    "pytest_passed": 180,
+    "ruff_lint_and_format": "passed",
+    "mypy_modules": 30,
+    "openapi_drift": "passed; additive notification endpoints and typed schemas",
+    "runtime_packages": 40,
+    "supplemental_notice": "http-ece 1.2.1 exact upstream MIT notice packaged with version/hash gate"
+  },
+  "web": {
+    "core_tests_passed": 34,
+    "typescript_format_build": "passed",
+    "npm_audit": "zero known advisories observed",
+    "ordinary_pwa_smoke": "passed existing offline/two-device/planning/template/import/axe/cache workflows",
+    "push_browser_smoke": "passed real PWA/API/IDB/offline draft/editor-safe worker message and actual receiver with CDP injection; explicit subscription/vendor doubles; test granted/denied permission",
+    "axe": "passed stated EN desktop light / DE phone dark settings",
+    "external_vendor": "not contacted"
+  },
+  "crypto": "real RFC payload encryption/decryption and VAPID ECDSA signature verification; network replaced in tests",
+  "docker": {
+    "status": "passed non-root/read-only HTTP/restart/clean-install JSON+ZIP restore smoke, VAPID public-key persistence and packaged supplemental notice",
+    "architecture": "linux/amd64",
+    "image_id": "sha256:72ef5cfec8248323ce4702f8a61c833452252f8953ea44856f7eeeec973b46eb",
+    "initial_environment_failure": "An earlier clean-container start hit ENOSPC in the ephemeral Docker host; unused build cache was removed, leaving 11 GB free, and the complete smoke passed. No application-volume data was removed."
+  },
+  "review": "docs/validation/reminders-review.md; fresh manual ship at tested UI scope, no automated detector/specialist claimed",
+  "captures": [
+    {
+      "path": "docs/screenshots/mealf-reminders-controls-desktop.png",
+      "sha256": "0cfd298806b0346697cb062057664a844ce85421feb33640acf4952b8075c618"
+    },
+    {
+      "path": "docs/screenshots/mealf-reminders-controls-phone-de-dark.png",
+      "sha256": "f7173780070aa02e853f64562a7264e022f57fdb7dea646430a1b90ca02119ef"
+    },
+    {
+      "path": "docs/screenshots/mealf-reminders-desktop.png",
+      "sha256": "108f7eece666528779920c023363f63c012b999cf2d50480bb31692dc36aee9b"
+    },
+    {
+      "path": "docs/screenshots/mealf-reminders-phone-de-dark.png",
+      "sha256": "05923b0ec0455a2eb9bb57fc8723902f644a84f386ba0e1fcfcbaf631deceb9c"
+    }
+  ],
+  "limits": [
+    "No live push vendor acceptance, OS display, user permission dialog, physical iPhone or Safari verification",
+    "No original supplied PNG installation; exact bytes unavailable",
+    "No stable release, full master acceptance or exactly-once delivery claim"
+  ]
+}

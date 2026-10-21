@@ -6,9 +6,24 @@ Does not assess OS packages, bundled native libraries or third-party service ter
 import argparse
 import hashlib
 import importlib.metadata
+import importlib.resources
 import json
 import re
 from pathlib import Path
+
+
+def supplemental_notice(name: str, version: str, expression: str):
+    manifest = json.loads(Path("licenses/supplemental-attribution.json").read_text())
+    entry = manifest.get(name)
+    if entry is None:
+        return []
+    if entry["version"] != version or entry["license_expression"] != expression:
+        raise SystemExit("Supplemental attribution version/licence mismatch: " + name)
+    content = importlib.resources.files("aircooker").joinpath(entry["resource"]).read_bytes()
+    digest = hashlib.sha256(content).hexdigest()
+    if digest != entry["sha256"] or not content:
+        raise SystemExit("Supplemental attribution checksum mismatch: " + name)
+    return [{"path": "aircooker:" + entry["resource"], "sha256": digest}]
 
 
 def inventory(lock: Path) -> dict:
@@ -42,6 +57,8 @@ def inventory(lock: Path) -> dict:
                 raise SystemExit(f"Empty attribution file: {name}/{relative}")
             notices.append({"path": relative, "sha256": hashlib.sha256(content).hexdigest()})
         if not notices:
+            notices = supplemental_notice(name, version, expression)
+        if not notices:
             raise SystemExit(f"Runtime wheel has no installed attribution files: {name}")
         components.append(
             {
@@ -55,7 +72,7 @@ def inventory(lock: Path) -> dict:
         "format": "aircooker-runtime-wheel-licenses",
         "version": 1,
         "lock_sha256": hashlib.sha256(lock.read_bytes()).hexdigest(),
-        "scope": "Installed Python runtime wheels only; not OS or bundled native-library clearance",
+        "scope": "Installed Python runtime wheels and explicitly pinned app-shipped supplemental notices; not OS or native-library clearance",
         "components": components,
     }
 
@@ -84,7 +101,9 @@ def main():
         args.approval.write_text(json.dumps(expected, indent=2, sort_keys=True) + "\n")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
-    print(f"Inventoried {len(expected)} locked runtime wheels with installed attribution files")
+    print(
+        f"Inventoried {len(expected)} locked runtime wheels with verified installed or pinned app-shipped attribution"
+    )
 
 
 if __name__ == "__main__":

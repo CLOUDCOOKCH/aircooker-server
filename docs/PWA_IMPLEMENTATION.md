@@ -33,9 +33,12 @@ client, not a declaration that the entire project or release checklist is finish
 - Public-only service-worker shell, install manifest/icons, explicit updates, persisted-storage
   request and browser recovery export with photos. API/auth/media are never in its cache.
 - English/German, light/dark, keyboard focus, named dialogs, reduced-motion and opaque fallbacks.
+- Opt-in per-device Web Push controls, household-time scheduling, persistent jobs/receipts,
+  offline preferences drafts and editor-safe notification navigation. Tested with explicit
+  subscription/vendor doubles and a real worker receiving an injected event; live unverified.
 - Browser dependency attribution/version gate; Node remains build-only, not a runtime service.
 
-Evidence: **151 backend tests**, **32 web core tests**, lint/types/format/OpenAPI/licence checks
+Evidence: **180 backend tests**, **34 web core tests**, lint/types/format/OpenAPI/licence checks
 and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
 save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
 assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
@@ -53,8 +56,10 @@ unavailable; the handoff used a fresh manual reviewer and no detector pass is cl
 
 - [ ] Physical iPhone/Safari Home Screen install, storage eviction/lifecycle, standalone safe
       areas, real keyboard/VoiceOver/large-text/reduced-transparency and broader browser testing.
-- [ ] Opt-in Web Push reminders and delivery/retry/permission management. No notification
-      settings pretend this exists. Passkeys are also not implemented.
+- [ ] Live Web Push vendor and physical-device delivery/permission/OS lifecycle validation.
+      Per-device controls, offline drafts, scheduling/retries and the browser receiver have
+      synthetic/Chromium coverage (REMINDERS.md); this does not prove live delivery. Passkeys
+      remain unimplemented.
 - [ ] Shared household recommendation preferences and acceptance learning.
 - [ ] Guided non-recipe archive reconstruction and automatic browser-recovery JSON import;
       current archives/exports preserve data but these recovery paths remain manual.

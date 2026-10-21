@@ -1325,6 +1325,25 @@ details label:first-of-type {
 .settings-group {
   margin-bottom: 32px;
 }
+.reminder-form {
+  padding: 16px 18px;
+}
+.reminder-form p {
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+}
+.reminder-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.reminder-time > label {
+  min-width: 0;
+}
+.reminder-time input[type='time'] {
+  max-width: 150px;
+}
 .settings-group > h2 {
   font-size: 0.875rem;
   margin: 0 0 12px 3px;

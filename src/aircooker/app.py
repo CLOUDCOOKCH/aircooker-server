@@ -85,6 +85,8 @@ from .planning import entities, occurrences, shopping_projection, week_start
 from .pwa_auth import ACCESS_COOKIE, is_pwa, require_csrf
 from .pwa_auth import register_routes as register_pwa_auth
 from .recommendations import planning_basis, suggest_week
+from .reminder_routes import register_routes as register_reminders
+from .reminders import Reminders
 from .secrets import SecretVault
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
@@ -99,6 +101,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     media_slots = asyncio.Semaphore(2)
     archive_slots = asyncio.Semaphore(1)
     SecretVault(data_dir / "config")
+    reminders = Reminders(database, data_dir / "config")
     token_file = data_dir / "config" / "setup-token"
     with database.connect() as db:
         configured = db.execute("SELECT 1 FROM household").fetchone()
@@ -112,6 +115,9 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
 
     def process_job(job):
         payload = json.loads(job["payload"])
+        if job["kind"] in ("notification.meal", "notification.test"):
+            reminders.deliver(job)
+            return
         if job["kind"] == "shopping.reconcile":
             with database.connect() as db:
                 household = db.execute("SELECT * FROM household").fetchone()
@@ -183,6 +189,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         last_periodic = 0.0
         while True:
             if time.monotonic() - last_periodic > 60:
+                await asyncio.to_thread(reminders.enqueue_due)
                 with database.transaction() as db:
                     prior = db.execute(
                         "SELECT state FROM background_job WHERE dedupe_key='shopping.current'"
@@ -196,7 +203,9 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     await asyncio.to_thread(process_job, job)
                 except Exception as exc:
                     code = exc.code if isinstance(exc, DomainError) else "job_processing_failed"
-                    await asyncio.to_thread(finish, database, job, code)
+                    await asyncio.to_thread(
+                        finish, database, job, code, retry_after=getattr(exc, "retry_after", None)
+                    )
                 else:
                     await asyncio.to_thread(finish, database, job)
             else:
@@ -306,6 +315,9 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             require_csrf(request, pwa=is_pwa(request))
         with database.connect() as db:
             return authenticate(db, token)
+
+    register_reminders(app, session, reminders)
+    app.state.reminders = reminders
 
     @app.get("/api/v1/system/info")
     def info():

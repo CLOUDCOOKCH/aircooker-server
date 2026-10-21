@@ -219,3 +219,16 @@ preview, the library remains unchanged before explicit confirmation, and the con
 recipe participates in JSON/ZIP export and clean-install restore. No live source account
 or AI provider was used. The API schema/pin is unchanged. Native translated review notices
 are implemented sources; their editor lifecycle remains unverified until Apple UI tests.
+
+## PWA opt-in reminder implementation, 2026-10-21
+
+The current development suite passes 180 backend tests and 34 web tests. Reminder checks
+cover actual encryption/VAPID signatures, endpoint/DNS restrictions, device/session/CSRF/rate
+controls, encrypted secrets/export exclusion, DST, durable retries/receipts and obsolete-meal
+suppression. The actual PWA/API/IDB controls and worker receiver pass Chromium using explicit
+subscription/vendor doubles, injected push events and test-controlled permissions. The full
+ordinary PWA smoke still passes. Exact local evidence/captures and fresh bounded manual UI
+review are in validation/reminders-local.json and validation/reminders-review.md. No live
+vendor/device delivery, user permission dialog or physical Safari acceptance is claimed.
+Current CI must be read for its exact source; prior mealf-name green runs cover name-only
+source (validation/github-mealf-name.json and github-native-mealf-name.json).

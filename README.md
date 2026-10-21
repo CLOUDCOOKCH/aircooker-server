@@ -71,11 +71,12 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional development client, genuine reviewed desktop/phone captures, 32 offline/planning/sync tests and real Chromium flows; physical Safari and remaining features open |
+| PWA | Functional development client, genuine reviewed desktop/phone captures, 34 offline/planning/sync/notification tests and real Chromium flows; physical Safari and remaining features open |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
 | Recurrences, serving scaling, pantry-aware aggregation | Implemented; bounded expansion and domain tests |
+| PWA reminders | Opt-in controls/offline drafts, durable scheduling/retries and real receiver with synthetic vendor tests; live delivery/iPhone unverified ([guide](docs/REMINDERS.md)) |
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared preference learning remains partial |
 | Website recipe import | JSON-LD previews and conservative metric/EN/DE fractions/ranges parsing; images and broader HTML extraction remain partial |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |

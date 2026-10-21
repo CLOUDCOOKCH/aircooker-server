@@ -291,6 +291,16 @@
       "approval": "explicit save/apply after preview",
       "drafts": "preserve local work"
     },
+    "reminders": {
+      "source": "frontend/src/ReminderSettings.tsx",
+      "surface": "optional per-device Settings group; existing solid surfaces, system typography and forest-green controls",
+      "controls": "household time zone; explicit connect and enable; category checkboxes and distinctly named native time inputs; separate save/test/retry/disconnect actions",
+      "drafts": "persist preference edits locally through offline/reload; explicit connected save applies server scheduling; no offline local notification scheduler",
+      "availability": "busy disables form; offline disables server actions; unsaved or disabled preferences disable test sending; installation/unsupported/denied/setup/key-change states explain recovery",
+      "feedback": "saved/queued/pending role=status; errors/key changes role=alert; Last accepted by delivery service is vendor acceptance, not proof of device display",
+      "navigation": "valid notification opens calendar day or Settings; preserve active recipe editor and show role=status handoff banner with Open reminder disabled until editing finishes",
+      "guide": "docs/REMINDERS.md"
+    },
     "feedback": {
       "error": "danger-soft/danger-ink; alert when sync blocked/error",
       "warning": "warning-soft/warning-ink",
@@ -356,7 +366,19 @@
   "review": {
     "initial": "docs/validation/pwa-visual-review.md",
     "verdict": "docs/validation/pwa-visual-verdict.md",
-    "disposition": "Newest review docs/validation/mealf-name-review.md: ship the reviewed name-only change; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
+    "disposition": "Newest review docs/validation/reminders-review.md: ship at the tested reminder UI scope, with no required UI fixes. The name-only review docs/validation/mealf-name-review.md remains limited to that change; original artwork installation remains blocked and incomplete. The initial/verdict, fix score and capture matrix below remain historical records of the original PWA screenshot/source and listed-fix scope. No full rebrand or product acceptance is claimed.",
+    "reminders": {
+      "report": "docs/validation/reminders-review.md",
+      "guide": "docs/REMINDERS.md",
+      "scope": "manual source/capture review of reminder Settings and notification handoff banner; ship at the tested reminder UI scope",
+      "captures": [
+        "docs/screenshots/mealf-reminders-desktop.png",
+        "docs/screenshots/mealf-reminders-controls-desktop.png",
+        "docs/screenshots/mealf-reminders-phone-de-dark.png",
+        "docs/screenshots/mealf-reminders-controls-phone-de-dark.png"
+      ],
+      "evidenceLimits": "connected/saved desktop and German dark phone controls use synthetic household/subscription/vendor data; handoff banner and other states reviewed in source; no new contrast, keyboard, screen-reader or text-enlargement acceptance; browser receiver evidence uses CDP-injected event; no live permission/vendor/Safari/physical iPhone/OS display/Focus validation"
+    },
     "fixScore": {
       "resolved": 2,
       "partial": 0,
@@ -392,7 +414,7 @@
       "captured-screen Axe WCAG2 A/AA +2.1AA",
       "exact accessible dialog name and focus-return assertion"
     ],
-    "handoffVerification": "Manual source/document inspection, fresh name-only review record and unchanged token/schema-structure comparison; browser checks not rerun. Context launcher/detector, cloud resources and specialist definition unavailable; no specialist pass claimed.",
+    "handoffVerification": "Manual source/document inspection, fresh reminder UI review record and unchanged complete token/schema/direction comparison; browser checks not rerun. Context launcher/detector, cloud resources and specialist definition unavailable; no plugin schema validation or specialist pass claimed.",
     "unclaimed": [
       "plugin schema validation",
       "automated design detector",
@@ -401,7 +423,7 @@
       "complete master product acceptance",
       "physical iPhone/WebKit validation",
       "complete accessibility compliance",
-      "Web Push",
+      "live Web Push delivery, real permission prompts, background OS display and Focus behavior",
       "passkeys",
       "QR UI",
       "live Bring!",
@@ -419,11 +441,14 @@
     "frontend/src/Imports.tsx",
     "frontend/src/Pantry.tsx",
     "frontend/src/Settings.tsx",
+    "frontend/src/ReminderSettings.tsx",
     "scripts/pwa_browser_smoke.py:257",
     "frontend/public/art/provenance.json",
     "docs/validation/pwa-visual-review.md",
     "docs/validation/pwa-visual-verdict.md",
     "docs/validation/mealf-name-review.md",
+    "docs/REMINDERS.md",
+    "docs/validation/reminders-review.md",
     "docs/BRANDING.md"
   ],
   "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."

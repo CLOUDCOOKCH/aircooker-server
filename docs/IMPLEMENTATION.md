@@ -9,9 +9,9 @@ icons and all storage/session/API identifiers are preserved. See BRANDING.md.
 The primary client is `frontend/`, served by this same container at `/app/`; no third
 repository/service is required. See PWA.md and PWA_IMPLEMENTATION.md for current browser
 coverage and limits. The original native-phase roadmap below is historical; native
-signing/TestFlight is deferred rather than a PWA blocker. Latest native source f165c36
+signing/TestFlight is deferred rather than a PWA blocker. Latest native source 805d043
 passed 90 core tests, native app/Share/Widget compilation and simulator demo/onboarding/
-German light/dark flows in run 39566779970. Physical-device capabilities remain unverified.
+German light/dark flows in run 39590881768 (validation/github-native-mealf-name.json). Physical-device capabilities remain unverified.
 
 Status vocabulary: **tested** means executed automated/local checks; **unverified** means
 code exists but its relevant platform/service was not exercised; **partial** means known
@@ -21,7 +21,7 @@ No development phase or full-product acceptance set is marked complete. This is 
 implementation across the phase boundaries; later-stage foundations do not imply earlier
 phases have passed every acceptance gate.
 
-The phase-0 dependency review now includes a reproducible 34-wheel licence/attribution
+The phase-0 dependency review now includes a reproducible 40-wheel licence/attribution
 inventory and CI drift gate. Full OS/bundled-library/source-distribution review remains a
 release gate; the wheel metadata baseline does not establish legal clearance. See
 DEPENDENCY_LICENSES.md. Phase-1 read-only job/import diagnostics and its localised console
@@ -70,7 +70,7 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-The current PWA integration passes 151 backend tests and 32 web core tests locally,
+The current PWA integration passes 180 backend tests and 34 web core tests locally,
 Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
 Python licence baseline and full npm advisory audit (zero known advisories observed).
 Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
@@ -88,7 +88,7 @@ manual review does not pretend they passed. Genuine screenshots and asset proven
 recorded in the PWA validation material. Current Docker smoke/security CI is recorded
 separately for the exact image/commit; do not apply earlier green runs to a newer tree.
 
-The overall project remains partial. Web Push, shared recommendation preferences/learning,
+The overall project remains partial. Live Web Push validation, shared recommendation preferences/learning,
 complete archive reconstruction, broader source/media import,
 admin deletion/destructive replacement, safe cleanup and release validation remain engineering
 work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
@@ -100,3 +100,8 @@ job IDs are in validation/github-pwa.json and validation/github-pantry-period.js
 template editor at 48c23e4 also passed all six jobs in run 39587189774. See
 validation/github-template-editor.json for the exact image IDs, scanner, architecture/job
 evidence and limits. Documentation-only follow-ups do not change that application source.
+
+Opt-in PWA reminders now have per-device controls/offline drafts, durable household-time
+scheduling and privacy-preserving payloads. Unit/API encryption/retry/security and real
+Chromium receiver/navigation tests use explicit subscription/vendor doubles. No live vendor,
+physical iPhone or OS delivery is claimed. See REMINDERS.md and ADR 011.

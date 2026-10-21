@@ -80,6 +80,10 @@ jobs:
           AIRCOOKER_SCREENSHOT_DIR: build/pwa-browser
           AIRCOOKER_CAPTURE: '1'
         run: python scripts/pwa_browser_smoke.py
+      - name: Exercise push settings/offline/receiver with explicit delivery doubles
+        env:
+          AIRCOOKER_SCREENSHOT_DIR: build/push-browser
+        run: python scripts/push_browser_smoke.py
       - name: Exercise console in installed Chrome
         env:
           AIRCOOKER_SCREENSHOT_DIR: build/browser
@@ -91,6 +95,7 @@ jobs:
           path: |
             build/browser
             build/pwa-browser
+            build/push-browser
   security:
     strategy:
       fail-fast: false

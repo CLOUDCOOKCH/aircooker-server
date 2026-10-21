@@ -186,3 +186,15 @@ A client must persist the capability securely before removing active authenticat
 retain it until an exact 204 receipt. A failed network request or an old server's 404 is
 pending revocation, not success. Never retain refresh secrets in an entity mutation queue.
 See ADR 008; this extension preserves API major/sync protocol 1/1.
+
+## Optional per-device PWA notifications
+
+`GET /api/v1/notifications/push` returns typed availability/public VAPID key, safe status and
+preferences. `PUT .../subscription` registers validated endpoint/keys for the authenticated
+device; `PUT .../preferences` applies times/category/language preferences; `DELETE
+.../subscription` disconnects (204). `POST .../test` takes a UUID request_id and returns a
+replay-safe typed queued response (202); `POST .../retry` returns the own-device requeued
+count (202). Cookie mutations require CSRF/origin. Invalid input is 422, absent/disabled or
+conflicting subscriptions are 409, expired auth 401 and per-device budgets 429. Credentials
+are never returned. These additive v1 endpoints do not alter the retained native client
+contract. REMINDERS.md specifies endpoint capabilities, privacy and delivery limitations.

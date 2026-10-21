@@ -1300,6 +1300,199 @@
         "title": "Push",
         "type": "object"
       },
+      "PushKeys": {
+        "additionalProperties": false,
+        "properties": {
+          "auth": {
+            "maxLength": 40,
+            "title": "Auth",
+            "type": "string"
+          },
+          "p256dh": {
+            "maxLength": 100,
+            "title": "P256Dh",
+            "type": "string"
+          }
+        },
+        "required": [
+          "p256dh",
+          "auth"
+        ],
+        "title": "PushKeys",
+        "type": "object"
+      },
+      "PushQueued": {
+        "additionalProperties": false,
+        "properties": {
+          "state": {
+            "const": "queued",
+            "default": "queued",
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "title": "PushQueued",
+        "type": "object"
+      },
+      "PushRegistration": {
+        "additionalProperties": false,
+        "properties": {
+          "endpoint": {
+            "maxLength": 4096,
+            "title": "Endpoint",
+            "type": "string"
+          },
+          "keys": {
+            "$ref": "#/components/schemas/PushKeys"
+          },
+          "language": {
+            "default": "en",
+            "enum": [
+              "en",
+              "de"
+            ],
+            "title": "Language",
+            "type": "string"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/ReminderPreferences"
+          }
+        },
+        "required": [
+          "endpoint",
+          "keys"
+        ],
+        "title": "PushRegistration",
+        "type": "object"
+      },
+      "PushRetried": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "state": {
+            "const": "queued",
+            "default": "queued",
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "title": "PushRetried",
+        "type": "object"
+      },
+      "PushSettings": {
+        "additionalProperties": false,
+        "properties": {
+          "language": {
+            "default": "en",
+            "enum": [
+              "en",
+              "de"
+            ],
+            "title": "Language",
+            "type": "string"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/ReminderPreferences"
+          }
+        },
+        "required": [
+          "preferences"
+        ],
+        "title": "PushSettings",
+        "type": "object"
+      },
+      "PushStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "failed_jobs": {
+            "default": 0,
+            "title": "Failed Jobs",
+            "type": "integer"
+          },
+          "last_success": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success"
+          },
+          "pending_jobs": {
+            "default": 0,
+            "title": "Pending Jobs",
+            "type": "integer"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/ReminderPreferences"
+          },
+          "public_key": {
+            "title": "Public Key",
+            "type": "string"
+          },
+          "subscribed": {
+            "title": "Subscribed",
+            "type": "boolean"
+          },
+          "subscription_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription Fingerprint"
+          }
+        },
+        "required": [
+          "available",
+          "public_key",
+          "subscribed",
+          "preferences"
+        ],
+        "title": "PushStatus",
+        "type": "object"
+      },
+      "PushTest": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "title": "PushTest",
+        "type": "object"
+      },
       "Recipe": {
         "additionalProperties": false,
         "properties": {
@@ -1483,6 +1676,54 @@
           "refresh_token"
         ],
         "title": "Refresh",
+        "type": "object"
+      },
+      "ReminderPreferences": {
+        "additionalProperties": false,
+        "properties": {
+          "breakfast": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "07:30",
+            "title": "Breakfast"
+          },
+          "dinner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "18:00",
+            "title": "Dinner"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "lunch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "12:00",
+            "title": "Lunch"
+          }
+        },
+        "title": "ReminderPreferences",
         "type": "object"
       },
       "SessionInfo": {
@@ -3756,6 +3997,195 @@
           }
         ],
         "summary": "Photo Info"
+      }
+    },
+    "/api/v1/notifications/push": {
+      "get": {
+        "operationId": "status_api_v1_notifications_push_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Status"
+      }
+    },
+    "/api/v1/notifications/push/preferences": {
+      "put": {
+        "operationId": "preferences_api_v1_notifications_push_preferences_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Preferences"
+      }
+    },
+    "/api/v1/notifications/push/retry": {
+      "post": {
+        "operationId": "retry_api_v1_notifications_push_retry_post",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushRetried"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Retry"
+      }
+    },
+    "/api/v1/notifications/push/subscription": {
+      "delete": {
+        "operationId": "unsubscribe_api_v1_notifications_push_subscription_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Unsubscribe"
+      },
+      "put": {
+        "operationId": "subscribe_api_v1_notifications_push_subscription_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushRegistration"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Subscribe"
+      }
+    },
+    "/api/v1/notifications/push/test": {
+      "post": {
+        "operationId": "test_api_v1_notifications_push_test_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushTest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushQueued"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Test"
       }
     },
     "/api/v1/pantry": {

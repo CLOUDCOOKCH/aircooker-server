@@ -1,0 +1,11 @@
+{
+  "http-ece": {
+    "version": "1.2.1",
+    "license_expression": "MIT",
+    "resource": "attributions/http-ece-1.2.1.LICENSE",
+    "sha256": "7d71f48c474da1de82fbdaac7fea5a1eaa41e4ac998dd44fd2897812812138d9",
+    "upstream_license": "https://github.com/web-push-libs/encrypted-content-encoding/blob/676b0096206abc8b7689ea714c920a3c9a1d32dc/LICENSE",
+    "source_distribution_sha256": "8c6ab23116bbf6affda894acfd5f2ca0fb8facbcbb72121c11c75c33e7ce8cff",
+    "reason": "PyPI 1.2.1 sdist/installed distribution omits the MIT notice; application ships the exact pinned upstream notice without modifying dependency code."
+  }
+}

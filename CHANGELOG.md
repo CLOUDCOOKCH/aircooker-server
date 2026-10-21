@@ -1,5 +1,10 @@
 # Changelog
 
+- Add optional PWA meal reminders: per-device consent/preferences and offline drafts,
+  household-time/DST scheduling, durable retries/receipts and editor-safe notification links.
+  Encrypt subscription/VAPID secrets; pin vendor DNS/TLS destinations. Tests cover actual
+  cryptography and an injected real browser-worker event; live delivery remains unverified.
+
 - Rename the product to mealf across the PWA, console, install metadata and download names.
   Keep existing sessions, offline stores, API headers and archive formats compatible. Original
   supplied peach/wordmark PNG installation is pending access to the attachment files.

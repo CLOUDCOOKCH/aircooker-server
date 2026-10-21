@@ -43,3 +43,25 @@ See [branding](../../docs/BRANDING.md) and the newest
 with no original-artwork or complete-product acceptance. Historical PWA reviews/captures
 retain their original scope. This manual handoff claims no launcher/detector, schema,
 design-hook or specialist pass.
+
+Reminder handoff, 2026-10-21: Settings includes optional per-device meal reminders within
+the existing solid settings surface and approved green/system-type direction. Preserve the
+household time zone, explicit connect/enable steps, labelled category/time controls and
+separate save/test/retry/disconnect actions. Local preference drafts survive offline/reload;
+only connected explicit save changes server scheduling. Server actions are disabled offline,
+and test sending requires saved, enabled preferences. Explain unsupported/denied permission,
+Home Screen installation, setup and changed-key states. Queued/saved/pending feedback and
+“Last accepted by delivery service” must not imply device receipt. Notification navigation
+preserves an active recipe editor and offers a status banner whose “Open reminder” action
+is disabled until editing finishes. There is no offline local notification scheduler.
+
+See the [reminder guide](../../docs/REMINDERS.md) and fresh
+[manual reminder UI finish review](../../docs/validation/reminders-review.md): **ship at the
+tested reminder UI scope**, with no required UI fixes. Four genuine desktop/German dark
+phone captures show connected/saved controls using synthetic household/subscription/vendor
+data; the handoff banner and other states were inspected in source. This documentation
+handoff did not rerun browser checks. The launcher, detector and specialist were unavailable;
+no schema validation or specialist pass is claimed. Real permission prompts, live push,
+Safari/physical iPhone delivery, background OS display, Focus behavior and full-product
+acceptance remain outside the evidence. Exact peach/wordmark artwork remains blocked as
+recorded above; this handoff introduces no new aesthetic direction or replacement artwork.

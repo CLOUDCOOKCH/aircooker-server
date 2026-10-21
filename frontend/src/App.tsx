@@ -37,6 +37,8 @@ import { Pantry } from './Pantry';
 import { Settings } from './Settings';
 import { Imports } from './Imports';
 import { activateUpdate, installWorker } from './worker-client';
+import { reminderTarget } from './lib/notifications';
+import type { ReminderTarget } from './lib/notifications';
 
 type View =
   | { kind: 'main' }
@@ -271,12 +273,41 @@ function Kitchen({
 }) {
   const app = useApp(),
     { t } = app;
-  const [day, setDay] = useState(today(app.household.timezone)),
+  const [day, setDay] = useState(
+      reminderTarget(location.search)?.day ?? today(app.household.timezone),
+    ),
     [view, setView] = useState<View>({ kind: 'main' }),
     [target, setTarget] = useState<PlanningTarget | null>(null),
     [managed, setManaged] = useState<Occurrence | null>(null),
     [suggestions, setSuggestions] = useState(false);
   const [update, setUpdate] = useState<ServiceWorker | null>(null);
+  const [reminder, setReminder] = useState<ReminderTarget | null>(null);
+  useEffect(() => {
+    if (app.ready && reminderTarget(location.search))
+      history.replaceState(history.state, '', '/app/');
+  }, [app.ready]);
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.data?.type !== 'MEAL_REMINDER') return;
+      try {
+        const url = new URL(event.data.url, location.origin);
+        if (url.origin !== location.origin || url.pathname !== '/app/') return;
+        const target = reminderTarget(url.search);
+        if (target) {
+          if (view.kind === 'editor') setReminder(target);
+          else {
+            app.setTab(target.tab);
+            if (target.day) setDay(target.day);
+            setView({ kind: 'main' });
+          }
+        }
+      } catch {
+        /* An invalid message never changes the current editor or calendar. */
+      }
+    };
+    navigator.serviceWorker?.addEventListener('message', receive);
+    return () => navigator.serviceWorker?.removeEventListener('message', receive);
+  }, [view.kind]);
   useEffect(() => {
     const listen = (event: Event) => setUpdate((event as CustomEvent<ServiceWorker>).detail);
     window.addEventListener('aircooker:update', listen);
@@ -483,6 +514,23 @@ function Kitchen({
           </div>
         )}
         <main id="main" tabIndex={-1} className="page-content" key={app.tab}>
+          {reminder && (
+            <div className="status-banner" role="status">
+              <p>{t('pushReminderReady')}</p>
+              <button
+                className="text-button"
+                disabled={view.kind === 'editor'}
+                onClick={() => {
+                  app.setTab(reminder.tab);
+                  if (reminder.day) setDay(reminder.day);
+                  setView({ kind: 'main' });
+                  setReminder(null);
+                }}
+              >
+                {t('pushOpenReminder')}
+              </button>
+            </div>
+          )}
           {content}
         </main>
         <footer className="app-footer">
