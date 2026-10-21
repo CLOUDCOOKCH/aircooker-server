@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Link, Plus } from 'lucide-react';
 import { useApp } from './model';
 import { PageHeader } from './components';
 import { uuid } from './lib/domain';
 import type { ImportTask } from './lib/store';
+import { sourceKind } from './lib/imports';
+import type { components } from './api-schema';
 export function Imports({
   back,
   review,
@@ -21,11 +23,50 @@ export function Imports({
     [consent, setConsent] = useState(false),
     [error, setError] = useState(false),
     [saving, setSaving] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [sourceID, setSourceID] = useState<string | null>(null);
+  const [status, setStatus] = useState<components['schemas']['AISettingsStatus'] | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const submitting = useRef(false);
+  useEffect(() => {
+    let alive = true;
+    if (app.api && !app.demo)
+      void app.api
+        .request<components['schemas']['AISettingsStatus']>('/api/v1/admin/ai')
+        .then((value) => {
+          if (alive) setStatus(value);
+        })
+        .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [app.api, app.demo]);
+  useEffect(() => {
+    if (
+      !app.online ||
+      !app.imports.some((task) => ['queued', 'processing', 'cancel_pending'].includes(task.state))
+    )
+      return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void app.sync();
+    }, 2000);
+    return () => window.clearInterval(timer);
+  }, [app.online, app.imports, app.sync]);
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setSaving(true);
     try {
-      if (!url && !text.trim()) throw new Error();
+      if (!url && !text.trim() && !file && !sourceID) throw new Error();
+      if (file && (file.size > 8 * 1024 * 1024 || !sourceKind(file.type))) throw new Error();
+      if (
+        file &&
+        status &&
+        (!status.enabled || !status.input_formats?.includes(sourceKind(file.type)!))
+      )
+        throw new Error();
+      const attachment = file ? uuid() : sourceID;
       await app.store.saveImport({
         id: uuid(),
         body: {
@@ -33,16 +74,32 @@ export function Imports({
           text: text || null,
           use_ai: ai,
           consent_external_ai: ai && consent,
+          ...(ai && status?.enabled && status.provider && status.base_url && status.model
+            ? {
+                ai_destination: [status.provider, status.base_url, status.model] as [
+                  string,
+                  string,
+                  string,
+                ],
+              }
+            : {}),
+          ...(attachment ? { source_id: attachment } : {}),
         },
+        ...(file ? { source: { blob: file, name: file.name } } : {}),
         state: 'queued',
       });
       setURL('');
       setText('');
+      setFile(null);
+      setSourceID(null);
+      setConsent(false);
+      if (fileInput.current) fileInput.current.value = '';
       setError(false);
       await app.changed();
     } catch {
       setError(true);
     } finally {
+      submitting.current = false;
       setSaving(false);
     }
   };
@@ -63,10 +120,32 @@ export function Imports({
       <div className="import-layout">
         <section>
           <p className="intro-copy">{t('importHint')}</p>
+          <p className="muted">{t('importMetadataFirst')}</p>
           {app.demo ? (
             <div className="info-note">{t('demoUnavailable')}</div>
           ) : (
             <form onSubmit={(e) => void submit(e)}>
+              <label>
+                {t('importFile')}
+                <input
+                  ref={fileInput}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"
+                  onChange={(event) => {
+                    const selected = event.target.files?.[0] ?? null;
+                    setFile(selected);
+                    setSourceID(null);
+                    if (selected) {
+                      setAI(true);
+                      setConsent(false);
+                    }
+                  }}
+                />
+                <small>{t('importFileHint')}</small>
+              </label>
+              {(file || sourceID) && (
+                <p className="info-note">{file?.name ?? t('importRetainedSource')}</p>
+              )}
               <label>
                 {t('importURL')}
                 <span className="input-icon">
@@ -93,6 +172,7 @@ export function Imports({
                 <input
                   type="checkbox"
                   checked={ai}
+                  disabled={!!file || !!sourceID}
                   onChange={(e) => {
                     setAI(e.target.checked);
                     setConsent(false);
@@ -100,6 +180,13 @@ export function Imports({
                 />
                 {t('useAI')}
               </label>
+              {ai && (
+                <p className="muted">
+                  {status?.enabled
+                    ? `${t('aiDefault')}: ${status.provider} · ${status.model}`
+                    : t('importAIUnavailable')}
+                </p>
+              )}
               {ai && (
                 <label className="check-row">
                   <input
@@ -113,12 +200,14 @@ export function Imports({
               )}
               {error && (
                 <p role="alert" className="error-note">
-                  {t('invalid')}
+                  {t('importFileError')}
                 </p>
               )}
               <button
                 className="primary full"
-                disabled={saving || (!url && !text.trim()) || (ai && !consent)}
+                disabled={
+                  saving || (!url && !text.trim() && !file && !sourceID) || (ai && !consent)
+                }
               >
                 {t('queueImport')}
                 <ArrowRight size={18} />
@@ -136,7 +225,7 @@ export function Imports({
             .filter((task) => task.state !== 'cancelled')
             .map((task) => (
               <article className="import-job" key={task.id}>
-                <strong>{task.recipe?.title ?? task.body.source_url ?? t('importText')}</strong>
+                <strong>{task.recipe?.title || task.body.source_url || t('importRecipe')}</strong>
                 <p className="muted">
                   {t(
                     task.state === 'saving' || task.state === 'cancel_pending'
@@ -147,11 +236,29 @@ export function Imports({
                 {task.state === 'needs_input' && (
                   <>
                     <p>{t('importFallback')}</p>
+                    {task.error && (
+                      <p role="status" className="error-note">
+                        {t(
+                          task.error === 'ai_input_format_unsupported'
+                            ? 'importFormatUnsupported'
+                            : task.error === 'ai_configuration_changed_review_consent'
+                              ? 'importProviderChanged'
+                              : task.error.includes('limit') || task.error.includes('large')
+                                ? 'importLimit'
+                                : task.error === 'ai_not_configured'
+                                  ? 'importAIUnavailable'
+                                  : 'importExtractionError',
+                        )}
+                      </p>
+                    )}
                     <button
                       className="text-button"
                       onClick={() => {
                         setURL(task.body.source_url ?? '');
                         setText(task.body.text ?? '');
+                        setSourceID(task.body.source_id ?? null);
+                        setAI(!!task.body.use_ai);
+                        setConsent(false);
                       }}
                     >
                       {t('edit')}

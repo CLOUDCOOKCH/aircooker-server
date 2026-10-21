@@ -5,6 +5,7 @@ import type { Tab } from './model';
 import { PageHeader, Sheet } from './components';
 import { ReminderSettings } from './ReminderSettings';
 import { PlanningSettings } from './PlanningSettings';
+import { AISettings } from './AISettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
 import { cloneRecipe } from './lib/planning';
@@ -131,6 +132,7 @@ export function Settings({
           </section>
           <PlanningSettings />
           <ReminderSettings />
+          <AISettings />
           <section className="settings-group">
             <h2>{t('bring')}</h2>
             <div className="settings-surface">

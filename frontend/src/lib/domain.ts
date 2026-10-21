@@ -60,6 +60,7 @@ export function amount(value: unknown, zero = false, maximum = '1000000'): strin
 }
 export function emptyRecipe(): Recipe {
   return {
+    schema_version: '1.0.0',
     title: '',
     description: '',
     servings: '2',
@@ -84,6 +85,9 @@ export function emptyIngredient(): Ingredient {
     unit: '',
     preparation: '',
     original_text: '',
+    quantity_text: '',
+    notes: '',
+    optional: false,
   };
 }
 export function civil(value: string): Date {
@@ -152,6 +156,34 @@ function dictionary(value: unknown, maximum: number): Record<string, string> {
   return Object.fromEntries(Object.entries(record).map(([key, item]) => [key, text(item, 10_000)]));
 }
 
+function minutes(value: unknown): number | null {
+  if (value == null) return null;
+  if (!Number.isInteger(value) || Number(value) < 0 || Number(value) > 525600)
+    throw new Error('invalid_duration');
+  return Number(value);
+}
+
+function stepDetail(value: unknown): NonNullable<Recipe['instruction_details']>[number] {
+  const row = object(value);
+  const temperature = row.temperature == null ? null : object(row.temperature);
+  if (
+    temperature &&
+    (typeof temperature.value !== 'number' ||
+      !Number.isFinite(temperature.value) ||
+      temperature.value < -273.15 ||
+      temperature.value > 2000 ||
+      !['C', 'F'].includes(String(temperature.unit)))
+  )
+    throw new Error('invalid_temperature');
+  return {
+    group: optionalText(row.group, 5000),
+    durationMinutes: minutes(row.durationMinutes ?? row.duration_minutes),
+    temperature: temperature
+      ? { value: Number(temperature.value), unit: temperature.unit as 'C' | 'F' }
+      : null,
+  };
+}
+
 /** Validate/normalise complete snapshots before persistence; server validation remains authoritative. */
 export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
   const row = object(value);
@@ -171,6 +203,17 @@ export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
         unit: text(item.unit, 30, ''),
         preparation: text(item.preparation, 300, ''),
         original_text: text(item.original_text, 500, ''),
+        quantity_text: text(item.quantity_text, 500, ''),
+        notes: text(item.notes, 5000, ''),
+        optional:
+          item.optional === undefined
+            ? false
+            : typeof item.optional === 'boolean'
+              ? item.optional
+              : (() => {
+                  throw new Error('invalid_payload');
+                })(),
+        group: optionalText(item.group, 5000),
       };
     });
     if (new Set(ingredients.map((item) => item.id)).size !== ingredients.length)
@@ -194,7 +237,37 @@ export function payload<K extends Kind>(kind: K, value: unknown): Payloads[K] {
       nutrition_source: optionalText(row.nutrition_source, 2048),
       rating: row.rating == null ? null : Number(row.rating),
       provenance: dictionary(row.provenance, 50),
+      schema_version: '1.0.0',
+      times:
+        row.times == null
+          ? {}
+          : (() => {
+              const value = object(row.times);
+              return {
+                prepMinutes: minutes(value.prepMinutes ?? value.prep_minutes),
+                cookMinutes: minutes(value.cookMinutes ?? value.cook_minutes),
+                totalMinutes: minutes(value.totalMinutes ?? value.total_minutes),
+              };
+            })(),
+      language: optionalText(row.language, 50),
+      category: optionalText(row.category, 5000),
+      cuisine: optionalText(row.cuisine, 5000),
+      tags: list(row.tags, 50).map((tag) => required(tag, 100)),
+      yield_info:
+        row.yield_info == null
+          ? null
+          : (() => {
+              const value = object(row.yield_info);
+              return {
+                quantity: value.quantity == null ? null : Number(amount(value.quantity)),
+                unit: optionalText(value.unit, 100),
+                rawText: optionalText(value.rawText ?? value.raw_text, 5000),
+              };
+            })(),
+      instruction_details: list(row.instruction_details, 200).map(stepDetail),
     };
+    if (row.schema_version !== undefined && row.schema_version !== '1.0.0')
+      throw new Error('invalid_schema_version');
   } else if (kind === 'meal') {
     const date = text(row.date, 10);
     civil(date);

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add provider-independent AI recipe imports from images, PDFs, websites, text and supported Gemini videos, with encrypted provider profiles, configurable models, schema-validated editable drafts, bounded usage and Wiki documentation.
+
 - Add per-device Day/3 days/Week calendar views and touch/pointer meal drag grips with
   target feedback, edge scrolling, cancellation and tap/keyboard move forms. Preserve
   offline durability, existing desktop drops and occurrence exceptions. Stack narrow

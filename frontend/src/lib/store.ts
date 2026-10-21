@@ -37,6 +37,8 @@ export type ImportTask = {
   error?: string;
   attempts?: number;
   nextAttempt?: number;
+  source?: { blob: Blob; name: string };
+  extraction?: components['schemas']['ImportPreview']['extraction'];
 };
 type Anchor = components['schemas']['SyncAnchor'];
 interface Schema extends DBSchema {
@@ -203,6 +205,9 @@ export class LocalStore {
     const media = [
       ...photos.map((photo) => ({ id: photo.id, blob: photo.blob, draft: false })),
       ...draftPhotos,
+      ...result.imports.flatMap((task) =>
+        task.source ? [{ id: task.id, blob: task.source.blob, draft: false, source: true }] : [],
+      ),
     ];
     if (media.reduce((total, photo) => total + photo.blob.size, 0) > 100 * 1024 * 1024)
       throw new Error('export_too_large');
@@ -217,9 +222,17 @@ export class LocalStore {
         draft: photo.draft,
         content_type: photo.blob.type,
         base64: btoa(binary),
+        source: 'source' in photo && photo.source === true,
       });
     }
-    return { ...result, media: encoded };
+    return {
+      ...result,
+      imports: result.imports.map(({ source, ...task }) => ({
+        ...task,
+        ...(source ? { source: { name: source.name, media_id: task.id } } : {}),
+      })),
+      media: encoded,
+    };
   }
   async archives() {
     const tx = this.db.transaction('archives', 'readonly');

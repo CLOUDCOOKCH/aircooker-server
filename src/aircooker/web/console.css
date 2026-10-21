@@ -9,6 +9,8 @@
   --radius: 16px;
 }
 * { box-sizing: border-box; }
+#ai-formats { min-inline-size: 0; max-width: 100%; margin: 20px 0; padding: 0; border: 0; }
+#ai-formats legend { max-width: 100%; overflow-wrap: anywhere; }
 h1, h2, p, label, button, .metric { overflow-wrap: anywhere; }
 .page-head > div, .metric > * { min-width: 0; }
 button { max-width: 100%; }

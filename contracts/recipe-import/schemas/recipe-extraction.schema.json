@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mealf:schema:recipe-extraction:v1",
+  "title": "MealF Recipe Extraction Result v1",
+  "description": "Normalized result returned by the backend to its client after invoking any AI provider. Never store as an unreviewed ready recipe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "recipe",
+    "issues"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "recipe": {
+      "$ref": "urn:mealf:schema:recipe-content:v1"
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "message",
+          "severity"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "RFC 6901 JSON pointer relative to recipe, e.g. /ingredients/2/quantity/value."
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "warning",
+              "error"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { APIError } from './api.ts';
 import type { APIClient } from './api.ts';
 import { assertUUID, entityKey, payload } from './domain.ts';
 import { LocalStore } from './store.ts';
+import { extractionPreview } from './imports.ts';
 import type { ImportTask, Queued } from './store.ts';
 
 type Wire = components['schemas'];
@@ -236,12 +237,25 @@ export class SyncEngine {
           continue;
         }
         if (task.state === 'queued') {
+          if (task.source && task.body.source_id) {
+            const data = new FormData();
+            data.set('file', task.source.blob, task.source.name);
+            await this.api.request('/api/v1/import-sources/' + assertUUID(task.body.source_id), {
+              method: 'PUT',
+              body: data,
+            });
+          }
           const result = await this.api.request<{ id: string }>('/api/v1/imports', {
             method: 'POST',
             body: JSON.stringify({ ...task.body, request_id: task.id }),
           });
           if (result.id !== task.id) throw new APIError('invalid_server_response', 0);
-          await this.store.saveImport({ ...task, state: 'processing', error: undefined });
+          await this.store.saveImport({
+            ...task,
+            state: 'processing',
+            source: undefined,
+            error: undefined,
+          });
         }
         const result = await this.api.request<{
           id: string;
@@ -249,6 +263,7 @@ export class SyncEngine {
           recipe?: unknown;
           warnings?: unknown;
           error_code?: string;
+          extraction?: Wire['ExtractionResult'];
         }>('/api/v1/imports/' + assertUUID(task.id));
         if (
           result.id !== task.id ||
@@ -261,7 +276,13 @@ export class SyncEngine {
         await this.store.saveImport({
           ...task,
           state: result.state === 'queued' ? 'processing' : (result.state as ImportTask['state']),
-          recipe: result.recipe ? payload('recipe', result.recipe) : undefined,
+          recipe: result.recipe
+            ? payload('recipe', result.recipe)
+            : result.extraction
+              ? extractionPreview(result.extraction, task.body.source_url)
+              : undefined,
+          extraction: result.extraction,
+          source: undefined,
           warnings,
           error: typeof result.error_code === 'string' ? result.error_code : undefined,
         });

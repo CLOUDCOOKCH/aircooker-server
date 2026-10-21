@@ -301,6 +301,58 @@ export const en = {
   deleteRecipe: 'Delete this recipe?',
   deleteRecipeHint:
     'Its scheduled meals must be removed first. Deletion syncs to your household; pending edits remain recoverable.',
+  aiSettingsTitle: 'AI recipe import',
+  aiSettingsHint:
+    'Configure a provider and model for recipe extraction. Keys are encrypted on the server and are never returned to the browser. Saving selects the default for future imports.',
+  aiDefault: 'Default provider',
+  aiEnable: 'Enable AI extraction',
+  aiProvider: 'AI provider',
+  aiEndpoint: 'API base URL',
+  aiModel: 'Model name',
+  aiKey: 'API key',
+  aiKeyStored: 'A key is stored. Leave blank to retain it for this provider and endpoint.',
+  aiKeyHint: 'Enter a provider key if required. It stays on your server after saving.',
+  aiClearKey: 'Remove this provider’s saved key',
+  aiFormats: 'Model input formats',
+  aiFormatsHint: 'Enable only formats documented for the selected model. Text is always enabled.',
+  aiImages: 'Images and screenshots',
+  aiPDF: 'PDF documents',
+  aiVideo: 'MP4 / WebM videos (Gemini)',
+  aiYouTube: 'Public YouTube videos (Gemini)',
+  aiHourlyLimit: 'Maximum AI requests per hour',
+  aiTimeout: 'Timeout (seconds)',
+  aiStructured: 'Use the model’s structured JSON output mode',
+  aiLocalHTTP: 'Allow HTTP for a trusted self-hosted endpoint',
+  aiSaveDefault: 'Save as default',
+  aiSettingsError:
+    'Could not save AI settings. Check the provider, endpoint, model, formats and limits, then reconnect and retry.',
+  aiSettingsSaved: 'AI settings saved. New imports use this provider and model.',
+  aiSettingsOffline: 'Reconnect to change server-side AI settings.',
+  importFile: 'Image, PDF or cooking video',
+  importFileHint:
+    'JPEG, PNG, WebP, PDF, MP4 or WebM; maximum 8 MiB. Select a model that supports the file. Short video uploads only; longer public YouTube videos can use a URL.',
+  importMetadataFirst:
+    'Website recipe metadata is read first. AI is used only when needed and only with your consent. Every result needs your review.',
+  importRetainedSource: 'Previously uploaded source selected',
+  importAIUnavailable:
+    'AI is unavailable. Configure and enable a provider and its input formats in Settings.',
+  importFileError:
+    'Check the source, its size and format, the configured model’s capabilities, and your consent.',
+  importFormatUnsupported:
+    'This model does not support this input. Choose a compatible model in Settings or provide recipe text.',
+  importProviderChanged:
+    'AI settings changed before extraction. Review the new provider and consent again.',
+  importLimit:
+    'An import or usage limit was reached. Try a smaller source or wait for the limit to reset.',
+  importExtractionError:
+    'The source or provider could not produce a validated recipe. Check AI settings, retry, or add the recipe text yourself.',
+  prepMinutes: 'Preparation time (minutes)',
+  cookMinutes: 'Cooking time (minutes)',
+  totalMinutes: 'Total time (minutes)',
+  recipeCategory: 'Recipe category',
+  recipeCuisine: 'Cuisine',
+  warningVideoLimit:
+    'Only the first 10 minutes of this video were analysed. Add any missing instructions before saving.',
   importing: 'Recipe imports',
   importURL: 'Recipe URL',
   importText: 'Recipe text',
@@ -660,6 +712,60 @@ export const de: Record<Key, string> = {
   deleteRecipe: 'Dieses Rezept löschen?',
   deleteRecipeHint:
     'Entferne zuerst die geplanten Mahlzeiten. Die Löschung wird synchronisiert; ausstehende Änderungen bleiben wiederherstellbar.',
+  aiSettingsTitle: 'KI-Rezeptimport',
+  aiSettingsHint:
+    'Konfiguriere Anbieter und Modell für die Rezepterkennung. Schlüssel werden auf dem Server verschlüsselt und nie an den Browser zurückgegeben. Speichern wählt den Standard für neue Importe.',
+  aiDefault: 'Standardanbieter',
+  aiEnable: 'KI-Extraktion aktivieren',
+  aiProvider: 'KI-Anbieter',
+  aiEndpoint: 'API-Basis-URL',
+  aiModel: 'Modellname',
+  aiKey: 'API-Schlüssel',
+  aiKeyStored:
+    'Ein Schlüssel ist gespeichert. Leer lassen, um ihn für diesen Anbieter und Endpunkt zu behalten.',
+  aiKeyHint:
+    'Trage bei Bedarf einen Anbieterschlüssel ein. Nach dem Speichern bleibt er auf deinem Server.',
+  aiClearKey: 'Gespeicherten Schlüssel dieses Anbieters entfernen',
+  aiFormats: 'Eingabeformate des Modells',
+  aiFormatsHint: 'Aktiviere nur dokumentierte Formate für dieses Modell. Text bleibt immer aktiv.',
+  aiImages: 'Bilder und Screenshots',
+  aiPDF: 'PDF-Dokumente',
+  aiVideo: 'MP4-/WebM-Videos (Gemini)',
+  aiYouTube: 'Öffentliche YouTube-Videos (Gemini)',
+  aiHourlyLimit: 'Maximale KI-Anfragen pro Stunde',
+  aiTimeout: 'Zeitlimit (Sekunden)',
+  aiStructured: 'Strukturierte JSON-Ausgabe des Modells verwenden',
+  aiLocalHTTP: 'HTTP für einen vertrauenswürdigen eigenen Endpunkt erlauben',
+  aiSaveDefault: 'Als Standard speichern',
+  aiSettingsError:
+    'KI-Einstellungen konnten nicht gespeichert werden. Prüfe Anbieter, Endpunkt, Modell, Formate und Limits sowie die Verbindung.',
+  aiSettingsSaved:
+    'KI-Einstellungen gespeichert. Neue Importe verwenden diesen Anbieter und dieses Modell.',
+  aiSettingsOffline: 'Verbinde dich erneut, um KI-Einstellungen auf dem Server zu ändern.',
+  importFile: 'Bild, PDF oder Kochvideo',
+  importFileHint:
+    'JPEG, PNG, WebP, PDF, MP4 oder WebM; maximal 8 MiB. Das Modell muss das Format unterstützen. Nur kurze Video-Uploads; längere öffentliche YouTube-Videos per URL.',
+  importMetadataFirst:
+    'Rezept-Metadaten von Websites werden zuerst gelesen. KI wird nur bei Bedarf und mit deiner Zustimmung verwendet. Prüfe jedes Ergebnis.',
+  importRetainedSource: 'Bereits hochgeladene Quelle ausgewählt',
+  importAIUnavailable:
+    'KI ist nicht verfügbar. Aktiviere und konfiguriere Anbieter und Eingabeformate in den Einstellungen.',
+  importFileError: 'Prüfe Quelle, Größe, Format, Modellfähigkeiten und deine Zustimmung.',
+  importFormatUnsupported:
+    'Dieses Modell unterstützt die Eingabe nicht. Wähle ein passendes Modell in den Einstellungen oder füge Rezepttext ein.',
+  importProviderChanged:
+    'Die KI-Einstellungen wurden vor der Extraktion geändert. Prüfe den neuen Anbieter und stimme erneut zu.',
+  importLimit:
+    'Ein Import- oder Nutzungslimit wurde erreicht. Nutze eine kleinere Quelle oder warte auf das Zurücksetzen des Limits.',
+  importExtractionError:
+    'Quelle oder Anbieter lieferte kein gültiges Rezept. Prüfe die KI-Einstellungen, versuche es erneut oder ergänze den Rezepttext.',
+  prepMinutes: 'Vorbereitung (Minuten)',
+  cookMinutes: 'Kochzeit (Minuten)',
+  totalMinutes: 'Gesamtzeit (Minuten)',
+  recipeCategory: 'Rezeptkategorie',
+  recipeCuisine: 'Küche',
+  warningVideoLimit:
+    'Nur die ersten 10 Minuten des Videos wurden analysiert. Ergänze fehlende Schritte vor dem Speichern.',
   importing: 'Rezeptimporte',
   importURL: 'Rezept-URL',
   importText: 'Rezepttext',

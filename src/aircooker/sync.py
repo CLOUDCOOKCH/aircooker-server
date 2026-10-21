@@ -91,6 +91,30 @@ def apply_mutation(db, mutation: Mutation, device_id: str, *, restoring=False):
         and raw["payload"].get("include_week_start") is None
     ):
         raw["payload"].pop("include_week_start", None)
+    if mutation.kind == "recipe" and raw.get("payload"):
+        # Additive import metadata must not change receipts for old clients' replays.
+        defaults: dict[str, object] = {
+            "schema_version": "1.0.0",
+            "times": {"prep_minutes": None, "cook_minutes": None, "total_minutes": None},
+            "language": None,
+            "yield_info": None,
+            "category": None,
+            "cuisine": None,
+            "tags": [],
+            "instruction_details": [],
+        }
+        for key, value in defaults.items():
+            if raw["payload"].get(key) == value:
+                raw["payload"].pop(key, None)
+        for ingredient in raw["payload"].get("ingredients", []):
+            for key, value in {
+                "quantity_text": "",
+                "notes": "",
+                "optional": False,
+                "group": None,
+            }.items():
+                if ingredient.get(key) == value:
+                    ingredient.pop(key, None)
     fingerprint = hashlib.sha256(json.dumps(raw, sort_keys=True).encode()).hexdigest()
     previous = db.execute(
         "SELECT * FROM mutation WHERE id=?", (str(mutation.mutation_id),)

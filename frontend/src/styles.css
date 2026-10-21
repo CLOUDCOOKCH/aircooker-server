@@ -1549,6 +1549,9 @@ a.settings-row:hover {
   margin-bottom: 24px;
   font-size: 0.875rem;
 }
+.info-note .muted {
+  color: inherit;
+}
 .error-note {
   background: var(--danger-soft);
   color: var(--danger-ink);
@@ -2416,4 +2419,17 @@ a.settings-row:hover {
   :root textarea {
     font-size: max(1rem, 16px);
   }
+}
+
+.ai-settings-form {
+  padding: 20px;
+}
+.ai-settings-form fieldset {
+  min-width: 0;
+}
+.recipe-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 16px;
 }

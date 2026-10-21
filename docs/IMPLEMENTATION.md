@@ -1,5 +1,7 @@
 # Implementation checklist and evidence
 
+**AI recipe import — implementation and synthetic validation:** the existing queue and explicit confirmation flow now accept bounded image, PDF and Gemini video inputs. Gemini is the initial provider option; OpenAI, OpenRouter and custom compatible APIs use configurable model IDs and per-model capabilities. Encrypted profiles retain independent credentials; website metadata precedes AI, and consent binds the displayed destination. Provider-neutral extraction follows the supplied v1 schema and preserves unknown facts, quantities, times and source text for review. Replay compatibility is covered for pre-metadata recipe mutations. See [configuration, architecture and limits](wiki/AI-Recipe-Import.md). Live cloud models, physical Apple devices and the independent native contract remain unverified. Current validation: 264 backend and 43 frontend tests, lint/type/contract checks, native image/PDF PWA review flows and existing PWA/admin/push Chromium regressions pass with synthetic cloud responses. Retained-database startup and Docker builder/wheel packaging pass. [Exact local evidence](validation/ai-recipe-import.json). Current Docker runtime validation is blocked by the cloud network policy for Alpine packages; this does not claim a released container.
+
 **Mobile calendar and form alignment, 2026-10-21 — implemented, local verification:**
 Day/3 days/Week selection persists per device. Multi-day columns remain readable and
 scroll horizontally. Explicit pointer/touch grips highlight destinations, scroll at

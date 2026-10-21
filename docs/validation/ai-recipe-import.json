@@ -1,0 +1,66 @@
+{
+  "feature": "AI recipe import",
+  "observed_at": "2026-10-21T18:28:04.318502+00:00",
+  "source": "Uncommitted working tree based on 79cd182e38409fa0247cc7763f51cc1309beb99e",
+  "backend": {
+    "passed": 264,
+    "failed": 0,
+    "skipped": 0,
+    "junit": "build/ai-recipe-import-tests.xml",
+    "warning": "Upstream Starlette/httpx TestClient deprecation"
+  },
+  "frontend": {
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "runner": "npm test, individual Node tests verified with local process communication enabled"
+  },
+  "checks": {
+    "ruff_lint": "passed",
+    "ruff_format": "passed",
+    "mypy": "passed (36 source files)",
+    "typescript": "passed",
+    "prettier": "passed",
+    "frontend_production_build": "passed",
+    "openapi_drift": "passed",
+    "frontend_contract_generation_compare": "passed",
+    "license_inventory": "passed (40 locked runtime packages)",
+    "brand_assets": "passed",
+    "git_diff_whitespace": "passed"
+  },
+  "browser": {
+    "new_image_pdf_flow": "passed",
+    "pwa_offline_sync_regression": "passed",
+    "admin_console_regression": "passed",
+    "push_receiver_regression": "passed",
+    "accessibility": "Axe WCAG A/AA checks in the scripts; new phone import/settings/review checks passed",
+    "cloud_responses": "Explicit synthetic HTTP transports, not live vendor calls",
+    "captures": "build/ai-import-browser"
+  },
+  "startup": {
+    "retained_development_database_migration": "010_recipe_import.sql passed",
+    "household_state": "preserved, remains unconfigured",
+    "development_server": "running and healthy"
+  },
+  "docker": {
+    "builder_stages": "passed",
+    "packaged_wheel_contents": "passed in read-only, network-disabled container",
+    "builder_image": "sha256:853cdf74911ed7b87d5af41ee646a5ca1b41fabe1f1e2325ac8653455ca4affd",
+    "architecture": "amd64",
+    "runtime_build": "blocked: configured HTTPS proxy returns 403 for dl-cdn.alpinelinux.org",
+    "runtime_smoke": "not run; no current runtime image could be completed",
+    "release_container_scan": "not run; existing HIGH/CRITICAL CI gate unchanged"
+  },
+  "environment_draft": {
+    "saved": true,
+    "added_domain": "dl-cdn.alpinelinux.org",
+    "applied_or_published": false
+  },
+  "limitations": [
+    "Live provider/model/region support not exercised",
+    "Physical Apple devices and WebKit not exercised for this feature",
+    "Video ingestion: enabled Gemini models only, native MP4/WebM uploads or public YouTube URLs, first 10 minutes",
+    "Independent iOS contract deliberately not updated by this PWA/server task",
+    "No Docker image or GitHub Wiki publication performed"
+  ]
+}

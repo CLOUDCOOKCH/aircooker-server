@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "recipe": {
+    "title": "Zitronen-Pasta",
+    "description": "Schnelle Pasta mit Zitrone und Parmesan.",
+    "language": "de-CH",
+    "servings": 2,
+    "yield": null,
+    "times": {
+      "prepMinutes": 10,
+      "cookMinutes": 15,
+      "totalMinutes": 25
+    },
+    "ingredients": [
+      {
+        "name": "Spaghetti",
+        "quantity": {
+          "value": 200,
+          "maxValue": null,
+          "unit": "g",
+          "rawText": "200 g"
+        },
+        "preparation": null,
+        "notes": null,
+        "optional": false,
+        "group": null,
+        "originalText": "200 g Spaghetti"
+      },
+      {
+        "name": "Zitrone",
+        "quantity": {
+          "value": 1,
+          "maxValue": null,
+          "unit": "piece",
+          "rawText": "1"
+        },
+        "preparation": "Schale abreiben, Saft auspressen",
+        "notes": null,
+        "optional": false,
+        "group": null,
+        "originalText": "1 Zitrone (Abrieb und Saft)"
+      },
+      {
+        "name": "Parmesan",
+        "quantity": {
+          "value": 40,
+          "maxValue": null,
+          "unit": "g",
+          "rawText": "40 g"
+        },
+        "preparation": "gerieben",
+        "notes": null,
+        "optional": false,
+        "group": null,
+        "originalText": "40 g Parmesan, gerieben"
+      }
+    ],
+    "instructions": [
+      {
+        "text": "Spaghetti in Salzwasser al dente kochen.",
+        "group": null,
+        "durationMinutes": null,
+        "temperature": null
+      },
+      {
+        "text": "Zitronenschale, Zitronensaft und Parmesan mit etwas Pastawasser verrühren.",
+        "group": null,
+        "durationMinutes": null,
+        "temperature": null
+      },
+      {
+        "text": "Pasta mit der Sauce vermengen und sofort servieren.",
+        "group": null,
+        "durationMinutes": null,
+        "temperature": null
+      }
+    ],
+    "category": "Hauptgericht",
+    "cuisine": "Italienisch",
+    "tags": [
+      "pasta",
+      "vegetarisch"
+    ],
+    "notes": null
+  },
+  "issues": [
+    {
+      "path": "/ingredients/1/quantity/value",
+      "message": "Zitronenmenge auf dem Foto nur teilweise lesbar; bitte prüfen.",
+      "severity": "warning"
+    }
+  ]
+}
