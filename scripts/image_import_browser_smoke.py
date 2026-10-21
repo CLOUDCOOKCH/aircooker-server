@@ -23,6 +23,10 @@ from playwright.sync_api import expect, sync_playwright
 def main():
     engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
     real_outage = engine == "webkit" or os.environ.get("MEALF_IMAGE_NETWORK_OUTAGE") == "1"
+
+    def phase(name):
+        print(f"Image import {engine}: {name}", flush=True)
+
     captures = (
         Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/image-import-browser")) / engine
     )
@@ -162,6 +166,7 @@ def main():
                     )
 
                 page.goto(base + "/app/")
+                phase("onboarding")
                 page.get_by_role("button", name="Open your kitchen").click()
                 page.get_by_label("Username", exact=True).fill("cook")
                 page.get_by_label("Password", exact=True).fill(
@@ -177,6 +182,7 @@ def main():
                     timeout=15000
                 )
                 import_page()
+                phase("English chooser")
                 assert page.locator("input[capture]").get_attribute("capture") == "environment"
                 choose("Choose image", "recipe-photo-en.png")
                 audit()
@@ -187,6 +193,7 @@ def main():
                 expect(page.locator(".import-job")).to_contain_text("Queued")
                 expect(page.locator(".import-job img")).to_be_visible()
                 page.reload()
+                phase("queued-image offline reload")
                 expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 import_page()
                 expect(page.locator(".import-job")).to_contain_text("Queued")
@@ -197,6 +204,7 @@ def main():
                     "Ready to review", timeout=45000
                 )
                 assert recipes() == [], "Import must not create a recipe before review"
+                phase("English OCR preview; no saved recipe")
                 page.locator(".import-job").get_by_role("button", name="Review", exact=True).click()
                 expect(page.get_by_role("heading", name="Review your import")).to_be_visible()
                 expect(page.get_by_label("Recipe name", exact=True)).to_have_value("Lemon rice")
@@ -207,6 +215,7 @@ def main():
                 audit()
                 page.screenshot(path=str(captures / "image-review-desktop.png"))
                 outage(True)
+                phase("offline reviewed save")
                 page.get_by_role("button", name="Save", exact=True).click()
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Recipes", exact=True
@@ -231,6 +240,7 @@ def main():
                     page.wait_for_timeout(200)
                 assert len(stored) == 1 and stored[0]["payload"]["title"] == "Reviewed photo rice"
                 assert stored[0]["payload"]["image_id"]
+                phase("server confirmation after restart")
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
                 expect(page.get_by_role("heading", name="Settings", exact=True)).to_be_visible()
                 radio = page.get_by_role("radio", name="After Dark", exact=True)
@@ -248,6 +258,7 @@ def main():
                 radio.press("Space")
                 expect(radio).to_be_checked()
                 expect(page.locator("html")).to_have_attribute("data-theme", "after-dark")
+                phase("native keyboard theme selected")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
                 page.get_by_role("navigation").get_by_role(
@@ -256,6 +267,7 @@ def main():
                 page.get_by_role("button", name="Rezept importieren", exact=True).click()
                 page.get_by_role("button", name="Foto oder Screenshot", exact=True).click()
                 choose("Foto aufnehmen", "recipe-photo-de.png")
+                phase("German camera chooser")
                 audit()
                 page.screenshot(path=str(captures / "image-camera-phone-de-dark.png"))
                 page.set_viewport_size({"width": 320, "height": 568})
@@ -273,7 +285,9 @@ def main():
                 # Two extraction jobs were delivered, only one explicitly saved recipe exists.
                 assert len(recipes()) == 1
                 assert errors == [], errors
+                phase("German OCR/phone/axe passed; closing context")
                 context.close()
+                phase("context closed")
             (captures / "evidence.json").write_text(
                 json.dumps(
                     {

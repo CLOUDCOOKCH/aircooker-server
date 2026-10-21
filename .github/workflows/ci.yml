@@ -103,7 +103,7 @@ jobs:
           python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
           sudo install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
           sudo update-ca-certificates
-          MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
+          timeout 180s env PYTHONUNBUFFERED=1 MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
