@@ -102,6 +102,22 @@ Real Chromium checks cover a touch pinch/double-tap with unchanged visual scale,
 swipe that scrolls, actual text selection, ordinary versus Ctrl+wheel cancellation, and the
 Safari gesture-event handlers. These checks do not establish physical iPhone/Safari behavior.
 
+## Phone viewport and safe areas
+
+Mobile inputs, selects and textareas use at least 16px to avoid iOS field-focus zoom.
+Safari text autosizing is fixed at 100%; browser/OS accessibility zoom remains available.
+The application uses the existing device-width/initial-scale viewport without maximum-scale
+or user-scalable restrictions. All four safe-area insets protect the application shell,
+welcome screen, navigation and dialogs. Bottom navigation also handles short touch-screen
+landscape viewports. Controls can shrink within narrow layouts; the page is not cropped
+with overflow hiding.
+
+Install the planner from `/app/`. After updating an existing installation, finish/save
+edits, accept the update, then close and reopen it. Do not clear browser storage or
+reinstall while local changes are pending. Linux Chromium/WebKit tests simulate notch
+insets and test field focus/layout; they do not simulate the iOS keyboard, status bar or
+Home Screen installation. Physical-device confirmation is still required.
+
 ## Offline operation and recovery
 
 Open online once so the public application shell can finish caching. Recipes, meals, pantry,

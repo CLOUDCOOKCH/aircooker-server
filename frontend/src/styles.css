@@ -8,6 +8,9 @@ html {
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 16px;
+  /* Stop Safari text autosizing on standalone launch/orientation changes. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   scroll-padding: 2rem;
   -webkit-user-select: none;
@@ -82,6 +85,7 @@ button {
 input,
 textarea,
 select {
+  min-width: 0;
   width: 100%;
   border: 1px solid var(--control-border);
   border-radius: 11px;
@@ -175,6 +179,10 @@ summary:focus-visible {
   color: var(--ink);
 }
 :root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
   scrollbar-color: var(--line) var(--canvas);
   scrollbar-width: thin;
 }
@@ -299,12 +307,13 @@ summary:focus-visible {
   max-width: 1660px;
   margin: auto;
   min-height: 100dvh;
+  padding: var(--safe-top) var(--safe-right) 0 var(--safe-left);
 }
 .app-nav {
   position: fixed;
-  top: 24px;
-  bottom: 24px;
-  left: max(24px, calc((100vw - 1660px) / 2 + 24px));
+  top: calc(24px + var(--safe-top));
+  bottom: calc(24px + var(--safe-bottom));
+  left: max(calc(24px + var(--safe-left)), calc((100vw - 1660px) / 2 + 24px));
   width: 196px;
   background: var(--glass);
   backdrop-filter: blur(28px) saturate(155%);
@@ -1090,8 +1099,9 @@ details label:first-of-type {
   margin-bottom: 10px;
 }
 .sheet {
-  width: min(540px, calc(100vw - 24px));
-  max-height: calc(100dvh - 48px);
+  inset: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  width: min(540px, calc(100vw - 24px - var(--safe-left) - var(--safe-right)));
+  max-height: calc(100dvh - 48px - var(--safe-top) - var(--safe-bottom));
   padding: 24px;
   border: 0;
   border-radius: 20px;
@@ -1579,6 +1589,7 @@ a.settings-row:hover {
 }
 .welcome-shell {
   min-height: 100dvh;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
   display: flex;
   flex-direction: column;
 }
@@ -1670,6 +1681,7 @@ a.settings-row:hover {
 .boot-screen {
   display: flex;
   min-height: 100dvh;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -1738,9 +1750,9 @@ a.settings-row:hover {
   }
   .app-nav {
     width: 172px;
-    left: 18px;
-    top: 18px;
-    bottom: 18px;
+    left: calc(18px + var(--safe-left));
+    top: calc(18px + var(--safe-top));
+    bottom: calc(18px + var(--safe-bottom));
   }
   .main-shell {
     margin-left: 204px;
@@ -1771,20 +1783,20 @@ a.settings-row:hover {
     padding-left: 31px;
   }
 }
-@media (max-width: 800px) {
+@media (max-width: 800px), (hover: none) and (pointer: coarse) and (max-height: 500px) {
   h1 {
     font-size: 2rem;
   }
   .main-shell {
     margin-left: 0;
-    padding: 10px 24px 100px;
+    padding: 10px 24px calc(100px + var(--safe-bottom));
   }
   .app-nav {
     top: auto;
-    left: 50%;
-    bottom: max(16px, env(safe-area-inset-bottom));
+    left: calc(50% + (var(--safe-left) - var(--safe-right)) / 2);
+    bottom: max(16px, var(--safe-bottom));
     transform: translateX(-50%);
-    width: min(520px, calc(100vw - 32px));
+    width: min(520px, calc(100vw - 32px - var(--safe-left) - var(--safe-right)));
     padding: 6px 9px;
     border-radius: 27px;
     display: block;
@@ -1880,7 +1892,7 @@ a.settings-row:hover {
 }
 @media (max-width: 600px) {
   .main-shell {
-    padding: 8px 20px 108px;
+    padding: 8px 20px calc(108px + var(--safe-bottom));
   }
   .home-columns {
     grid-template-columns: 1fr;
@@ -2082,7 +2094,7 @@ a.settings-row:hover {
   }
   .sheet {
     padding: 20px;
-    max-height: calc(100dvh - 32px);
+    max-height: calc(100dvh - 32px - var(--safe-top) - var(--safe-bottom));
     border-radius: 20px;
   }
   .sheet-heading {
@@ -2114,7 +2126,8 @@ a.settings-row:hover {
     font-size: 0.95rem;
   }
   .welcome-footer {
-    padding-bottom: max(25px, env(safe-area-inset-bottom));
+    /* The welcome shell already reserves the bottom safe area. */
+    padding-bottom: 25px;
   }
   .editor-footer {
     gap: 12px;
@@ -2230,4 +2243,15 @@ a.settings-row:hover {
   align-items: center;
   min-width: 0;
   min-height: 44px;
+}
+
+/* iOS focuses smaller fields by zooming the visual viewport. Keep every mobile
+   field at least 16px, including those inheriting compact labels or settings rows.
+   This does not disable browser/OS accessibility zoom or enlarge desktop forms. */
+@media (max-width: 800px), (any-pointer: coarse) {
+  :root input,
+  :root select,
+  :root textarea {
+    font-size: max(1rem, 16px);
+  }
 }

@@ -1,0 +1,1917 @@
+{
+  "date": "2026-10-21",
+  "status": "local Chromium passed; WebKit CI/publication pending",
+  "scope": "PWA mobile focus font sizing and safe-area geometry; no storage/API/native changes",
+  "reported_behavior": "User reports slight zoom and clipping immediately after adding the PWA to the phone. Exact device/iOS and trigger not yet supplied.",
+  "source_findings": [
+    "Mobile fields inherited sub-16px labels/controls, allowing iOS focus zoom.",
+    "viewport-fit cover was present but top/side safe areas were not consistently reserved.",
+    "Wide short touch landscape could select the desktop sidebar."
+  ],
+  "tests": {
+    "backend": 226,
+    "frontend": 39,
+    "existing_pwa_flows": "passed",
+    "layout": "Chromium passed five variants, field focus and visual scale 1, no document horizontal overflow, min 16px mobile fields, notch/nav/dialog bounds",
+    "variants": [
+      {
+        "size": [
+          390,
+          844
+        ],
+        "insets": [
+          59,
+          0,
+          34,
+          0
+        ]
+      },
+      {
+        "size": [
+          320,
+          568
+        ],
+        "insets": [
+          20,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "size": [
+          844,
+          390
+        ],
+        "insets": [
+          0,
+          59,
+          21,
+          59
+        ]
+      },
+      {
+        "size": [
+          852,
+          393
+        ],
+        "insets": [
+          0,
+          0,
+          21,
+          59
+        ]
+      },
+      {
+        "size": [
+          1440,
+          1000
+        ],
+        "insets": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "review": "Implementation-agent source/capture review; final portrait/landscape/sheet confirmation; no independent specialist or unavailable plugin-schema pass.",
+  "limitations": [
+    "Injected safe-area values are geometry tests, not OS-reported insets.",
+    "Linux browser engines do not reproduce actual Home Screen installation, iOS software keyboard, status bar or device-specific zoom.",
+    "Local WebKit download blocked by network policy; same engine check added to GitHub CI."
+  ],
+  "geometry": [
+    {
+      "variant": "phone",
+      "stage": "welcome",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 0,
+        "right": 390,
+        "top": 59,
+        "bottom": 145
+      }
+    },
+    {
+      "variant": "phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "home",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [],
+      "target": {
+        "left": 16,
+        "right": 374,
+        "top": 743,
+        "bottom": 810
+      }
+    },
+    {
+      "variant": "phone",
+      "stage": "recipes",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "search focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "servings focus",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "editor",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "phone",
+      "stage": "sheet",
+      "scale": 1,
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 19,
+        "right": 371,
+        "top": 193.703125,
+        "bottom": 675.296875
+      }
+    },
+    {
+      "variant": "small-phone",
+      "stage": "welcome",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 0,
+        "right": 320,
+        "top": 20,
+        "bottom": 106
+      }
+    },
+    {
+      "variant": "small-phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "home",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [],
+      "target": {
+        "left": 16,
+        "right": 304,
+        "top": 485,
+        "bottom": 552
+      }
+    },
+    {
+      "variant": "small-phone",
+      "stage": "recipes",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "search focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "servings focus",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "editor",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "small-phone",
+      "stage": "sheet",
+      "scale": 1,
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 19,
+        "right": 301,
+        "top": 53.203125,
+        "bottom": 534.796875
+      }
+    },
+    {
+      "variant": "landscape",
+      "stage": "welcome",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 59,
+        "right": 785,
+        "top": 0,
+        "bottom": 86
+      }
+    },
+    {
+      "variant": "landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "home",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [],
+      "target": {
+        "left": 162,
+        "right": 682,
+        "top": 302,
+        "bottom": 369
+      }
+    },
+    {
+      "variant": "landscape",
+      "stage": "recipes",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "search focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "servings focus",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "editor",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "landscape",
+      "stage": "sheet",
+      "scale": 1,
+      "width": 844,
+      "client": 844,
+      "scroll": 844,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 152,
+        "right": 692,
+        "top": 24,
+        "bottom": 345
+      }
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "welcome",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 59,
+        "right": 852,
+        "top": 0,
+        "bottom": 86
+      }
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "home",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [],
+      "target": {
+        "left": 195.5,
+        "right": 715.5,
+        "top": 305,
+        "bottom": 372
+      }
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "recipes",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "search focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "servings focus",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "editor",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "SELECT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "asymmetric-landscape",
+      "stage": "sheet",
+      "scale": 1,
+      "width": 852,
+      "client": 852,
+      "scroll": 852,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        }
+      ],
+      "target": {
+        "left": 185.5,
+        "right": 725.5,
+        "top": 24,
+        "bottom": 348
+      }
+    },
+    {
+      "variant": "desktop",
+      "stage": "welcome",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        }
+      ],
+      "target": {
+        "left": 0,
+        "right": 1440,
+        "top": 0,
+        "bottom": 106
+      }
+    },
+    {
+      "variant": "desktop",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "setup focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "SELECT",
+          "size": 12.8
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "home",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [],
+      "target": {
+        "left": 24,
+        "right": 220,
+        "top": 24,
+        "bottom": 976
+      }
+    },
+    {
+      "variant": "desktop",
+      "stage": "recipes",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "search focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "servings focus",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 12
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "editor",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "SELECT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 16
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 14
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 14
+        },
+        {
+          "tag": "TEXTAREA",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": null
+    },
+    {
+      "variant": "desktop",
+      "stage": "sheet",
+      "scale": 1,
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "fields": [
+        {
+          "tag": "INPUT",
+          "size": 14
+        },
+        {
+          "tag": "INPUT",
+          "size": 14
+        }
+      ],
+      "target": {
+        "left": 450,
+        "right": 990,
+        "top": 255.203125,
+        "bottom": 744.796875
+      }
+    }
+  ]
+}

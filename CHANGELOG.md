@@ -1,5 +1,11 @@
 # Changelog
 
+- Fix phone PWA enlargement/clipping risks: minimum 16px mobile form fields, explicit
+  Safari text autosizing, all-edge safe-area layout, short touch-landscape navigation and
+  safe dialog bounds. Preserve accessibility zoom, selection, scrolling and stored work.
+  Add real-engine layout/focus regressions with simulated notch geometry; physical iOS
+  Home Screen and software-keyboard behavior remains unverified. Publication tracked below.
+
 - Add a silent peach-slap Easter egg in the PWA and admin console: native touch/keyboard
   activation, a hand-swipe and 560ms wobble, localized rotating comebacks and reduced-motion
   feedback. Add more English/German food jokes without changing security/help language.

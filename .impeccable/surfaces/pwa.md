@@ -123,3 +123,11 @@ ship in the PWA offline shell and admin console. Existing palette tokens and art
 bytes are unchanged. See [behavior and scoped manual evidence](../../docs/PEACH_EGG.md).
 Chromium click/keyboard/reduced-motion/offline/admin checks pass. Physical Safari/iPhone
 and screen-reader delivery are unverified; no independent specialist/schema pass claimed.
+
+Phone viewport refinement, 2026-10-21: keep mobile input/select/textarea text at least
+16px and Safari text-size-adjust at 100%. Preserve ordinary viewport metadata, accessibility
+zoom and user data. Layout-only --safe-top/right/bottom/left properties read the four CSS
+safe-area insets. Shells, navigation and dialogs reserve those edges; short touch landscape
+uses bottom navigation. No overflow hiding or viewport-reset script masks layout errors.
+Chromium focus/geometry checks use injected notch values; CI also runs WebKit. Physical
+iOS installation/keyboard and status-bar behavior remain outside Linux engine evidence.

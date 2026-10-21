@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.6`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.7`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -65,6 +65,13 @@ It also blocks ordinary PWA pinch/double-tap zoom while keeping recipes and inpu
 enabled. Accidental control/label selection is suppressed. Browser/OS keyboard accessibility zoom remains available. Safari/physical-iPhone
 behavior is unverified. Publication retries for this version preserve a completed release;
 do not rerun an older release expecting to publish newer main-branch changes.
+
+The `.7` preview addresses phone PWA enlargement/clipping: mobile fields are at least
+16px, Safari text autosizing is stabilized, and app content, navigation and dialogs
+respect notch/home-indicator safe areas in portrait and landscape. Retain your volume
+and port settings. Save edits, accept the PWA update and close/reopen the installed app.
+No browser-data reset or reinstallation is required. Physical phone confirmation remains
+necessary; Linux engine checks are not an actual Home Screen installation.
 
 ## What you can try
 

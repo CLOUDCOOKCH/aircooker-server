@@ -706,5 +706,15 @@
     "networkOrPersistence": "none",
     "evidence": "docs/PEACH_EGG.md",
     "limits": "Chromium tested; physical Safari/iPhone and screen-reader delivery unverified; no independent review"
+  },
+  "phoneViewport": {
+    "source": "frontend/src/styles.css",
+    "textSizeAdjust": "100%",
+    "mobileFieldMinimum": "max(1rem, 16px) at <=800px or any coarse pointer",
+    "safeArea": "four env(safe-area-inset-*, 0px) values exposed as layout properties; shell/nav/dialog bounds",
+    "landscape": "bottom nav at <=800px or short <=500px coarse-pointer/no-hover viewport",
+    "viewportMetadata": "existing device width, initial scale 1, viewport-fit cover; accessibility zoom preserved",
+    "evidence": "docs/validation/mealf-phone-layout-local.json",
+    "limits": "simulated insets in Linux engines; actual iOS Home Screen/keyboard/status bar unverified"
   }
 }
