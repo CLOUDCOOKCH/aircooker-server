@@ -5,8 +5,9 @@
   "local_evidence": "docs/validation/mealf-palette-local.json",
   "review": "docs/validation/mealf-palette-review.md",
   "publication": {
-    "status": "pending",
+    "status": "blocked: no Actions run started",
     "planned_tag": "poc-20261021.5",
-    "reason": "The Git push was accepted but no Actions run has appeared for the implementation commit. This reviewed validation record is committed through the connected GitHub account to request the normal main-branch checks. Exact-source dual-architecture CI and fresh release-image security/runtime gates remain required."
+    "reason": "Both the implementation Git push and connected-account validation commit were accepted on main. GitHub reports zero workflow runs and zero check suites for the implementation commit; no run appeared for the validation commit either. Repository Actions status requires owner inspection. No release tag or container has been published; existing poc-20261021.4 remains the last verified image. Exact-source dual-architecture CI and fresh release-image security/runtime gates remain required.",
+    "trigger_record_commit": "5c74bbc6039a8f816d3c016162c27f109e0aa076"
   }
 }

@@ -27,6 +27,6 @@
   "limitations": [
     "launcher/detector unavailable (attempted exit127), no plugin-schema validation claimed",
     "No physical iPhone/Safari, native UI, live Bring/AI/vendor push or full-product acceptance",
-    "Local Docker build blocked by pre-existing mirror policy; dual-architecture image verification remains in publication pipeline"
+    "Local source/browser checks do not establish packaged Docker verification; dual-architecture image gates remain pending because Actions has not started."
   ]
 }
