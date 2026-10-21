@@ -57,7 +57,7 @@ def main():
                         or shutil.which("google-chrome"),
                         "args": ["--no-sandbox"],
                     }
-                browser = getattr(playwright, engine).launch(**options)
+                browser = playwright.chromium.launch(**options) if engine == "chromium" else None
                 for name, width, height, safe, language in [
                     ("phone", 390, 844, [59, 0, 34, 0], "en"),
                     ("small-phone", 320, 568, [20, 0, 0, 0], "en"),
@@ -66,39 +66,22 @@ def main():
                     ("desktop", 1440, 1000, [0, 0, 0, 0], "en"),
                 ]:
                     mobile = width < 1000
-                    context = browser.new_context(
-                        viewport={"width": width, "height": height},
-                        is_mobile=mobile,
-                        has_touch=mobile,
-                        color_scheme="dark" if language == "de" else "light",
+                    context_options = {
+                        "viewport": {"width": width, "height": height},
+                        "is_mobile": mobile,
+                        "has_touch": mobile,
+                        "color_scheme": "dark" if language == "de" else "light",
+                    }
+                    # WebKit's ephemeral session rejects Blob staging for IndexedDB.
+                    # Use real disposable disk storage, as an installed app does.
+                    context = (
+                        browser.new_context(**context_options)
+                        if browser
+                        else playwright.webkit.launch_persistent_context(
+                            str(Path(temporary) / ("profile-" + name)), **context_options
+                        )
                     )
                     page = context.new_page()
-                    # Diagnostics are confined to this synthetic browser context. Keep
-                    # native return values/throws; report API errors, never record values.
-                    page.add_init_script("""(() => {
-                        window.__layoutFailures = [];
-                        for (const [proto, names] of [
-                            [IDBFactory.prototype, ['open']],
-                            [IDBDatabase.prototype, ['transaction']],
-                            [IDBObjectStore.prototype, ['put','add']],
-                            [Crypto.prototype, ['randomUUID']]
-                        ]) for (const name of names) {
-                            const original=proto[name];
-                            if (!original) continue;
-                            proto[name]=function(...args) {
-                                try {
-                                    const result=original.apply(this,args);
-                                    if (result instanceof IDBRequest)
-                                        result.addEventListener('error',()=>window.__layoutFailures.push(
-                                            {api:name,name:result.error?.name,message:result.error?.message}));
-                                    return result;
-                                } catch(e) {
-                                    window.__layoutFailures.push({api:name,name:e.name,message:e.message});
-                                    throw e;
-                                }
-                            };
-                        }
-                    })();""")
                     page.goto(base + "/app/")
                     expect(page.locator(".welcome-content")).to_be_visible()
                     # These are simulated safe areas, not OS-provided test evidence.
@@ -156,16 +139,7 @@ def main():
                     page.get_by_role(
                         "button", name="Demo entdecken" if language == "de" else "Explore the demo"
                     ).click()
-                    try:
-                        expect(page.locator(".app-nav")).to_be_visible()
-                    except AssertionError:
-                        print(
-                            "Synthetic engine diagnostics:",
-                            page.evaluate("""() => ({secure:isSecureContext,
-                                uuid:typeof crypto.randomUUID, failures:window.__layoutFailures})"""),
-                            flush=True,
-                        )
-                        raise
+                    expect(page.locator(".app-nav")).to_be_visible()
                     nav = page.locator(".nav-links")
                     if language == "de":
                         nav.get_by_role("button", name="Settings").click()
@@ -205,7 +179,8 @@ def main():
                     check("sheet", ".sheet")
                     page.screenshot(path=str(captures / f"{name}-sheet.png"))
                     context.close()
-                browser.close()
+                if browser:
+                    browser.close()
         finally:
             server.should_exit = True
             thread.join(timeout=10)
