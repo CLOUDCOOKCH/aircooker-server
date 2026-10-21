@@ -83,3 +83,9 @@ and connected opt-in Web Push are the chosen browser constraints. Do not claim f
 feature parity or completed product acceptance.
 
 See PWA.md for installation, development, behavior and recovery-format/security details.
+
+Reminder implementation source 8c946b6 passed all six GitHub jobs in run 39596349930:
+180 backend tests per AMD64/ARM64 runner, 34 web tests, full ordinary/reminder/console
+browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
+See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
+limits. This verifies the development implementation, not live vendor/device delivery.

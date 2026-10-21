@@ -105,3 +105,9 @@ Opt-in PWA reminders now have per-device controls/offline drafts, durable househ
 scheduling and privacy-preserving payloads. Unit/API encryption/retry/security and real
 Chromium receiver/navigation tests use explicit subscription/vendor doubles. No live vendor,
 physical iPhone or OS delivery is claimed. See REMINDERS.md and ADR 011.
+
+Reminder implementation source 8c946b6 passed all six GitHub jobs in run 39596349930:
+180 backend tests per AMD64/ARM64 runner, 34 web tests, full ordinary/reminder/console
+browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
+See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
+limits. This verifies the development implementation, not live vendor/device delivery.

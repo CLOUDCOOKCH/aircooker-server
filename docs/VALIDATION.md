@@ -232,3 +232,9 @@ review are in validation/reminders-local.json and validation/reminders-review.md
 vendor/device delivery, user permission dialog or physical Safari acceptance is claimed.
 Current CI must be read for its exact source; prior mealf-name green runs cover name-only
 source (validation/github-mealf-name.json and github-native-mealf-name.json).
+
+Reminder implementation source 8c946b6 passed all six GitHub jobs in run 39596349930:
+180 backend tests per AMD64/ARM64 runner, 34 web tests, full ordinary/reminder/console
+browser flows, Docker restart/restore and unsuppressed HIGH/CRITICAL security gates.
+See validation/github-reminders.json for exact images, jobs, artifacts and synthetic/live
+limits. This verifies the development implementation, not live vendor/device delivery.

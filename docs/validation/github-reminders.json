@@ -1,0 +1,107 @@
+{
+  "format": "mealf-reminders-github-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "repository": "CLOUDCOOKCH/aircooker-server",
+  "commit": "8c946b612874d62825fde03da7f22ce7c0779b0d",
+  "run_id": 39596349930,
+  "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39596349930",
+  "conclusion": "success",
+  "backend_tests_per_architecture": 180,
+  "web_core_tests": 34,
+  "jobs": [
+    {
+      "id": 119209492303,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119209492334,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119209492414,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119209492519,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119209492571,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119209492806,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "runtime_security": {
+    "scanner": "Trivy",
+    "configured_version": "0.70.0",
+    "gate": "HIGH,CRITICAL; exit-code 1; ignore-unfixed false; no suppressions",
+    "architectures": [
+      {
+        "architecture": "linux/amd64",
+        "job_id": 119209492519,
+        "image_id": "sha256:399a9e920bbb75b603d275a3fc19049595c3a989f622a8843b3bf280a8891c92",
+        "gate": "passed"
+      },
+      {
+        "architecture": "linux/arm64",
+        "job_id": 119209492334,
+        "image_id": "sha256:0451d980d6b405069a1a77fd5559e69e4a7d9f03b1e35fd6554db9031127f0e3",
+        "gate": "passed"
+      }
+    ],
+    "dependency_audit": "pip-audit strict runtime lock passed both architectures",
+    "secret_scan": "gitleaks 8.28.0 passed both architectures",
+    "limits": "Severity gates do not establish no vulnerabilities at every severity or legal clearance."
+  },
+  "artifacts": [
+    {
+      "id": 12343708984,
+      "name": "backend-tests-ubuntu-24.04-arm",
+      "archive_digest": "sha256:dc1828203999382eae1a9f5709d3229f3978f6f9b6d2b04e06bff42915ec7726"
+    },
+    {
+      "id": 12343689142,
+      "name": "backend-tests-ubuntu-24.04",
+      "archive_digest": "sha256:217f418b11d3be6122b5f4db0583fc98fc97d629fa095681bb3dd85dfeb57dcf"
+    },
+    {
+      "id": 12343638212,
+      "name": "console-screenshots",
+      "archive_digest": "sha256:626c22abf7f04fc22b72e1f92158f441ea4ba6e1ce0e876ae3492c33abb66a54"
+    },
+    {
+      "id": 12343308595,
+      "name": "container-security-ubuntu-24.04",
+      "archive_digest": "sha256:7e020ecd34c8f8bb6076576d7cb4d2070aac7208a8089ac2785a301573f8f6c4"
+    },
+    {
+      "id": 12343178926,
+      "name": "container-security-ubuntu-24.04-arm",
+      "archive_digest": "sha256:f7110b746eaf23ef5a62ac20a1d95c6fb6cf43c5f23550adead90d60fe8893d5"
+    }
+  ],
+  "verified": [
+    "180 backend tests per architecture, lint/types/format/contract and 40-package attribution gate",
+    "34 web core tests, strict TypeScript/format/generated contract, production build and npm advisory gate",
+    "Real ordinary PWA and console acceptance flows",
+    "Real PWA/API/IndexedDB reminder controls and offline reload draft, editor-safe worker navigation, denied permission UI and actual service-worker receiver with CDP-injected push; subscription and vendor transport explicitly synthetic",
+    "Non-root/read-only Docker HTTP/restart/clean-install JSON+ZIP restore, encrypted VAPID key persistence and packaged supplemental notice on both architectures"
+  ],
+  "limits": [
+    "No live push vendor, user permission dialog, physical iPhone/Safari, background OS display or Focus behavior verified",
+    "Exact original peach/wordmark PNGs not accessible and not recreated",
+    "Bring/AI tests do not establish live service compatibility",
+    "No stable release, full master acceptance or exactly-once notification delivery claim",
+    "Subsequent documentation evidence commit does not change application source"
+  ]
+}
