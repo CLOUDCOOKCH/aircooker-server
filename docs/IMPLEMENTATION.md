@@ -185,3 +185,11 @@ original-source/derived provenance. No scanner allowlist was weakened. Earlier f
 test-helper/evidence-field attempts and exact final images/jobs/assets are recorded in
 validation/github-mealf-artwork.json. Physical iPhone icon refresh and native artwork remain
 outside this PWA/console acceptance. Historical screenshot/review records retain their scope.
+
+PWA touch refinement, 2026-10-21: implemented and tested in Chromium. Pinch/double-tap keep
+visual viewport scale at 1, finger swipes scroll and reading text remains selectable. Safari
+cancelable gesture handlers and Ctrl+wheel versus normal wheel are covered; keyboard/OS
+accessibility zoom and normal viewport metadata are retained. Full PWA browser flow,
+213 backend/39 web tests, lint/format/type/build and OpenAPI checks pass. No visual tokens,
+admin behavior, storage or API contracts change. Physical iPhone/Safari is unverified;
+container publication remains blocked pending a successful Actions run on current source.

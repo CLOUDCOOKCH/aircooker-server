@@ -632,5 +632,35 @@
     ".impeccable/surfaces/admin.md",
     "docs/validation/mealf-palette-review.md"
   ],
-  "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
+  "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally.",
+  "interactionPolicy": {
+    "scope": "primary PWA only; admin defaults unchanged",
+    "touchAction": {
+      "selectors": [
+        "html",
+        "body",
+        "#root"
+      ],
+      "value": "pan-x pan-y"
+    },
+    "textSelection": {
+      "selector": "html",
+      "user-select": "text",
+      "-webkit-user-select": "text"
+    },
+    "gestureEvents": [
+      "gesturestart",
+      "gesturechange",
+      "gestureend"
+    ],
+    "wheel": "prevent default only when ctrlKey (trackpad pinch)",
+    "preserved": [
+      "single-finger scrolling",
+      "text-selection handles and copy menus",
+      "input editing",
+      "browser/OS keyboard accessibility zoom",
+      "normal viewport metadata"
+    ],
+    "evidence": "scripts/pwa_browser_smoke.py real Chromium pinch/double-tap scale, finger-swipe scroll and actual text selection; Safari handlers tested with cancelable events, physical iPhone/Safari unverified"
+  }
 }

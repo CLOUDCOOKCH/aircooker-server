@@ -99,6 +99,62 @@ def main():
                 expect(
                     page.get_by_role("heading", name="Get your hot buns in here.")
                 ).to_be_visible()
+                # User can still select/copy reading text while page-zoom gestures are blocked.
+                page.locator(".welcome-description").dblclick()
+                assert page.evaluate("Boolean(window.getSelection()?.toString().trim())")
+                page.evaluate("window.getSelection()?.removeAllRanges()")
+                assert page.evaluate("""() => {
+                    const event = new WheelEvent('wheel', {ctrlKey:true,cancelable:true});
+                    document.dispatchEvent(event);
+                    return event.defaultPrevented;
+                }""")
+                assert page.evaluate("""() => {
+                    const event = new WheelEvent('wheel', {cancelable:true});
+                    document.dispatchEvent(event);
+                    return !event.defaultPrevented;
+                }""")
+                for gesture in ["gesturestart", "gesturechange", "gestureend"]:
+                    assert page.evaluate(
+                        """type => {
+                        const event = new Event(type, {cancelable:true});
+                        document.dispatchEvent(event);
+                        return event.defaultPrevented;
+                    }""",
+                        gesture,
+                    )
+                touch_context = browser.new_context(
+                    viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True
+                )
+                touch_page = touch_context.new_page()
+                touch_page.goto(base + "/app/")
+                expect(touch_page.locator(".welcome-content")).to_be_visible()
+                touch_session = touch_context.new_cdp_session(touch_page)
+                touch_session.send(
+                    "Input.synthesizePinchGesture",
+                    {"x": 195, "y": 300, "scaleFactor": 1.8, "gestureSourceType": "touch"},
+                )
+                assert touch_page.evaluate("visualViewport.scale") == 1
+                touch_page.touchscreen.tap(20, 200)
+                touch_page.touchscreen.tap(20, 200)
+                assert touch_page.evaluate("visualViewport.scale") == 1
+                touch_page.get_by_role("button", name="Explore the demo").click()
+                expect(touch_page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                touch_page.wait_for_function("document.documentElement.scrollHeight > innerHeight")
+                touch_session.send(
+                    "Input.dispatchTouchEvent",
+                    {"type": "touchStart", "touchPoints": [{"x": 180, "y": 600}]},
+                )
+                for position in range(570, 299, -30):
+                    touch_session.send(
+                        "Input.dispatchTouchEvent",
+                        {"type": "touchMove", "touchPoints": [{"x": 180, "y": position}]},
+                    )
+                    touch_page.wait_for_timeout(25)
+                touch_session.send(
+                    "Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []}
+                )
+                touch_page.wait_for_function("scrollY > 0")
+                touch_context.close()
                 capture("pwa-welcome-desktop.png")
                 page.set_viewport_size({"width": 390, "height": 844})
                 capture("pwa-welcome-phone.png")

@@ -213,7 +213,17 @@ Source: [components.tsx](frontend/src/components.tsx), [App.tsx](frontend/src/Ap
 - **Feedback:** errors use danger-soft/danger-ink; warnings use warning-soft/warning-ink; notices use a `role="status"` toast. Disabled buttons use opacity 0.45 and default cursor. Disabled, loading and empty states should explain the next useful action in interface copy.
 - **Demo:** explicitly entered, isolated and visibly labelled, with an exit control. Never silently add illustrated samples to connected account data.
 
-### Accessibility and motion guidance
+### PWA gesture and selection policy
+
+The user's 2026-10-21 interaction request blocks ordinary page-zoom gestures and explicitly
+keeps text selection enabled. `html`, `body` and `#root` use `touch-action: pan-x pan-y`;
+root `user-select: text` and `-webkit-user-select: text` retain selection. `main.tsx` cancels
+Safari gesture events and Ctrl+wheel pinch, but never single-finger touch events or keyboard
+zoom commands. The original viewport metadata remains unchanged. Browser/OS accessibility
+zoom can override page policy. Console gestures and all visual tokens remain unchanged.
+Chromium touch/selection regression checks passed; physical iPhone/Safari is unverified.
+
+## Accessibility and motion guidance
 
 The implementation includes a focus-only skip link, named icon buttons, native field controls, visible `3px solid var(--focus)` outlines with 4px offset, selected-day semantics and named modal headings. Preserve those relationships when extracting components. Decorative cooking-pot placeholders are hidden from assistive technology; `Photo` accepts alternative text, defaults to empty text and lazily loads local/cached media. Choose useful alt text when an image carries information beyond adjacent copy.
 

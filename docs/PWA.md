@@ -88,6 +88,19 @@ work offline and survive reload. Cancel leaves the saved template unchanged. App
 template adds its meals to the currently selected week; editing the template itself never
 changes existing calendar meals. Templates cannot copy already cooked leftover portions.
 
+## Touch gestures and text selection
+
+The PWA blocks ordinary pinch, trackpad-pinch and double-tap page zoom for an app-like
+interaction. Single-finger horizontal/vertical scrolling and text selection remain enabled;
+long-press selection/copy menus and input editing are not disabled. The implementation
+keeps the normal viewport metadata and does not intercept browser/OS keyboard accessibility
+zoom commands. Browsers and OS accessibility tools can override page gesture policy.
+The administration console retains its own browser interaction defaults.
+
+Real Chromium checks cover a touch pinch/double-tap with unchanged visual scale, a finger
+swipe that scrolls, actual text selection, ordinary versus Ctrl+wheel cancellation, and the
+Safari gesture-event handlers. These checks do not establish physical iPhone/Safari behavior.
+
 ## Offline operation and recovery
 
 Open online once so the public application shell can finish caching. Recipes, meals, pantry,

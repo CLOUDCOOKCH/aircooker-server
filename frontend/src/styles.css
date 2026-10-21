@@ -10,6 +10,14 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   scroll-padding: 2rem;
+  -webkit-user-select: text;
+  user-select: text;
+}
+html,
+body,
+#root {
+  /* Allow ordinary scrolling, but not page pinch or double-tap zoom. */
+  touch-action: pan-x pan-y;
 }
 body {
   margin: 0;

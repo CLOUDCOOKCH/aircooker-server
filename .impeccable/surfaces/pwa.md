@@ -107,3 +107,10 @@ acceptance remain outside this scope. The then-reviewed glass/system-type/forest
 Current palette/voice handoff, 2026-10-21: the user requested the Mealf design across every PWA and admin surface, with cheeky food innuendo and a login headliner. `frontend/src/tokens.css` owns the shared semantic palette; the build exports exact bytes to `/app/theme.css` for console reuse. `--accent*` replaces green-named roles. Preserve original PNGs byte-for-byte, system typography, solid forms, durable work and explicit import/suggestion approval. English/German welcome/login, empty-state, sidebar and footer copy may be playful. Setup instructions, help, security, error and recovery language stays literal. Current screenshots and exact light/dark tokens are in [DESIGN.md](../../DESIGN.md) and the project-owned [snapshot](../design.json); historical captures above retain their tested-source scope.
 
 Local 213 backend/39 web tests, lint/type/contract/build checks, asset/licence checks and real Chromium PWA/admin/push-receiver flows passed in the implementation handoff. Expanded admin Axe setup/login/six-page theme checks, PWA palette pairs and narrow/enlarged-text overflow checks passed. The [manual palette finish review](../../docs/validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Publication remains pending and complete-product readiness is not claimed. No unavailable launcher/detector/schema pass, physical iPhone/Safari or live-service verification is claimed. Native is unchanged and retained for later.
+
+Touch refinement, 2026-10-21: block ordinary page pinch/double-tap zoom; keep text selection,
+copy menus, input editing and single-finger scrolling enabled. The request says “activate
+text selector”; no reply to the optional clarification had arrived, so this follows that
+literal instruction. Keep normal viewport metadata and browser/OS keyboard accessibility
+zoom. The console is outside this interaction change. See PWA.md's gesture policy and
+scripts/pwa_browser_smoke.py; Chromium behavior passed, physical Safari/iPhone unverified.

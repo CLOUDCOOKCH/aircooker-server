@@ -1,5 +1,10 @@
 # Changelog
 
+- Block ordinary PWA page pinch/double-tap and trackpad-pinch zoom while explicitly enabling
+  text selection. Preserve scrolling, input editing and browser/OS keyboard accessibility
+  zoom. Real Chromium gesture/selection and existing PWA flows pass; physical iPhone/Safari
+  is unverified. This source change is not yet included in the published container.
+
 - Apply the approved Mealf cream/coral/peach and cocoa/peach palette throughout the PWA
   and administration console, with shared exact theme tokens, glass navigation, system
   headings, solid forms and a direct planner link. Preserve original artwork and compatible
