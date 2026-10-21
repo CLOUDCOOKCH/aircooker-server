@@ -27,6 +27,6 @@
   "limitations": [
     "launcher/detector unavailable (attempted exit127), no plugin-schema validation claimed",
     "No physical iPhone/Safari, native UI, live Bring/AI/vendor push or full-product acceptance",
-    "Local source/browser checks do not establish packaged Docker verification; dual-architecture image gates remain pending because Actions has not started."
+    "Local-only checks did not establish Docker acceptance; subsequent combined-source CI/publication and both native image gates passed. See github-preview-retry.json for exact identities and real retry/upgrade evidence."
   ]
 }

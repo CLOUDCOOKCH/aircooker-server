@@ -210,3 +210,14 @@ scrolling, input-editing or admin behavior is removed. Added workflow_dispatch t
 the source gate accepts that event only with the same exact SHA/main/repository/workflow
 checks and all six successful jobs. This provides a concrete manual trigger when a push
 has no Actions run; old `.4` reruns still cannot publish newer main source.
+
+Current publication: `.5` is verified and published from d15b37a. All six CI jobs in
+39628446235 pass with 226 backend tests per architecture and 39 frontend tests. Both fresh
+native release images in 39629099312 attempt 1 pass unsuppressed HIGH/CRITICAL gates and
+Docker checks. Anonymous pull and same-volume original-digest `.4` to `.5` upgrade preserve
+household/session/recipe/sync history on internal 5152. The actual completed-release retry
+(attempt 2) succeeds without image builds or registry/release writes; digest and release
+body/assets stay unchanged. The previous pending/blocked observations above are historical
+and superseded by validation/github-preview-retry.json. Native/physical-iPhone/live-service
+and complete-product acceptance remain open. Keep existing volumes/ports and reload/accept
+the PWA update after finishing edits; clearing browser data is not required.

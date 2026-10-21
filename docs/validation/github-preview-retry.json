@@ -28,11 +28,171 @@
   },
   "planned_publication": {
     "tag": "poc-20261021.5",
-    "status": "pending final-source CI; delayed prior main push runs are now starting"
+    "status": "published and independently pulled/upgraded"
   },
   "limits": [
     "Physical iPhone/Safari and live external accounts remain unverified",
     "Existing .4 Git tag and release assets are preserved; immutable digest recommended for historical builds"
   ],
-  "final_implementation_commit": "333360e"
+  "final_implementation_commit": "333360e",
+  "final_source_commit": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+  "source_ci": {
+    "run_id": 39628446235,
+    "event": "push",
+    "head_branch": "main",
+    "conclusion": "success",
+    "backend_tests_per_architecture": 226,
+    "frontend_tests": 39,
+    "jobs": [
+      {
+        "id": 119320503787,
+        "name": "security (ubuntu-24.04)",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119320503925,
+        "name": "checks (ubuntu-24.04)",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119320503982,
+        "name": "browser",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119320504047,
+        "name": "security (ubuntu-24.04-arm)",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119320504062,
+        "name": "pwa-core",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119320504080,
+        "name": "checks (ubuntu-24.04-arm)",
+        "head_sha": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publication": {
+    "run_id": 39629099312,
+    "attempt": 1,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119322101002,
+        "name": "gate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119322263419,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119322263786,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119323095749,
+        "name": "publish",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "source": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261021.5",
+    "release_id": 419754064,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.5",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58273603",
+    "index_digest": "sha256:269302c1e209d2a8d93834450c6a0af7aea242a6005a4240e8683d1475d62d0b",
+    "assets": {
+      "compose.preview.yaml": "44d7bc61ddd5fce26189125105dd1f8416d518e7a3252f14424319de89965216",
+      "container-security-amd64.json": "549efc3ea6dbfd97022f3c7d13ed25775ced0fff452763a31ac1d5b91e8ea40a",
+      "container-security-arm64.json": "b06038f85604d3a6be0dac88833defd767fa969b3d77fa27b447d050ef953b8a",
+      "openapi-v1.json": "224de2f0157d4e18a50e0de75e31da68fe0c752a1a24cd515af9da91b89a8ef8",
+      "sbom-amd64.cdx.json": "f41bacde5a50019f8e2f3385190b61fda6dde2ba6d88a1589a1fc472472e0112",
+      "sbom-arm64.cdx.json": "b565dbdc2f3db3c3face85d9c4fbaa671d8155e45689658afb4bab50c9382fe8"
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:0ff14a82c888e08e185647b03475f6b259a783f9ad2fc152e5fcfd60e9948262",
+        "config": "sha256:092a8f5c35a685021f1793149dadbfed8f879f845b956a063f3109314a536696",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:c5eddb4ddd39cb950a3ab87753ddf4e5f72ee313427f30e16f84890f51b307d4",
+        "config": "sha256:14683bc2f4c63070f6794b87c44753a7de5efc80bf0686eba6cb24840ce3619d",
+        "high_critical": 0
+      }
+    },
+    "scanner": {
+      "version": "0.70.0",
+      "severity_gate": [
+        "HIGH",
+        "CRITICAL"
+      ],
+      "ignore_unfixed": false,
+      "suppressions_added": false
+    }
+  },
+  "live_retry": {
+    "run_id": 39629099312,
+    "attempt": 2,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119325083248,
+        "name": "gate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 119325183880,
+        "name": "verify-images",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 119325184256,
+        "name": "publish",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ],
+    "result": "Existing completed release detected; verify-images and publish skipped, no image/release writes",
+    "image_digest_unchanged": true,
+    "release_body_asset_ids_and_checksums_unchanged": true
+  },
+  "public_runtime": {
+    "anonymous_pull": "passed with empty command-scoped Docker auth config",
+    "pulled_amd64_config": "sha256:092a8f5c35a685021f1793149dadbfed8f879f845b956a063f3109314a536696",
+    "revision_label": "d15b37ad71e14a06186c09163d4b3a71b634877b",
+    "upgrade": "Passed original digest-pinned .4 -> digest-pinned .5 on a disposable shared volume; internal 5152, non-root/read-only, household/session/recipe/sync proof preserved; no configured setup-token log; served theme/artwork and gesture/selection bundle verified",
+    "actual_user_deployment": "Not accessed or modified",
+    "api_contract": "unchanged"
+  },
+  "validation_limits": [
+    "Physical iPhone/Safari and live Bring/AI/vendor push remain unverified",
+    "Native iOS unchanged; complete-product acceptance remains open",
+    "Old .4 image tag was rebuilt by its historical retry; original immutable digest/release assets retained. New retries are verified read-only."
+  ]
 }

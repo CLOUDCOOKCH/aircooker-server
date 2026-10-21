@@ -60,6 +60,17 @@ publication 39620210006. Both architectures verify original/derived/packaged ass
 fresh image scans. Anonymous pull and the published AMD64 .3-to-.4 household/session/recipe/
 sync-proof upgrade on internal 5152 passed. See validation/github-mealf-artwork.json.
 
+Combined design/gesture/retry update: `poc-20261021.5` from d15b37a passed all six exact-source
+CI jobs in 39628446235 (226 backend tests per architecture, 39 web tests). Publication
+39629099312 attempt 1 passed fresh native image scans/Docker checks and published both
+verified images at digest
+`sha256:269302c1e209d2a8d93834450c6a0af7aea242a6005a4240e8683d1475d62d0b`.
+Public pull, six asset checksums, report/config identities and a disposable same-volume
+original-digest `.4` → `.5` upgrade on internal 5152 passed. An actual gate-job retry
+(attempt 2) passed with verify-images/publish skipped; the image digest and release body,
+asset IDs and checksums stayed unchanged. This verifies the completed-release no-op path.
+See [exact source, images, jobs and limits](validation/github-preview-retry.json).
+
 ## Stable releases
 
 Both repositories and their first CI runs are published. Configure private vulnerability
