@@ -91,8 +91,9 @@ changes existing calendar meals. Templates cannot copy already cooked leftover p
 ## Touch gestures and text selection
 
 The PWA blocks ordinary pinch, trackpad-pinch and double-tap page zoom for an app-like
-interaction. Single-finger horizontal/vertical scrolling and text selection remain enabled;
-long-press selection/copy menus and input editing are not disabled. The implementation
+interaction. Single-finger horizontal/vertical scrolling remains enabled. Controls and app
+labels do not accidentally select; recipe reading content and input fields remain selectable
+and editable. Recipe selection/copy menus and field editing are not disabled. The implementation
 keeps the normal viewport metadata and does not intercept browser/OS keyboard accessibility
 zoom commands. Browsers and OS accessibility tools can override page gesture policy.
 The administration console retains its own browser interaction defaults.

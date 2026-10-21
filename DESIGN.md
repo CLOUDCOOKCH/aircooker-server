@@ -216,8 +216,8 @@ Source: [components.tsx](frontend/src/components.tsx), [App.tsx](frontend/src/Ap
 ### PWA gesture and selection policy
 
 The user's 2026-10-21 interaction request blocks ordinary page-zoom gestures and explicitly
-keeps text selection enabled. `html`, `body` and `#root` use `touch-action: pan-x pan-y`;
-root `user-select: text` and `-webkit-user-select: text` retain selection. `main.tsx` cancels
+keeps recipes and inputs selectable while disabling accidental control selection. `html`, `body` and `#root` use `touch-action: pan-x pan-y`;
+root `user-select: none` and `-webkit-user-select: none` suppress app-label selection. The recipe detail `.recipe-content` group, text inputs, textareas and editable fields opt into `text`; buttons, navigation links, labels, summaries and selects remain `none`. Source links inside recipes also opt in. `main.tsx` cancels
 Safari gesture events and Ctrl+wheel pinch, but never single-finger touch events or keyboard
 zoom commands. The original viewport metadata remains unchanged. Browser/OS accessibility
 zoom can override page policy. Console gestures and all visual tokens remain unchanged.

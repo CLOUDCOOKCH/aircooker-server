@@ -644,9 +644,23 @@
       "value": "pan-x pan-y"
     },
     "textSelection": {
-      "selector": "html",
-      "user-select": "text",
-      "-webkit-user-select": "text"
+      "default": "html user-select:none and -webkit-user-select:none",
+      "selectable": [
+        ".recipe-content",
+        "input",
+        "textarea",
+        "[contenteditable=\"true\"]",
+        ".recipe-content .source-link a"
+      ],
+      "nonselectableControls": [
+        "button",
+        "a",
+        "label",
+        "summary",
+        "select",
+        "[role=\"button\"]"
+      ],
+      "confirmation": "User confirmed suppressing control selection while keeping recipes and inputs selectable."
     },
     "gestureEvents": [
       "gesturestart",
@@ -661,6 +675,6 @@
       "browser/OS keyboard accessibility zoom",
       "normal viewport metadata"
     ],
-    "evidence": "scripts/pwa_browser_smoke.py real Chromium pinch/double-tap scale, finger-swipe scroll and actual text selection; Safari handlers tested with cancelable events, physical iPhone/Safari unverified"
+    "evidence": "scripts/pwa_browser_smoke.py: Chromium pinch/double-tap scale, finger-swipe scroll, unselectable app text, actual recipe word selection and input select/edit. Physical iPhone/Safari unverified."
   }
 }

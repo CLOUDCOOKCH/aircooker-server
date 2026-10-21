@@ -10,6 +10,26 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   scroll-padding: 2rem;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.recipe-content {
+  -webkit-user-select: text;
+  user-select: text;
+}
+button,
+a,
+label,
+summary,
+select,
+[role='button'] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input,
+textarea,
+[contenteditable='true'],
+.recipe-content .source-link a {
   -webkit-user-select: text;
   user-select: text;
 }

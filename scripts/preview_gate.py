@@ -24,7 +24,7 @@ def select_run(payload, sha, repository):
         and run.get("head_branch") == "main"
         and run.get("head_repository", {}).get("full_name") == repository
         and run.get("path") == ".github/workflows/ci.yml"
-        and run.get("event") == "push"
+        and run.get("event") in {"push", "workflow_dispatch"}
         and run.get("status") == "completed"
         and run.get("conclusion") == "success"
     ]

@@ -108,9 +108,8 @@ Current palette/voice handoff, 2026-10-21: the user requested the Mealf design a
 
 Local 213 backend/39 web tests, lint/type/contract/build checks, asset/licence checks and real Chromium PWA/admin/push-receiver flows passed in the implementation handoff. Expanded admin Axe setup/login/six-page theme checks, PWA palette pairs and narrow/enlarged-text overflow checks passed. The [manual palette finish review](../../docs/validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Publication remains pending and complete-product readiness is not claimed. No unavailable launcher/detector/schema pass, physical iPhone/Safari or live-service verification is claimed. Native is unchanged and retained for later.
 
-Touch refinement, 2026-10-21: block ordinary page pinch/double-tap zoom; keep text selection,
-copy menus, input editing and single-finger scrolling enabled. The request says “activate
-text selector”; no reply to the optional clarification had arrived, so this follows that
-literal instruction. Keep normal viewport metadata and browser/OS keyboard accessibility
+Touch refinement, 2026-10-21: block ordinary page pinch/double-tap zoom; suppress accidental selection on app controls and labels while keeping recipe reading
+content and input fields selectable. This follows the user’s confirmed clarification.
+Preserve recipe copy menus, input editing and single-finger scrolling. Keep normal viewport metadata and browser/OS keyboard accessibility
 zoom. The console is outside this interaction change. See PWA.md's gesture policy and
 scripts/pwa_browser_smoke.py; Chromium behavior passed, physical Safari/iPhone unverified.

@@ -21,6 +21,12 @@ new publication. Authentication, rate limits and other API failures stop the wor
 Draft/stable/mismatched releases and missing immutable image references require inspection.
 If an image tag was partially pushed without a completed release, publication refuses to
 replace its base or architecture tags; use a fresh version after reviewing the failed run.
+If a push event has not started CI, open Actions → Backend checks → Run workflow and select
+`main`. This performs the identical full matrix. The preview gate accepts successful `push`
+or `workflow_dispatch` runs only for the exact main-branch commit and expected repository/
+workflow; unrelated branches, PR runs and incomplete/skipped matrices still fail closed.
+Create the fresh release tag only after that exact source passes.
+
 All six exact-source CI checks and both fresh image scans/runtime checks still precede every
 new image. The moving `preview` channel alone is intentionally updated.
 

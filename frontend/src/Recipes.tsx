@@ -131,7 +131,7 @@ export function RecipeDetail({
   const source = safeURL(recipe.source_url),
     nutritionSource = safeURL(recipe.nutrition_source);
   return (
-    <>
+    <div className="recipe-content">
       <PageHeader title={recipe.title} back={back}>
         <button className="secondary" onClick={edit}>
           {t('edit')}
@@ -297,7 +297,7 @@ export function RecipeDetail({
           </div>
         </Sheet>
       )}
-    </>
+    </div>
   );
 }
 type EditorValue = {

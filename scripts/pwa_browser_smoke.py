@@ -99,9 +99,9 @@ def main():
                 expect(
                     page.get_by_role("heading", name="Get your hot buns in here.")
                 ).to_be_visible()
-                # User can still select/copy reading text while page-zoom gestures are blocked.
+                # App chrome does not accidentally select; recipe reading and inputs opt in.
                 page.locator(".welcome-description").dblclick()
-                assert page.evaluate("Boolean(window.getSelection()?.toString().trim())")
+                assert page.evaluate("!window.getSelection()?.toString().trim()")
                 page.evaluate("window.getSelection()?.removeAllRanges()")
                 assert page.evaluate("""() => {
                     const event = new WheelEvent('wheel', {ctrlKey:true,cancelable:true});
@@ -183,7 +183,17 @@ def main():
                 capture("pwa-recipes-phone-dark.png")
                 page.get_by_role("button", name="Creamy tomato pasta", exact=False).first.click()
                 expect(page.get_by_role("heading", name="Creamy tomato pasta")).to_be_visible()
+                page.locator(".method-list li").first.dblclick(position={"x": 55, "y": 12})
+                assert page.evaluate("Boolean(window.getSelection()?.toString().trim())")
+                page.evaluate("window.getSelection()?.removeAllRanges()")
+                assert page.get_by_role("button", name="Edit", exact=True).evaluate(
+                    "element => getComputedStyle(element).userSelect === 'none'"
+                )
                 page.get_by_role("button", name="Edit", exact=True).click()
+                page.get_by_label("Recipe name", exact=True).select_text()
+                assert page.get_by_label("Recipe name", exact=True).evaluate(
+                    "element => element.selectionStart === 0 && element.selectionEnd === element.value.length"
+                )
                 page.get_by_label("Recipe name", exact=True).fill("Demo pasta edited offline")
                 page.wait_for_function("!!navigator.serviceWorker.controller")
                 context.set_offline(True)

@@ -29,7 +29,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p build
-          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$GITHUB_SHA" -f branch=main -f event=push -f status=success -f per_page=100 > build/preview-runs.json
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$GITHUB_SHA" -f branch=main -f status=success -f per_page=100 > build/preview-runs.json
           python3 scripts/preview_gate.py run build/preview-runs.json
       - name: Reject skipped or incomplete CI matrices
         if: steps.release.outputs.already_published != 'true'

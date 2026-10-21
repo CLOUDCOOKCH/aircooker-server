@@ -61,8 +61,8 @@ food innuendo; setup, security and error instructions remain literal. Update onl
 reference, retain the volume and existing port/command/healthcheck settings (including a
 custom `5152:5152` installation), then reload and accept the PWA update after saving edits.
 
-It also blocks ordinary PWA pinch/double-tap zoom while keeping text selection and scrolling
-enabled. Browser/OS keyboard accessibility zoom remains available. Safari/physical-iPhone
+It also blocks ordinary PWA pinch/double-tap zoom while keeping recipes and input fields selectable and scrolling
+enabled. Accidental control/label selection is suppressed. Browser/OS keyboard accessibility zoom remains available. Safari/physical-iPhone
 behavior is unverified. Publication retries for this version preserve a completed release;
 do not rerun an older release expecting to publish newer main-branch changes.
 

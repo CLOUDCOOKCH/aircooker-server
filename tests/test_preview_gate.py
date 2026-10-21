@@ -66,3 +66,10 @@ def test_preview_requires_each_exact_source_job_to_pass():
     for changed in invalid:
         with pytest.raises(ValueError):
             gate.verify_jobs([{"jobs": changed}], SHA)
+
+
+def test_manual_main_run_requires_the_same_source_and_full_matrix():
+    run = {**successful_run(), "event": "workflow_dispatch"}
+    assert gate.select_run({"workflow_runs": [run]}, SHA, REPO) == 123
+    with pytest.raises(ValueError):
+        gate.select_run({"workflow_runs": [{**run, "head_branch": "other"}]}, SHA, REPO)

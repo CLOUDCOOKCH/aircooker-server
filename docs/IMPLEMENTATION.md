@@ -202,3 +202,11 @@ for completed/mismatched releases and API failures; original exact-source/securi
 remain intact. The palette-only validation commit 5c74bbc now has successful CI 39624790084;
 it cannot validate later gesture/retry commits. Fresh combined-source verification and `.5`
 publication are pending. The existing `.4` Git tag and release assets are not moved/replaced.
+
+Confirmed selection refinement: app controls and labels are non-selectable; recipe detail
+text/source attribution and inputs remain selectable. The browser test selects an actual
+recipe word and input range rather than the padded empty area of a step row. No gesture,
+scrolling, input-editing or admin behavior is removed. Added workflow_dispatch to full CI;
+the source gate accepts that event only with the same exact SHA/main/repository/workflow
+checks and all six successful jobs. This provides a concrete manual trigger when a push
+has no Actions run; old `.4` reruns still cannot publish newer main source.
