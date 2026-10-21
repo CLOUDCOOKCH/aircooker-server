@@ -36,3 +36,8 @@ See the implementation checklist for feature status and verification limits.
   peer rate limits and no session-existence disclosure; retain Bearer logout compatibility.
 - Verify revocation persistence in the real-container restart workflow.
 - Make recipe use count outrank ratings/history when repeated weekly suggestions are allowed.
+
+- Replace the administration accordion with dedicated sections and responsive navigation;
+  refine typography, dark appearance, focus/controls and narrow/enlarged-text layouts.
+- Preserve unsaved edits across section changes and retain existing secured workflows;
+  update genuine Chromium captures and browser acceptance checks.

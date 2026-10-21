@@ -76,3 +76,6 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.
+
+See the genuine [console desktop capture](docs/screenshots/admin-desktop.png) and
+[German phone capture](docs/screenshots/admin-mobile-de.png), using synthetic household data.

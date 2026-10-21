@@ -104,6 +104,10 @@ def main():
                 page.on("dialog", lambda dialog: dialog.accept())
                 page.goto(base)
                 login = page.locator("#login")
+                expect(login.locator('[name="username"]')).to_be_visible()
+                screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
+                screenshots.mkdir(parents=True, exist_ok=True)
+                page.screenshot(path=str(screenshots / "admin-setup.png"), full_page=True)
                 login.locator('[name="username"]').fill("cook")
                 login.locator('[name="password"]').fill("synthetic browser household password")
                 login.locator('[name="token"]').fill((root / "config/setup-token").read_text())
@@ -112,7 +116,7 @@ def main():
                 login.locator('button[type="submit"]').click()
                 expect(page.locator("#dashboard")).to_be_visible(timeout=15000)
                 expect(page.locator("#status")).to_have_text("Ready")
-                page.get_by_text("Household settings", exact=True).click()
+                page.locator('[data-page-link="household"]').click()
                 household = page.locator("#household-form")
                 household.locator('[name="name"]').fill("Test household <safe>")
                 household.locator('[name="timezone"]').fill("Europe/Berlin")
@@ -125,7 +129,7 @@ def main():
                 expect(household.locator('[name="name"]')).to_have_value("Unsaved household draft")
                 page.locator("#language").select_option("en")
                 household.locator('[name="name"]').fill("Test household <safe>")
-                page.get_by_text("Optional AI extraction", exact=True).click()
+                page.locator('[data-page-link="ai"]').click()
                 ai = page.locator("#ai-form")
                 ai.locator('[name="enabled"]').check()
                 ai.locator('[name="provider"]').select_option("openai-compatible")
@@ -140,7 +144,7 @@ def main():
                 expect(page.locator("#status")).to_have_text(
                     "The provider returned a validated recipe for the connection test."
                 )
-                page.get_by_text("Bring! connection", exact=True).click()
+                page.locator('[data-page-link="bring"]').click()
                 bring = page.locator("#bring-form")
                 bring.locator('[name="email"]').fill("cook@example.invalid")
                 bring.locator('[name="password"]').fill("synthetic Bring browser password")
@@ -161,7 +165,7 @@ def main():
                 expect(page.locator("#status")).to_have_text(
                     "Reconciliation queued; external changes are pending."
                 )
-                page.get_by_text("Data export and import", exact=True).click()
+                page.locator('[data-page-link="data"]').click()
                 document = {
                     "format": "aircooker-household",
                     "version": 2,
@@ -213,9 +217,10 @@ def main():
                         "device_id": other_device,
                     },
                 ).json()
+                page.locator('[data-page-link="overview"]').click()
                 page.locator("#reload").click()
                 expect(page.locator("#status")).to_have_text("Ready")
-                page.get_by_text("Account and devices", exact=True).click()
+                page.locator('[data-page-link="security"]').click()
                 row = page.locator(".session-row").filter(has_text=other_device[:8])
                 row.get_by_role("button", name="Revoke session").click()
                 expect(row).to_contain_text("Revoked")
@@ -223,35 +228,63 @@ def main():
                     s["id"] == other["session_id"] and s["revoked"]
                     for s in get("/api/v1/auth/sessions")
                 )
-                # Inspect desktop and German mobile in one bounded capture pass.
+                # One batched capture pass: real UI, synthetic household, EN/DE and themes.
                 screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
                 screenshots.mkdir(parents=True, exist_ok=True)
-                page.locator("details").evaluate_all(
-                    "elements => elements.forEach((element,index) => element.open=index===0)"
-                )
-                page.evaluate("scrollTo(0,0)")
+                page.locator('[data-page-link="overview"]').click()
                 page.screenshot(path=str(screenshots / "admin-desktop.png"), full_page=True)
+                page.emulate_media(color_scheme="dark")
+                page.screenshot(path=str(screenshots / "admin-desktop-dark.png"), full_page=True)
+                page.emulate_media(color_scheme="light")
                 page.locator("#language").select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
-                page.locator("details").evaluate_all(
-                    "elements => elements.forEach((element,index) => element.open=index===3)"
-                )
                 assert page.evaluate("document.documentElement.scrollWidth<=innerWidth+1")
                 expect(page.locator(".metric span").first).to_have_text("Ausstehende Aufträge")
                 expect(page.locator("#storage")).to_contain_text("Datenbank")
-                page.evaluate("scrollTo(0,0)")
                 page.screenshot(path=str(screenshots / "admin-mobile-de.png"), full_page=True)
-                page.locator("#language").select_option("en")
-                page.locator("details").evaluate_all(
-                    "elements => elements.forEach((element,index) => element.open=index===2)"
+                page.locator('[data-page-link="ai"]').click()
+                page.screenshot(path=str(screenshots / "admin-mobile-ai-de.png"), full_page=True)
+                # Text zoom and narrow screens must keep settings usable.
+                page.set_viewport_size({"width": 320, "height": 844})
+                page.route(
+                    "**/text-zoom-test.css",
+                    lambda route: route.fulfill(
+                        content_type="text/css", body="html { font-size: 200% !important; }"
+                    ),
                 )
+                zoom = page.add_style_tag(url=base + "/text-zoom-test.css")
+                for key in ["overview", "household", "ai", "bring", "security", "data"]:
+                    page.locator(f'[data-page-link="{key}"]').click()
+                    assert page.locator('[data-page-link][aria-current="page"]').count() == 1
+                    assert page.locator("[data-page]:visible").count() == 1
+                    assert page.evaluate("document.documentElement.scrollWidth<=innerWidth+1"), (
+                        key,
+                        page.evaluate("""() => [...document.querySelectorAll('body *')]
+                          .filter(e => e.getBoundingClientRect().right > innerWidth + 1)
+                          .map(e => [e.tagName, e.id, Math.round(e.getBoundingClientRect().width)])
+                          .slice(0, 12)"""),
+                    )
+                zoom.evaluate("element => element.remove()")
+                page.set_viewport_size({"width": 390, "height": 844})
+                page.locator('[data-page-link="household"]').click()
+                expect(household.locator('[name="name"]')).to_have_value("Test household <safe>")
+                page.screenshot(
+                    path=str(screenshots / "admin-mobile-settings-de.png"), full_page=True
+                )
+                # Navigation and language changes preserve unsaved settings, with no overflow.
+                household.locator('[name="name"]').fill("Unstored navigation draft")
+                page.locator('[data-page-link="ai"]').click()
+                page.locator('[data-page-link="household"]').click()
+                expect(household.locator('[name="name"]')).to_have_value(
+                    "Unstored navigation draft"
+                )
+                page.locator("#language").select_option("en")
+                page.locator('[data-page-link="ai"]').click()
                 ai.locator('[name="enabled"]').uncheck()
                 ai.locator('button[type="submit"]').click()
                 expect(page.locator("#status")).to_have_text("Changes saved.")
                 assert get("/api/v1/admin/ai")["enabled"] is False
-                page.locator("details").evaluate_all(
-                    "elements => elements.forEach((element,index) => element.open=index===1)"
-                )
+                page.locator('[data-page-link="security"]').click()
                 password = page.locator("#password-form")
                 password.locator('[name="current_password"]').fill(
                     "synthetic browser household password"

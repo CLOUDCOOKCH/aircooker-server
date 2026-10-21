@@ -12,7 +12,7 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
 | Swift core compile and tests | **76 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 256 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 262 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
@@ -135,3 +135,26 @@ A full test run initially exposed an existing seed-sensitive recommendation fail
 languages now sort by use count before rating/history score; new extreme-rating/history
 regressions exercise ten seeds. All three existing cross-language fixtures remain unchanged
 and pass. Earlier history-specific counts above are historical evidence, not the current total.
+
+
+## Interface refinement
+
+Chromium workflows pass after replacing the long accordion with six persistent settings
+pages and desktop/phone navigation. Tests verify existing setup, cookie/CSRF, account,
+AI/Bring configuration, JSON/ZIP transfer and password workflows; section/language changes
+preserve unsaved fields. All six pages remain within a 320px viewport at 200% root text
+size. This is a text-size check, not an assistive-technology audit. Light/dark desktop,
+German phone overview/settings/AI and initial setup were captured from the running
+synthetic household and visually inspected. See ADMINISTRATION.md for exact image paths.
+
+Body/muted/navigation color-pair calculations exceed 4.5:1; control boundaries exceed 3:1
+against their panel backgrounds in both palettes. This is a bounded token check, not a
+claim that every state passed a complete accessibility audit. No external fonts, tracking
+or invented recipe images were added. No HTTP security policy was relaxed.
+
+97 backend tests and 76 companion core tests still pass; lint/types/OpenAPI/contract and
+262-key localisation checks pass. Native Home/recipe/calendar sources were refined but
+remain unverified against an Apple SDK. No release gate is cleared by UI changes.
+The exact server source changes are `web/index.html`, `web/console.css`, `web/console.js`,
+`scripts/browser_smoke.py`, documentation and six genuine browser captures. Runtime
+schemas, migrations, dependency locks and the canonical API contract are unchanged.

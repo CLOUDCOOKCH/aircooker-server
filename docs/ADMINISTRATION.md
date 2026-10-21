@@ -8,6 +8,10 @@ require the same Origin and CSRF token. No integration keys are stored in browse
 
 English and German are available from the language selector. Changing the displayed
 language preserves unsaved form fields. Household default language is saved separately.
+Use the sidebar (a compact navigation grid on phones) to switch between Overview, Household,
+Account, AI, Bring! and Data. Switching sections preserves unsaved fields; the selected
+section is announced through the navigation state and page heading.
+
 The dashboard shows the active recipe count, pending jobs, database/WAL size, stored photo
 bytes, available volume space and recent job error codes. Counts cover the whole household.
 
@@ -90,3 +94,17 @@ editing, saved AI configuration/probe, Bring list selection/retry, JSON/ZIP tran
 duplicate rejection, device revocation, password changes and EN/DE mobile layout. The
 committed desktop/mobile screenshots are genuine Chromium renders of those fictional data.
 The configured CI browser job has not been executed remotely.
+
+
+The current presentation uses distinct settings pages, a persistent household identity,
+light/dark appearances and a compact phone layout. Forms and requests retain the existing
+cookie/CSRF protection; no security policy was relaxed for styling. Inputs retain 16px
+base text, visible focus and contrasting boundaries. Browser checks exercise all six
+sections at 320px with 200% root text size, one visible page/current navigation link and
+no horizontal document overflow. That check uses a test-only intercepted same-origin
+stylesheet, complying with the production content security policy.
+
+Genuine captures: `admin-desktop.png`, `admin-desktop-dark.png`, `admin-mobile-de.png`,
+`admin-mobile-settings-de.png`, `admin-mobile-ai-de.png` and `admin-setup.png`. Household
+names and external integration inputs are synthetic; the AI and Bring services are doubles.
+The captures show the actual running console. They are not native iOS screenshots.
