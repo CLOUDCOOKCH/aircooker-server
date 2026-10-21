@@ -1,0 +1,428 @@
+{
+  "schema": {
+    "id": "aircooker.design-snapshot",
+    "version": 1,
+    "owner": "aircooker project",
+    "status": "project-owned documentation snapshot; not a plugin/vendor contract",
+    "pluginSchemaValidation": "not performed: plugin schema and cloud resources unavailable"
+  },
+  "project": "aircooker",
+  "surface": "PWA frontend/",
+  "snapshotDate": "2026-10-21",
+  "authority": [
+    "PRODUCT.md",
+    ".impeccable/surfaces/pwa.md"
+  ],
+  "direction": {
+    "purpose": "effortless household food planning",
+    "appearance": "system light/dark",
+    "typography": "approved system UI stack",
+    "accent": "forest green",
+    "glass": "floating navigation; solid reading/editing surfaces",
+    "native": "independent iOS repository retained for later"
+  },
+  "tokens": {
+    "cssCustomProperties": {
+      "source": "frontend/src/tokens.css",
+      "light": {
+        "--canvas": "#f4f5f1",
+        "--surface": "#ffffff",
+        "--ink": "#1c231f",
+        "--muted": "#626b64",
+        "--line": "#dce1d9",
+        "--soft": "#e9ede6",
+        "--hover": "#e1e7dd",
+        "--green": "#28533c",
+        "--green-hover": "#1a3e2a",
+        "--on-green": "#ffffff",
+        "--green-soft": "#e5ede2",
+        "--green-ink": "#264633",
+        "--green-muted": "#52674f",
+        "--focus": "#669967",
+        "--selection": "#cdddc7",
+        "--glass": "rgba(255, 255, 255, 0.76)",
+        "--glass-shadow": "0 8px 32px rgba(24, 44, 27, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+        "--sheet-shadow": "0 18px 70px rgba(9, 24, 13, 0.2)",
+        "--danger": "#a0322d",
+        "--danger-soft": "#f9e9e6",
+        "--danger-ink": "#79241e",
+        "--warning-soft": "#f0eadc",
+        "--warning-ink": "#695427"
+      },
+      "dark": {
+        "--canvas": "#151a17",
+        "--surface": "#202722",
+        "--ink": "#f0f2ec",
+        "--muted": "#a4aea4",
+        "--line": "#39423b",
+        "--soft": "#2a332c",
+        "--hover": "#354137",
+        "--green": "#a9cda8",
+        "--green-hover": "#c6e4c0",
+        "--on-green": "#18301e",
+        "--green-soft": "#273a2c",
+        "--green-ink": "#d2e4ce",
+        "--green-muted": "#acbfa7",
+        "--focus": "#a9cda8",
+        "--selection": "#3b563e",
+        "--glass": "rgba(37, 47, 40, 0.8)",
+        "--glass-shadow": "0 10px 36px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+        "--sheet-shadow": "0 22px 80px rgba(0, 0, 0, 0.5)",
+        "--danger": "#f2a49b",
+        "--danger-soft": "#482b29",
+        "--danger-ink": "#f4c0b9",
+        "--warning-soft": "#373325",
+        "--warning-ink": "#e4d7af"
+      }
+    },
+    "typography": {
+      "source": "frontend/src/styles.css",
+      "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "rootSize": "16px",
+      "h1": {
+        "size": "2.375rem",
+        "weight": 700,
+        "lineHeight": 1.15,
+        "letterSpacing": "-0.035em",
+        "phoneSize": "2rem"
+      },
+      "h2": {
+        "size": "1.25rem",
+        "weight": 650,
+        "lineHeight": 1.3,
+        "letterSpacing": "-0.02em"
+      },
+      "h3": {
+        "size": "1rem",
+        "weight": 600,
+        "lineHeight": 1.35
+      },
+      "body": {
+        "size": "1rem",
+        "lineHeight": 1.6
+      },
+      "button": {
+        "size": "0.875rem",
+        "weight": 600
+      },
+      "label": {
+        "size": "0.875rem",
+        "weight": 550
+      },
+      "welcomeH1": {
+        "size": "2.75rem",
+        "lineHeight": 1.12,
+        "at800": "2.5rem",
+        "at600": "2.375rem"
+      }
+    },
+    "spacing": {
+      "meaning": "observed implementation measurements, not CSS custom properties or a mandatory universal scale",
+      "sectionBlock": "36px",
+      "sectionHeadingBottom": "18px",
+      "controlGap": "9px",
+      "formLabelGap": "8px",
+      "formRowGap": "14px",
+      "homeGap": "36px",
+      "homeGapWide": "44px",
+      "homeGapPhone": "28px",
+      "pageHeaderBottom": "30px",
+      "mainHorizontal": "40px",
+      "mainHorizontalWide": "55px",
+      "mainHorizontalTablet": "24px",
+      "mainHorizontalPhone": "20px"
+    },
+    "radii": {
+      "input": "11px",
+      "button": "12px",
+      "surface": "16px",
+      "calendarDay": "14px",
+      "weekDay": "14px",
+      "sheet": "20px",
+      "desktopNav": "24px",
+      "phoneNav": "27px",
+      "toast": "30px",
+      "iconButton": "50%",
+      "mealThumb": "10px",
+      "recipeThumb": "12px"
+    },
+    "dimensions": {
+      "appMax": "1660px",
+      "pageMax": "1160px",
+      "sidebar": "196px",
+      "sidebarCompact": "172px",
+      "mainMarginLeft": "252px",
+      "mainMarginLeftCompact": "204px",
+      "buttonMinHeight": "46px",
+      "inputMinHeight": "46px",
+      "iconButton": "44px",
+      "phoneNavMinHeight": "55px",
+      "phoneNavWidth": "min(520px, calc(100vw - 32px))",
+      "phoneNavBottom": "max(16px, env(safe-area-inset-bottom))",
+      "sheetWidth": "min(540px, calc(100vw - 24px))",
+      "sheetMaxHeight": "calc(100dvh - 48px)",
+      "sheetMaxHeightPhone": "calc(100dvh - 32px)",
+      "featuredPhotoHeight": "310px",
+      "recipeCardPhotoHeight": "195px",
+      "phoneRecipeThumbnail": "84px"
+    },
+    "effects": {
+      "navigationFilter": "blur(28px) saturate(155%)",
+      "sheetBackdrop": "rgba(15, 22, 17, 0.4)",
+      "sheetBackdropFilter": "blur(5px)",
+      "focusOutline": "3px solid var(--focus)",
+      "focusOffset": "4px",
+      "disabledOpacity": 0.45,
+      "zIndex": {
+        "navigation": 10,
+        "toast": 30,
+        "skipLink": 100
+      }
+    },
+    "motion": {
+      "themeSensitiveButtonTransition": "none",
+      "hover": "background-color 180ms ease-out",
+      "daySelection": {
+        "duration": "180ms",
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "from": {
+          "transform": "scale(0.94)",
+          "filter": "blur(0.3px)"
+        },
+        "to": {
+          "transform": "scale(1)",
+          "filter": "blur(0)"
+        }
+      },
+      "loading": "1.5s ease-out infinite",
+      "reducedMotion": "disable animations, transitions and smooth scrolling"
+    }
+  },
+  "responsive": {
+    "source": "frontend/src/styles.css",
+    "breakpoints": [
+      {
+        "query": "(min-width: 1550px)",
+        "rules": [
+          "main horizontal padding 55px",
+          "Home gap 44px",
+          "featured image 360px"
+        ]
+      },
+      {
+        "query": "(max-width: 1180px)",
+        "rules": [
+          "sidebar 172px at 18px inset",
+          "main margin-left 204px; horizontal padding 24px",
+          "recipes 2 columns; previews 1 column",
+          "Home gap 24px; featured image 260px",
+          "pantry rows wrap"
+        ]
+      },
+      {
+        "query": "(max-width: 800px)",
+        "rules": [
+          "five-destination bottom navigation with safe-area inset",
+          "main padding 10px 24px 100px; margin-left 0",
+          "h1 2rem",
+          "Home still two columns until 600px",
+          "featured image 250px; detail 320px",
+          "toast centered, bottom 100px"
+        ]
+      },
+      {
+        "query": "(max-width: 600px)",
+        "rules": [
+          "main padding 8px 20px 108px",
+          "Home, detail, Settings and Imports single column",
+          "recipe list rows with 84px thumbnails",
+          "Calendar selected day only",
+          "header actions 44px named icons",
+          "featured image 235px; detail 245px",
+          "sheet padding 20px; banner and form actions wrap"
+        ]
+      }
+    ],
+    "fallbacks": {
+      "reducedTransparency": "opaque navigation; remove nav blur and standard sheet backdrop blur",
+      "unsupportedBackdropFilter": "opaque navigation",
+      "safeArea": "bottom nav and welcome footer respect env(safe-area-inset-bottom)"
+    }
+  },
+  "components": {
+    "navigation": {
+      "destinations": [
+        "Home",
+        "Calendar",
+        "Recipes",
+        "Pantry",
+        "Settings"
+      ],
+      "activeSemantics": "aria-current=page",
+      "iconFamily": "lucide-react",
+      "iconSize": "22px",
+      "activeStrokeWidth": 2,
+      "inactiveStrokeWidth": 1.6
+    },
+    "WeekStrip": {
+      "days": 7,
+      "selectedSemantics": "aria-pressed",
+      "labels": "full localized civil date",
+      "selectionColours": [
+        "--green",
+        "--on-green"
+      ]
+    },
+    "Sheet": {
+      "element": "dialog",
+      "name": "useId heading ID referenced by aria-labelledby",
+      "focus": "native showModal; restore connected opener on cleanup",
+      "dismissal": "named close button; Escape invokes onClose"
+    },
+    "Photo": {
+      "loading": "lazy",
+      "media": "local or cached household media",
+      "alt": "caller-supplied, empty default",
+      "fallback": "aria-hidden cooking-pot placeholder"
+    },
+    "forms": {
+      "labels": "visible",
+      "surfaces": "solid",
+      "approval": "explicit save/apply after preview",
+      "drafts": "preserve local work"
+    },
+    "feedback": {
+      "error": "danger-soft/danger-ink; alert when sync blocked/error",
+      "warning": "warning-soft/warning-ink",
+      "notice": "role=status toast",
+      "loading": "boot line and soft skeleton",
+      "empty": "explain next useful action"
+    },
+    "demo": {
+      "entry": "explicit",
+      "isolation": "separate from existing household data",
+      "disclosure": "visible label and exit action"
+    }
+  },
+  "accessibility": {
+    "requirements": [
+      "body/placeholder contrast >=4.5:1; large text >=3:1",
+      "visible focus; keyboard and screen-reader controls",
+      "EN/DE UI; preserve imported content language",
+      "explicit move/copy controls alongside drag",
+      "scalable text and browser storage/recovery clarity"
+    ],
+    "implementedEvidence": [
+      "focus-only skip link",
+      "named IconButton",
+      "selected day aria-pressed",
+      "Sheet heading accessible name and opener focus restoration",
+      "reduced motion/transparency fallbacks"
+    ],
+    "targetSizeCaveat": "44px default IconButton has smaller local overrides; no universal target-size claim",
+    "representativeContrast": {
+      "lightMutedOnCanvas": 5.04,
+      "lightSearchPlaceholder": 4.66,
+      "lightSuggestionCopy": 5.14,
+      "darkMutedOnSurface": 6.67,
+      "darkSearchPlaceholder": 5.7,
+      "darkSuggestionCopy": 6.23,
+      "lightPrimaryText": 8.78,
+      "darkPrimaryText": 8.1
+    },
+    "acceptance": "incomplete; review and captured-screen automated checks do not establish complete accessibility compliance"
+  },
+  "assets": {
+    "provenance": "frontend/public/art/provenance.json",
+    "sourceCommit": "f165c362106955db4405b5c4ce9b3fb25fbc3fd9",
+    "food": {
+      "file": "frontend/public/art/lemon-chicken.png",
+      "type": "original AI-generated illustration",
+      "origin": "aircooker-ios/App/Assets/DemoChicken.png",
+      "generationID": "exec-b3e6fb11-5c8c-4b69-ae40-eb5dda3a6c00",
+      "usage": "explicit isolated demo only; never silently seed a household"
+    },
+    "icons": {
+      "files": [
+        "frontend/public/icon-192.png",
+        "frontend/public/icon-512.png"
+      ],
+      "origin": "aircooker-ios/Design/AppIconSource.png",
+      "generationID": "exec-349b86a6-9e88-4e5a-98ad-a03789dd7b31"
+    },
+    "prompts": "original prompts unavailable; none reconstructed",
+    "concept": "User-approved illustrative concept supplied in conversation; not a running app capture or published repository artifact"
+  },
+  "review": {
+    "initial": "docs/validation/pwa-visual-review.md",
+    "verdict": "docs/validation/pwa-visual-verdict.md",
+    "disposition": "ship only within listed-fix and reviewed screenshot/source scope",
+    "fixScore": {
+      "resolved": 2,
+      "partial": 0,
+      "unresolved": 0
+    },
+    "resolved": [
+      "shared dialog accessible name",
+      "singular/plural serving copy"
+    ],
+    "captureDirectory": "docs/screenshots/",
+    "captures": [
+      "pwa-welcome-desktop.png",
+      "pwa-home-desktop.png",
+      "pwa-home-phone.png",
+      "pwa-home-phone-dark.png",
+      "pwa-recipes-phone-dark.png",
+      "pwa-settings-phone-de-dark.png",
+      "pwa-calendar-phone-de-dark.png"
+    ],
+    "viewports": {
+      "desktop": {
+        "width": 1440,
+        "height": 1000
+      },
+      "phone": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "captureSemantics": "full-document screenshots retain fixed navigation at original viewport y-position",
+    "suppliedVerification": [
+      "Chromium functional smoke",
+      "captured-screen Axe WCAG2 A/AA +2.1AA",
+      "exact accessible dialog name and focus-return assertion"
+    ],
+    "handoffVerification": "source/document inspection and JSON/source token consistency only; browser checks not rerun",
+    "unclaimed": [
+      "plugin schema validation",
+      "automated design detector",
+      "design-hook pass",
+      "motion acceptance from static captures",
+      "complete master product acceptance",
+      "physical iPhone/WebKit validation",
+      "complete accessibility compliance",
+      "Web Push",
+      "passkeys",
+      "QR UI",
+      "live Bring!",
+      "live AI"
+    ]
+  },
+  "sourceReferences": [
+    "frontend/src/tokens.css",
+    "frontend/src/styles.css",
+    "frontend/src/components.tsx",
+    "frontend/src/App.tsx",
+    "frontend/src/Calendar.tsx",
+    "frontend/src/Recipes.tsx",
+    "frontend/src/i18n.ts",
+    "frontend/src/Imports.tsx",
+    "frontend/src/Pantry.tsx",
+    "frontend/src/Settings.tsx",
+    "scripts/pwa_browser_smoke.py:257",
+    "frontend/public/art/provenance.json",
+    "docs/validation/pwa-visual-review.md",
+    "docs/validation/pwa-visual-verdict.md"
+  ],
+  "maintenance": "Update alongside actual CSS/component changes and evidence. Runtime CSS remains authoritative. Do not change surface mode globally."
+}

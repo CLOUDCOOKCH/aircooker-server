@@ -41,3 +41,29 @@ accepts refresh secrets, never unauthenticated session IDs, revokes only the ass
 session and returns no session existence information. Retained rotation hashes close the
 lost-refresh-response race. The iOS source keeps pending secrets in device-only Keychain
 and rejects stale credential generations; native Keychain/lifecycle validation remains open.
+
+## PWA trust boundaries
+
+The public shell is hosted on the API origin under `/app/`. The service worker handles an
+explicit public-build allowlist only; it never caches API/authenticated media responses.
+Public demo art and application icons are labelled in the asset provenance file. Cookie
+credentials are Secure, HttpOnly and SameSite=Strict, distinct from admin cookies. Unsafe
+cookie requests require a matching CSRF token and exact configured origin. Refresh rotation
+is serialised across open tabs with Web Locks where available. No long-lived password or
+token is put in localStorage, IndexedDB, a manifest or QR code.
+
+Private offline records/photos/drafts/outbox/archives stay in the origin's IndexedDB, separated
+by backend instance UUID. This is not an encrypted native Keychain or biometric lock. Sign-out
+revokes the browser session and hides, rather than deletes, cached work. Already cached data
+cannot be remotely erased while a device is offline. Browser data eviction and shared unlocked
+devices remain risks; request persistence, keep private exports and use device-level protection.
+
+The server verifies history checkpoints for browser pushes, import confirmation and grouped
+suggestion approval. Restored/forked history never silently drains an old queue. Explicit
+snapshot recovery archives records/outbox before replacement. Blob image URLs are permitted
+by CSP for locally validated JPEG/PNG; source strings/URLs are escaped and external attribution
+links permit HTTP(S) only. No imported HTML or AI output is executed by the client.
+
+Browser recovery exports include private content and photos, with no session/integration
+secrets. They are separate from server household archives and require private handling.
+Web Push/passkeys are not yet implemented; no claim about their security or delivery is made.

@@ -1710,7 +1710,8 @@ export interface components {
         /** SuggestionApply */
         SuggestionApply: {
             /** Basis */
-            basis: string;
+            basis?: string | null;
+            checkpoint?: components["schemas"]["SyncAnchor"] | null;
             /**
              * Monday
              * Format: date

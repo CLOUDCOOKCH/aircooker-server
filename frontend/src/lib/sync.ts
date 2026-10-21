@@ -54,13 +54,91 @@ export class SyncEngine {
       throw new APIError('device_session_changed', 401);
 
     await this.imports();
+    const queue = await this.store.pending();
+    const neededPhotos = new Set(
+      queue.flatMap((entry) =>
+        entry.mutation.kind === 'recipe' &&
+        entry.mutation.payload &&
+        'image_id' in entry.mutation.payload &&
+        entry.mutation.payload.image_id
+          ? [entry.mutation.payload.image_id]
+          : [],
+      ),
+    );
+    const failedPhotos = new Set<string>();
     for (const photo of await this.store.photos()) {
-      if (!photo.pending) continue;
-      await this.api.upload(photo.id, photo.blob);
-      await this.store.acknowledgePhoto(photo.id);
+      if (!photo.pending || !neededPhotos.has(photo.id)) continue;
+      if (photo.error) {
+        failedPhotos.add(photo.id);
+        continue;
+      }
+      try {
+        await this.api.upload(photo.id, photo.blob);
+        await this.store.acknowledgePhoto(photo.id);
+      } catch (error) {
+        if (error instanceof APIError && [400, 409, 413, 415, 422, 507].includes(error.status)) {
+          await this.store.failPhoto(photo.id, 'photo_upload_rejected');
+          failedPhotos.add(photo.id);
+        } else throw error;
+      }
     }
     const blocked = new Set<string>();
-    for (const entry of (await this.store.pending()).slice(0, 100)) {
+    const approvals = new Set<string>();
+    for (const entry of queue.slice(0, 100)) {
+      const imageID =
+        entry.mutation.kind === 'recipe' &&
+        entry.mutation.payload &&
+        'image_id' in entry.mutation.payload
+          ? entry.mutation.payload.image_id
+          : null;
+      if (imageID && failedPhotos.has(imageID)) {
+        await this.store.block(entry.mutation.mutation_id, 'photo_upload_rejected');
+        entry.blocked = 'photo_upload_rejected';
+      }
+      if (entry.approval) {
+        const group = entry.approval;
+        if (approvals.has(group.request_id)) continue;
+        approvals.add(group.request_id);
+        if (entry.blocked) {
+          progress.blocked += group.mutations.length;
+          for (const mutation of group.mutations)
+            blocked.add(entityKey(mutation.kind, mutation.entity_id));
+          continue;
+        }
+        try {
+          const results = await this.api.request<Wire['MutationResult'][]>(
+            '/api/v1/suggestions/apply',
+            { method: 'POST', body: JSON.stringify(group) },
+          );
+          if (
+            !Array.isArray(results) ||
+            results.length !== group.mutations.length ||
+            results.some(
+              (result, i) =>
+                result.mutation_id !== group.mutations[i].mutation_id ||
+                !['accepted', 'deleted'].includes(result.status) ||
+                !Number.isSafeInteger(result.revision) ||
+                result.revision < 1,
+            )
+          )
+            throw new APIError('invalid_server_response', 0);
+          for (const result of results) await this.store.acknowledge(result);
+          progress.sent += results.length;
+        } catch (error) {
+          if (
+            error instanceof APIError &&
+            [400, 409, 422].includes(error.status) &&
+            error.code !== 'sync_history_changed'
+          ) {
+            for (const mutation of group.mutations) {
+              await this.store.block(mutation.mutation_id, error.code);
+              blocked.add(entityKey(mutation.kind, mutation.entity_id));
+            }
+            progress.blocked += group.mutations.length;
+          } else throw error;
+        }
+        continue;
+      }
       const key = entityKey(entry.mutation.kind, entry.mutation.entity_id);
       if (entry.blocked) {
         blocked.add(key);
@@ -143,10 +221,20 @@ export class SyncEngine {
 
   private async imports(): Promise<void> {
     for (const task of (await this.store.imports()).slice(0, 100)) {
-      if (['confirmed', 'cancelled', 'needs_input', 'preview'].includes(task.state)) continue;
+      if (['confirmed', 'cancelled', 'needs_input', 'preview', 'saving'].includes(task.state))
+        continue;
       const delay = (task.nextAttempt ?? 0) - Date.now();
       if (delay > 0 && delay <= 60_000) continue;
       try {
+        if (task.state === 'cancel_pending') {
+          try {
+            await this.api.request('/api/v1/imports/' + assertUUID(task.id), { method: 'DELETE' });
+          } catch (error) {
+            if (!(error instanceof APIError && error.status === 404)) throw error;
+          }
+          await this.store.saveImport({ ...task, state: 'cancelled' });
+          continue;
+        }
         if (task.state === 'queued') {
           const result = await this.api.request<{ id: string }>('/api/v1/imports', {
             method: 'POST',

@@ -225,3 +225,146 @@ test('two local clients cannot reserve more leftover portions than exist', async
   a.close();
   b.close();
 });
+
+test('import approval marks the draft saving in the same transaction and prevents double save', async () => {
+  const store = await LocalStore.open(uuid()),
+    importID = uuid();
+  await store.saveImport({
+    id: importID,
+    body: { use_ai: false, consent_external_ai: false, text: 'Soup' },
+    state: 'preview',
+  });
+  await store.saveBatch(
+    [{ kind: 'recipe', id: uuid(), value: { ...emptyRecipe(), title: 'Reviewed' } }],
+    { importID },
+  );
+  assert.equal((await store.imports())[0].state, 'saving');
+  await assert.rejects(
+    store.saveBatch(
+      [{ kind: 'recipe', id: uuid(), value: { ...emptyRecipe(), title: 'Duplicate' } }],
+      { importID },
+    ),
+  );
+  assert.equal((await store.entities('recipe')).length, 1);
+  assert.equal((await store.pending()).length, 1);
+  store.close();
+});
+test('server snapshot recovery archives unsent work atomically and preserves photos and drafts', async () => {
+  const store = await LocalStore.open(uuid()),
+    id = uuid();
+  await store.saveDraft('recipe:new', { title: 'Unsaved' });
+  await store.saveBatch(
+    [{ kind: 'recipe', id, value: { ...emptyRecipe(), title: 'Offline work' } }],
+    { photos: [{ id: uuid(), blob: new Blob(['photo'], { type: 'image/png' }), pending: true }] },
+  );
+  const snapshot: Change = {
+    kind: 'recipe',
+    entity_id: uuid(),
+    revision: 1,
+    deleted: false,
+    payload: { ...emptyRecipe(), title: 'Restored server' },
+    updated_at: '2026-10-21T00:00:00Z',
+  };
+  await store.replaceSnapshot([snapshot], { cursor: 1, token });
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Restored server');
+  assert.equal((await store.pending()).length, 0);
+  const archive = (await store.archives())[0];
+  assert.equal((archive.entities[0].payload as { title: string }).title, 'Offline work');
+  assert.equal(archive.outbox.length, 1);
+  assert.ok(await store.draft('recipe:new'));
+  assert.equal((await store.photos()).length, 1);
+  const exported = (await store.localExport()) as {
+    media: { base64: string }[];
+    drafts: { key: string }[];
+  };
+  assert.equal(exported.media[0].base64, btoa('photo'));
+  assert.equal(exported.drafts[0].key, 'recipe:new');
+  await assert.rejects(store.replaceSnapshot([{ ...snapshot, revision: 2 }], { cursor: 1, token }));
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Restored server');
+  store.close();
+});
+test('rejected recipe recovery keeps its archive and creates a new identity without resurrecting a tombstone', async () => {
+  const store = await LocalStore.open(uuid()),
+    id = uuid();
+  await store.saveBatch([
+    { kind: 'recipe', id, value: { ...emptyRecipe(), title: 'Keep my edit' } },
+  ]);
+  const mutation = (await store.pending())[0].mutation;
+  await store.acknowledge({
+    mutation_id: mutation.mutation_id,
+    status: 'rejected_tombstone',
+    revision: 2,
+    conflict: true,
+  });
+  await store.merge(
+    [
+      {
+        kind: 'recipe',
+        entity_id: id,
+        revision: 2,
+        deleted: true,
+        payload: {},
+        updated_at: '2026-10-21T00:00:00Z',
+      },
+    ],
+    { cursor: 2, token },
+  );
+  await store.resolveRejected(id, true);
+  const recipes = await store.entities('recipe');
+  assert.equal(recipes.length, 1);
+  assert.notEqual(recipes[0].id, id);
+  assert.equal(recipes[0].payload.title, 'Keep my edit');
+  assert.equal((await store.pending())[0].mutation.base_revision, 0);
+  assert.equal((await store.archives())[0].outbox[0].mutation.entity_id, id);
+  store.close();
+});
+
+test('equal-revision deltas canonicalise accepted payloads and edits preserve the last known server copy', async () => {
+  const store = await LocalStore.open(uuid()),
+    id = uuid();
+  await store.merge(
+    [
+      {
+        kind: 'recipe',
+        entity_id: id,
+        revision: 1,
+        deleted: false,
+        payload: { ...emptyRecipe(), title: 'Server copy' },
+        updated_at: '2026-10-21T00:00:00Z',
+      },
+    ],
+    { cursor: 1, token },
+  );
+  await store.saveBatch([
+    { kind: 'recipe', id, value: { ...emptyRecipe(), title: 'Rejected edit' } },
+  ]);
+  const m = (await store.pending())[0].mutation;
+  await store.block(m.mutation_id, 'photo_upload_rejected');
+  await store.resolveRejected(id, false);
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Server copy');
+  await store.saveBatch([
+    { kind: 'recipe', id, value: { ...emptyRecipe(), title: 'Accepted local' } },
+  ]);
+  const m2 = (await store.pending())[0].mutation;
+  await store.acknowledge({
+    mutation_id: m2.mutation_id,
+    status: 'accepted',
+    revision: 2,
+    conflict: false,
+  });
+  await store.merge(
+    [
+      {
+        kind: 'recipe',
+        entity_id: id,
+        revision: 2,
+        deleted: false,
+        payload: { ...emptyRecipe(), title: 'Canonical server' },
+        updated_at: '2026-10-21T00:00:00Z',
+      },
+    ],
+    { cursor: 2, token },
+  );
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Canonical server');
+  store.close();
+});

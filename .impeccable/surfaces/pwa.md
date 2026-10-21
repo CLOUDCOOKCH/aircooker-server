@@ -6,8 +6,8 @@ is delegated by the master prompt. This adapts an established visual world, not 
 
 Visual authority: existing SwiftUI KitchenStyle/components and the user-approved glass
 concept at /workspace/generated_images/exec-d61616a4-31c5-4cbf-8f34-24d3ed52d35f.png.
-The image is labelled illustrative; it is not a product capture. Taste App collection
-c8f95424-62b2-4ed2-88f9-d7c7a79aac3e supplies supporting references. No new AI brief credit.
+The image is labelled illustrative; it is not a product capture. Supporting private design
+references apply to the conversation only; preserve the approved decisions, not private IDs.
 
 First viewport: Your kitchen heading and compact import/create actions, household civil-week
 strip, today's actual meals with one strong food photo when present, accessible empty-slot

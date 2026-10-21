@@ -1,11 +1,12 @@
 # aircooker-server
 
-**PWA-first delivery is now user-confirmed.** The primary web client is being implemented
-in `frontend/` and will ship inside this container. Its browser authentication and offline
-core are tested; the visible/installable PWA is still in development. The native iOS
-repository is retained for later. See [PWA progress and limits](docs/PWA_IMPLEMENTATION.md).
+**PWA-first delivery.** Open `/app/` on the configured HTTPS backend to use the primary
+installable browser application. Home, Calendar, Recipes, Pantry, Settings, offline editing,
+reviewed imports and two-device synchronisation have real Chromium acceptance coverage.
+The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
+and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md).
 
-Self-hosted household meal planning, with an independent native iOS companion.
+Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
 
@@ -67,6 +68,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
+| PWA | Functional development client, genuine reviewed desktop/phone captures, 31 offline/planning/sync tests and real Chromium flows; physical Safari and remaining features open |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
 | Recipes, photos, meals, pantry, leftovers and saved template records | Implemented; automated tests cover key paths |
@@ -83,5 +85,8 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.
 
-See the genuine [console desktop capture](docs/screenshots/admin-desktop.png) and
+See genuine [PWA desktop](docs/screenshots/pwa-home-desktop.png),
+[phone](docs/screenshots/pwa-home-phone.png) and [German dark calendar](docs/screenshots/pwa-calendar-phone-de-dark.png)
+captures of the explicitly isolated demo. The food artwork is illustrative; the screens are
+actual browser renders. Also see the genuine [console desktop capture](docs/screenshots/admin-desktop.png) and
 [German phone capture](docs/screenshots/admin-mobile-de.png), using synthetic household data.

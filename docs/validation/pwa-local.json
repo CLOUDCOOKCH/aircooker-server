@@ -1,0 +1,120 @@
+{
+  "format": "aircooker-pwa-local-validation",
+  "version": 1,
+  "date": "2026-10-21",
+  "source_status": "validated working tree; exact published commit/remote CI recorded separately",
+  "backend": {
+    "pytest": {
+      "passed": 146,
+      "warnings": 1,
+      "warning": "Starlette TestClient deprecates httpx; test-only warning"
+    },
+    "ruff_lint": true,
+    "ruff_format": true,
+    "mypy_modules": 26,
+    "openapi_drift": true,
+    "runtime_wheel_licence_baseline": true
+  },
+  "web": {
+    "unit_tests_passed": 31,
+    "typescript_strict": true,
+    "prettier": true,
+    "production_build": true,
+    "npm_audit_known_advisories": 0,
+    "generated_contract_sha256": "fd8e8de270aeadca3b0fcf0defa722ce49ccc016c4089b813dd1d9fb50e5c172",
+    "assets": [
+      {
+        "path": "frontend/dist/assets/index-42KcQD2T.js",
+        "sha256": "5559427826191a6b63c9b5b4d39253a3fcc15381f30523b67ef1dbb67b1071be"
+      },
+      {
+        "path": "frontend/dist/assets/index-xsZ2DTdl.css",
+        "sha256": "ccfe5df9783719b06be48ca849e90290b2f4697ef972fd4ae8edacb802a08492"
+      }
+    ]
+  },
+  "browser": {
+    "engine": "installed Chromium on Linux",
+    "data": "synthetic household and isolated demo; real API/IndexedDB/auth/job processing",
+    "scenarios": [
+      "offline save/reload",
+      "independent cookie sessions",
+      "server-commit conflict order",
+      "tombstone rejection and new-copy recovery",
+      "calendar assignment",
+      "cooked leftovers",
+      "pantry",
+      "explicit import preview/save",
+      "named planning dialog and restored opener focus",
+      "public-shell-only CacheStorage"
+    ],
+    "axe_tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21aa"
+    ],
+    "axe_screens": [
+      "Home desktop light",
+      "Home phone dark",
+      "Recipes phone dark",
+      "Settings phone German dark",
+      "Calendar phone German dark"
+    ],
+    "result": "passed"
+  },
+  "visual": {
+    "review": "docs/validation/pwa-visual-review.md",
+    "verdict": "docs/validation/pwa-visual-verdict.md",
+    "scope": "seven named captures/relevant source and two listed fixes; not full product acceptance",
+    "disposition": "ship at reviewed scope",
+    "fixes_resolved": 2,
+    "detector_executed": false,
+    "tool_limit": "design launcher/specialist resources unavailable; fresh manual review/documentation used",
+    "captures": [
+      {
+        "path": "docs/screenshots/pwa-calendar-phone-de-dark.png",
+        "sha256": "11aafe56e9a17b3ca8ddae61297f5668e2023221506a9ac938299ee5e091b4ab"
+      },
+      {
+        "path": "docs/screenshots/pwa-home-desktop.png",
+        "sha256": "a11a193d5507df5a28d413a8a1bcf7f34c0f20df52c37a66e1a0ca85aaf8c1fc"
+      },
+      {
+        "path": "docs/screenshots/pwa-home-phone-dark.png",
+        "sha256": "224dd67754a80682e567591c1dc8ff0612615736bec4b3aca7c5677ff1385660"
+      },
+      {
+        "path": "docs/screenshots/pwa-home-phone.png",
+        "sha256": "53d381c93860409197ea7ef27feead94dc53fb9592881ac001d3482373813b03"
+      },
+      {
+        "path": "docs/screenshots/pwa-recipes-phone-dark.png",
+        "sha256": "d6844db79ac9d667c55218ffa6b7e1ce4ee1ccbee009526a29a7d91e0f36422f"
+      },
+      {
+        "path": "docs/screenshots/pwa-settings-phone-de-dark.png",
+        "sha256": "bf11416e7f7665d93e00bbda7e395c103b30169bdde7cbbac3fa00bda0415e46"
+      },
+      {
+        "path": "docs/screenshots/pwa-welcome-desktop.png",
+        "sha256": "1227c7ce0b0a884e707eb1498c0124069d7c92137ebed283030cd2599dadf1d3"
+      }
+    ]
+  },
+  "docker": {
+    "smoke": "passed non-root/read-only real-HTTP bootstrap/auth/sync/photos/import preview/confirmation/restart/exports and public PWA shell/manifest/worker/icons",
+    "architecture": "local amd64 only; ARM64 validation is a separate CI gate",
+    "node": "build stage only; immutable multi-architecture node image digest pinned"
+  },
+  "source_secrets_scan": {
+    "scanner": "Gitleaks 8.28.0",
+    "result": "no leaks found"
+  },
+  "limits": [
+    "physical iPhone/Safari not exercised",
+    "live Bring/AI not exercised",
+    "Web Push/passkeys not implemented",
+    "complete product/release acceptance not satisfied",
+    "current runtime image vulnerabilities require exact-commit CI scan; older results are not reused"
+  ]
+}

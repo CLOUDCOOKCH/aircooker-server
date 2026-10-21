@@ -1,0 +1,360 @@
+"""Real Chromium PWA flows, local backend, synthetic household. No external-service doubles.
+
+Build frontend first. Captures are real renders; demo food is labelled illustrative.
+"""
+
+import json
+import os
+import shutil
+import socket
+import threading
+import time
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+import uvicorn
+from playwright.sync_api import expect, sync_playwright
+
+from aircooker.app import create_app
+
+
+def main():
+    with TemporaryDirectory(prefix="aircooker-pwa-") as temporary:
+        root = Path(temporary)
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", 0))
+            port = probe.getsockname()[1]
+        base = f"http://127.0.0.1:{port}"
+        os.environ["BASE_URL"] = base
+        app = create_app(root, run_worker=False)
+        server = uvicorn.Server(
+            uvicorn.Config(app, host="127.0.0.1", port=port, log_level="error", access_log=False)
+        )
+        thread = threading.Thread(target=server.run, daemon=True)
+        thread.start()
+        for _ in range(100):
+            if server.started:
+                break
+            time.sleep(0.05)
+        else:
+            raise RuntimeError("PWA server did not start")
+        captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", ".impeccable/review/round-1"))
+        captures.mkdir(parents=True, exist_ok=True)
+        try:
+            with sync_playwright() as playwright:
+                browser = playwright.chromium.launch(
+                    executable_path=os.environ.get("CHROMIUM_EXECUTABLE")
+                    or shutil.which("chromium")
+                    or shutil.which("google-chrome"),
+                    args=["--no-sandbox"],
+                )
+                errors = []
+                context = browser.new_context(
+                    viewport={"width": 1440, "height": 1000}, accept_downloads=True
+                )
+                page = context.new_page()
+                page.on("pageerror", lambda error: errors.append(str(error)))
+
+                axe = Path("frontend/node_modules/axe-core/axe.min.js").read_text()
+
+                def audit(name):
+                    page.evaluate(axe)
+                    result = page.evaluate(
+                        "async()=> (await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)}))"
+                    )
+                    assert result == [], (name, result)
+
+                def capture(name):
+                    if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                        page.evaluate(
+                            "async()=>{for(const image of document.images){if(image.complete)await image.decode().catch(()=>{});}}"
+                        )
+                        page.screenshot(
+                            path=str(captures / name), animations="disabled", full_page=True
+                        )
+
+                page.goto(base + "/app/")
+                expect(
+                    page.get_by_role("heading", name="A calmer kind of meal planning.")
+                ).to_be_visible()
+                capture("pwa-welcome-desktop.png")
+                page.get_by_role("button", name="Explore the demo").click()
+                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.locator(".featured-meal img")).to_be_visible()
+                audit("home desktop")
+                capture("pwa-home-desktop.png")
+                page.set_viewport_size({"width": 390, "height": 844})
+                capture("pwa-home-phone.png")
+                page.emulate_media(color_scheme="dark")
+                audit("home phone dark")
+                capture("pwa-home-phone-dark.png")
+                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                expect(page.get_by_role("heading", name="Recipes", exact=True)).to_be_visible()
+                audit("recipes phone dark")
+                capture("pwa-recipes-phone-dark.png")
+                page.get_by_role("button", name="Creamy tomato pasta", exact=False).first.click()
+                expect(page.get_by_role("heading", name="Creamy tomato pasta")).to_be_visible()
+                page.get_by_role("button", name="Edit", exact=True).click()
+                page.get_by_label("Recipe name", exact=True).fill("Demo pasta edited offline")
+                page.wait_for_function("!!navigator.serviceWorker.controller")
+                context.set_offline(True)
+                page.get_by_role("button", name="Save", exact=True).click()
+                expect(page.get_by_role("heading", name="Recipes", exact=True)).to_be_visible()
+                page.reload()
+                expect(
+                    page.get_by_role("button", name="Demo pasta edited offline", exact=False).first
+                ).to_be_visible()
+                context.set_offline(False)
+                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                page.get_by_label("Language", exact=True).select_option("de")
+                expect(page.get_by_role("heading", name="Einstellungen")).to_be_visible()
+                audit("settings phone German dark")
+                capture("pwa-settings-phone-de-dark.png")
+                page.get_by_role("navigation").get_by_role("button", name="Kalender").click()
+                expect(page.get_by_role("heading", name="Kalender", exact=True)).to_be_visible()
+                audit("calendar phone German dark")
+                capture("pwa-calendar-phone-de-dark.png")
+                page.get_by_role("button", name="Demo verlassen").first.click()
+                expect(
+                    page.get_by_role("heading", name="A calmer kind of meal planning.")
+                ).to_be_visible()
+                # Demo never created a server household or library.
+                assert not page.evaluate(
+                    "async()=> (await (await fetch('/api/v1/system/info')).json()).configured"
+                )
+                page.emulate_media(color_scheme="light")
+                page.get_by_role("button", name="Open your kitchen").click()
+                expect(page.get_by_role("heading", name="Set up your kitchen")).to_be_visible()
+                page.get_by_label("Username", exact=True).fill("cook")
+                page.get_by_label("Password", exact=True).fill("synthetic pwa kitchen password")
+                page.get_by_label("One-time setup token", exact=True).fill(
+                    (root / "config/setup-token").read_text()
+                )
+                page.get_by_label("Kitchen name", exact=True).fill("Browser kitchen")
+                page.get_by_label("Household time zone", exact=True).fill("Europe/Zurich")
+                page.get_by_role("button", name="Set up your kitchen", exact=True).click()
+                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible(
+                    timeout=15000
+                )
+                page.get_by_role("button", name="New recipe", exact=True).click()
+                page.get_by_label("Recipe name", exact=True).fill("Offline test soup")
+                page.get_by_role("button", name="Add ingredient", exact=True).click()
+                page.get_by_role("textbox", name="Ingredient 1", exact=True).fill("Carrots")
+                page.get_by_label("Quantity", exact=True).fill("1½")
+                page.get_by_label("Unit", exact=True).fill("kg")
+                page.get_by_role("button", name="Add step", exact=True).click()
+                page.get_by_label("Step 1", exact=True).fill("Simmer until tender.")
+                page.wait_for_function("!!navigator.serviceWorker.controller")
+                context.set_offline(True)
+                page.get_by_role("button", name="Save", exact=True).click()
+                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                expect(
+                    page.get_by_role("button", name="Offline test soup", exact=False)
+                ).to_be_visible()
+                page.reload()
+                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                expect(
+                    page.get_by_role("button", name="Offline test soup", exact=False)
+                ).to_be_visible()
+                context.set_offline(False)
+                page.get_by_role("button", name="Sync now", exact=True).click()
+                expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
+                assert page.evaluate(
+                    "async()=>{const r=await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}});const data=await r.json();return JSON.stringify(data).includes('Offline test soup');}"
+                )
+                # Second physical browser context = independent device session.
+                second_context = browser.new_context(viewport={"width": 1100, "height": 900})
+                second = second_context.new_page()
+                second.on("pageerror", lambda error: errors.append(str(error)))
+                second.goto(base + "/app/")
+                second.get_by_role("button", name="Open your kitchen").click()
+                second.get_by_label("Username", exact=True).fill("cook")
+                second.get_by_label("Password", exact=True).fill("synthetic pwa kitchen password")
+                second.get_by_role("button", name="Sign in", exact=True).click()
+                expect(second.get_by_role("heading", name="Your kitchen")).to_be_visible(
+                    timeout=15000
+                )
+                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                expect(
+                    second.get_by_role("button", name="Offline test soup", exact=False)
+                ).to_be_visible(timeout=15000)
+                second.get_by_role("button", name="Offline test soup", exact=False).click()
+                expect(second.locator(".ingredient-amount")).to_have_text("1.5 kg")
+                # Conflicting offline edits are ordered by server commits, then deletion
+                # blocks a stale edit instead of resurrecting the old identity.
+                context.set_offline(True)
+                page.get_by_role("button", name="Offline test soup", exact=False).click()
+                page.get_by_role("button", name="Edit", exact=True).click()
+                page.get_by_label("Recipe name", exact=True).fill("Device A committed last")
+                page.get_by_role("button", name="Save", exact=True).click()
+                expect(
+                    page.locator(".recipe-card").filter(has_text="Device A committed last")
+                ).to_be_visible()
+                second.get_by_role("button", name="Edit", exact=True).click()
+                second.get_by_label("Recipe name", exact=True).fill("Device B committed first")
+                second.get_by_role("button", name="Save", exact=True).click()
+                expect(
+                    second.locator(".recipe-card").filter(has_text="Device B committed first")
+                ).to_be_visible()
+                expect(second.locator(".connection-status")).to_have_text(
+                    "Up to date", timeout=15000
+                )
+                context.set_offline(False)
+                page.get_by_role("button", name="Sync now", exact=True).click()
+                expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                expect(
+                    second.locator(".recipe-card").filter(has_text="Device A committed last")
+                ).to_be_visible(timeout=15000)
+                second_context.set_offline(True)
+                second.locator(".recipe-card").filter(has_text="Device A committed last").click()
+                second.get_by_role("button", name="Edit", exact=True).click()
+                second.get_by_label("Recipe name", exact=True).fill(
+                    "Keep this rejected offline edit"
+                )
+                second.get_by_role("button", name="Save", exact=True).click()
+                expect(
+                    second.locator(".recipe-card").filter(
+                        has_text="Keep this rejected offline edit"
+                    )
+                ).to_be_visible()
+                page.locator(".recipe-card").filter(has_text="Device A committed last").click()
+                page.get_by_role("button", name="Delete", exact=True).click()
+                page.get_by_role("dialog").get_by_role("button", name="Delete", exact=True).click()
+                expect(
+                    page.get_by_role("heading", name="Your next favourite starts here.")
+                ).to_be_visible()
+                expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
+                second_context.set_offline(False)
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                expect(
+                    second.get_by_role("alert").filter(has_text="Changes need review")
+                ).to_be_visible(timeout=15000)
+                second.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                second.get_by_role("button", name="Keep recipe as a new copy", exact=True).click()
+                expect(second.locator(".connection-status")).to_have_text(
+                    "Up to date", timeout=15000
+                )
+                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                expect(
+                    second.locator(".recipe-card").filter(
+                        has_text="Keep this rejected offline edit"
+                    )
+                ).to_be_visible()
+                server_rows = second.evaluate(
+                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                )
+                assert (
+                    len(server_rows) == 1
+                    and server_rows[0]["payload"]["title"] == "Keep this rejected offline edit"
+                )
+                # Calendar assignment, cooked leftovers and pantry use actual local mutations.
+                second.locator(".recipe-card").filter(
+                    has_text="Keep this rejected offline edit"
+                ).click()
+                second.get_by_role("button", name="Plan a meal", exact=True).click()
+                plan = second.get_by_role("dialog", name="Plan a meal", exact=True)
+                planned_day = plan.locator('input[type="date"]').first.input_value()
+                plan.get_by_role("button", name="Save", exact=True).click()
+                expect(plan).not_to_be_visible()
+                expect(second.get_by_role("button", name="Plan a meal", exact=True)).to_be_focused()
+                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                expect(
+                    second.locator(".meal-open").filter(has_text="Keep this rejected offline edit")
+                ).to_be_visible()
+                second.get_by_role(
+                    "button", name="Edit Keep this rejected offline edit", exact=True
+                ).click()
+                second.get_by_role("button", name="Record leftovers", exact=True).click()
+                second.get_by_role("spinbutton", name="Remaining portions", exact=True).fill("2")
+                second.get_by_role("dialog").get_by_role(
+                    "button", name="Record leftovers", exact=True
+                ).last.click()
+                expect(second.get_by_role("dialog")).not_to_be_visible()
+                expect(second.locator(".leftovers-section")).to_contain_text("2 Remaining portions")
+                second.get_by_role("navigation").get_by_role("button", name="Pantry").click()
+                second.get_by_role("textbox", name="Staple name", exact=True).fill("Carrots")
+                second.get_by_role("button", name="Add", exact=True).click()
+                expect(second.locator(".pantry-item")).to_contain_text("Carrots")
+                expect(second.locator(".connection-status")).to_have_text(
+                    "Up to date", timeout=15000
+                )
+                server_meals = second.evaluate(
+                    "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                )
+                assert (
+                    len(server_meals) == 1
+                    and server_meals[0]["payload"]["cooked"]
+                    and server_meals[0]["payload"]["date"] == planned_day
+                )
+                # Import structured user-supplied content through the actual persistent job handler.
+                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                second.get_by_role("button", name="Import recipe", exact=True).click()
+                source = {
+                    "@context": "https://schema.org",
+                    "@type": "Recipe",
+                    "name": "Reviewed imported beans",
+                    "recipeYield": "2",
+                    "recipeIngredient": ["200 g beans"],
+                    "recipeInstructions": ["Simmer until tender."],
+                }
+                second.get_by_role("textbox", name="Recipe text", exact=True).fill(
+                    '<script type="application/ld+json">' + json.dumps(source) + "</script>"
+                )
+                second.get_by_role("button", name="Prepare preview", exact=True).click()
+                expect(second.locator(".import-job")).to_contain_text(
+                    "Preparing preview", timeout=15000
+                )
+                expect(second.locator(".connection-status")).to_have_text(
+                    "Up to date", timeout=15000
+                )
+                with app.state.database.connect() as db:
+                    job = dict(
+                        db.execute(
+                            "SELECT * FROM background_job WHERE kind='recipe.import' ORDER BY rowid DESC LIMIT 1"
+                        ).fetchone()
+                    )
+                app.state.process_job(job)
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                second.get_by_role("button", name="Review", exact=True).click(timeout=15000)
+                expect(second.get_by_role("heading", name="Review your import")).to_be_visible()
+                assert (
+                    second.evaluate(
+                        "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                    )
+                    == 1
+                )
+                second.get_by_label("Recipe name", exact=True).fill("Explicitly reviewed beans")
+                second.get_by_role("button", name="Save", exact=True).click()
+                expect(second.get_by_role("heading", name="Recipes", exact=True)).to_be_visible()
+                expect(second.locator(".connection-status")).to_have_text(
+                    "Up to date", timeout=15000
+                )
+                final_rows = second.evaluate(
+                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                )
+                assert len(final_rows) == 2 and any(
+                    row["payload"]["title"] == "Explicitly reviewed beans" for row in final_rows
+                )
+                second_context.close()
+                # Worker cache contains public shell assets, never authenticated API/media.
+                cached = page.evaluate(
+                    "async()=>{const result=[];for(const key of await caches.keys()){for(const request of await (await caches.open(key)).keys())result.push(new URL(request.url).pathname);}return result;}"
+                )
+                assert cached and all(path.startswith("/app/") for path in cached), cached
+                assert not errors, errors
+                assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+                context.close()
+                browser.close()
+                print(
+                    "PWA real-browser smoke passed: isolated demo, English/German dark/mobile, setup, offline edit/reload, exact fractions, independent cookie sessions, commit-ordered conflicts, deletion/rejected-copy recovery, meal assignment, cooked leftovers, pantry, explicit import review, axe WCAG checks and public-shell-only cache."
+                )
+        finally:
+            server.should_exit = True
+            thread.join(timeout=10)
+
+
+if __name__ == "__main__":
+    main()

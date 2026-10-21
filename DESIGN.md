@@ -1,0 +1,130 @@
+# aircooker PWA design reference
+
+This is the implementation snapshot for `frontend/`, dated 2026-10-21. The direction contract is [PRODUCT.md](PRODUCT.md) and the existing [PWA surface brief](.impeccable/surfaces/pwa.md). The independent native iOS app is retained for later. This document records the approved effortless, food-led, forest-green, system-type, iOS-like glass direction; it does not reopen design selection or replace the master product requirements. Surface mode remains recorded only in the surface brief.
+
+## Authority and evidence
+
+The user-approved glass concept supplied in the conversation is illustrative, not a running app capture. It and the established native KitchenStyle/components inform the visual continuity recorded here. The concept image is not a published repository artifact.
+
+The published [finish review](docs/validation/pwa-visual-review.md) and [fix verdict](docs/validation/pwa-visual-verdict.md) are the acceptance record. The verdict is **ship within the reviewed screenshot/source and two-fix scope**, with 2 resolved, 0 partial and 0 unresolved findings. It does not declare the complete product ready. The final matrix is seven genuine captures: [welcome desktop](docs/screenshots/pwa-welcome-desktop.png), [Home desktop](docs/screenshots/pwa-home-desktop.png), [Home phone light](docs/screenshots/pwa-home-phone.png), [Home phone dark](docs/screenshots/pwa-home-phone-dark.png), [Recipes phone dark](docs/screenshots/pwa-recipes-phone-dark.png), [German Settings phone dark](docs/screenshots/pwa-settings-phone-de-dark.png) and [German Calendar phone dark](docs/screenshots/pwa-calendar-phone-de-dark.png). Desktop viewport was 1440×1000 and phone viewport 390×844; full-document images retain fixed navigation at the original viewport position. Captures do not establish motion quality.
+
+[design.json](.impeccable/design.json) uses **aircooker's project-owned snapshot schema, version 1**. Its `tokens.cssCustomProperties` contains exact CSS strings, and its other token groups record literal implementation measurements. It is a documentation snapshot, not a runtime token source. The plugin schema, cloud design resources and shipped documentation specialist definition were unavailable. No plugin schema validation, automated design detector or design-hook pass is claimed. No generation prompt has been reconstructed.
+
+## Visual language and content
+
+Use warm food imagery against restrained neutral surfaces, with green reserved for primary actions, selection and relevant status. Keep reading and editing surfaces solid and legible. Reserve glass for floating navigation; modal backdrops may blur the surrounding scene. Do not add a marketing hero, invented metrics, ornamental dashboards, emoji icons, gradient type or decorative eyebrow headings to the operating UI. Preserve the approved food/card treatment.
+
+The first kitchen view combines the heading and compact create/import controls, civil-week strip, actual selected-day meals, useful empty-slot actions and visible demo/offline status. Selecting a day updates its meal composition while the week/navigation stay anchored. Preserve five destinations: Home, Calendar, Recipes, Pantry and Settings. Import and suggestion flows require review before explicit apply/save; local work and recovery state must remain understandable. Existing households never gain implicit sample recipes or meals.
+
+## Colour and elevation tokens
+
+Source of truth: [tokens.css](frontend/src/tokens.css). Dark values follow `prefers-color-scheme: dark`; `html` declares `color-scheme: light dark`. Change foreground/background pairs together rather than fading between themes.
+
+| CSS token | Light | Dark | Role |
+| --- | --- | --- | --- |
+| `--canvas` | `#f4f5f1` | `#151a17` | Page background |
+| `--surface` | `#ffffff` | `#202722` | Reading/editor/card surface |
+| `--ink` | `#1c231f` | `#f0f2ec` | Primary text |
+| `--muted` | `#626b64` | `#a4aea4` | Supporting copy/placeholders |
+| `--line` | `#dce1d9` | `#39423b` | Dividers and field outlines |
+| `--soft` | `#e9ede6` | `#2a332c` | Secondary controls/search |
+| `--hover` | `#e1e7dd` | `#354137` | Neutral hover |
+| `--green` | `#28533c` | `#a9cda8` | Primary action/active icon |
+| `--green-hover` | `#1a3e2a` | `#c6e4c0` | Primary action hover |
+| `--on-green` | `#ffffff` | `#18301e` | Primary action/selected-day text |
+| `--green-soft` | `#e5ede2` | `#273a2c` | Selection/suggestion background |
+| `--green-ink` | `#264633` | `#d2e4ce` | Suggestion/information heading |
+| `--green-muted` | `#52674f` | `#acbfa7` | Suggestion supporting text |
+| `--focus` | `#669967` | `#a9cda8` | Focus outline |
+| `--selection` | `#cdddc7` | `#3b563e` | Text selection |
+| `--glass` | `rgba(255, 255, 255, 0.76)` | `rgba(37, 47, 40, 0.8)` | Floating nav |
+| `--danger` | `#a0322d` | `#f2a49b` | Destructive action |
+| `--danger-soft` | `#f9e9e6` | `#482b29` | Error background |
+| `--danger-ink` | `#79241e` | `#f4c0b9` | Error copy |
+| `--warning-soft` | `#f0eadc` | `#373325` | Sync/update banner background |
+| `--warning-ink` | `#695427` | `#e4d7af` | Sync/update banner copy |
+
+| Elevation | Light | Dark |
+| --- | --- | --- |
+| `--glass-shadow` | `0 8px 32px rgba(24, 44, 27, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.8)` | `0 10px 36px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08)` |
+| `--sheet-shadow` | `0 18px 70px rgba(9, 24, 13, 0.2)` | `0 22px 80px rgba(0, 0, 0, 0.5)` |
+
+Navigation uses `blur(28px) saturate(155%)`, z-index 10. Sheets use a `rgba(15, 22, 17, 0.4)` backdrop with `blur(5px)`. Toasts use the glass shadow, inverse ink/canvas colours and z-index 30; the focus-only skip link uses z-index 100. Do not treat translucency as a substitute for contrast testing on actual composited backgrounds.
+
+## Typography, spacing and shape
+
+Source: [styles.css](frontend/src/styles.css:5). Use `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`; the system stack is intentional, with no required web font. Root size is 16px; controls inherit typography. Preserve scalable rem-based text and wrapping. Imported recipe text retains its original language; interface copy supports English/German and count-sensitive serving labels.
+
+| Role | Size | Weight | Line-height / tracking |
+| --- | --- | --- | --- |
+| Desktop h1 | `2.375rem` | 700 | `1.15 / -0.035em`, balanced wrapping |
+| h1 at ≤800px | `2rem` | 700 | Inherits h1 line-height/tracking |
+| h2 | `1.25rem` | 650 | `1.3 / -0.02em` |
+| h3 | `1rem` | 600 | `1.35` |
+| Body paragraph | Inherited `1rem` | Normal | `1.6` |
+| Button/field label | `0.875rem` | 600 / 550 | Inherits where unspecified |
+| Supporting text | Commonly `0.75–0.95rem` | Contextual | Usually `1.4–1.7` |
+| Welcome h1 | `2.75rem`, ≤800px `2.5rem`, ≤600px `2.375rem` | 700 | `1.12 / -0.035em` |
+
+Use section space larger than within-group space: section blocks 36px; heading-to-content commonly 16–24px; compact related controls 8–14px. These are observed CSS measurements, not a newly imposed universal scale. Common layout gaps are 20, 24, 28, 30, 36 and 44px. Preserve component-specific values instead of rounding every measurement to an invented grid.
+
+| Shape/measurement | Implemented value |
+| --- | --- |
+| Inputs | 11px radius; 12px 13px padding; minimum 46px height |
+| Primary/secondary buttons | 12px radius; 12px 20px padding; minimum 46px height; 9px icon gap |
+| IconButton default | 44×44px, circular; smaller local overrides exist |
+| Solid content cards/groups | Usually 16px radius |
+| Week day / calendar card | 14px radius |
+| Sheet | 20px radius; 24px padding, phone 20px |
+| Desktop nav / phone nav | 24px / 27px radius |
+| Recipe preview/thumb | 12px radius; meal thumb 10px |
+| Toast | 30px radius |
+
+Do not infer a universal 44px target guarantee: slot, calendar and editor controls have smaller overrides. Retain explicit labels and assess target size and text enlargement in future acceptance work.
+
+## Adaptive layout
+
+Source: [styles.css media rules](frontend/src/styles.css:1629). Breakpoints are CSS viewport pixels, inclusive as written; smaller maximum-width rules override earlier rules.
+
+| Rule | Implemented adaptation |
+| --- | --- |
+| Base desktop | App max 1660px; page max 1160px. Fixed sidebar width 196px, 24px outer inset; main margin-left 252px with 40px horizontal padding. Home columns `1.5fr / minmax(260px, 1fr)`, gap 36px; recipe grid 3 columns. |
+| ≥1550px | Main horizontal padding 55px; Home gap 44px; featured image 360px high. |
+| ≤1180px | Sidebar 172px, 18px inset; main margin-left 204px, horizontal padding 24px. Home `1.3fr / minmax(220px, 1fr)`, gap 24px. Recipes 2 columns; recipe previews one column; featured image 260px. Pantry rows wrap. |
+| ≤800px | Sidebar becomes bottom nav: width `min(520px, calc(100vw - 32px))`; bottom `max(16px, env(safe-area-inset-bottom))`; 5 horizontal labelled controls, minimum 55px height. Brand/household sidebar footer hidden. Main margin 0 and padding `10px 24px 100px`. H1 2rem. Home remains two columns until 600px; featured image 250px. Toast centered at bottom 100px. |
+| ≤600px | Main padding `8px 20px 108px`. Home, recipe detail, Settings and Imports become single column; Home gap 28px. Recipes become divided rows with 84×84px thumbnails. Calendar shows selected day only, with full-width meal rows. Header actions collapse to 44px icons with accessible names. Featured image 235px; detail image 245px. Banner/actions wrap and editor save spans width. |
+
+Base featured image height is 310px; base detail image 380px (320px at ≤800px). Calendar uses seven horizontally scrollable columns, minimum 165px each; at ≤800px minimum is 180px, before the ≤600px selected-day layout. Sheets are `min(540px, calc(100vw - 24px))` wide, max-height `calc(100dvh - 48px)` or phone `calc(100dvh - 32px)`, with internal overflow. Respect bottom safe areas and reserved content padding; do not use full-document capture position alone to diagnose fixed navigation.
+
+## Components and states
+
+Source: [components.tsx](frontend/src/components.tsx), [App.tsx](frontend/src/App.tsx), [Calendar.tsx](frontend/src/Calendar.tsx), [Recipes.tsx](frontend/src/Recipes.tsx), [Imports.tsx](frontend/src/Imports.tsx), [Pantry.tsx](frontend/src/Pantry.tsx) and [Settings.tsx](frontend/src/Settings.tsx).
+
+- **PageHeader:** one h1, optional subtitle/back action and compact create/import actions. Preserve a clear h1/body hierarchy without decorative headings.
+- **Navigation:** Lucide stroke icons with text; active destination uses `aria-current="page"`, green-soft background and green foreground. App uses icon size 22px, stroke 2 active / 1.6 inactive. Keep five destinations across layouts.
+- **WeekStrip:** seven civil dates, named previous/next-week controls, complete spoken date labels and `aria-pressed` selected state. Selected day uses green/on-green and a visible dot, with tabular day numerals.
+- **Meals/recipes:** use actual household records. Strong featured food imagery when present, image placeholders when unavailable, divided supporting meal rows and clear empty-slot actions. Recipe cards adapt to compact rows on phones.
+- **Forms:** visible labels, muted helper text, solid field surfaces, visible focus and explicit save/apply/cancel controls. Preserve line breaks and long imported text using wrapping. Keep import preview and save separate. Preserve drafts/outbox and avoid updating the app while an editor is active.
+- **Sheet:** native modal dialog with unique React `useId` heading reference through `aria-labelledby`, visible close control, native modal behavior, Escape routed through onClose and cleanup focus restoration to the opener. Planning and confirmation flows share this primitive.
+- **Loading:** boot icon/loading line plus text; content skeleton uses soft blocks. Loading line animation is 1.5s ease-out infinite. Do not substitute fabricated household records for loading/empty states.
+- **Offline/sync/recovery:** connection bar shows offline, syncing, pending count or synced state plus sync action. Error/blocked sync has a `role="alert"` banner linking to Settings; preserve rejected-copy/conflict/recovery actions and durable unsynchronised work. Updates are announced with an explicit apply action; editing disables that action.
+- **Feedback:** errors use danger-soft/danger-ink; warnings use warning-soft/warning-ink; notices use a `role="status"` toast. Disabled buttons use opacity 0.45 and default cursor. Disabled, loading and empty states should explain the next useful action in interface copy.
+- **Demo:** explicitly entered, isolated and visibly labelled, with an exit control. Never silently add illustrated samples to connected account data.
+
+## Accessibility and motion guidance
+
+The implementation includes a focus-only skip link, named icon buttons, native field controls, visible `3px solid var(--focus)` outlines with 4px offset, selected-day semantics and named modal headings. Preserve those relationships when extracting components. Decorative cooking-pot placeholders are hidden from assistive technology; `Photo` accepts alternative text, defaults to empty text and lazily loads local/cached media. Choose useful alt text when an image carries information beyond adjacent copy.
+
+Representative manual contrast evidence in the finish review: light muted/canvas 5.04:1, light search placeholder/soft 4.66:1, light suggestion copy 5.14:1; dark muted/surface 6.67:1, dark search placeholder 5.70:1, dark suggestion copy 6.23:1; primary text 8.78:1 light and 8.10:1 dark. This is a representative pair check, not measurement of every runtime combination. Continue to require body/placeholder contrast ≥4.5:1 and large text ≥3:1.
+
+Button theme changes intentionally have no transition. Icon/card background hover uses 180ms ease-out; selected-day emphasis uses 180ms `cubic-bezier(0.16, 1, 0.3, 1)` from scale 0.94/blur 0.3px to scale 1/blur 0. Reduced-motion CSS disables animation/transitions and smooth scrolling. Reduced transparency makes nav opaque and removes its blur; it also removes the standard sheet backdrop blur. Unsupported backdrop-filter makes navigation opaque. Preserve the fallbacks and test actual browser behavior rather than claiming static captures prove it. Provide explicit move/copy actions alongside any drag interaction.
+
+The published review records report passing Chromium functional smoke and captured-screen Axe WCAG 2 A/AA + 2.1 AA evidence. The exact-name “Plan a meal” browser assertion also checks modal closing and focus return ([smoke script](scripts/pwa_browser_smoke.py:257)). This documentation handoff inspected sources and review records; it did not rerun those browser checks. Complete keyboard, text enlargement, screen-reader, all-state contrast and physical iPhone/WebKit acceptance remain outside this finish evidence.
+
+## Assets and provenance
+
+See [provenance.json](frontend/public/art/provenance.json). `lemon-chicken.png` is original AI-generated project illustration reused from `aircooker-ios/App/Assets/DemoChicken.png`, source commit `f165c362106955db4405b5c4ce9b3fb25fbc3fd9`, generation `exec-b3e6fb11-5c8c-4b69-ae40-eb5dda3a6c00`. It is for the explicitly isolated demo only; it is not a real cooking photograph or product screenshot. PWA icons `icon-192.png`/`icon-512.png` reuse original artwork from `aircooker-ios/Design/AppIconSource.png` at the same commit, generation `exec-349b86a6-9e88-4e5a-98ad-a03789dd7b31`. Original prompts are unavailable and are not reconstructed. Household recipe media requires appropriate rights and remains distinct from demo assets.
+
+## Delivery limits
+
+This is a bounded visual/source documentation handoff. It does not establish complete original-master acceptance, physical iPhone/WebKit behavior, full native feature parity, complete accessibility compliance, Web Push, passkeys, QR UI, live Bring! or live AI verification. The PWA requires HTTPS, initial offline download/storage handling and reopening for automatic sync; native widgets remain deferred and incoming sharing uses paste/import or documented optional Shortcuts. Product and implementation records own functional status. This reference must not turn source presence or scoped review evidence into service/platform acceptance.

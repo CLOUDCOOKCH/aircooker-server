@@ -1,0 +1,9 @@
+{
+  "react": { "version": "19.3.1", "license": "MIT" },
+  "react-dom": { "version": "19.3.1", "license": "MIT" },
+  "scheduler": { "version": "0.28.0", "license": "MIT" },
+  "idb": { "version": "8.0.4", "license": "ISC" },
+  "decimal.js": { "version": "10.6.0", "license": "MIT" },
+  "lucide-react": { "version": "1.61.0", "license": "ISC" },
+  "vite": { "version": "8.3.5", "license": "MIT" }
+}

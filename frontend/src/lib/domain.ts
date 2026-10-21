@@ -34,7 +34,7 @@ export type Entity<K extends Kind = Kind> = {
   deleted: boolean;
   payload: Payloads[K];
   lastMutation?: string;
-  serverShadow?: Wire['Change'];
+  serverShadow?: Omit<Wire['Change'], 'updated_at'> & { updated_at?: string };
 };
 export type Mutation = Wire['Mutation'];
 export type Change = Wire['Change'];

@@ -367,3 +367,95 @@ def test_repetition_waits_for_all_available_recipes_despite_extreme_ratings(harn
             assert len(suggestions) == 7
             assert len({meal["recipe_id"] for meal in suggestions[:3]}) == 3
             assert len({meal["recipe_id"] for meal in suggestions[3:6]}) == 3
+
+
+def test_offline_preview_approval_is_atomic_replay_safe_and_checks_occupied_slots(
+    harness, mutation
+):
+    c, _, device, _ = harness
+    rid = library(c, device, mutation)[0]
+    payload = {"recipe_id": rid, "date": "2026-10-19", "category": "dinner", "servings": "2"}
+    body = {
+        "request_id": str(uuid4()),
+        "monday": "2026-10-19",
+        "basis": None,
+        "checkpoint": {"cursor": 0, "token": "root"},
+        "mutations": [mutation(device, kind="meal", payload=payload)],
+    }
+    accepted = c.post("/api/v1/suggestions/apply", json=body)
+    assert accepted.status_code == 200, accepted.text
+    assert c.post("/api/v1/suggestions/apply", json=body).json() == accepted.json()
+    other = {
+        **body,
+        "request_id": str(uuid4()),
+        "mutations": [mutation(device, kind="meal", payload=payload)],
+    }
+    failed = c.post("/api/v1/suggestions/apply", json=other)
+    assert (
+        failed.status_code == 409 and failed.json()["error"]["code"] == "suggestion_slot_occupied"
+    )
+    assert len(c.get("/api/v1/calendar/meals").json()["items"]) == 1
+
+
+def test_offline_approval_history_mismatch_never_creates_meals(harness, mutation):
+    c, _, device, _ = harness
+    rid = library(c, device, mutation)[0]
+    body = {
+        "request_id": str(uuid4()),
+        "monday": "2026-10-19",
+        "basis": None,
+        "checkpoint": {"cursor": 1, "token": "b" * 32},
+        "mutations": [
+            mutation(
+                device,
+                kind="meal",
+                payload={
+                    "recipe_id": rid,
+                    "date": "2026-10-19",
+                    "category": "dinner",
+                    "servings": "2",
+                },
+            )
+        ],
+    }
+    result = c.post("/api/v1/suggestions/apply", json=body)
+    assert result.status_code == 409 and result.json()["error"]["code"] == "sync_history_changed"
+    assert c.get("/api/v1/calendar/meals").json()["items"] == []
+
+
+def test_existing_native_suggestion_receipt_fingerprints_remain_replayable(harness, mutation):
+    import hashlib
+    from datetime import date
+    from uuid import UUID
+
+    from aircooker.models import Model, Mutation
+
+    class LegacyApproval(Model):
+        request_id: UUID
+        monday: date
+        basis: str
+        mutations: list[Mutation]
+
+    c, app, device, _ = harness
+    library(c, device, mutation)
+    preview = c.post("/api/v1/suggestions/weekly?monday=2026-10-19").json()
+    body = {
+        "request_id": str(uuid4()),
+        "monday": preview["monday"],
+        "basis": preview["basis"],
+        "mutations": [mutation(device, kind="meal", payload=preview["meals"][0])],
+    }
+    # Reasons are preview-only, not part of the native Meal mutation.
+    body["mutations"][0]["payload"].pop("reasons", None)
+    accepted = c.post("/api/v1/suggestions/apply", json=body)
+    assert accepted.status_code == 200, accepted.text
+    old_fingerprint = hashlib.sha256(
+        LegacyApproval.model_validate(body).model_dump_json().encode()
+    ).hexdigest()
+    with app.state.database.transaction() as db:
+        db.execute(
+            "UPDATE suggestion_application SET fingerprint=? WHERE id=?",
+            (old_fingerprint, body["request_id"]),
+        )
+    replay = c.post("/api/v1/suggestions/apply", json=body)
+    assert replay.status_code == 200 and replay.json() == accepted.json()

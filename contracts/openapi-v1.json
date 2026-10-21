@@ -1572,9 +1572,26 @@
         "additionalProperties": false,
         "properties": {
           "basis": {
-            "pattern": "^[a-f0-9]{64}$",
-            "title": "Basis",
-            "type": "string"
+            "anyOf": [
+              {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Basis"
+          },
+          "checkpoint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SyncAnchor"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "monday": {
             "format": "date",
@@ -1599,7 +1616,6 @@
         "required": [
           "request_id",
           "monday",
-          "basis",
           "mutations"
         ],
         "title": "SuggestionApply",

@@ -47,3 +47,15 @@ SQLite are system components. XcodeGen/Mint and build tooling still require thei
 inventory. AI/Bring service terms, social-source access policies, Apple review requirements
 and recipe/image rights remain separate reviews. Do not publish a stable image or app
 until the documented release-acceptance gate covers these remaining checks.
+
+## Browser client
+
+`frontend/licenses/bundled.json` pins the reviewed declarations/versions for six bundled
+runtime JavaScript packages plus Vite's generated preload helper. The build recursively
+checks runtime dependency names, rejects version/licence drift, copies complete attribution
+texts (including Lucide's inherited icon notices), and emits `THIRD_PARTY_NOTICES.txt` plus
+`dependency-licenses.json` into the public client. Type-only packages are not bundled.
+This is a reproducible attribution/declaration check, not full legal clearance. npm's locked
+full dependency graph is audited separately in CI; Node and build packages are absent from
+the final Python runtime image. Continue the existing OS/bundled-library/source obligations
+review before stable distribution.

@@ -205,3 +205,202 @@ test('the isolated demo cannot construct network work even with an API client su
   );
   store.close();
 });
+
+test('offline suggestion approval replays the immutable whole group after a partial local acknowledgement', async () => {
+  const instance = uuid(),
+    store = await LocalStore.open(instance),
+    recipeID = uuid();
+  await store.saveBatch([
+    { kind: 'recipe', id: recipeID, value: { ...emptyRecipe(), title: 'Soup' } },
+  ]);
+  const first = (await store.pending())[0];
+  await store.acknowledge({
+    mutation_id: first.mutation.mutation_id,
+    status: 'accepted',
+    revision: 1,
+    conflict: false,
+  });
+  const device = await store.device();
+  await store.saveBatch(
+    [0, 1].map((i) => ({
+      kind: 'meal' as const,
+      id: uuid(),
+      value: {
+        recipe_id: recipeID,
+        date: `2026-10-${19 + i}`,
+        category: 'dinner' as const,
+        servings: '2',
+        order: 0,
+        cooked: false,
+        recurrence: null,
+        leftover_id: null,
+      },
+    })),
+    { suggestion: { request_id: uuid(), monday: '2026-10-19', basis: null } },
+  );
+  const queue = await store.pending(),
+    group = queue[0].approval!;
+  assert.deepEqual(queue[1].approval, group);
+  await store.acknowledge({
+    mutation_id: queue[0].mutation.mutation_id,
+    status: 'accepted',
+    revision: 2,
+    conflict: false,
+  });
+  let calls = 0;
+  const api = {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: instance,
+          cursor: 0,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      if (path.endsWith('/suggestions/apply')) {
+        assert.deepEqual(JSON.parse(String(init?.body)), group);
+        calls++;
+        return group.mutations.map((mutation, i) => ({
+          mutation_id: mutation.mutation_id,
+          status: 'accepted',
+          revision: 2 + i,
+          conflict: false,
+        })) as T;
+      }
+      if (path.includes('/pull'))
+        return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+      throw new Error(path);
+    },
+    async upload() {
+      throw new Error('No upload expected');
+    },
+  };
+  await new SyncEngine(store, api).synchronise();
+  assert.equal(calls, 1);
+  assert.equal((await store.pending()).length, 0);
+  store.close();
+});
+test('a colliding suggestion group stays blocked and can be archived without removing server meals', async () => {
+  const instance = uuid(),
+    store = await LocalStore.open(instance),
+    recipeID = uuid();
+  await store.saveBatch([
+    { kind: 'recipe', id: recipeID, value: { ...emptyRecipe(), title: 'Soup' } },
+  ]);
+  const first = (await store.pending())[0];
+  await store.acknowledge({
+    mutation_id: first.mutation.mutation_id,
+    status: 'accepted',
+    revision: 1,
+    conflict: false,
+  });
+  const requestID = uuid(),
+    device = await store.device();
+  await store.saveBatch(
+    [
+      {
+        kind: 'meal',
+        id: uuid(),
+        value: {
+          recipe_id: recipeID,
+          date: '2026-10-19',
+          category: 'dinner',
+          servings: '2',
+          order: 0,
+          cooked: false,
+          recurrence: null,
+          leftover_id: null,
+        },
+      },
+    ],
+    { suggestion: { request_id: requestID, monday: '2026-10-19', basis: null } },
+  );
+  const api = {
+    async request<T>(path: string): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: instance,
+          cursor: 0,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      if (path.endsWith('/apply')) throw new APIError('suggestion_slot_occupied', 409);
+      return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+    },
+    async upload() {},
+  };
+  const result = await new SyncEngine(store, api).synchronise();
+  assert.equal(result.blocked, 1);
+  assert.equal((await store.pending())[0].blocked, 'suggestion_slot_occupied');
+  await store.archiveSuggestion(requestID);
+  assert.equal((await store.pending()).length, 0);
+  assert.equal((await store.entities('meal')).length, 0);
+  assert.equal((await store.entities('recipe')).length, 1);
+  assert.equal((await store.archives())[0].entities.length, 1);
+  store.close();
+});
+
+test('a permanently rejected photo cannot poison unrelated outgoing recipes', async () => {
+  const instance = uuid(),
+    store = await LocalStore.open(instance),
+    imageID = uuid(),
+    badID = uuid(),
+    goodID = uuid(),
+    device = await store.device();
+  await store.saveBatch(
+    [
+      {
+        kind: 'recipe',
+        id: badID,
+        value: { ...emptyRecipe(), title: 'Photo needs retry', image_id: imageID },
+      },
+      { kind: 'recipe', id: goodID, value: { ...emptyRecipe(), title: 'Unrelated recipe' } },
+    ],
+    { photos: [{ id: imageID, blob: new Blob(['image'], { type: 'image/png' }), pending: true }] },
+  );
+  let pushes = 0,
+    uploads = 0;
+  const api = {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: instance,
+          cursor: 0,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      if (path.endsWith('/push')) {
+        const body = JSON.parse(String(init?.body)) as Wire['Push'];
+        assert.equal(body.mutations[0].entity_id, goodID);
+        pushes++;
+        return [
+          {
+            mutation_id: body.mutations[0].mutation_id,
+            status: 'accepted',
+            revision: 1,
+            conflict: false,
+          },
+        ] as T;
+      }
+      return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+    },
+    async upload() {
+      uploads++;
+      throw new APIError('image_too_large', 413);
+    },
+  };
+  await new SyncEngine(store, api).synchronise();
+  assert.equal(pushes, 1);
+  assert.equal(uploads, 1);
+  assert.equal((await store.pending()).length, 1);
+  assert.equal((await store.pending())[0].blocked, 'photo_upload_rejected');
+  await new SyncEngine(store, api).synchronise();
+  assert.equal(uploads, 1);
+  await store.retryPhotos();
+  assert.equal((await store.pending())[0].blocked, undefined);
+  assert.equal((await store.photo(imageID))?.error, undefined);
+  store.close();
+});

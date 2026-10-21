@@ -102,6 +102,12 @@ def main():
         else:
             raise RuntimeError("Container readiness timed out")
         assert docker("inspect", "--format", "{{.Config.User}}", name) == "10001:10001"
+        shell = request(base, "/app/")
+        assert b"manifest.webmanifest" in shell and b"/app/assets/" in shell
+        assert json.loads(request(base, "/app/manifest.webmanifest"))["start_url"] == "/app/"
+        worker = request(base, "/app/sw.js")
+        assert b"aircooker-shell-" in worker and b"/api/v1/" not in worker
+        assert request(base, "/app/icon-192.png").startswith(b"\x89PNG")
         token = docker("exec", name, "cat", "/data/config/setup-token")
         device = str(uuid4())
         credentials = {

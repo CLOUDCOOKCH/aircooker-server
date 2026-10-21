@@ -1,5 +1,16 @@
 # Changelog
 
+- Deliver the primary installable PWA at `/app/` in the existing container, with the approved
+  food/glass visual direction, system light/dark appearance and English/German controls.
+- Add recipe editing/drafts/photos/scaling/nutrition, calendar/recurrence/copy/templates,
+  leftovers/pantry, local suggestion previews and explicit import review.
+- Preserve offline work through transactional IndexedDB records/outbox/photos/drafts,
+  grouped suggestion approvals, rejected-photo isolation, tombstones and archived recovery.
+- Exercise real browser setup, offline reload, two-device ordering/deletion recovery,
+  planning/pantry/import workflows and automated accessibility checks in CI.
+- Package only public client assets in the service-worker allowlist; keep auth in isolated
+  rotating HttpOnly cookies and ship browser dependency notices with a version/licence gate.
+
 - Record the user-confirmed PWA-first delivery decision while retaining native iOS code.
 - Add isolated HttpOnly browser sessions/bootstrap, transactional import history checks and
   a typed IndexedDB/outbox/sync foundation with authentication and offline safety tests.

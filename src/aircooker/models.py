@@ -267,7 +267,8 @@ class SuggestionPreview(Model):
 class SuggestionApply(Model):
     request_id: UUID
     monday: date
-    basis: str = Field(pattern=r"^[a-f0-9]{64}$")
+    basis: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    checkpoint: SyncAnchor | None = None
     mutations: list[Mutation] = Field(min_length=1, max_length=21)
 
 

@@ -1,5 +1,13 @@
 # Implementation checklist and evidence
 
+**Delivery update, 2026-10-21:** the user chose PWA-first and retained native code for later.
+The primary client is `frontend/`, served by this same container at `/app/`; no third
+repository/service is required. See PWA.md and PWA_IMPLEMENTATION.md for current browser
+coverage and limits. The original native-phase roadmap below is historical; native
+signing/TestFlight is deferred rather than a PWA blocker. Latest native source f165c36
+passed 90 core tests, native app/Share/Widget compilation and simulator demo/onboarding/
+German light/dark flows in run 39566779970. Physical-device capabilities remain unverified.
+
 Status vocabulary: **tested** means executed automated/local checks; **unverified** means
 code exists but its relevant platform/service was not exercised; **partial** means known
 requirements are missing; **planned** means no functional delivery is claimed.
@@ -57,9 +65,24 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-136 backend tests and 85 Swift core tests pass; diagnostics redaction/count/filter tests pass. Native app/Share/Widget compilation and foundation simulator onboarding have passed on GitHub; the new offline demo UI run remains in progress. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. The new Alpine runtime passed real-HTTP Docker smoke checks and Trivy 0.70.0 reports
-zero HIGH/CRITICAL findings without ignoring unfixed issues. Native AMD64/ARM64 tests, Docker smoke checks, secret scans and vulnerability scans
-passed on GitHub run 39559444646 for parser commit 9b4fe3c (129 tests per architecture); current diagnostics changes await their own run. The previous Debian image retained
-44 high matches across eight advisories and is preserved as historical evidence.
-See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected
-environment variable `RELEASE_ACCEPTANCE_VERIFIED=true` and are not enabled by these results.
+The current PWA integration passes 146 backend tests and 31 web core tests locally,
+Ruff lint/format, Python types, generated OpenAPI drift, strict TypeScript/format, the
+Python licence baseline and full npm advisory audit (zero known advisories observed).
+Real Chromium covers isolated demo, EN/DE light/dark phone/desktop, secure setup, offline
+recipe save/reload, independent cookie sessions, server-ordered conflicts, deletion with
+rejected-edit recovery, calendar assignment, cooked leftovers, pantry and explicit import
+review/confirmation. Axe checks pass on the stated Home/Recipes/Settings/Calendar screens;
+full manual accessibility and real iPhone/Safari are separate gates.
+
+An independent visual/source review and one bounded fix pass scored dialog naming and
+singular/localised serving copy resolved. Its scope is the captured screens and listed
+fixes, not complete product acceptance. The design launcher/detector were unavailable;
+manual review does not pretend they passed. Genuine screenshots and asset provenance are
+recorded in the PWA validation material. Current Docker smoke/security CI is recorded
+separately for the exact image/commit; do not apply earlier green runs to a newer tree.
+
+The overall project remains partial. Web Push, shared recommendation preferences/learning,
+period-bound pantry overrides, complete archive reconstruction, broader source/media import,
+admin deletion/destructive replacement, safe cleanup and release validation remain engineering
+work. Live Bring!/AI accounts and physical browser devices are external validation gaps.
+No stable release or protected release acceptance is enabled by these development results.

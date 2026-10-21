@@ -42,8 +42,8 @@ account, payments, analytics or tracking. Third-party AI is optional and needs e
 ## Brand Commitments
 
 aircooker. The user approved an iOS-like glass design and requested the same design in the
-PWA: effortless controls, food-led content and uncluttered navigation. Preserve the Taste
-collection App (c8f95424-62b2-4ed2-88f9-d7c7a79aac3e); references apply to this project only.
+PWA: effortless controls, food-led content and uncluttered navigation. Preserve the approved
+visual decisions; the private design references were supplied for the conversation only.
 
 ## Evidence on Hand
 

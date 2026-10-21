@@ -285,7 +285,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
         )
         response.headers["Cache-Control"] = "no-store"
         if request.url.scheme == "https":
@@ -1008,4 +1008,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             )
 
     register_pwa_auth(app, database, login, setup)
+    from fastapi.staticfiles import StaticFiles
+
+    packaged_pwa = Path(__file__).parent / "web" / "pwa"
+    development_pwa = Path(__file__).resolve().parents[2] / "frontend" / "dist"
+    pwa = packaged_pwa if packaged_pwa.is_dir() else development_pwa
+    if (pwa / "index.html").is_file():
+        app.mount("/app", StaticFiles(directory=pwa, html=True), name="pwa")
     return app

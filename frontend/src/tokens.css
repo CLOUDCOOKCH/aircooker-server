@@ -1,0 +1,52 @@
+:root {
+  --canvas: #f4f5f1;
+  --surface: #ffffff;
+  --ink: #1c231f;
+  --muted: #626b64;
+  --line: #dce1d9;
+  --soft: #e9ede6;
+  --hover: #e1e7dd;
+  --green: #28533c;
+  --green-hover: #1a3e2a;
+  --on-green: #ffffff;
+  --green-soft: #e5ede2;
+  --green-ink: #264633;
+  --green-muted: #52674f;
+  --focus: #669967;
+  --selection: #cdddc7;
+  --glass: rgba(255, 255, 255, 0.76);
+  --glass-shadow: 0 8px 32px rgba(24, 44, 27, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --sheet-shadow: 0 18px 70px rgba(9, 24, 13, 0.2);
+  --danger: #a0322d;
+  --danger-soft: #f9e9e6;
+  --danger-ink: #79241e;
+  --warning-soft: #f0eadc;
+  --warning-ink: #695427;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #151a17;
+    --surface: #202722;
+    --ink: #f0f2ec;
+    --muted: #a4aea4;
+    --line: #39423b;
+    --soft: #2a332c;
+    --hover: #354137;
+    --green: #a9cda8;
+    --green-hover: #c6e4c0;
+    --on-green: #18301e;
+    --green-soft: #273a2c;
+    --green-ink: #d2e4ce;
+    --green-muted: #acbfa7;
+    --focus: #a9cda8;
+    --selection: #3b563e;
+    --glass: rgba(37, 47, 40, 0.8);
+    --glass-shadow: 0 10px 36px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --sheet-shadow: 0 22px 80px rgba(0, 0, 0, 0.5);
+    --danger: #f2a49b;
+    --danger-soft: #482b29;
+    --danger-ink: #f4c0b9;
+    --warning-soft: #373325;
+    --warning-ink: #e4d7af;
+  }
+}

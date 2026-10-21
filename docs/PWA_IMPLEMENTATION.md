@@ -1,64 +1,72 @@
 # PWA-first implementation and evidence
 
-User-confirmed direction, 2026-10-21: make the PWA primary and retain the native iOS code for
-later. ADR 010 and PRODUCT.md supersede the original native-only distribution requirements.
-All other recipe/planning/security/privacy requirements remain in force. No third mandatory
-repository or running infrastructure service is introduced.
+Explicit user decision, 2026-10-21: PWA-first; keep native code for later. ADR 010 and
+PRODUCT.md replace native-only delivery/signing requirements. Other master product,
+security, privacy and reliability requirements still apply. This is a functional development
+client, not a declaration that the entire project or release checklist is finished.
 
-## Delivered foundation
+## Implemented and tested
 
-- Secure, HttpOnly, rotating browser session cookies, distinct from console cookies and
-  compatible with native bearer sessions. Explicit origin/CSRF checks and token-free JSON.
-- PWA bootstrap protected by the same local one-time token and transactionally locked setup.
-- Credential expiry/logout/replay and Unicode username checks: six backend tests pass.
-- Optional sync-history headers make reviewed import confirmation transactional with its
-  history check; a backend test proves a mismatched/incomplete proof creates no recipe.
-- React/TypeScript/Vite dependencies are pinned with an npm integrity lock. TypeScript 5.9.3
-  satisfies the API generator's declared peer range; no forced peer dependency bypass.
-- TypeScript API types are generated from canonical OpenAPI, with CI drift checks.
-- IndexedDB records, outbox, photos and editor-draft removal share a transaction. Complete
-  snapshots validate before commit; leftovers cannot be overbooked by competing tabs.
-- Foreground sync validates server identity/history before uploads, checks receipts, keeps
-  rejected drafts/queues and isolates permanent import errors. Demo sync is guarded off.
-- Nineteen Node tests using fake IndexedDB pass. Strict types/format checks pass. npm reports
-  no known advisories in the current full lock, not a guarantee of absence of vulnerabilities.
+- Same-container `/app/` client and focused original administration console at `/`.
+- Onboarding/setup, one-time administrator token, isolated Secure/HttpOnly rotating browser
+  credentials, CSRF/origin checks and independent device sessions. No JS-stored auth secrets.
+- Home, Calendar, Recipes, Pantry and Settings in the approved food/glass direction. Native
+  code and original artwork retained independently; explicit demo never touches household APIs.
+- Recipe editor/detail, searchable library, draft persistence, selected photos, fractions/
+  decimals/ranges, proportional ingredient scaling, original source/provenance/notes/rating,
+  optional nutrition editing. Nutrition is preserved as supplied, not inferred or rescaled.
+- Civil-week planning, accessible assignment/move/duplicate/remove/cooked controls, drag
+  alternative, bounded recurrence/exceptions, day/week copy, saved templates and leftovers.
+- Basic pantry and local ratings/history/variety/leftover recommendations with preview approval.
+- Durable import requests, polling, editable previews, explicit AI content consent, manual
+  source/text fallback and cancellation delivery. No auto-save of extraction results.
+- IndexedDB records/outbox/photos/draft removal commit atomically. Web Locks serialise sync
+  across tabs; history/identity checks precede uploads/pushes; receipts are validated.
+- Grouped suggestions replay the immutable full request after partial local acknowledgement;
+  server slot collisions reject atomically and keep the local plan available for review.
+- Rejected-photo isolation preserves unrelated outgoing work. Tombstones, rejected-copy
+  recovery, retained server snapshots and explicit archived history rebuild preserve edits.
+- Public-only service-worker shell, install manifest/icons, explicit updates, persisted-storage
+  request and browser recovery export with photos. API/auth/media are never in its cache.
+- English/German, light/dark, keyboard focus, named dialogs, reduced-motion and opaque fallbacks.
+- Browser dependency attribution/version gate; Node remains build-only, not a runtime service.
 
-These are foundation tests, not evidence of an installed/running PWA. The full expanded backend suite passes: 143 tests. Ruff lint/format, mypy, OpenAPI drift,
-frontend strict types/format, all 19 offline/API tests and the full npm advisory audit pass
-locally. Remote CI and real-browser integration remain separate gates.
+Evidence: **146 backend tests**, **31 web core tests**, lint/types/format/OpenAPI/licence checks
+and zero known npm advisories pass locally. Real Chromium smoke covers setup, offline recipe
+save/reload, fractions, two-device commit ordering, deletion/rejected-copy recovery, meal
+assignment, cooked leftovers, pantry, explicit import preview/save and cache separation.
+The same script passes Axe WCAG2 A/AA and 2.1AA checks on its stated screens. Domain/unit
+tests cover recurrence/copy/templates/suggestions; not every source control has browser E2E.
 
-## Work still required
+The independent visual/source reviewer inspected seven genuine desktop/phone/light/dark/DE
+captures. One bounded pass fixed dialog names and singular serving copy; the reviewer scored
+both resolved at that scope. The design plugin's launcher/specialist resources became
+unavailable; the handoff used a fresh manual reviewer and no detector pass is claimed.
 
-- [ ] Visible glass/food interface: Home, Calendar, Recipes, Pantry, Settings and onboarding.
-- [ ] Real cookie-auth browser connection and two-device, restart/offline sync scenarios.
-- [ ] Recipe editor/detail, scaling, image preparation/cache, original attribution/nutrition.
-- [ ] Date-only recurring calendar, move/copy/duplication, weekly templates and leftovers.
-- [ ] Pantry exclusions, local weekly suggestions, review-before-apply and shared preferences.
-- [ ] Durable import UI, editable preview, explicit AI consent and reliable cancellation.
-- [ ] Server-history rebuild and rejected-mutation recovery/export with preserved local data.
-- [ ] Manifest/icons, service worker, safe updates, install guidance and storage failure UX.
-- [ ] Opt-in Web Push reminders, with browser-platform limitations documented.
-- [ ] One-container static build/serving, Docker/browser tests and multi-architecture CI.
-- [ ] EN/DE, keyboard/screen-reader/large-text/light-dark and actual iPhone verification.
-- [ ] Dependency attribution/security review, release docs and remaining master checklist.
+## Partial, unverified or planned
 
-No incoming iPhone Share Target or pure-PWA WidgetKit capability is claimed. Use URL/text
-paste/import; an optional Shortcut may be documented. Face ID via passkeys would require
-separate implementation and differs from the deferred native local biometric lock.
+- [ ] Physical iPhone/Safari Home Screen install, storage eviction/lifecycle, standalone safe
+      areas, real keyboard/VoiceOver/large-text/reduced-transparency and broader browser testing.
+- [ ] Opt-in Web Push reminders and delivery/retry/permission management. No notification
+      settings pretend this exists. Passkeys are also not implemented.
+- [ ] Shared household recommendation preferences and acceptance learning.
+- [ ] Week-bound pantry shopping overrides: the existing boolean does not expire itself.
+- [ ] Guided non-recipe archive reconstruction and automatic browser-recovery JSON import;
+      current archives/exports preserve data but these recovery paths remain manual.
+- [ ] Template rename/slot editing, full recurrence browser acceptance and expanded suggestion
+      collision UX/testing beyond tested atomic grouping/recovery.
+- [ ] Source-photo import, broader HTML/caption/transcript extraction, language/quantity cases.
+      Unsupported sources retain manual/AI fallback; no access-control bypasses are implemented.
+- [ ] Live Bring!/AI compatibility and external response/error verification. Bring mutations
+      remain capability-guarded; synthetic tests do not establish live compatibility.
+- [ ] Original master backend work: safe cleanup/retention, admin deletion/destructive replacement,
+      remaining typed API/quotas/security/load review, backups/release compatibility and docs.
+- [ ] Exact-commit AMD64/ARM64/security/browser CI evidence, stable image/release and reproducibility
+      acceptance. Earlier green native/backend runs are historical, not current PWA proof.
 
-## Development checks
+iPhone incoming Web Share Target, native local notifications/biometric lock and WidgetKit
+are deferred native capabilities, not promised pure-PWA functions. Foreground/reopen sync
+and connected opt-in Web Push are the chosen browser constraints. Do not claim full native
+feature parity or completed product acceptance.
 
-Node 24+ and the backend's Python environment, without a Mac:
-
-```sh
-cd frontend
-npm ci --ignore-scripts
-npm run api:generate
-npm run typecheck
-npm run format:check
-npm test
-npm audit --audit-level=high
-```
-
-The UI build/installation flow is not ready at this foundation stage. Do not present an
-illustrative design image as a running PWA capture or mark the app release-ready.
+See PWA.md for installation, development, behavior and recovery-format/security details.
