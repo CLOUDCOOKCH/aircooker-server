@@ -134,7 +134,7 @@ def main():
         assert identity["id"] == identity["scope"] == "/app/"
         assert identity["icons"][0]["src"] == "/app/brand/icon-192-v1.png"
         assert any(icon["purpose"] == "maskable" for icon in identity["icons"])
-        brand = json.loads(request(base, "/app/brand/provenance.json"))
+        brand = request(base, "/app/brand/provenance.json")
         for path, expected in brand["outputs"].items():
             content = request(base, "/app/" + path)
             assert hashlib.sha256(content).hexdigest() == expected["sha256"]
