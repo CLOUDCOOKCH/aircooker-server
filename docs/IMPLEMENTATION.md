@@ -18,7 +18,7 @@ phases have passed every acceptance gate.
 | 5 Bring | SDK adapter, encrypted credentials, list selection API, projection, UUID ownership/replay/purchase/rollover tests, durable retries | Synthetic connector tests; live unverified; browser configuration tested with doubles; additional purchased requirement semantics incomplete |
 | 6 Imports/AI | Public HTTPS safety, JSON-LD drafts, import review confirmation, idempotent requests, encrypted admin configuration, synthetic connection probes, request budgets, text AI provider adapters, share inbox and review UI sources | Partial: source-specific captions/transcripts, ingredient parsing, live providers, image extraction, native lifecycle validation |
 | 7 UX | Dashboard/start-screen settings, system appearance, native components, localisation, 14-day widget cache/deep links and opt-in local reminder settings/reconciliation | Core dates/DST/cache/links tested; native delivery/rendering/permission/lock lifecycle, accessibility, photography and UI performance unverified |
-| 8 Release | Local backup, media-aware JSON/ZIP restore, independent CI configuration, governance and release instructions | Partial: Apple build/signing/TestFlight, demo, screenshots/icons, remaining container advisory triage, full security review, ARM64 runtime, stable releases |
+| 8 Release | Local backup, media-aware JSON/ZIP restore, independent CI configuration, governance and release instructions | Partial: Apple build/signing/TestFlight, demo, screenshots/icons, remaining container advisory triage, full security review, ARM64 CI verification, stable releases |
 
 ## Executed evidence
 
@@ -36,9 +36,11 @@ suppression and new-period identity. No live Bring smoke test was executed.
 
 - Both GitHub repositories are published under CLOUDCOOKCH. Initial backend tests, browser
   workflows and Docker smoke checks passed on GitHub; native compilation and security
-  scanning encountered CI setup failures now being corrected. No stable release exists.
-- macOS/Xcode 27, iOS simulator/device, Apple developer team, signing profiles and App Store
-  Connect credentials are unavailable here.
+  scanning encountered CI setup failures which were corrected. Native build validation
+  continues; no stable release exists.
+- The interactive workspace is Linux. GitHub supplies Xcode 26.6 and supported simulators;
+  native compilation is being exercised there. Physical devices, an Apple developer team,
+  signing profiles and App Store Connect credentials remain unavailable.
 - No Bring test account/list or AI endpoint credentials were supplied. Tests use synthetic
   connectors and HTTP responses. Automatic Bring writes stay disabled without proof.
 
@@ -49,7 +51,9 @@ are tracked as remaining engineering work, not falsely labelled credential-block
 
 ## Latest verification
 
-97 backend tests and 80 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. Container security
-still fails: 44 high package matches across 8 unique advisories, no critical matches.
+97 backend tests and 80 Swift core tests pass. Docker photo upload, leftover exclusion, suggestion approval/replay across restart and JSON/ZIP restore pass. Chromium setup, household/AI/Bring forms, device revocation/password change and JSON/ZIP transfer passed with explicit external-service doubles. Encrypted AI settings persist across Docker restart. Runtime and browser/development dependency audits and source secret scans pass. The new Alpine runtime passed real-HTTP Docker smoke checks and Trivy 0.70.0 reports
+zero HIGH/CRITICAL findings without ignoring unfixed issues. Native AMD64/ARM64 CI checks
+are configured; ARM64 validation is still pending. The previous Debian image retained
+44 high matches across eight advisories and is preserved as historical evidence.
 See VALIDATION.md and its recorded artifacts. Distribution workflows require the protected
 environment variable `RELEASE_ACCEPTANCE_VERIFIED=true` and are not enabled by these results.

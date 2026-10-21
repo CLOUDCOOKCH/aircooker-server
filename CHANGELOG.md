@@ -1,5 +1,9 @@
 # Changelog
 
+- Replace Debian runtime packaging with pinned official Python/Alpine to remove unused
+  util-linux packages; full Docker smoke and a zero HIGH/CRITICAL AMD64 scan pass.
+- Repair the scanner action/release pins and add native AMD64/ARM64 CI test/scan jobs.
+
 ## Unreleased — 0.1.0 development
 
 Initial independently versioned repository. This is not a stable or production release.

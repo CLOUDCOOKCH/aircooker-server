@@ -10,17 +10,17 @@ No real household, Bring account, cloud AI credential or Apple signing credentia
 | mypy | Passed across 23 application modules | `check_untyped_defs`, not exhaustive strict typing |
 | OpenAPI regeneration/drift | Passed | Version 0.1.0, API-major/sync-protocol 1/1 |
 | iOS vendored contract checksum / fields / paths | Passed | Does not replace Apple SDK or semantic integration tests |
-| Swift core compile and tests | **76 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
+| Swift core compile and tests | **80 passed**, Swift 6.2.1 Linux | No SwiftUI/UIKit/WidgetKit/Keychain/Face ID runtime validation |
 | Swift source formatting and native syntax parse | Passed | Syntax parsing is not Apple framework type checking |
-| Localisation parity | 262 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
+| Localisation parity | 277 EN/DE keys and static localised error lookups passed | Human translation/a11y audit outstanding |
 | Docker build | Passed, linux/amd64 | ARM64 publication/runtime not executed |
 | Docker E2E | Passed | Real HTTP + SQLite; synthetic household, no Bring service |
 | Chromium administration console | Passed | Loopback development origin; production TLS ingress not validated |
 | Source Gitleaks 8.28.0 scans | No findings in both repositories | Build outputs/installed tooling excluded, source tests included |
 | pip-audit 2.9.0 on runtime lock | 34 packages, no known advisories reported | Advisory database coverage is finite |
 | pip-audit on optional browser/development lock | 45 packages, no known advisories reported | pytest upgraded to 9.0.3 after an advisory was detected |
-| Trivy 0.67.2 | **Gate fails: 44 HIGH package matches across 8 unique advisories; 0 CRITICAL** | Remaining matches have no fixed version listed; exploitability not adjudicated |
-| Workflow YAML / scanner TOML / export plist | Parsed | No GitHub/macOS workflow executed |
+| Trivy 0.70.0, Alpine candidate | **0 HIGH / 0 CRITICAL**, no unfixed exclusions | linux/amd64 image; advisory coverage is finite; ARM64 pending |
+| GitHub workflows | Backend tests, browser workflow, Docker smoke and Swift core checks passed | Native build found/fixed missing assets and a section initializer; further Apple checks pending |
 
 Docker E2E verifies non-root/read-only startup, token-protected setup, HTTP authentication,
 idempotent mutation replay, recipe/meal persistence and scaling projection, server restart,
@@ -40,6 +40,19 @@ a synthetic household: [desktop](screenshots/admin-desktop.png),
 
 ## Container security result
 
+The current runtime switches to the pinned official Python/Alpine base described in
+[ADR 009](adr/009-container-runtime.md). Candidate image
+`sha256:9ccbfe4c48216c0281477561a1f43ac61a95bbf70d213069b51bd3eb3065a896`
+is 135,073,697 bytes and passes the full Docker smoke script. Trivy 0.70.0 reports zero
+HIGH/CRITICAL findings using a freshly fetched database, without suppressions or unfixed
+exclusions. See [current scan](validation/container-security-alpine.json). The scanner
+recognises Alpine 3.24 and uses its vulnerability repository, but warns that its static EOL
+table does not list that OS version. This scan is not proof that all vulnerabilities are
+absent. AMD64/ARM64 CI checks and scans now run natively; ARM64 evidence is still pending.
+
+Historical Debian findings follow; they are retained without claiming remediation within
+that old image.
+
 The initial Python 3.12.12/Debian 12 image had 9 critical and 91 high package/advisory
 matches. It was replaced with the verified multi-architecture Python 3.12.14/Debian 13 image
 pinned by digest. Published PCRE2/OpenSSL package fixes were installed at exact versions.
@@ -56,12 +69,12 @@ The first Trivy mirror was unavailable; the supported GHCR database repository s
 
 ## Not verified / incomplete
 
-Native Xcode 27 build, iOS 26/27 simulator/device, UI tests, share/widget lifecycle,
+Successful native SDK build, supported iOS simulator/device UI tests, share/widget lifecycle,
 notifications, native photo-picker/cache UI, accessibility, macOS signing and TestFlight upload remain
 unverified or incomplete. No live Bring compatibility report was generated. No live AI
 provider was contacted. Social source-specific captions/transcripts are incomplete.
-GitHub repository creation/publishing was not possible through the shell (`Forbidden`);
-remote workflows and releases do not exist yet.
+Both independent GitHub repositories and CI runs are now published. No stable release,
+TestFlight build or physical-device acceptance result exists.
 
 Media tests additionally cover metadata stripping, file/pixel/quota limits, immutable
 identity, archive traversal/corruption, duplicate rollback, historical deletion/provenance

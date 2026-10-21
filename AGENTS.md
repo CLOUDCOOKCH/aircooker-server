@@ -15,4 +15,5 @@ dependencies. Released migrations are immutable.
 Run pytest, Ruff check/format, mypy, and the generated OpenAPI drift check. Use the Docker
 smoke test after persistence/deployment changes. Update the pinned iOS contract deliberately
 in the independent companion repository. Do not claim Apple/live-service validation from
-Linux or synthetic tests. The container security gate currently remains failing; see validation.
+Linux or synthetic tests. Preserve the HIGH/CRITICAL container gate without suppressions;
+record exact image, scanner and architecture evidence in validation.

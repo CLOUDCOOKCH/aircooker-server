@@ -16,7 +16,9 @@ workflow without first adapting its tag/channel policy.
 
 Initial GitHub backend tests, browser workflows and Docker smoke checks pass. Security
 scanning initially stopped on a removed upstream action dependency; the updated pinned
-action and current v0.70.0 scanner still need successful execution. The former v0.67.2
+action and current v0.70.0 scanner now execute. The previous Debian image still failed
+the vulnerability gate; the Alpine replacement passes the local AMD64 scan and awaits
+the native AMD64/ARM64 CI matrix. The former v0.67.2
 GitHub release is no longer available; the newer release and its asset checksums were
 verified through GitHub metadata. Container scanning and
 acceptance gates must be required checks on the release commit before tag creation; the
