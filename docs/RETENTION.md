@@ -118,3 +118,9 @@ worker. It logs only `worker_retry`, backs off and retries; existing lease/fenci
 rules still apply. Real SQLite-full tests verify rollback, history integrity and identical
 mutation retry, plus reconnect/restart cap enforcement and worker recovery. This does not
 claim disk-controller fault injection, long-running load or a complete retention/GC policy.
+
+
+Migration 014 adds draft source-photo references. Those references are cleared with terminal
+preview content after 30 days; queued/editable previews retain their references. Saved
+immutable media remains under the existing conservative media retention/quota policy so
+offline devices and history do not lose referenced image bytes. See [recipe photos](RECIPE_PHOTOS.md).

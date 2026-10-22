@@ -1,8 +1,10 @@
 """Recipe import orchestration: metadata first, optional AI, then explicit human review."""
 
+import hashlib
 import json
 import time
-from uuid import UUID, uuid4
+from datetime import UTC, datetime
+from uuid import UUID, uuid4, uuid5
 
 from pydantic import ValidationError
 
@@ -12,21 +14,38 @@ from .auth import rate_limit
 from .errors import DomainError
 from .image_import import printed_recipe
 from .import_sources import youtube_url
+from .importing import FetchedPage
+from .media import MediaInfo, insert_media
 
 
 def process_import(
-    database, payload, *, fetch, provider_factory, extractor, recognise, personal_extract=None
+    database,
+    payload,
+    *,
+    fetch,
+    provider_factory,
+    extractor,
+    recognise,
+    personal_extract=None,
+    source_photo=None,
 ):
     iid = payload["id"]
     with database.connect() as db:
         draft = db.execute("SELECT * FROM import_draft WHERE id=?", (iid,)).fetchone()
     if not draft or draft["state"] in ("cancelled", "confirmed"):
         return
+    with database.connect() as db:
+        saved_photo = db.execute(
+            "SELECT m.data,m.width,m.height,p.source_url FROM import_source_photo p "
+            "JOIN recipe_media m ON m.id=p.image_id WHERE p.import_id=?",
+            (iid,),
+        ).fetchone()
     attempt = None
     extraction = None
     recipe = None
     try:
         source = None
+        page = None
         image_id = payload.get("image_id")
         if image_id:
             content = payload.get("text")
@@ -56,7 +75,13 @@ def process_import(
                 raise DomainError("import_source_expired", 410)
             content = payload.get("text") or ""
         else:
-            content = payload.get("text") or fetch(draft["source_url"])
+            content = payload.get("text")
+            if not content:
+                fetched = fetch(draft["source_url"])
+                if isinstance(fetched, FetchedPage):
+                    page, content = fetched, fetched.text
+                else:
+                    content = fetched
         if source is None and not image_id:
             try:
                 recipe, warnings = extractor(content, draft["source_url"], draft["source_platform"])
@@ -151,7 +176,49 @@ def process_import(
                     "local-image-ocr" if not payload.get("text") else "user_corrected_image_text"
                 )
                 warnings.append("image_text_requires_review")
+        photo = tuple(saved_photo) if saved_photo else None
+        if not photo and (
+            (recipe or extraction)
+            and not (recipe and recipe.image_id)
+            and draft["source_url"]
+            and source_photo
+        ):
+            try:
+                photo = source_photo(draft["source_url"], page)
+            except (DomainError, OSError, ValueError):
+                pass
+            if not photo:
+                warnings.append("source_image_unavailable")
         with database.transaction() as db:
+            active = db.execute("SELECT state FROM import_draft WHERE id=?", (iid,)).fetchone()
+            if not active or active["state"] in ("cancelled", "confirmed"):
+                if attempt:
+                    db.execute(
+                        "UPDATE import_ai_attempt SET state='succeeded' WHERE id=?", (attempt,)
+                    )
+                return
+            if photo:
+                data, width, height, origin = photo
+                info = MediaInfo(
+                    id=uuid5(UUID(iid), "source-photo"),
+                    sha256=hashlib.sha256(data).hexdigest(),
+                    byte_count=len(data),
+                    width=width,
+                    height=height,
+                    created_at=datetime.now(UTC).isoformat(),
+                )
+                try:
+                    insert_media(db, info, data)
+                    db.execute(
+                        "INSERT INTO import_source_photo VALUES (?,?,?) ON CONFLICT(import_id) DO NOTHING",
+                        (iid, str(info.id), origin),
+                    )
+                    if recipe:
+                        recipe.image_id = info.id
+                        recipe.provenance["image_source"] = origin
+                        recipe.provenance["image_extractor"] = "source-metadata-v1"
+                except DomainError:
+                    warnings.append("source_image_unavailable")
             db.execute(
                 "UPDATE import_draft SET state='preview',recipe=?,extraction=?,warnings=?,error_code=NULL WHERE id=? AND state NOT IN ('cancelled','confirmed')",
                 (

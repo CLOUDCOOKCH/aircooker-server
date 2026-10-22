@@ -163,6 +163,18 @@ def main():
         assert (
             docker(
                 "exec",
+                name,
+                "python",
+                "-c",
+                "from aircooker.source_images import bounded_source_photo; "
+                "assert bounded_source_photo('http://127.0.0.1/private', None) is None; "
+                "print('source-photo-isolation-ok')",
+            )
+            == "source-photo-isolation-ok"
+        )
+        assert (
+            docker(
+                "exec",
                 "-t",
                 name,
                 "/bin/bash",

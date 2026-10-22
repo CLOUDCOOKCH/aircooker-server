@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add theme-aware original-peach fallbacks for missing/unreadable recipe photos. Retrieve
+  source Recipe/Open Graph/Twitter images through bounded public-HTTPS fetching, preserve
+  attribution and incomplete AI review, cache images locally and retain explicit Save.
+
 - Add a read-only weekly shopping view, persistent offline snapshot, per-item Bring! states,
   manual sync and explicit queued/error/success feedback. Package the dedicated-test-list
   UUID experiment in the durable worker, bind evidence to the configured credentials/list,

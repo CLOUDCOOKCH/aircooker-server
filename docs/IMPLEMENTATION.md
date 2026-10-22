@@ -1,5 +1,14 @@
 # Implementation checklist and evidence
 
+**Recipe photos — implemented; preview validation in progress:** the original peach fills
+missing/unreadable recipe pictures across the PWA. Public URL imports try source metadata
+images through bounded pinned-HTTPS fetching, store a local sanitized image and retain
+attribution and incomplete AI drafts through explicit review/Save. Cached pictures work
+offline; unavailable pictures remain honest placeholders. Migration 014 and the additive
+optional import `source_photo` field preserve existing recipe/sync fields; native is unchanged.
+See [behavior and limits](RECIPE_PHOTOS.md). Live sites/providers and physical iPhone remain
+unverified.
+
 **Shopping/Bring! visibility — published and verified in `poc-20261022.3`:** Home, Calendar
 and Settings open a read-only current-week requirement list with quantities, ownership states,
 pantry exclusions, server job/errors and a manual Sync to Bring! action. Cached snapshots

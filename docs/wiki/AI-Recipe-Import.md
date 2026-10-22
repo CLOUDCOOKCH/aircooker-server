@@ -345,3 +345,12 @@ review behavior without spending provider credits. Live provider/model/region co
 and physical Apple-device behavior require separate validation with an administrator's
 configuration. This feature does not publish a Docker image or modify the independently
 pinned native iOS contract; update that companion deliberately before native adoption.
+
+
+## Source pictures
+
+Public URL imports also try the recipe image or page preview metadata. The backend stores
+a bounded, validated local copy, keeps attribution and shows it during editable review,
+including incomplete AI drafts. Missing/inaccessible pictures use the Mealf peach. No
+model-invented image URL, stock search or image-generation call is used. See
+[recipe-photo behavior and limits](../RECIPE_PHOTOS.md).

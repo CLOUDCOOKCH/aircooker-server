@@ -64,7 +64,7 @@ from .errors import DomainError
 from .image_import import ocr_available, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
 from .import_sources import ImportSourceInfo, put_source
-from .importing import bounded_fetch_html, extract, platform_for
+from .importing import bounded_fetch_page, extract, platform_for
 from .instance_lock import InstanceLock
 from .jobs import claim, enqueue, finish
 from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
@@ -106,6 +106,7 @@ from .retention import cleanup_database, cleanup_startup_transfers
 from .secrets import SecretVault
 from .shopping import BringVerification, ShoppingSnapshot, request_verification
 from .shopping import snapshot as shopping_snapshot
+from .source_images import bounded_source_photo
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
 from .sync_history import snapshot_page, state_for, validate_anchor
@@ -178,7 +179,8 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             process_import(
                 database,
                 payload,
-                fetch=bounded_fetch_html,
+                fetch=bounded_fetch_page,
+                source_photo=bounded_source_photo,
                 provider_factory=provider_for,
                 extractor=extract,
                 recognise=recognise_text,
@@ -967,6 +969,10 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
     def get_import(import_id: UUID, s=Depends(session)):
         with database.connect() as db:
             row = db.execute("SELECT * FROM import_draft WHERE id=?", (str(import_id),)).fetchone()
+            photo = db.execute(
+                "SELECT image_id,source_url FROM import_source_photo WHERE import_id=?",
+                (str(import_id),),
+            ).fetchone()
         if not row:
             raise DomainError("not_found", 404)
         return {
@@ -978,6 +984,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             "recipe": json.loads(row["recipe"]) if row["recipe"] else None,
             "warnings": json.loads(row["warnings"]),
             "extraction": json.loads(row["extraction"]) if row["extraction"] else None,
+            "source_photo": dict(photo) if photo else None,
         }
 
     @app.delete("/api/v1/imports/{import_id}", status_code=204)

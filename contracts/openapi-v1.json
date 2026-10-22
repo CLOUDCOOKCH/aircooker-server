@@ -1666,6 +1666,27 @@
         "title": "ImportSourceInfo",
         "type": "object"
       },
+      "ImportSourcePhoto": {
+        "additionalProperties": false,
+        "properties": {
+          "image_id": {
+            "format": "uuid",
+            "title": "Image Id",
+            "type": "string"
+          },
+          "source_url": {
+            "maxLength": 2048,
+            "title": "Source Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "image_id",
+          "source_url"
+        ],
+        "title": "ImportSourcePhoto",
+        "type": "object"
+      },
       "Ingredient-Input": {
         "additionalProperties": false,
         "properties": {
@@ -3381,6 +3402,16 @@
               }
             ],
             "title": "Recognized Text"
+          },
+          "source_photo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImportSourcePhoto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "source_platform": {
             "title": "Source Platform",

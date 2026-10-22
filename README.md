@@ -16,6 +16,10 @@ Optionally connect your personal ChatGPT plan for reviewed recipe-text imports u
 [Windows-friendly setup helper](docs/CHATGPT.md). Connections belong to an individual
 browser session, not the household. Live subscription eligibility remains unverified.
 
+Recipes without a usable picture show the original Mealf peach. URL imports, including
+AI-assisted imports, try source recipe/preview images and retain them through review and
+offline viewing. See [recipe photos and limits](docs/RECIPE_PHOTOS.md).
+
 Open **Calendar → Shopping list** to inspect current-week quantities, Bring! item states
 and failures, and use **Sync to Bring!**. See [shopping and safe verification](docs/SHOPPING.md).
 

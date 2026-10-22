@@ -29,6 +29,7 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | meal_plan_entry / leftover / pantry_item | Indexed date/category projection and explicit recipe/leftover links |
 | suggestion_application | Device-scoped request fingerprint/result receipts for atomic live preview approval and replay |
 | background_job | Deduplicated jobs, leases, fencing token, generation, retries, redacted error code |
+| import_source_photo | Migration 014: draft-to-media reference and source origin, including incomplete AI previews; terminal preview retention clears the link |
 | import_draft | Pending/preview/needs-input/confirmed/cancelled state, warnings and provenance |
 | import_source / import_ai_attempt | Bounded private immutable attachments and redacted provider-attempt history; source UUIDs never grant public access |
 | bring_owned_item | Period/requirement/list ownership ledger, external UUID, applied state and purchase history |

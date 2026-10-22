@@ -285,6 +285,11 @@ class ImportRequest(Model):
         return self
 
 
+class ImportSourcePhoto(Model):
+    image_id: UUID
+    source_url: str = Field(max_length=2048)
+
+
 class RecipeImportStatus(Model):
     id: UUID
     source_url: str | None
@@ -292,6 +297,7 @@ class RecipeImportStatus(Model):
     state: Literal["queued", "preview", "needs_input", "confirmed", "cancelled"]
     recipe: Recipe | None
     extraction: ExtractionResult | None = None
+    source_photo: ImportSourcePhoto | None = None
     recognized_text: str | None = Field(default=None, max_length=100000)
     warnings: list[str]
     error_code: str | None

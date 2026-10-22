@@ -255,3 +255,14 @@ library before explicit confirmation. The canonical schema distinguishes recipe/
 input and output serialization for decimal fields; wire field names are unchanged.
 The companion native repository pins the reviewed exact contract bytes while retaining
 its existing client UI. See [photo import](IMAGE_IMPORT.md) for error recovery and limits.
+
+
+## Imported source photos
+
+`GET /api/v1/imports/{id}` optionally returns `source_photo: {image_id, source_url}`.
+The server persists a validated source image before publishing the editable preview,
+including when `recipe` is null for incomplete AI output. Existing `recipe.image_id`
+and provenance fields remain canonical after explicit confirmation. See
+[recipe photos](RECIPE_PHOTOS.md) for limits, attribution, fallback and migration 014.
+This additive API-v1 field does not change the sync protocol; the retained native pin
+is deliberately unchanged.

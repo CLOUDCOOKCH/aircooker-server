@@ -1,5 +1,13 @@
 # mealf PWA proof of concept
 
+## Next preview candidate
+
+`poc-20261022.4` adds original-peach recipe placeholders and source metadata photos for
+URL/AI imports, including incomplete drafts. Photos stay editable before explicit Save
+and cached for offline use. See [recipe photos](RECIPE_PHOTOS.md). Publication/exact-image
+upgrade checks must pass before this candidate is described as available. Preserve
+existing volumes and custom `5152:5152` command/healthcheck settings.
+
 ## Current published preview
 
 `poc-20261022.3` adds the [shopping requirements view](SHOPPING.md), manual **Sync to Bring!**,

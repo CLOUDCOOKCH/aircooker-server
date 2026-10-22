@@ -275,6 +275,7 @@ export class SyncEngine {
           warnings?: unknown;
           error_code?: string;
           extraction?: Wire['ExtractionResult'];
+          source_photo?: Wire['ImportSourcePhoto'] | null;
           recognized_text?: string | null;
         }>('/api/v1/imports/' + assertUUID(task.id));
         if (
@@ -285,14 +286,26 @@ export class SyncEngine {
         const warnings = Array.isArray(result.warnings)
           ? result.warnings.filter((warning): warning is string => typeof warning === 'string')
           : [];
+        const recipe = result.recipe
+          ? payload('recipe', result.recipe)
+          : result.extraction
+            ? extractionPreview(result.extraction, task.body.source_url)
+            : undefined;
+        if (recipe && result.source_photo) {
+          const photo = result.source_photo;
+          if (typeof photo.source_url !== 'string' || photo.source_url.length > 2048)
+            throw new APIError('invalid_server_response', 0);
+          recipe.image_id = assertUUID(photo.image_id);
+          recipe.provenance = {
+            ...recipe.provenance,
+            image_source: photo.source_url,
+            image_extractor: 'source-metadata-v1',
+          };
+        }
         await this.store.saveImport({
           ...task,
           state: result.state === 'queued' ? 'processing' : (result.state as ImportTask['state']),
-          recipe: result.recipe
-            ? payload('recipe', result.recipe)
-            : result.extraction
-              ? extractionPreview(result.extraction, task.body.source_url)
-              : undefined,
+          recipe,
           extraction: result.extraction,
           source: undefined,
           warnings,

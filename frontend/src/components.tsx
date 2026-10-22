@@ -116,10 +116,21 @@ export function Photo({
     };
   }, [id, store, api]);
   return url ? (
-    <img className={'food-photo ' + className} src={url} alt={alt} loading="lazy" />
+    <img
+      className={'food-photo ' + className}
+      src={url}
+      alt={alt}
+      loading="lazy"
+      onError={() => setURL(null)}
+    />
   ) : placeholder ? (
     <div className={'photo-placeholder ' + className} aria-hidden="true">
-      <CookingPot size={28} strokeWidth={1.2} />
+      <img
+        className="recipe-placeholder-mark"
+        src="/app/brand/peach-v1.png"
+        alt=""
+        draggable={false}
+      />
     </div>
   ) : null;
 }

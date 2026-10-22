@@ -207,3 +207,31 @@ no live Bring!, physical iPhone/Safari, exact-source CI or publication pass is c
 Launcher/detector were attempted but absent, with no passes claimed. This ordinary
 extension preserves DESIGN.md/design.json and acknowledges historical layout/system-only
 appearance drift without repairing it. It is not whole-product or security acceptance.
+
+Recipe source-photo refinement, 2026-10-22: shared recipe thumbnails/detail frames use
+the existing original peach on the semantic soft surface for absent, unavailable or
+unreadable pictures. Keep the mark decorative, proportionally contained and capped at
+104px; preserve recipe names and the existing compact phone rows. AI URL imports may
+attach an available source picture even when extracted facts such as servings remain
+incomplete. Preserve editable preview, removal/replacement, literal warnings and explicit
+Save; retain original picture attribution in recipe provenance. Local cached media remains
+usable offline. No invented dish image or implicit household sample is introduced.
+
+The [bounded source-photo review](../../docs/validation/source-photos-ui-review.md)
+records **ship within the reviewed photo UI scope**, supplied independent persistence
+pass, TYPE/MATERIAL/GROUND and thesis/story/form match, quality ceiling reached and no
+material UI fixes. This documentation handoff inspected sources/log/script and opened all
+five genuine Chromium captures: missing/unreadable desktop cards, desktop detail fallback,
+full-document editable import, German After Dark phone library and offline phone reload.
+The phone viewport is 390×844; full-document image dimensions are 390×914. Source/AI
+network outputs are explicit doubles; the picture fixture is existing illustrative
+lemon-chicken artwork in a synthetic household. Supplied browser evidence passes explicit
+Save/attribution, incomplete-servings review, desktop/phone Axe and cached offline reload.
+The later duplicate-placeholder CSS consolidation changes no computed style/capture and
+was disclosed to the independent reviewer. The shipped specialist definition was absent;
+the review is a disclosed manual fallback. Launcher/detector were attempted but absent,
+with no automated design/schema pass claimed. Live source/provider, physical iPhone/Safari,
+exact-source CI and publication remain outside this record. Original artwork, PRODUCT.md,
+DESIGN.md/design.json and native code are preserved; historical mobile-calendar/theme-library
+drift is acknowledged without repair. This is an ordinary extension, not whole-product or
+security acceptance, and this documentation handoff reran no tests/browser checks.
