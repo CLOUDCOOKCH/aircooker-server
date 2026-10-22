@@ -112,7 +112,7 @@ jobs:
           python scripts/pwa_layout_smoke.py
           python scripts/theme_browser_smoke.py
           python scripts/image_import_browser_smoke.py
-          timeout 300s python -m playwright install --with-deps webkit
+          timeout 600s python -m playwright install --with-deps webkit
           MEALF_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
           MEALF_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
           python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
