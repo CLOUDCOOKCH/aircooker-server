@@ -6,6 +6,7 @@ import socket
 import ssl
 from decimal import Decimal
 from html.parser import HTMLParser
+from typing import NamedTuple
 from urllib.parse import urljoin, urlsplit
 
 from .errors import DomainError
@@ -54,7 +55,12 @@ class PinnedHTTPS(http.client.HTTPSConnection):
             raise
 
 
-def fetch_html(url: str):
+class FetchedPage(NamedTuple):
+    text: str
+    url: str
+
+
+def fetch_resource(url: str, content_types, max_bytes: int):
     for _ in range(4):
         try:
             parsed = urlsplit(url)
@@ -62,7 +68,8 @@ def fetch_html(url: str):
         except ValueError as exc:
             raise DomainError("source_url_forbidden", 422) from exc
         if (
-            parsed.scheme != "https"
+            len(url) > 2048
+            or parsed.scheme != "https"
             or not parsed.hostname
             or parsed.username
             or parsed.password
@@ -77,7 +84,7 @@ def fetch_html(url: str):
                 parsed.path + ("?" + parsed.query if parsed.query else "") or "/",
                 headers={
                     "User-Agent": "mealf/0.1 recipe-import",
-                    "Accept": "text/html, application/ld+json",
+                    "Accept": ", ".join(sorted(content_types)),
                     "Accept-Encoding": "identity",
                 },
             )
@@ -91,19 +98,28 @@ def fetch_html(url: str):
             if response.status != 200:
                 raise DomainError("source_unavailable_use_supplied_text", 422)
             media_type = response.getheader("Content-Type", "").split(";")[0].strip().lower()
-            if media_type not in ("text/html", "application/ld+json"):
+            if media_type not in content_types:
                 raise DomainError("source_content_type_unsupported", 422)
             if response.getheader("Content-Encoding", "identity") != "identity":
                 raise DomainError("source_encoding_unsupported", 422)
-            raw = response.read(MAX_BYTES + 1)
-            if len(raw) > MAX_BYTES:
+            raw = response.read(max_bytes + 1)
+            if len(raw) > max_bytes:
                 raise DomainError("source_too_large", 422)
-            return raw.decode("utf-8", errors="replace")
+            return raw, media_type, url
         except (OSError, http.client.HTTPException) as exc:
             raise DomainError("source_network_failed", 422) from exc
         finally:
             connection.close()
     raise DomainError("source_redirect_limit", 422)
+
+
+def fetch_page(url: str):
+    raw, _, final_url = fetch_resource(url, {"text/html", "application/ld+json"}, MAX_BYTES)
+    return FetchedPage(raw.decode("utf-8", errors="replace"), final_url)
+
+
+def fetch_html(url: str):
+    return fetch_page(url).text
 
 
 class JSONLDParser(HTMLParser):
@@ -256,7 +272,6 @@ def extract(content: str, source_url=None, platform="website"):
     warnings = [
         "review_ingredient_quantities",
         "review_servings",
-        "image_import_not_yet_available",
     ]
     if not isinstance(raw_ingredients, list) or any(
         not isinstance(text, str) or not text.strip() for text in raw_ingredients
@@ -296,7 +311,7 @@ def _fetch_child(url, output):
     resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
     resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
     try:
-        output.send(("ok", fetch_html(url)))
+        output.send(("ok", fetch_page(url)))
     except DomainError as exc:
         output.send(("error", exc.code))
     except Exception:
@@ -305,7 +320,7 @@ def _fetch_child(url, output):
         output.close()
 
 
-def bounded_fetch_html(url: str):
+def bounded_fetch_page(url: str):
     import multiprocessing
 
     context = multiprocessing.get_context("spawn")
@@ -332,3 +347,7 @@ def bounded_fetch_html(url: str):
         if process.is_alive():
             process.kill()
             process.join(timeout=1)
+
+
+def bounded_fetch_html(url: str):
+    return bounded_fetch_page(url).text

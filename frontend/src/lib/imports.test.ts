@@ -49,6 +49,59 @@ test('media capabilities classify explicit formats and reject arbitrary files', 
   assert.equal(sourceKind('image/heic'), null);
 });
 
+test('an incomplete AI preview retains its source photo and attribution after a local restart', async () => {
+  const instance = uuid(),
+    id = uuid(),
+    image = uuid();
+  let store = await LocalStore.open(instance);
+  const device = await store.device(),
+    extraction = result();
+  extraction.recipe.servings = null;
+  await store.saveImport({
+    id,
+    state: 'processing',
+    body: { source_url: 'https://example.org/recipe', use_ai: true },
+  });
+  await new SyncEngine(store, {
+    async request<T>(path: string): Promise<T> {
+      let response: unknown;
+      if (path.startsWith('/api/v1/sync/state'))
+        response = {
+          instance_id: instance,
+          cursor: 0,
+          token: 'root',
+          requested_cursor: 0,
+          requested_token: 'root',
+        };
+      else if (path.endsWith('/session')) response = { device_id: device };
+      else if (path.startsWith('/api/v1/sync/pull'))
+        response = { changes: [], cursor: 0, cursor_token: 'root', has_more: false };
+      else if (path === '/api/v1/imports/' + id)
+        response = {
+          id,
+          state: 'preview',
+          extraction,
+          source_photo: { image_id: image, source_url: 'https://example.org/dish.jpg' },
+          warnings: ['review_servings'],
+        };
+      else throw Error('unexpected request ' + path);
+      return response as T;
+    },
+    async upload() {
+      throw Error('no upload expected');
+    },
+  }).synchronise();
+  store.close();
+  store = await LocalStore.open(instance);
+  const draft = (await store.imports())[0].recipe!;
+  assert.equal(draft.servings, '');
+  assert.equal(draft.image_id, image);
+  assert.equal(draft.provenance.image_source, 'https://example.org/dish.jpg');
+  assert.throws(() => payload('recipe', draft));
+  assert.equal(payload('recipe', { ...draft, servings: '2' }).image_id, image);
+  store.close();
+});
+
 test('queued source bytes survive reload and recovery export, then upload before import submission', async () => {
   const instance = uuid(),
     id = uuid(),

@@ -1929,6 +1929,16 @@ export interface components {
              */
             id: string;
         };
+        /** ImportSourcePhoto */
+        ImportSourcePhoto: {
+            /**
+             * Image Id
+             * Format: uuid
+             */
+            image_id: string;
+            /** Source Url */
+            source_url: string;
+        };
         /** Ingredient */
         "Ingredient-Input": {
             /** Group */
@@ -2568,6 +2578,7 @@ export interface components {
             recipe: components["schemas"]["Recipe-Output"] | null;
             /** Recognized Text */
             recognized_text?: string | null;
+            source_photo?: components["schemas"]["ImportSourcePhoto"] | null;
             /** Source Platform */
             source_platform: string;
             /** Source Url */

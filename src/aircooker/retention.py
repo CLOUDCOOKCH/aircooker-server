@@ -41,6 +41,7 @@ def cleanup_database(database, *, now=None, dry_run=False):
         counts["import_previews"] = len(imports)
         for row in imports:
             if not dry_run:
+                db.execute("DELETE FROM import_source_photo WHERE import_id=?", (row["id"],))
                 db.execute(
                     "UPDATE import_draft SET recipe=NULL,recognized_text=NULL,extraction=NULL,warnings='[]',error_code=NULL WHERE id=?",
                     (row["id"],),

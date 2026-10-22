@@ -137,13 +137,11 @@ export function RecipeDetail({
           {t('edit')}
         </button>
       </PageHeader>
-      {recipe.image_id && (
-        <Photo
-          id={recipe.image_id}
-          className="detail-photo"
-          alt={app.demo ? t('photoIllustration') : recipe.title}
-        />
-      )}
+      <Photo
+        id={recipe.image_id}
+        className="detail-photo"
+        alt={app.demo ? t('photoIllustration') : recipe.title}
+      />
       <div className="detail-intro">
         <p>{recipe.description}</p>
         <button className="primary" onClick={plan}>
@@ -503,6 +501,7 @@ export function RecipeEditor({
                     ai_extracted_review_all_fields: 'warningAI',
                     review_servings: 'warningServings',
                     image_import_not_yet_available: 'warningImage',
+                    source_image_unavailable: 'warningSourceImage',
                     ingredient_entries_omitted: 'warningOmitted',
                     ingredient_text_truncated: 'warningTruncated',
                     video_first_ten_minutes: 'warningVideoLimit',
@@ -619,7 +618,7 @@ export function RecipeEditor({
             />
             <small>{t('photoHint')}</small>
           </label>
-          {recipe.image_id && !photo && <Photo id={recipe.image_id} className="editor-photo" />}
+          {!photo && <Photo id={recipe.image_id} className="editor-photo" />}
           {photo && (
             <p className="success-note">
               <Check size={16} />

@@ -201,6 +201,8 @@ export const en = {
   warningQuantities: 'Please review the extracted ingredient quantities.',
   warningServings: 'Please review the number of servings.',
   warningImage: 'Source images were not imported. You can add your own.',
+  warningSourceImage:
+    'No usable source photo was available. Mealf will show a placeholder; you can add your own photo.',
   warningOmitted: 'Some ingredient entries could not be read.',
   warningTruncated: 'Some source text exceeded the import limit.',
   warningUnknown: 'Extraction needs review. Check the source for missing details.',
@@ -755,6 +757,8 @@ export const de: Record<Key, string> = {
   warningQuantities: 'Bitte prüfe die erkannten Zutatenmengen.',
   warningServings: 'Bitte prüfe die Anzahl der Portionen.',
   warningImage: 'Quellbilder wurden nicht importiert. Du kannst eigene ergänzen.',
+  warningSourceImage:
+    'Kein nutzbares Quellbild verfügbar. Mealf zeigt einen Platzhalter; du kannst ein eigenes Foto hinzufügen.',
   warningOmitted: 'Einige Zutaten konnten nicht gelesen werden.',
   warningTruncated: 'Einige Quelltexte überschritten die Importgrenze.',
   warningUnknown: 'Die Extraktion muss geprüft werden. Vergleiche fehlende Angaben mit der Quelle.',
