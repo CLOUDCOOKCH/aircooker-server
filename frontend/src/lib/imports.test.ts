@@ -60,7 +60,7 @@ test('an incomplete AI preview retains its source photo and attribution after a 
   await store.saveImport({
     id,
     state: 'processing',
-    body: { source_url: 'https://example.org/recipe', use_ai: true },
+    body: { source_url: 'https://example.org/recipe', use_ai: true, consent_external_ai: true },
   });
   await new SyncEngine(store, {
     async request<T>(path: string): Promise<T> {
