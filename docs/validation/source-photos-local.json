@@ -1,6 +1,6 @@
 {
   "date": "2026-10-22",
-  "status": "implemented and locally tested; exact-source CI/publication pending",
+  "status": "implemented and locally tested; exact-source CI/publication separately verified",
   "baseline": "2a2fcc6",
   "scope": "Original-peach recipe fallbacks and bounded metadata-based source photos, including incomplete AI previews; explicit review/save, offline cache, provenance and migration 014",
   "backend_tests": 383,
@@ -9,7 +9,8 @@
   "checks": [
     "Ruff lint/format; mypy 48 files; generated OpenAPI/PWA type checks",
     "Real PWA/server/worker AI source-image preview, missing servings correction, explicit Save, attribution, missing/unreadable fallbacks, EN desktop/DE dark phone/Axe and cached offline reload",
-    "Source/AI HTTP responses are explicit doubles; existing illustrative demo food asset is a synthetic source picture"
+    "Source/AI HTTP responses are explicit doubles; existing illustrative demo food asset is a synthetic source picture",
+    "Final frontend type/format/tests/build rerun after adding the required consent flag to the new unit fixture"
   ],
   "logs": [
     "build/source-photo-all-tests.log",
@@ -22,9 +23,9 @@
   "ui_review": "docs/validation/source-photos-ui-review.md",
   "unverified": [
     "Live source websites/social-media access and provider inference",
-    "Physical iPhone/Safari/Home Screen lifecycle",
-    "Fresh native image and publication/upgrade gates until recorded separately"
+    "Physical iPhone/Safari/Home Screen lifecycle"
   ],
   "native": "Retained native repository and contract pin intentionally unchanged; API extension is additive",
-  "production_v1_accepted": false
+  "production_v1_accepted": false,
+  "subsequent_evidence": "docs/validation/github-source-photos-preview.json"
 }

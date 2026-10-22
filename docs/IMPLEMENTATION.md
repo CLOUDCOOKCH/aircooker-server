@@ -1,13 +1,16 @@
 # Implementation checklist and evidence
 
-**Recipe photos — implemented; preview validation in progress:** the original peach fills
+**Recipe photos — published and verified in `poc-20261022.4`:** the original peach fills
 missing/unreadable recipe pictures across the PWA. Public URL imports try source metadata
 images through bounded pinned-HTTPS fetching, store a local sanitized image and retain
 attribution and incomplete AI drafts through explicit review/Save. Cached pictures work
 offline; unavailable pictures remain honest placeholders. Migration 014 and the additive
 optional import `source_photo` field preserve existing recipe/sync fields; native is unchanged.
 See [behavior and limits](RECIPE_PHOTOS.md). Live sites/providers and physical iPhone remain
-unverified.
+unverified. All six exact-source CI jobs pass at e47b107: 383 backend tests per architecture,
+55 frontend tests and real Chromium/WebKit regressions. Both fresh native image gates,
+six public checksums/config identities, anonymous pull and published .3-to-.4 same-volume
+5152 upgrade/OCR/restore pass. See [exact release evidence](validation/github-source-photos-preview.json).
 
 **Shopping/Bring! visibility — published and verified in `poc-20261022.3`:** Home, Calendar
 and Settings open a read-only current-week requirement list with quantities, ownership states,

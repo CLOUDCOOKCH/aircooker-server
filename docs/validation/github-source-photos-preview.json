@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-22",
+  "status": "published and verified preview; live source/provider acceptance incomplete",
+  "source": "e47b107d9f6871b89175682dd3383c3b10ea4fe8",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/5",
+  "followup": "e47b107d9f6871b89175682dd3383c3b10ea4fe8",
+  "scope": "Original-peach missing/unreadable recipe photo fallback; bounded pinned-HTTPS source Recipe/Open Graph/Twitter images, sanitized local media, provenance, incomplete AI preview retention, explicit Save and offline cache; migration 014",
+  "ci": {
+    "run_id": 39736682473,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39736682473",
+    "backend_tests_per_architecture": 383,
+    "frontend_tests": 55,
+    "jobs": [
+      {
+        "id": 119684126277,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119684126381,
+        "name": "browser",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119684126443,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119684126548,
+        "name": "pwa-core",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119684126595,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119684126710,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      }
+    ],
+    "browser": "Real Chromium PWA/server/worker AI-source image preview with missing servings correction, explicit Save, attribution, missing/unreadable-photo peach fallback, EN desktop/DE dark phone/Axe and cached offline reload; existing Chromium/WebKit planner/theme/photo-OCR/shopping/personal-ChatGPT regressions pass. Source/AI external responses are explicit doubles."
+  },
+  "publication": {
+    "run_id": 39737662914,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39737662914",
+    "jobs": [
+      {
+        "id": 119687070052,
+        "name": "gate",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119687120509,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119687120692,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      },
+      {
+        "id": 119687836307,
+        "name": "publish",
+        "conclusion": "success",
+        "head_sha": "e47b107d9f6871b89175682dd3383c3b10ea4fe8"
+      }
+    ],
+    "release_id": 420400762,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.4",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.4",
+    "index_digest": "sha256:efaa7baeb77f266fffff503d2040640161e3826c86dbb224a078128a406f2e9f",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "9d2a0e85a702281d25df91a77d7871e4f677bcecc29ecf2e792f0fea38355397",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "c03d9bba83d771ed3c791b1197a6b658bcb2479ff350b420ac05df64da0a9f10",
+        "size": 186566
+      },
+      "container-security-arm64.json": {
+        "sha256": "0944d6f11158314b7943c308fd7f3fa37c31462ca641d153120235e2b10f067a",
+        "size": 186648
+      },
+      "openapi-v1.json": {
+        "sha256": "2b4306dcdb5b722a0244e312b11cab8c1a887dabad37ed0f23ac260c66e978b5",
+        "size": 203775
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "ab6819b70db8c160817a5d749d2b9cfdf94c8ca750487f63349d4e7a3a321061",
+        "size": 167993
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "06eaaf9b152b29f59af488761aaa4e4a6fe60c3466597b3025fc9be041471218",
+        "size": 168433
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:f1d5c512602c304f20f323d4c60f84a90fe89013ebf67ab2f6c9ace8ee1fbc54",
+        "config": "sha256:9bce213074db125993f4cfbca74537ba43765685a6eea065f9ea3fd8b40b1249",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:63b21d2b569b71501010c4f147f448cb4767337f689c5667e5fa6bad946ac9a0",
+        "config": "sha256:a3b4abfca0b572fc17664840ec3d70f29fa7d7f954ddd5b36d4d613b8dc8d5a7",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed: isolated empty per-command Docker credential configuration; global configuration unchanged",
+    "scanner": "Trivy 0.70.0 unsuppressed HIGH/CRITICAL gate; ImageIDs equal native build logs and public manifests",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58527889"
+  },
+  "post_publication": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:bede199fac5acfc7bf7adaa30c351e9168190f02f368ac5c0f84ea7c90f95b9b",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:efaa7baeb77f266fffff503d2040640161e3826c86dbb224a078128a406f2e9f",
+    "same_volume_5152_upgrade": "passed",
+    "identity_session_sync_proof": "preserved",
+    "offline_mutation_replay": "passed",
+    "ai_configuration_catalog": "present; keys redacted; no live provider invoked",
+    "real_local_ocr": [
+      "en",
+      "de"
+    ],
+    "explicit_preview_no_auto_save": "passed",
+    "old_archive_to_clean_new_install": "passed",
+    "packaged_chatgpt_helper_sha256": "matches source",
+    "personal_chatgpt_status": "disconnected; no bundled credentials",
+    "shopping_view": "current-week planned recipe retained; 200 g requirement not falsely marked sent; no credentials bundled",
+    "bring_purchased_ownership_ledger": "preserved from old image; synthetic ledger only, no live Bring calls",
+    "photo_hash": "preserved",
+    "source_photo_isolation": "packaged spawned process fails closed for forbidden source; existing OCR imports return optional source_photo without changing the retained image",
+    "isolation": "Disposable uniquely named synthetic containers and volumes only; no user deployment accessed"
+  },
+  "ui_review": "docs/validation/source-photos-ui-review.md",
+  "native": "Retained native repository and pinned API snapshot intentionally unchanged. Optional source_photo is an additive API-v1 response extension; recipe/sync protocol remains unchanged. No native photo-import parity claim.",
+  "limits": [
+    "Live website/social-media image retrieval and AI provider extraction remain unverified here; source/provider responses in tests are explicit doubles.",
+    "Source page preview images can depict a page rather than the exact recipe; photos stay removable/replaceable in editable review. Copyright and source terms still apply.",
+    "Text-only personal ChatGPT and upload-only inputs with no source URL use the fallback; no invented URL, stock search, image generation or silent backfill of existing recipes.",
+    "Photos become available offline after download/caching; missing or unreadable assets use the original peach.",
+    "Physical iPhone/Safari/Home Screen, live Bring/push and household pilot remain open. Bounded manual UI review and container/dependency/secret CI are separate from the outstanding dedicated security review and production-v1 acceptance."
+  ],
+  "production_v1_accepted": false
+}

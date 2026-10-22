@@ -14,12 +14,13 @@
     {
       "id": "core_workflows",
       "status": "partial",
-      "detail": "366 backend tests per architecture, 54 frontend tests, Chromium/WebKit shopping/verification/manual retry/offline-cache and existing planner/OCR regressions pass; Bring responses are synthetic and expanded recurrence acceptance remains open.",
+      "detail": "383 backend tests per architecture, 55 frontend tests, real source-photo/incomplete-AI review/save/offline-cache and existing Chromium/WebKit regressions pass; external responses are synthetic and expanded recurrence acceptance remains open.",
       "evidence": [
         "docs/validation/ai-recipe-import-merge.json",
         "docs/validation/github-v1-readiness-preview.json",
         "docs/validation/github-chatgpt-preview.json",
-        "docs/validation/github-shopping-preview.json"
+        "docs/validation/github-shopping-preview.json",
+        "docs/validation/github-source-photos-preview.json"
       ]
     },
     {
@@ -34,12 +35,13 @@
     {
       "id": "backup_restore_upgrade",
       "status": "partial",
-      "detail": "Verified WAL snapshot and JSON/ZIP merge restore pass, including published .2-to-.3 same-volume 5152 upgrade preserving identity/session/offline replay/synthetic purchased Bring ledger and old ZIP/photo restore into clean .3; broader disaster recovery/device rehearsal remains open.",
+      "detail": "Published .3-to-.4 same-volume 5152 upgrade preserves identity/session/history/offline replay/recipe/photo/synthetic purchased Bring ledger; real EN/DE OCR previews and old ZIP/photo restore into clean .4 pass. Broader disaster/device rehearsal remains open.",
       "evidence": [
         "docs/BACKUP.md",
         "docs/validation/github-v1-readiness-preview.json",
         "docs/validation/github-chatgpt-preview.json",
-        "docs/validation/github-shopping-preview.json"
+        "docs/validation/github-shopping-preview.json",
+        "docs/validation/github-source-photos-preview.json"
       ]
     },
     {

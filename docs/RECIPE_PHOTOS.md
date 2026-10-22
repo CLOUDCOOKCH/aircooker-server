@@ -67,3 +67,10 @@ image preview, explicit Save, missing/broken-image fallbacks, EN desktop/DE dark
 and cached offline reload. Source/AI network responses are explicit doubles, with the existing
 illustrative demo food asset used as a synthetic source picture. Live-site/provider and
 physical-iPhone behavior remain unverified. See [bounded UI review](validation/source-photos-ui-review.md).
+
+
+`poc-20261022.4` is published for AMD64/ARM64. Exact-source CI, fresh native image scans,
+packaged process-isolation/runtime/operator checks, public assets/pull and the published
+.3-to-.4 same-volume 5152 upgrade pass. Existing identity/session/history, offline replay,
+recipe/photo and synthetic purchased Bring ownership survive; real EN/DE OCR previews and
+clean ZIP/photo restore pass. See [exact release evidence](validation/github-source-photos-preview.json).
