@@ -1,12 +1,17 @@
 # Implementation checklist and evidence
 
-**Shopping/Bring! visibility — implemented; preview validation in progress:** Home, Calendar
+**Shopping/Bring! visibility — published and verified in `poc-20261022.3`:** Home, Calendar
 and Settings open a read-only current-week requirement list with quantities, ownership states,
 pantry exclusions, server job/errors and a manual Sync to Bring! action. Cached snapshots
 remain useful offline with a stale/local-edit warning. An explicit dedicated-test-list
 check now runs inside the container worker; no terminal/helper is needed. Reports remain
 scoped, expire and fail closed on missing UUID acknowledgements. See [shopping guide](SHOPPING.md).
-Live Bring! and physical iPhone behavior remain unverified; native is unchanged.
+All six exact-source CI jobs pass at 74c76bf: 366 backend tests per architecture, 54 PWA
+tests and real Chromium/WebKit regressions. Both fresh native image gates, six public
+asset checksums/config identities, anonymous pull and the published .2-to-.3 same-volume
+5152 upgrade/OCR/restore pass; synthetic purchased ownership history is preserved. See
+[exact publication/upgrade evidence](validation/github-shopping-preview.json). Live Bring!
+and physical iPhone behavior remain unverified; native is unchanged.
 
 **Personal ChatGPT imports — published and verified in `poc-20261022.2`:** the supported
 open-source OAuth/PKCE loopback helper pairs a personal account with one authenticated

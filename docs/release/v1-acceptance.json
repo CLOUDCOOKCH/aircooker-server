@@ -14,11 +14,12 @@
     {
       "id": "core_workflows",
       "status": "partial",
-      "detail": "349 backend tests per architecture, 52 frontend tests, Windows helper tests, Chromium/WebKit and published .1-to-.2 preview upgrade/OCR/restore pass; expanded recurrence acceptance remains open.",
+      "detail": "366 backend tests per architecture, 54 frontend tests, Chromium/WebKit shopping/verification/manual retry/offline-cache and existing planner/OCR regressions pass; Bring responses are synthetic and expanded recurrence acceptance remains open.",
       "evidence": [
         "docs/validation/ai-recipe-import-merge.json",
         "docs/validation/github-v1-readiness-preview.json",
-        "docs/validation/github-chatgpt-preview.json"
+        "docs/validation/github-chatgpt-preview.json",
+        "docs/validation/github-shopping-preview.json"
       ]
     },
     {
@@ -33,11 +34,12 @@
     {
       "id": "backup_restore_upgrade",
       "status": "partial",
-      "detail": "Verified WAL snapshot and JSON/ZIP merge restore pass, including published .1-to-.2 same-volume 5152 upgrade and old ZIP/photo restore into clean .2; broader disaster recovery/device rehearsal remains open.",
+      "detail": "Verified WAL snapshot and JSON/ZIP merge restore pass, including published .2-to-.3 same-volume 5152 upgrade preserving identity/session/offline replay/synthetic purchased Bring ledger and old ZIP/photo restore into clean .3; broader disaster recovery/device rehearsal remains open.",
       "evidence": [
         "docs/BACKUP.md",
         "docs/validation/github-v1-readiness-preview.json",
-        "docs/validation/github-chatgpt-preview.json"
+        "docs/validation/github-chatgpt-preview.json",
+        "docs/validation/github-shopping-preview.json"
       ]
     },
     {
@@ -89,9 +91,11 @@
     {
       "id": "live_bring",
       "status": "blocked",
-      "detail": "Requires a dedicated Bring test account/list and live ownership/purchase/rollover evidence.",
+      "detail": "Packaged explicitly confirmed dedicated-test-list verification and UUID write postconditions have synthetic worker/browser coverage; real dedicated Bring account/list ownership/purchase/rollover evidence remains required.",
       "evidence": [
-        "docs/BRING.md"
+        "docs/BRING.md",
+        "docs/SHOPPING.md",
+        "docs/validation/github-shopping-preview.json"
       ]
     },
     {

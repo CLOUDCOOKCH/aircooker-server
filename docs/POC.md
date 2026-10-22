@@ -1,14 +1,24 @@
 # mealf PWA proof of concept
 
-## Next preview candidate
-
-`poc-20261022.3` adds the [shopping requirements view](SHOPPING.md), manual Sync to Bring!,
-per-item/queued/error feedback, an offline snapshot and in-container dedicated-test-list
-verification. Existing quantities, pantry, leftovers and ownership rules remain active.
-Publication and exact-image upgrade checks must pass before this candidate is described
-as available. Preserve existing volumes and custom `5152:5152` command/healthcheck settings.
-
 ## Current published preview
+
+`poc-20261022.3` adds the [shopping requirements view](SHOPPING.md), manual **Sync to Bring!**,
+per-item/queued/error feedback, an offline snapshot and in-container dedicated-test-list
+verification. All six exact-source CI jobs pass: 366 backend tests per architecture,
+54 frontend tests and real Chromium/WebKit regressions. Both fresh native image scans,
+runtime/operator checks, six public asset checksums/config identities, anonymous pull and
+the published .2-to-.3 same-volume 5152 upgrade pass. Identity/session/history, recipe/photo,
+offline replay and the synthetic purchased ownership ledger survive; real EN/DE OCR previews
+and old ZIP/photo restore pass. See [prerelease](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.3)
+and [exact publication evidence](validation/github-shopping-preview.json).
+
+Preserve existing volumes and custom `5152:5152` command/healthcheck settings. Save edits,
+accept the PWA update, then open **Calendar → Shopping list**. Loading Bring! lists alone
+does not prove safe writes: explicit dedicated-test-list verification is required and
+unsupported UUID behavior stays blocked. Live Bring! and physical iPhone remain unverified;
+preview publication is not production-v1 acceptance.
+
+## Previous preview: personal ChatGPT
 
 `poc-20261022.2` adds optional personal ChatGPT **text** imports through the official
 open-source sign-in flow, a downloadable Windows-friendly loopback helper, encrypted
@@ -63,7 +73,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.2`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.3`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.

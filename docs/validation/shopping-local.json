@@ -1,10 +1,10 @@
 {
   "date": "2026-10-22",
-  "status": "implemented and locally tested; exact-source CI/publication pending",
+  "status": "implemented and locally tested; exact-source CI/publication separately verified",
   "baseline": "cbe2f46",
   "scope": "Read-only weekly shopping view, persistent cached server snapshot, per-item Bring ownership states and manual sync; packaged explicit dedicated-list verification with durable UUID/stage; write postcondition checks and credential/list-bound compatibility evidence",
-  "backend_tests": 363,
-  "backend_seconds": 50.52,
+  "backend_tests": 366,
+  "backend_seconds": 49.7,
   "frontend_tests": 54,
   "checks": [
     "Ruff lint/format",
@@ -13,7 +13,9 @@
     "TypeScript/Prettier/production build",
     "Original/derived artwork integrity",
     "41-wheel runtime licence inventory",
-    "real PWA/server/worker verification/failure/retry/sync/manual-item preservation/EN desktop/DE dark phone/Axe/offline cached reload with explicit Bring double"
+    "real PWA/server/worker verification/failure/retry/sync/manual-item preservation/EN desktop/DE dark phone/Axe/offline cached reload with explicit Bring double",
+    "Unsafe verification failures terminate without inflating attempt counts; superseding job generation remains queued",
+    "Capability evidence uses the existing server secret key: identical credentials on another installation cannot accept a copied report"
   ],
   "logs": [
     "build/shopping-all-tests.log",
@@ -29,9 +31,9 @@
   "unverified": [
     "Live Bring UUID semantics and actual account/list sync",
     "Physical iPhone/Safari",
-    "Fresh native image gates/publication until recorded separately",
     "Native UI/contract intentionally unchanged"
   ],
   "local_limit": "Source Docker build blocked by managed APK destination policy; CI native image checks required. No policy bypass or live credentials used.",
-  "production_v1_accepted": false
+  "production_v1_accepted": false,
+  "subsequent_evidence": "docs/validation/github-shopping-preview.json"
 }

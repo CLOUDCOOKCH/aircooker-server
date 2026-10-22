@@ -53,8 +53,9 @@ old attempts. Verification is limited to three new attempts per hour and only th
 holds the credentials. No container shell, secret files or Windows helper is required.
 
 Evidence expires after 30 days and is bound to the exact credential/list configuration
-and pinned bring-api SDK 1.1.2. Changing accounts/lists or losing write confirmation blocks
-writes until verification succeeds again. Older unbound reports need fresh verification;
+and pinned bring-api SDK 1.1.2. The binding uses this server’s existing secret key; copying
+evidence between installations cannot authorize writes. Changing accounts/lists or losing
+write confirmation blocks writes until verification succeeds again. Older unbound reports need fresh verification;
 never hand-write or edit an affirmative report. A test on one list does not authorize another.
 If the live service cannot preserve item identities, automatic/manual mutations remain
 disabled; use the displayed quantities to add items in Bring! manually. This unofficial
@@ -88,3 +89,10 @@ interrupted verification, rewritten UUIDs, unknown-item preservation and missing
 acknowledgements. Bring! HTTP behavior is synthetic; physical iPhone and live Bring!
 compatibility remain unverified until separately recorded. See the bounded UI review and
 release validation reports; preview publication is not production-v1 acceptance.
+
+`poc-20261022.3` is published for AMD64/ARM64. All six exact-source CI jobs, fresh native
+image scans/runtime checks, public asset/config identities, anonymous pull and the published
+.2-to-.3 same-volume 5152 upgrade pass. The synthetic purchased ownership ledger and offline
+replay survive; real EN/DE OCR remains preview-only and old ZIP/photo restore passes. See
+[exact release evidence](validation/github-shopping-preview.json). This subsequent release
+validation does not turn the manual UI review into a full accessibility or security audit.
