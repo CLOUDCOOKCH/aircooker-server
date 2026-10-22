@@ -64,3 +64,8 @@ Gemini adapter, replacing only provider HTTP: ingredient/random flows, explicit 
 offline edit/reload/sync, cached results, malformed responses, EN desktop, DE phone down to
 320px and Axe. This is not live-provider or physical-iPhone evidence. See the bounded
 [UI review](validation/recipe-ideas-ui-review.md).
+
+Published `poc-20261022.7`: all six exact-source CI jobs, both fresh native image gates,
+public assets/scans/SBOM identities, anonymous pull and .6-to-.7 same-volume 5152 upgrade
+pass. [Exact evidence](validation/github-recipe-ideas-preview.json) distinguishes generated
+content over synthetic provider HTTP from published runtime and unverified live services.

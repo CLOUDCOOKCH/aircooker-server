@@ -1,14 +1,18 @@
 # Implementation checklist and evidence
 
-**Recipe ideas, 2026-10-22 — implemented, locally tested; release verification pending:**
+**Recipe ideas, 2026-10-22 — published and verified in `poc-20261022.7`:**
 Home/Recipes offers ingredient-based or surprise generation using configured household AI.
 Three complete proposals require editor review/Save; no automatic library/calendar/Bring!
 changes. Migration 015, idempotent delivery, pinned consent, recovery without duplicate
-billing, redaction and preview retention are covered. Local validation passes 408 backend
+billing, redaction and preview retention are covered. Local validation passes 421 backend
 and 59 frontend tests, Ruff/mypy/OpenAPI, build and real Chromium ingredient/random/offline
 review-save-reload-sync/Axe using provider HTTP doubles. Live provider/physical iPhone remain
-unverified. Explicit user scope addition: [guide](RECIPE_IDEAS.md),
-[decision](adr/016-creative-recipe-ideas.md). Native UI remains unchanged.
+unverified. All six exact-main CI jobs pass at 74c1c925, including both native architecture
+build/runtime/security gates and Chromium/WebKit regressions. Both fresh publication image
+gates, public hashes/config identities/scans/SBOMs/anonymous pull and published .6-to-.7
+same-volume 5152 upgrade pass. See [exact evidence](validation/github-recipe-ideas-preview.json).
+Explicit user scope addition: [guide](RECIPE_IDEAS.md), [decision](adr/016-creative-recipe-ideas.md).
+Native UI remains unchanged; the deliberate contract refresh passes independent CI.
 
 **Shopping navigation, 2026-10-22 — published and verified in `poc-20261022.6`:** Shopping list is the sixth
 primary PWA destination on desktop/mobile. Existing shortcuts select the same tab.

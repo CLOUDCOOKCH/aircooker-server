@@ -1,14 +1,27 @@
 # Mealf preview
 
-## Recipe ideas candidate
+## Published preview: Recipe ideas
 
-`poc-20261022.7` is prepared for the next preview; publication is pending. Home/Recipes
-offers three ingredient-based or surprise recipes from configured household AI, with
-explicit consent and review/Save. Cached proposals and reviewed offline saves persist.
-See [usage/privacy](RECIPE_IDEAS.md) and [scoped UI review](validation/recipe-ideas-ui-review.md).
-The last verified published image remains `.6` below until new exact-source CI, native
-image scans and runtime/upgrade verification succeed. Preserve the existing volume and
-custom internal/external `5152:5152` command/healthcheck. This remains a preview, not v1.
+`poc-20261022.7` is published and verified for **AMD64 and ARM64**. Open **Recipe ideas**
+on Home or in Recipes. Enter ingredients at home or choose **Surprise me** for three
+complete proposals from configured household AI, with explicit consent and review/Save.
+Cached proposals and reviewed offline saves persist. No automatic library/calendar/Bring!
+changes occur, and personal ChatGPT billing is not used. See [usage/privacy](RECIPE_IDEAS.md).
+
+All six exact-main-source CI jobs pass at 74c1c925: 421 backend tests per architecture,
+59 frontend tests, Chromium/WebKit regressions and both security gates. Both fresh native
+image scan/runtime/operator gates, six public checksums/config identities, anonymous pull
+and a published .6-to-.7 same-volume upgrade on internal port 5152 pass. Identity/session/
+history/recipe/shopping projection, six-tab EN/DE navigation and cached offline shopping
+are preserved; migration 015 and new Recipe ideas controls/API are present. Generated
+proposals use explicit provider HTTP doubles in browser acceptance; live AI/iPhone remain
+unverified. The retained native contract passes its independent Linux/macOS/Xcode/simulator
+CI; no native Recipe ideas UI is added.
+
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.7`, keeping the existing volume and
+custom internal/external `5152:5152` command/healthcheck. Save local work, accept the PWA
+update and reopen Home or Recipes. See [exact evidence](validation/github-recipe-ideas-preview.json)
+and [scoped UI review](validation/recipe-ideas-ui-review.md). This is a preview, not v1.
 
 ## Published preview: primary Shopping navigation
 

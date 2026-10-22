@@ -1,0 +1,222 @@
+{
+  "source_commit": "74c1c925ad945714c686f8b968d85c6bdb191465",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/9",
+  "ci": {
+    "id": 39758274181,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39758274181",
+    "head_sha": "74c1c925ad945714c686f8b968d85c6bdb191465",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "jobs": [
+    {
+      "id": 119755723757,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119755723980,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119755724074,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119755724090,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119755724163,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119755724168,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    }
+  ],
+  "pr_ci": {
+    "id": 39757462027,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39757462027",
+    "head_sha": "2dd348638ad88d1fcfdc13f7d2b68cb9390287cb",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "pr_jobs": [
+    {
+      "id": 119753152226,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119753152514,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119753152650,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119753152686,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119753152804,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119753153815,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "publication": {
+    "id": 39758920886,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39758920886",
+    "head_sha": "74c1c925ad945714c686f8b968d85c6bdb191465",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "publication_jobs": [
+    {
+      "id": 119757900710,
+      "name": "gate",
+      "conclusion": "success"
+    },
+    {
+      "id": 119757977619,
+      "name": "verify-images (ubuntu-24.04, amd64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119757977649,
+      "name": "verify-images (ubuntu-24.04-arm, arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119758834906,
+      "name": "publish",
+      "conclusion": "success"
+    }
+  ],
+  "release_id": 420555392,
+  "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.7",
+  "attestation": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58582487",
+  "public": {
+    "release_id": 420555392,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.7",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.7",
+    "index_digest": "sha256:27be26b7e6193ee3795415fd872786280b6930998668e515df087aebc62c40aa",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "24ea6469daa975ceaa1c5bfa28550b2a6df6bc07d42a3c38e99c8bbc89446d1e",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "f9af5724a1c7efe60b8a30d9c3c77d5d80e143dc705ab1f068e8aefb4dc653ba",
+        "size": 186530
+      },
+      "container-security-arm64.json": {
+        "sha256": "4c82882bce345c82e098c905dd9b0d8d23db16bae480308dc0cd451819a79a1c",
+        "size": 186612
+      },
+      "openapi-v1.json": {
+        "sha256": "dc237dc99bfa290f1a6b5c24830105369e6b3681ce072adb77bf1036f401eb6d",
+        "size": 208582
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "920720cc192ec393f4508a357013d627bb626fba118cecae46d475ec2f0df105",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "792bb83cd9a6066165c74bfbf13c6b9a042396efc16760c1e58974a7efe4b660",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:a2c6df45084a2c61f7bd7b300d2824c235c47d1e5d89d3be384d8d80e8788a65",
+        "config": "sha256:4600a88ec8813081c8d77a3f48c06737a2823fffb448a369402a484973367920",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:38ce501cd0376b9746807e9cde6af8c7b1ee59f27b00866ef21d60e6f09494c7",
+        "config": "sha256:ec4c507e535e95750f059774e6609a7808616517b40ca66649b43e89a38d6828",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "published_runtime": {
+    "runtime_kind": "published immutable image",
+    "recipe_ideas": "migration015/table/authenticated API present; unconfigured generation rejected without external requests",
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:7a225ca29951c501bf140a6e981363a6b9056147a55c8e149f6fd3297c5d6a75",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:27be26b7e6193ee3795415fd872786280b6930998668e515df087aebc62c40aa",
+    "same_volume_5152_upgrade": "passed; instance identity, active session, sync history proof and planned recipe/400 g projection preserved",
+    "published_pwa": "six primary destinations; EN/DE Shopping selection, six >=44px nonoverlapping 320px targets, real cached offline reload and disabled Bring action passed in Chromium",
+    "routes": "/admin/ and assets200, root404, PWA /app/",
+    "scope": "Disposable synthetic volume/containers only; no user deployment accessed, live Bring calls or physical iPhone evidence"
+  },
+  "local": {
+    "backend_tests": 421,
+    "frontend_tests": 59,
+    "mypy_source_files": 50,
+    "ruff": "117 files format/lint pass",
+    "openapi": "exact drift check passed",
+    "browser": "real PWA/FastAPI/SQLite/worker and Gemini adapter; provider HTTP synthetic; ingredient/surprise privacy, explicit Save, offline edit/reload/sync, cached proposals, malformed output pass",
+    "accessibility": "Axe desktop and German390;320 overflow/layout only",
+    "docker_fixture": "pass startup/restart/sync/backup/restore and operator smoke; fixture derived from published .6 runtime plus current code/dist, not production image build evidence",
+    "ui_review": "fresh scoped ship; original Mealf artwork/theme preserved; launcher/detector unavailable",
+    "unverified": [
+      "live AI provider/model/allowance",
+      "physical iPhone/Safari",
+      "native Recipe ideas UI (not implemented)"
+    ],
+    "upgrade_fixture": ".6-to-current runtime fixture; same volume/internal5152 identity/session/history/recipe/shopping preserved; new migration/API/form present; no live inference"
+  },
+  "native_contract": {
+    "source_commit": "1e8f644d5bcf453163a676a9e9fdb8546be7f11c",
+    "ci": {
+      "id": 39757481143,
+      "html_url": "https://github.com/CLOUDCOOKCH/aircooker-ios/actions/runs/39757481143",
+      "head_sha": "1e8f644d5bcf453163a676a9e9fdb8546be7f11c",
+      "run_attempt": 1,
+      "conclusion": "success"
+    },
+    "jobs": [
+      {
+        "id": 119753056706,
+        "name": "core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119753056801,
+        "name": "native",
+        "conclusion": "success"
+      }
+    ],
+    "swift_core_tests": 91,
+    "pin_source_commit": "8a3ef7456e1d5fa470c6686d5eca5eaeaa08e500",
+    "scope": "compatible contract only; native Recipe ideas UI not added"
+  },
+  "limitations": [
+    "Live AI inference/account/model billing unverified",
+    "Physical iPhone/Safari acceptance unverified",
+    "Provider HTTP in generated-ideas browser/unit tests is explicitly synthetic",
+    "Desktop and DE390 Axe;320 layout/overflow only",
+    "Preview is not production v1"
+  ]
+}
