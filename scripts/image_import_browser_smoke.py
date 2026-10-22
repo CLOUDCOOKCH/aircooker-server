@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from browser_test_errors import unexpected_browser_errors
 from playwright.sync_api import expect, sync_playwright
 
 
@@ -122,38 +123,36 @@ def main():
                     context.add_init_script("Reflect.deleteProperty(window, 'PushManager')")
                 page = context.new_page()
                 errors = []
-                outage_active = False
+                window_errors = []
                 failed_requests = []
+                outage_active = False
+                page.on(
+                    "pageerror",
+                    lambda error: errors.append(
+                        {
+                            "name": error.name,
+                            "message": error.message,
+                            "stack": error.stack,
+                            "outage": outage_active,
+                        }
+                    ),
+                )
                 page.on(
                     "requestfailed",
                     lambda request: failed_requests.append(
-                        {"url": request.url, "outage": outage_active, "failure": request.failure}
-                    ),
-                )
-                page.on(
-                    "pageerror",
-                    lambda error: print(
-                        "Runtime diagnostic:",
-                        json.dumps(
-                            {
-                                "name": error.name,
-                                "message": error.message,
-                                "stack": error.stack,
-                                "outage": outage_active,
-                            }
-                        ),
-                        flush=True,
+                        {
+                            "url": request.url,
+                            "outage": outage_active,
+                        }
                     ),
                 )
                 page.expose_function(
-                    "reportTestRuntime",
-                    lambda detail: print("Window diagnostic:", json.dumps(detail), flush=True),
+                    "recordTestRuntimeError", lambda detail: window_errors.append(detail)
                 )
                 context.add_init_script("""for (const kind of ['error', 'unhandledrejection']) window.addEventListener(kind, event => {
                   const error = event.error ?? event.reason;
-                  void window.reportTestRuntime({kind, name: error?.name, message: error?.message ?? event.message, stack: error?.stack});
+                  void window.recordTestRuntimeError({kind, name: error?.name, message: error?.message ?? event.message, stack: error?.stack});
                 });""")
-                page.on("pageerror", lambda error: errors.append(str(error)))
                 page.on(
                     "response",
                     lambda response: print(
@@ -326,9 +325,12 @@ def main():
                 page.screenshot(path=str(captures / "image-review-phone-de-dark.png"))
                 # Two extraction jobs were delivered, only one explicitly saved recipe exists.
                 assert len(recipes()) == 1
+                unexpected = unexpected_browser_errors(
+                    engine, base, errors, failed_requests, window_errors
+                )
+                assert unexpected == [], unexpected
                 if errors:
-                    print("Failed transport observations:", json.dumps(failed_requests), flush=True)
-                assert errors == [], errors
+                    print("Verified native WebKit outage diagnostics:", len(errors), flush=True)
                 phase("German OCR/phone/axe passed; closing context")
                 context.close()
                 phase("context closed")
@@ -336,6 +338,8 @@ def main():
                 json.dumps(
                     {
                         "engine": engine,
+                        "native_outage_diagnostics": len(errors),
+                        "uncaught_errors_and_rejections": len(window_errors),
                         "backend": "real",
                         "ocr": "real Tesseract eng+deu",
                         "native_push": "unavailable OS capability fixture"
