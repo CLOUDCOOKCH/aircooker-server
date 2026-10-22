@@ -40,6 +40,7 @@ jobs:
           gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN/jobs?per_page=100" > build/preview-jobs.json
           python3 scripts/preview_gate.py jobs build/preview-jobs.json
   verify-images:
+    timeout-minutes: 20
     needs: gate
     if: needs.gate.outputs.already_published != 'true'
     strategy:
@@ -78,7 +79,7 @@ jobs:
           AIRCOOKER_TEST_IMAGE: mealf-verified:${{ matrix.arch }}
         run: |
           python scripts/docker_smoke.py
-          python scripts/operator_docker_smoke.py
+          timeout 180s python scripts/operator_docker_smoke.py
       - name: Generate software bill of materials
         env:
           IMAGE_ARCH: ${{ matrix.arch }}

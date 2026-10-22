@@ -150,6 +150,7 @@ def main():
         erased = offline_delete("DELETE " + identity)
         assert erased["code"] == 0, erased
         docker("start", name)
+        base = "http://127.0.0.1:" + docker("port", name, "8080/tcp").rsplit(":", 1)[1]
         ready()
         assert request(base, "/api/v1/system/info")["configured"] is False
         setup()
