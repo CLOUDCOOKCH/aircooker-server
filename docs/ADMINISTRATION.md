@@ -1,6 +1,6 @@
 # Administration console
 
-Open the configured HTTPS `BASE_URL`. A fresh installation requires the one-time token
+Open `/admin/` on the configured HTTPS `BASE_URL` origin. A fresh installation requires the one-time token
 from `/data/config/setup-token`; there are no default credentials. After setup, sign in
 with the shared household account. Browser access expires after 15 minutes and requires
 sign-in again. Cookies are Secure/HttpOnly/SameSite=Strict; unsafe operations additionally

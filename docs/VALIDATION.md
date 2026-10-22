@@ -278,21 +278,29 @@ limits are in validation/github-retention.json.
 
 ## Mealf identifiers and administration paths — 2026-10-22
 
-Current source/package/native target names use Mealf. Console `/admin/` and its assets no
-longer occupy `/`; the backend reserves the root for the operator's landing page. PWA/API
-paths remain stable. Existing database, session, archive and offline browser state have
-explicit compatibility handling. See [upgrade guide](MEALF_MIGRATION.md).
+Published and verified in `poc-20261022.5`. Current source/package/native target names
+use Mealf. Console `/admin/` and its assets no longer occupy `/`; the root is reserved
+for the operator's landing page. PWA/API paths remain stable. Existing databases,
+sessions, archives and browser offline state have explicit compatibility handling.
+See [upgrade and path routing](MEALF_MIGRATION.md).
 
-Local validation: full 391-test backend suite plus the added admin compatibility check,
-59 browser-core tests, Ruff, mypy, generated OpenAPI drift, original brand assets,
-41-wheel licence inventory and real Chromium console flows pass. The full PWA offline/two-device/Axe browser check also passes, including current admin
-links and the absence of admin links in demo mode. The console browser check includes root/old-asset 404s, `/admin` redirect, setup, secure cookies, household,
-EN/DE phone layout, sessions and archive transfer. No physical iPhone or live external
-integration claim. Local Docker source build is blocked by this environment's Alpine
-registry HTTP 403; remote CI/runtime/image gates must pass before publication. The
-Impeccable launcher/detector are unavailable; no automated design-detector pass is claimed.
-Full v1 readiness remains open.
+Exact-source main CI passes: 392 backend tests on each architecture, 59 frontend core
+tests, Ruff/mypy/format, OpenAPI drift, original assets, licence/dependency/secret checks,
+and Chromium/WebKit workflows. Both fresh native image scan/runtime/operator gates pass;
+public hashes, manifests/configs, attestation and anonymous pull are verified. The
+published .4-to-.5 same-volume 5152 upgrade preserves identity/session/history, offline
+replay, recipe/photo and synthetic purchased Bring ownership; real EN/DE OCR previews
+and old ZIP/photo restore into a clean new image pass. A real Chromium old/new-PWA
+upgrade additionally preserves exact offline outbox/mutation/device/image IDs and Blob
+hash, reuses the existing browser database, rotates legacy cookies and opens `/admin/`.
+Root/old-console assets return 404. No assertion/gate was suppressed on CI retries.
+See [the exact source and release evidence](validation/github-mealf-rename-preview.json).
 
-The fresh finish reviewer records **ship within name, routing and visual-preservation
+The fresh finish review records **ship within name, routing and visual-preservation
 scope** in [the review](validation/mealf-admin-routing-review.md); the documentation
-handoff preserves the incumbent visual tokens.
+handoff preserves incumbent tokens. Launcher/detector remain unavailable. The local
+source image build was restricted by Alpine HTTP 403; published images for both architectures
+were built/scanned/run in GitHub and pulled/exercised locally. Initial extra local
+upgrade harness/disk failures and successful reruns are recorded in the evidence.
+Physical iPhone and live external integrations remain unverified; full v1 acceptance
+is open. Actual GitHub repository names still require owner renaming in Settings.

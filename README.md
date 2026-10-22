@@ -106,7 +106,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional development client, genuine reviewed desktop/phone captures, 51 core tests and real Chromium/WebKit flows; physical Safari and remaining acceptance open |
+| PWA | Functional development client, genuine reviewed desktop/phone captures, 59 core tests and real Chromium/WebKit flows; physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
@@ -123,7 +123,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
 | Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; household deletion uses the tested offline operator CLI; extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
-| Releases | [POC 20261022.1 AI imports and hardening](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.1) published for AMD64/ARM64; fresh scans/runtime/operator checks, anonymous pull, public assets and same-volume 5152 upgrade/OCR/restore passed; stable acceptance remains open |
+| Releases | [POC 20261022.5 Mealf names/admin paths](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.5) published for AMD64/ARM64; exact-source CI, fresh scans/runtime/operator checks, public pull/assets and old-to-new 5152/PWA/offline/restore checks pass; stable acceptance remains open |
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.

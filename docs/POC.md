@@ -1,13 +1,31 @@
 # Mealf preview
 
-Next candidate: **poc-20261022.5**. Renames current packages/targets to Mealf,
-serves the administration console at `/admin/`, and reserves `/` for the separate
-landing page. Existing volumes, sessions and browser offline work have explicit
-compatibility handling. See [upgrade and reverse-proxy instructions](MEALF_MIGRATION.md).
-Publication and image acceptance are pending until exact-tag CI and image gates pass.
+`poc-20261022.5` is published for **AMD64 and ARM64**. Current Python/Swift packages,
+modules, targets and operator examples use Mealf. The administration console and its
+scripts/styles live at `/admin/`; `/` is free for a separately hosted landing page. The
+PWA remains at `/app/`. See [upgrade and path-routing instructions](MEALF_MIGRATION.md).
 
+All six exact-main-source CI jobs pass at 0b6307e: 392 backend tests per architecture,
+59 frontend tests, and the Chromium/WebKit regressions. Both fresh native image
+scan/runtime/operator gates, six public asset hashes, manifest/config identities,
+anonymous pull and the published .4-to-.5 upgrade checks pass. Real previous/new PWA
+bundles preserve an offline recipe, image Blob hash, outbox/mutation/device IDs and
+session while reusing the existing browser database; cookie refresh issues current names.
+The same-volume 5152 upgrade preserves identity/history, pending replay, recipe/photo,
+synthetic purchased Bring ledger, real EN/DE OCR previews and clean old ZIP/photo restore.
 
-## Current published preview
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.5`, retaining the existing volume and
+custom `5152:5152` command/healthcheck. No PWA reset/reinstall is needed. The former
+module entry point is retained as a deprecated bridge for deployed custom commands;
+fresh configuration uses `mealf.app:create_app`. Actual GitHub repository names still
+require owner renaming in Settings. Native identifiers/contract were updated separately
+and passed Linux/macOS/Xcode/simulator CI. Live services and physical iPhone acceptance
+remain open; this preview is not production v1.
+
+See [the prerelease](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.5)
+and [exact source, scans and upgrade evidence](validation/github-mealf-rename-preview.json).
+
+## Previous preview: recipe photos
 
 `poc-20261022.4` adds original-peach placeholders for missing/unreadable recipe photos and
 source metadata pictures for URL/AI imports, including incomplete drafts. Photos remain
@@ -98,7 +116,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.4`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.5`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.

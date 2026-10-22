@@ -133,8 +133,8 @@ docker compose -f compose.preview.yaml -f compose.tunnel.yaml logs --tail=50 clo
 Keep both `-f` arguments for future operations on this installation. The original
 loopback backend binding remains available for local health checks; the connector
 does not need a published port. Do not launch the base Compose file as a second project
-against the same data volume. Source-build users can adapt the overlay's `mealf` service
-key and tunnel service URL to `mealf`, retaining their original source Compose volume.
+against the same data volume. Source and preview builds both use the `mealf` service
+key; retain the original Compose project and volume mapping when adapting this overlay.
 
 ## Cache, access and request settings
 

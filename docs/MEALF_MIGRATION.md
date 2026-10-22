@@ -97,3 +97,11 @@ GitHub repositories. Links and the contract pin retain the valid URLs; no nonexi
 remote is advertised. Historical release/test evidence, Git history and released
 migrations retain their original names and hashes. Compatibility identifiers occur only
 where needed to read existing installations or archives.
+
+## Published upgrade evidence
+
+`poc-20261022.5` passed old-to-new same-volume 5152 and real Chromium PWA upgrade
+rehearsals, preserving exact offline IDs/photos/outbox, sessions, household/history and
+old archive restore. Native package/targets also passed independent Linux/macOS/Xcode/
+simulator checks. See [exact source/image/CI evidence](validation/github-mealf-rename-preview.json).
+Physical installed iPhone and live external services were not exercised by these tests.

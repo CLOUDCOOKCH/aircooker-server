@@ -42,6 +42,5 @@ default credentials or separate administrator roles. Keep the data volume, conta
 logs, tunnel credentials and exports private. Never run two backend instances against
 the same SQLite volume.
 
-The product was previously called **mealf**. Existing package, Compose, API and
-storage names retain that identifier for compatibility; do not rename volumes during
-an upgrade. See the [branding and compatibility notes](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BRANDING.md).
+Current packages and source names use **Mealf**. Existing installations keep explicit
+compatibility for their saved data; do not rename volumes during an upgrade. See the [branding and compatibility notes](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BRANDING.md).

@@ -1,0 +1,175 @@
+{
+  "recorded_at": "2026-10-22",
+  "source_commit": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef",
+  "feature_commit": "753e1ffacc39644bbf4401888081eeb07ee8e888",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/6",
+  "ci": {
+    "run_id": 39742716756,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39742716756",
+    "run_attempt": 2,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119705747779,
+        "name": "browser",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      },
+      {
+        "id": 119705750152,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      },
+      {
+        "id": 119705750621,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      },
+      {
+        "id": 119705750869,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      },
+      {
+        "id": 119705811548,
+        "name": "pwa-core",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      },
+      {
+        "id": 119705812072,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "0b6307e51f77ada22d15c8a11bd6f5fb35b799ef"
+      }
+    ],
+    "backend_tests_per_architecture": 392,
+    "frontend_core_tests": 59,
+    "windows_helper_run": 39742716761,
+    "browser": "Full Chromium and WebKit flows, admin/root routing, mobile layouts, themes, image/OCR imports, offline/two-device/Axe; external service responses synthetic",
+    "retry_history": "PR browser setup timed out downloading WebKit OS packages, then passed on retry. First main run reported a WebKit network pageerror during the deliberate backend-outage test; unchanged source/assertions passed on clean-runner retry. Gates were not suppressed."
+  },
+  "publication": {
+    "run_id": 39744194893,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39744194893",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119708494215,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119708572165,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119708572356,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119709351649,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58543660",
+    "release_id": 420446352,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.5"
+  },
+  "upgrade_evidence_scope": "Synthetic disposable containers/volumes and real Chromium profile; no user deployment or live external accounts accessed",
+  "native_evidence": "Independent companion docs/validation/github-mealf-identifiers.json (source 4f1f13c; 91 core tests, Xcode build and simulator pass)",
+  "limitations": [
+    "Physical installed iPhone and live AI/Bring/ChatGPT remain unverified by this task.",
+    "Complete product/v1 acceptance remains open.",
+    "Actual GitHub repository names and immutable historical evidence retain their names until owner action; legacy compatibility reads are deliberate."
+  ],
+  "public_release": {
+    "release_id": 420446352,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.5",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.5",
+    "index_digest": "sha256:7266612ba453d4c9e83c0d59325e1fdc6880bf60ffc41c5947af7493638a5b09",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "3fbaa14184d7485843b92facabd0932c79a59d3688eda43838aea26952a6eeec",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "842e89c6acdf841fe5acec37d8bc4130170692cd84139d449341cf31cde3ab6d",
+        "size": 186531
+      },
+      "container-security-arm64.json": {
+        "sha256": "240f232bc46178c205a3f8a9abc5680143d18550e5d4d425c7e355600394ebe3",
+        "size": 186611
+      },
+      "openapi-v1.json": {
+        "sha256": "87feb2b709afa981c2354bb9f5fa3b6164dfbe88560c1c3884ffb82614f71bbd",
+        "size": 203751
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "85d7726d420f7c449d9dcd6b371afe063dfa2cef52483a29b0fcdedcd9d78ec2",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "0066a99990833b92b13e2b97e3606cea2946f4e3b724ef69cbf57234d17acb98",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:277568f7db1fb549cbaec921c3782f6d10ff17de857a8317a7deafb08b56a8a1",
+        "config": "sha256:62d6acd3bfdf9fd6d9b6c81d75eccb680ab4967d1d10f4cde30a263f1f494a3b",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:c0604364e077bf782fce95b183ab108f5292c8c1f76e9fe728bcfbdb513f84f6",
+        "config": "sha256:742fbc36f0a75b4704056abf244b5b4f9a4e0055ceda5893814fa11b051e960c",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed: isolated empty per-command Docker credential configuration; global configuration unchanged",
+    "scanner": "Trivy 0.70.0 unsuppressed HIGH/CRITICAL gate; ImageIDs equal native build logs and public manifests",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58543660"
+  },
+  "published_backend_upgrade": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:efaa7baeb77f266fffff503d2040640161e3826c86dbb224a078128a406f2e9f",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:7266612ba453d4c9e83c0d59325e1fdc6880bf60ffc41c5947af7493638a5b09",
+    "same_volume_5152_upgrade": "passed with previous deployed uvicorn module command through explicit compatibility shim",
+    "sqlite_filename_migration": "mealf.sqlite3 present, legacy filename absent",
+    "routes": "/admin/ and its scripts200; root and old console.js404",
+    "identity_session_sync_proof": "preserved",
+    "offline_mutation_replay": "passed",
+    "ai_configuration_catalog": "present; keys redacted; no live provider invoked",
+    "real_local_ocr": [
+      "en",
+      "de"
+    ],
+    "explicit_preview_no_auto_save": "passed",
+    "old_archive_to_clean_new_install": "passed",
+    "packaged_chatgpt_helper_sha256": "matches source",
+    "personal_chatgpt_status": "disconnected; no bundled credentials",
+    "shopping_view": "current-week planned recipe retained; 200 g requirement not falsely marked sent; no credentials bundled",
+    "bring_purchased_ownership_ledger": "preserved from old image; synthetic ledger only, no live Bring calls",
+    "photo_hash": "preserved",
+    "source_photo_isolation": "packaged spawned process fails closed for forbidden source; existing OCR imports return optional source_photo without changing the retained image",
+    "isolation": "Disposable uniquely named synthetic containers and volumes only; no user deployment accessed"
+  },
+  "published_browser_upgrade": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:efaa7baeb77f266fffff503d2040640161e3826c86dbb224a078128a406f2e9f",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:7266612ba453d4c9e83c0d59325e1fdc6880bf60ffc41c5947af7493638a5b09",
+    "actual_browser_upgrade": "passed: same HTTPS-capable loopback origin, real old/new PWA bundles and worker, retained browser context and Docker volume, custom internal 5152",
+    "offline_mutation_and_photo": "exact stable mutation/device/entity/image IDs and Blob SHA-256 retained before sync; old physical IndexedDB reused; no shadow database; one recipe committed",
+    "cookies": "real previous HttpOnly session/refresh and CSRF upgraded through current JS; new names present and legacy names expired",
+    "routes": "PWA Settings opens /admin/ with packaged assets; / and old root console assets return404",
+    "database": "WAL-backed old filename migrated; new file present, legacy absent",
+    "scope": "synthetic isolated Chromium, not a physical installed iPhone; only uniquely named disposable containers/volume touched"
+  },
+  "local_test_harness_notes": "Initial extra browser-upgrade fixture used an incorrect photo selector; corrected to the existing Remove recipe photo control. Initial local restore attempt exhausted the disposable workspace disk; unused image/build cache was reclaimed without deleting user volumes. Both complete upgrade rehearsals then passed against the same immutable published image."
+}
