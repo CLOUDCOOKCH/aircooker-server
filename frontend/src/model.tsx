@@ -12,7 +12,7 @@ import { translate } from './i18n';
 import type { Key, Language } from './i18n';
 import type { Entity, Kind } from './lib/domain';
 import type { Edit, ImportTask, Queued } from './lib/store';
-export type Tab = 'home' | 'calendar' | 'recipes' | 'pantry' | 'settings';
+export type Tab = 'home' | 'calendar' | 'recipes' | 'pantry' | 'shopping' | 'settings';
 export type Household = { name: string; timezone: string; language: Language };
 export type SystemInfo = {
   name: string;

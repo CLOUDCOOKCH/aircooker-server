@@ -54,7 +54,7 @@ class SyntheticBring(UnofficialBringConnector):
 
 
 def main():
-    captures = Path("build/shopping-browser")
+    captures = Path(os.environ.get("MEALF_SHOPPING_SCREENSHOT_DIR", "build/shopping-browser"))
     captures.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix="mealf-shopping-browser-") as directory:
         root = Path(directory)
@@ -196,7 +196,23 @@ def main():
                         page.get_by_role("navigation").get_by_role(
                             "button", name="Calendar", exact=True
                         ).click()
-                        page.get_by_role("button", name="Shopping list", exact=True).click()
+                        # The calendar shortcut and primary navigation open the same destination.
+                        page.locator("main").get_by_role(
+                            "button", name="Shopping list", exact=True
+                        ).click()
+                        shopping_nav = page.get_by_role("navigation").get_by_role(
+                            "button", name="Shopping list", exact=True
+                        )
+                        expect(shopping_nav).to_have_attribute("aria-current", "page")
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Recipes", exact=True
+                        ).click()
+                        shopping_nav.focus()
+                        shopping_nav.press("Enter")
+                        expect(shopping_nav).to_have_attribute("aria-current", "page")
+                        expect(
+                            page.get_by_role("navigation").locator('[aria-current="page"]')
+                        ).to_have_count(1)
                         expect(
                             page.get_by_role("heading", name="Shopping list", exact=True)
                         ).to_be_visible()
@@ -204,6 +220,7 @@ def main():
                         expect(
                             page.get_by_role("button", name="Sync to Bring!", exact=True)
                         ).to_be_disabled()
+                        page.get_by_role("heading", name="Shopping list", exact=True).click()
                         page.screenshot(
                             path=str(captures / "shopping-unverified-desktop.png"), full_page=True
                         )
@@ -247,7 +264,9 @@ def main():
                         page.get_by_label("Language", exact=True).select_option("de")
                         page.evaluate("window.mealfAppearance.set('after-dark')")
                         page.set_viewport_size({"width": 390, "height": 844})
-                        page.get_by_role("button", name="Einkaufsliste", exact=True).click()
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Einkaufsliste", exact=True
+                        ).click()
                         expect(
                             page.get_by_text("Mit Bring! abgeglichen", exact=True)
                         ).to_be_visible()
@@ -259,13 +278,37 @@ def main():
                         page.screenshot(
                             path=str(captures / "shopping-synced-phone-de-dark.png"), full_page=True
                         )
+                        # All six destinations keep distinct, usable hit areas at 320px.
+                        page.set_viewport_size({"width": 320, "height": 740})
+                        assert page.evaluate("""() => {
+                          const nav = document.querySelector('.nav-links');
+                          const boxes = [...nav.querySelectorAll('button')].map(b => b.getBoundingClientRect());
+                          return boxes.length === 6 && boxes.every((b, i) =>
+                            b.width >= 44 && b.height >= 44 && b.left >= 0 && b.right <= innerWidth &&
+                            (!i || b.left >= boxes[i - 1].right)) &&
+                            [...nav.querySelectorAll('button span')].every(s => s.scrollWidth <= s.clientWidth + 1 &&
+                              s.clientHeight <= parseFloat(getComputedStyle(s).lineHeight) + 1) &&
+                            document.documentElement.scrollWidth <= innerWidth;
+                        }""")
+                        expect(
+                            page.get_by_role("navigation").get_by_role(
+                                "button", name="Einkaufsliste", exact=True
+                            )
+                        ).to_have_attribute("aria-current", "page")
+                        page.screenshot(
+                            path=str(captures / "shopping-nav-phone-320-de-dark.png"),
+                            full_page=True,
+                        )
+                        page.set_viewport_size({"width": 390, "height": 844})
                         page.evaluate("async()=>{await navigator.serviceWorker.ready}")
                         context.set_offline(True)
                         page.reload()
                         page.get_by_role("navigation").get_by_role(
                             "button", name="Kalender", exact=True
                         ).click()
-                        page.get_by_role("button", name="Einkaufsliste", exact=True).click()
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Einkaufsliste", exact=True
+                        ).click()
                         expect(page.get_by_text("400 g", exact=True)).to_be_visible()
                         expect(
                             page.get_by_role(

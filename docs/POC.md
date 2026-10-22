@@ -1,5 +1,16 @@
 # Mealf preview
 
+## Shopping navigation candidate
+
+`poc-20261022.6` is prepared in source; publication and exact-source CI are pending.
+Shopping list is a primary sidebar destination and appears as **Shop** / **Einkauf**
+in mobile navigation. Existing Home/Calendar/Settings shortcuts select the same page.
+The manual Bring! action and cached offline requirements are preserved. Local browser
+checks cover keyboard navigation, current-tab state and six non-overlapping 44px targets
+with unbroken German labels at 320px. No API, storage or native changes are required.
+
+## Published preview: Mealf identifiers and administration paths
+
 `poc-20261022.5` is published for **AMD64 and ARM64**. Current Python/Swift packages,
 modules, targets and operator examples use Mealf. The administration console and its
 scripts/styles live at `/admin/`; `/` is free for a separately hosted landing page. The

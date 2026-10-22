@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Promote Shopping list to the main PWA navigation, with consistent selected state from
+  existing shortcuts, English/German labels and six usable destinations on narrow phones.
+
 - Add theme-aware original-peach fallbacks for missing/unreadable recipe photos. Retrieve
   source Recipe/Open Graph/Twitter images through bounded public-HTTPS fetching, preserve
   attribution and incomplete AI review, cache images locally and retain explicit Save.

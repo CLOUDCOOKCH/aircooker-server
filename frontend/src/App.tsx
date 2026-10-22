@@ -9,6 +9,7 @@ import {
   Home as HomeIcon,
   Leaf,
   Settings2,
+  ShoppingBag,
   X,
 } from 'lucide-react';
 import {
@@ -45,8 +46,7 @@ type View =
   | { kind: 'main' }
   | { kind: 'recipe'; id: string }
   | { kind: 'editor'; id?: string; task?: ImportTask; initial?: Recipe; draftID?: string }
-  | { kind: 'imports' }
-  | { kind: 'shopping' };
+  | { kind: 'imports' };
 export default function App() {
   const [runtime, setRuntime] = useState<Runtime | null>(null),
     [loading, setLoading] = useState(true),
@@ -331,12 +331,17 @@ function Kitchen({
   const back = () => setView({ kind: 'main' }),
     open = (id: string) => setView({ kind: 'recipe', id }),
     create = () => setView({ kind: 'editor' }),
-    importRecipe = () => setView({ kind: 'imports' });
+    importRecipe = () => setView({ kind: 'imports' }),
+    shopping = () => {
+      app.setTab('shopping');
+      back();
+    };
   const tabs: { id: Tab; icon: typeof HomeIcon }[] = [
     { id: 'home', icon: HomeIcon },
     { id: 'calendar', icon: CalendarDays },
     { id: 'recipes', icon: ChefHat },
     { id: 'pantry', icon: Leaf },
+    { id: 'shopping', icon: ShoppingBag },
     { id: 'settings', icon: Settings2 },
   ];
   let content;
@@ -391,7 +396,6 @@ function Kitchen({
         }
       />
     );
-  else if (view.kind === 'shopping') content = <Shopping back={back} />;
   else if (app.tab === 'home')
     content = (
       <Home
@@ -402,7 +406,7 @@ function Kitchen({
         manage={setManaged}
         create={create}
         importRecipe={importRecipe}
-        shopping={() => setView({ kind: 'shopping' })}
+        shopping={shopping}
         suggest={() => setSuggestions(true)}
       />
     );
@@ -414,21 +418,15 @@ function Kitchen({
         open={open}
         plan={setTarget}
         manage={setManaged}
-        shopping={() => setView({ kind: 'shopping' })}
+        shopping={shopping}
         suggest={() => setSuggestions(true)}
       />
     );
   else if (app.tab === 'recipes')
     content = <Recipes open={open} create={create} importRecipe={importRecipe} />;
   else if (app.tab === 'pantry') content = <Pantry />;
-  else
-    content = (
-      <Settings
-        shopping={() => setView({ kind: 'shopping' })}
-        logout={onLeave}
-        reauthenticate={reauthenticate}
-      />
-    );
+  else if (app.tab === 'shopping') content = <Shopping />;
+  else content = <Settings shopping={shopping} logout={onLeave} reauthenticate={reauthenticate} />;
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
@@ -444,17 +442,21 @@ function Kitchen({
               key={id}
               className={app.tab === id ? 'active' : ''}
               aria-current={app.tab === id ? 'page' : undefined}
-              aria-label={t(id)}
+              aria-label={t(id === 'shopping' ? 'shoppingTitle' : id)}
               onClick={() => {
                 app.setTab(id);
                 back();
               }}
             >
               <Icon size={22} strokeWidth={app.tab === id ? 2 : 1.6} />
-              <span className={id === 'settings' ? 'nav-label-full' : undefined}>{t(id)}</span>
-              {id === 'settings' && (
+              <span
+                className={id === 'settings' || id === 'shopping' ? 'nav-label-full' : undefined}
+              >
+                {t(id === 'shopping' ? 'shoppingTitle' : id)}
+              </span>
+              {(id === 'settings' || id === 'shopping') && (
                 <span className="nav-label-short" aria-hidden="true">
-                  {t('navSettings')}
+                  {t(id === 'shopping' ? 'navShopping' : 'navSettings')}
                 </span>
               )}
             </button>
