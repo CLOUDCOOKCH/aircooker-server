@@ -1,5 +1,10 @@
 # PWA-first implementation and evidence
 
+Recipe ideas extends Home/Recipes with ingredient-based/random AI proposals, complete
+editable previews, explicit Save and cached offline review. Generation requires a configured
+household text AI and displayed-destination consent; it does not send household inventory
+or use the personal ChatGPT connection. See [behavior/evidence](RECIPE_IDEAS.md).
+
 Explicit user decision, 2026-10-21: PWA-first; keep native code for later. ADR 010 and
 PRODUCT.md replace native-only delivery/signing requirements. Other master product,
 security, privacy and reliability requirements still apply. This is a functional development

@@ -1025,6 +1025,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/recipe-ideas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate Recipe Ideas */
+        post: operations["generate_recipe_ideas_api_v1_recipe_ideas_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recipe-ideas/{request_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Recipe Ideas */
+        get: operations["read_recipe_ideas_api_v1_recipe_ideas__request_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/recipes": {
         parameters: {
             query?: never;
@@ -1854,6 +1888,58 @@ export interface components {
             name: string;
             /** Timezone */
             timezone: string;
+        };
+        /** IdeaRequest */
+        IdeaRequest: {
+            /** Ai Destination */
+            ai_destination: [
+                string,
+                string,
+                string
+            ];
+            /**
+             * Consent External Ai
+             * @constant
+             */
+            consent_external_ai: true;
+            /**
+             * Ingredients
+             * @default
+             */
+            ingredients: string;
+            /**
+             * Language
+             * @default en
+             * @enum {string}
+             */
+            language: "en" | "de";
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "ingredients" | "surprise";
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+        };
+        /** IdeaStatus */
+        IdeaStatus: {
+            /** Error Code */
+            error_code?: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Recipes */
+            recipes?: components["schemas"]["Recipe-Output"][];
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "running" | "ready" | "failed" | "expired";
         };
         /** ImportDiagnostic */
         ImportDiagnostic: {
@@ -5088,6 +5174,70 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BrowserSession"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_recipe_ideas_api_v1_recipe_ideas_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IdeaRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IdeaStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_recipe_ideas_api_v1_recipe_ideas__request_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IdeaStatus"];
                 };
             };
             /** @description Validation Error */

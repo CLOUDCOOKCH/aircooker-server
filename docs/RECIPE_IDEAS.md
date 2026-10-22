@@ -1,0 +1,66 @@
+# Recipe ideas
+
+Open **Recipe ideas** on Home or in Recipes. Choose **Use what I have**, enter ingredients
+(for example, spaghetti and minced beef), or choose **Surprise me**. The configured
+household AI produces three complete proposals in the English/German interface language.
+Check the full ingredient list: extra ingredients may be needed. This does not inspect
+inventory or guarantee that everything is already at home.
+
+Select **Review recipe** to edit quantities, servings and instructions in the normal editor.
+**Save** explicitly adds that recipe to the local library and outgoing sync queue. Generating
+or reviewing proposals never changes the library, calendar or Bring! list. Saved recipes can
+subsequently be scheduled normally. Generated content retains provider/model provenance;
+no nutrition, source attribution or photo is invented. The original peach is the placeholder.
+
+## Configuration and privacy
+
+Configure a text-capable household AI in Settings or `/admin/`. Existing Gemini, OpenAI,
+OpenAI-compatible, Anthropic, Ollama, OpenWebUI and OpenRouter adapters are reused. Support
+depends on the model/endpoint. This feature does not use a personal ChatGPT-plan connection
+or silently fall back to another billing source.
+
+The page displays provider, model and base URL and asks permission to send the request.
+Ingredients mode sends your entered text and requested language/mode. Surprise sends an
+empty ingredient string, even when earlier typed ingredients remain locally. Neither mode
+uploads the recipe library, pantry, shopping list, calendar, credentials or a photo. The
+server supplies a bounded generation prompt/schema. Cloud providers can charge per request
+and apply their own retention policies.
+
+Queued work is pinned to the displayed destination; configuration changes fail closed and
+require renewed consent. New requests are limited to 20 per household hour and share the
+configured AI quota with imports. Keys remain encrypted on the server; prompts, ingredient
+text and provider responses are not application log fields.
+
+## Reliability and offline use
+
+Migration 015 persists requests/results in SQLite for the existing durable worker. The
+client saves its UUID before sending: identical replay returns the original job, while a
+changed body under the same UUID returns 409. Strict validation requires exactly three
+bounded proposals with ingredients and steps. Creative generation has its own prompt,
+separate from factual extraction. User text is untrusted data; it grants no tools or browsing.
+
+Provider generation is not assumed idempotent. Recovery of a previously running job fails
+the request rather than silently billing it twice. Interrupted/invalid/quota-limited/failed
+requests show an error; the user can explicitly request another batch. Reconnection retries
+delivery of the existing UUID rather than starting another generation.
+
+The last form, request and downloaded results remain in this browser's household storage.
+Offline users can read cached proposals, edit and save through the normal durable outbox.
+New generation requires connectivity. Completed/failed server previews expire after 30 days:
+text/results are removed while a minimal UUID/fingerprint receipt prevents replay. Cached
+proposals remain locally until replaced or local household data is removed. Unsaved temporary
+proposals are excluded from exports; saved recipes use ordinary export/sync behavior.
+
+AI recipes can contain mistakes. Review ingredients, dietary restrictions, quantities and
+instructions. They are not verified nutrition or food-safety advice. Local weekly meal-plan
+recommendations remain independent of AI and use the saved library/history.
+
+## Evidence
+
+`tests/test_recipe_ideas.py` covers processing/replay, configuration pinning, crash recovery,
+schema rejection, redaction, retention and all seven actual adapters over synthetic HTTP.
+`scripts/recipe_ideas_browser_smoke.py` drives the real PWA/backend/SQLite/worker through the
+Gemini adapter, replacing only provider HTTP: ingredient/random flows, explicit review/Save,
+offline edit/reload/sync, cached results, malformed responses, EN desktop, DE phone down to
+320px and Axe. This is not live-provider or physical-iPhone evidence. See the bounded
+[UI review](validation/recipe-ideas-ui-review.md).

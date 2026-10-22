@@ -9,6 +9,11 @@ from .models import AdministrationDiagnostics, ImportDiagnostic, JobCounts, JobI
 PUBLIC_ERRORS = frozenset(
     {
         "ai_authentication_failed",
+        "ai_generation_failed",
+        "ai_generation_interrupted",
+        "ai_configuration_changed_review_consent",
+        "ai_input_format_unsupported",
+        "ai_timeout",
         "ai_content_disclosure_consent_required",
         "ai_content_too_large",
         "ai_incomplete_recipe_review_manually",

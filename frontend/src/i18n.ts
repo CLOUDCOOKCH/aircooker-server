@@ -1,4 +1,31 @@
 export const en = {
+  ideasConfigurationChanged:
+    'AI settings changed. Review the displayed provider and consent again.',
+  recipeIdeas: 'Recipe ideas',
+  ideasIntro: 'A few ingredients. A little imagination. Something good for dinner.',
+  ideasShortcut: 'Use what you have, or let dinner surprise you.',
+  ideasMode: 'What are we working with?',
+  ideasUseMine: 'Use what I have',
+  ideasSurprise: 'Surprise me',
+  ideasIngredients: 'What do you have at home?',
+  ideasPlaceholder: 'Spaghetti, minced beef, onions…',
+  ideasSurpriseHint: 'Get three fresh recipe ideas. No ingredient list is sent in this mode.',
+  ideasConsent: 'Send my ingredient list or surprise request to this configured AI provider.',
+  ideasConfigure:
+    'Enable a household AI provider with text support in Settings to generate recipes.',
+  ideasGenerate: 'Give me three ideas',
+  ideasGenerating: 'Dreaming up dinner…',
+  ideasQueued: 'Your server is preparing ideas. You can leave this screen and come back.',
+  ideasOffline:
+    'Reconnect to generate new ideas. Your input and downloaded ideas stay available here.',
+  ideasReviewHint:
+    'AI-generated proposals. Check all ingredients, quantities and cooking instructions. You may need extra ingredients; nothing is saved or scheduled automatically.',
+  ideasReview: 'Review recipe',
+  ideasEmpty: 'Dinner starts with an idea',
+  ideasEmptyHint: 'Tell us what is in your kitchen, or go for something completely unexpected.',
+  ideasError:
+    'Could not finish these ideas. Check your connection and AI settings, then try again. Your ingredient text stays here.',
+
   shoppingTitle: 'Shopping list',
   shoppingWeek: 'Current household week',
   shoppingIntro:
@@ -551,6 +578,35 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  ideasConfigurationChanged:
+    'Die KI-Einstellungen wurden geändert. Prüfe den angezeigten Anbieter und stimme erneut zu.',
+  recipeIdeas: 'Rezeptideen',
+  ideasIntro: 'Ein paar Zutaten. Ein bisschen Fantasie. Etwas Gutes auf dem Teller.',
+  ideasShortcut: 'Nutze deine Zutaten oder lass dich überraschen.',
+  ideasMode: 'Womit kochen wir?',
+  ideasUseMine: 'Mit meinen Zutaten',
+  ideasSurprise: 'Überrasch mich',
+  ideasIngredients: 'Was hast du zu Hause?',
+  ideasPlaceholder: 'Spaghetti, Hackfleisch, Zwiebeln…',
+  ideasSurpriseHint: 'Drei neue Rezeptideen. In diesem Modus wird keine Zutatenliste gesendet.',
+  ideasConsent:
+    'Meine Zutatenliste oder Überraschungsanfrage an diesen eingerichteten KI-Anbieter senden.',
+  ideasConfigure:
+    'Aktiviere in den Einstellungen einen Haushalts-KI-Anbieter mit Textunterstützung.',
+  ideasGenerate: 'Gib mir drei Ideen',
+  ideasGenerating: 'Das Abendessen nimmt Form an…',
+  ideasQueued:
+    'Dein Server bereitet Ideen vor. Du kannst diese Ansicht verlassen und später zurückkommen.',
+  ideasOffline:
+    'Verbinde dich für neue Ideen. Deine Eingabe und heruntergeladene Vorschläge bleiben hier verfügbar.',
+  ideasReviewHint:
+    'KI-generierte Vorschläge. Prüfe alle Zutaten, Mengen und Kochschritte. Weitere Zutaten können nötig sein; nichts wird automatisch gespeichert oder eingeplant.',
+  ideasReview: 'Rezept prüfen',
+  ideasEmpty: 'Das Abendessen beginnt mit einer Idee',
+  ideasEmptyHint: 'Verrate uns, was in deiner Küche liegt, oder probiere etwas ganz Unerwartetes.',
+  ideasError:
+    'Diese Ideen konnten nicht erstellt werden. Prüfe Verbindung und KI-Einstellungen und versuche es erneut. Deine Zutatenliste bleibt hier.',
+
   shoppingTitle: 'Einkaufsliste',
   shoppingWeek: 'Aktuelle Haushaltswoche',
   shoppingIntro:

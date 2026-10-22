@@ -1,5 +1,11 @@
 # Database schema and invariants
 
+Migration 015 adds `recipe_idea_request`: household-scoped UUID/fingerprint delivery receipt,
+bounded immutable request, queued/running/ready/failed/expired state and temporary proposals.
+It never inserts canonical recipe entities. Completed/failed content expires after 30 days;
+minimal receipts remain to prevent duplicate generation. A recovered running request fails
+instead of automatically calling a potentially billed provider twice. See RECIPE_IDEAS.md.
+
 Migration 013 adds `shopping_sync` for successful period/list reconciliation state and
 `bring_probe` for durable selected-test-list UUID/stage, private configuration binding and
 baseline fingerprints. These are integration records, not new canonical sync entities.
