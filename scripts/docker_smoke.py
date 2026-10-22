@@ -342,6 +342,10 @@ def main():
         assert planning_before["accepted_counts"] == {recipe["entity_id"]: 1}
         projection = request(base, "/api/v1/planning/shopping-projection", headers=headers)
         assert projection["requirements"][0]["spec"] == "600 g"
+        shopping = request(base, "/api/v1/planning/shopping", headers=headers)
+        assert shopping["connection_state"] == "not_configured"
+        assert shopping["requirements"][0]["spec"] == "600 g"
+        assert shopping["requirements"][0]["state"] == "not_sent"
         ai_credential = "synthetic container AI credential"
         configured_ai = request(
             base,

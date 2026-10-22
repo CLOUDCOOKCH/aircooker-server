@@ -12,6 +12,7 @@ from bring_api.types import BringItemOperation
 from .bring import Capabilities, Item
 from .errors import DomainError
 from .secrets import SecretVault
+from .shopping import configuration_hash
 
 
 class UnofficialBringConnector:
@@ -25,11 +26,17 @@ class UnofficialBringConnector:
         self.capabilities = Capabilities()
         report = root / "bring-compatibility.json"
         if report.exists():
-            data = json.loads(report.read_text())
+            try:
+                data = json.loads(report.read_text())
+            except (ValueError, OSError):
+                data = {}
             if (
-                data.get("sdk_version") == "1.1.2"
+                isinstance(data, dict)
+                and data.get("sdk_version") == "1.1.2"
+                and data.get("configuration_hash") == configuration_hash(raw)
                 and data.get("list_id") == self.settings.get("list_id")
-                and 0 <= time.time() - data.get("verified_at", 0) < 30 * 86400
+                and isinstance(data.get("verified_at"), (int, float))
+                and 0 <= time.time() - data["verified_at"] < 30 * 86400
                 and data.get("passed") is True
             ):
                 self.capabilities = Capabilities(True, True, True, True)
@@ -71,15 +78,43 @@ class UnofficialBringConnector:
             raise DomainError("bring_item_identity_invalid", 502)
         return items
 
-    def _write(self, list_id, item, operation):
+    def probe_write(self, list_id, item, action):
+        """Only the explicit dedicated-list experiment calls this with its persisted UUID."""
+        operation = {
+            "add": BringItemOperation.ADD,
+            "complete": BringItemOperation.COMPLETE,
+            "remove": BringItemOperation.REMOVE,
+        }[action]
+        self._send(list_id, item, operation)
+
+    def _send(self, list_id, item, operation):
         assert self.bring is not None
-        if not self.capabilities.uuid_create or not item.id:
-            raise DomainError("bring_capability_unverified", 409)
         self.runner.run(
             self.bring.batch_update_list(
                 list_id, {"uuid": item.id, "itemId": item.name, "spec": item.spec}, operation
             )
         )
+
+    def _write(self, list_id, item, operation):
+        assert self.bring is not None
+        if not self.capabilities.uuid_create or not item.id:
+            raise DomainError("bring_capability_unverified", 409)
+        self._send(list_id, item, operation)
+        actual = {i.id: i for i in self.read(list_id)}
+        found = actual.get(item.id)
+        valid = (
+            found is None
+            if operation == BringItemOperation.REMOVE
+            else (
+                found is not None
+                and found.name == item.name
+                and found.spec == item.spec
+                and not found.completed
+            )
+        )
+        if not valid:
+            (self.root / "bring-compatibility.json").unlink(missing_ok=True)
+            raise DomainError("bring_write_not_confirmed", 502)
 
     def add(self, list_id, item):
         self._write(list_id, item, BringItemOperation.ADD)

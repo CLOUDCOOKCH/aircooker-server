@@ -1,5 +1,13 @@
 # mealf PWA proof of concept
 
+## Next preview candidate
+
+`poc-20261022.3` adds the [shopping requirements view](SHOPPING.md), manual Sync to Bring!,
+per-item/queued/error feedback, an offline snapshot and in-container dedicated-test-list
+verification. Existing quantities, pantry, leftovers and ownership rules remain active.
+Publication and exact-image upgrade checks must pass before this candidate is described
+as available. Preserve existing volumes and custom `5152:5152` command/healthcheck settings.
+
 ## Current published preview
 
 `poc-20261022.2` adds optional personal ChatGPT **text** imports through the official

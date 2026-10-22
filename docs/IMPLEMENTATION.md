@@ -1,5 +1,13 @@
 # Implementation checklist and evidence
 
+**Shopping/Bring! visibility — implemented; preview validation in progress:** Home, Calendar
+and Settings open a read-only current-week requirement list with quantities, ownership states,
+pantry exclusions, server job/errors and a manual Sync to Bring! action. Cached snapshots
+remain useful offline with a stale/local-edit warning. An explicit dedicated-test-list
+check now runs inside the container worker; no terminal/helper is needed. Reports remain
+scoped, expire and fail closed on missing UUID acknowledgements. See [shopping guide](SHOPPING.md).
+Live Bring! and physical iPhone behavior remain unverified; native is unchanged.
+
 **Personal ChatGPT imports — published and verified in `poc-20261022.2`:** the supported
 open-source OAuth/PKCE loopback helper pairs a personal account with one authenticated
 mealf session. Encrypted server credentials, verified signed tokens, account model discovery,

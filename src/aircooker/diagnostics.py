@@ -21,6 +21,13 @@ PUBLIC_ERRORS = frozenset(
         "ai_response_too_large",
         "ai_schema_validation_failed",
         "bring_capability_unverified",
+        "bring_configuration_changed",
+        "bring_uuid_not_supported",
+        "bring_write_not_confirmed",
+        "bring_verification_unsafe",
+        "bring_verification_baseline_changed",
+        "bring_verification_timeout",
+        "bring_verification_missing",
         "bring_connection_failed",
         "bring_list_not_found",
         "bring_list_not_selected",
@@ -70,7 +77,7 @@ def recent_jobs(db, limit: int = 100, state: str | None = None) -> list[JobInfo]
         JobInfo(
             id=row["id"],
             kind=row["kind"]
-            if row["kind"] in ("recipe.import", "shopping.reconcile")
+            if row["kind"] in ("recipe.import", "shopping.reconcile", "bring.verify")
             else "unknown",
             state=row["state"],
             attempts=row["attempts"],

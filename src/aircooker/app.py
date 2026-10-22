@@ -55,6 +55,7 @@ from .backup import (
 )
 from .bring import reconcile
 from .bring_runtime import UnofficialBringConnector
+from .bring_verification import verify as verify_bring
 from .chatgpt import ChatGPTConnections
 from .chatgpt_routes import register_routes as register_chatgpt
 from .db import Database
@@ -103,6 +104,8 @@ from .reminder_routes import register_routes as register_reminders
 from .reminders import Reminders
 from .retention import cleanup_database, cleanup_startup_transfers
 from .secrets import SecretVault
+from .shopping import BringVerification, ShoppingSnapshot, request_verification
+from .shopping import snapshot as shopping_snapshot
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
 from .sync_history import snapshot_page, state_for, validate_anchor
@@ -149,6 +152,9 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         payload = json.loads(job["payload"])
         if job["kind"] in ("notification.meal", "notification.test"):
             reminders.deliver(job)
+            return
+        if job["kind"] == "bring.verify":
+            verify_bring(database, UnofficialBringConnector, payload["id"])
             return
         if job["kind"] == "shopping.reconcile":
             with database.connect() as db:
@@ -417,13 +423,19 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
 
     @app.get("/api/v1/system/capabilities")
     def capabilities():
+        bring_automatic = False
+        if SecretVault(data_dir / "config").load("bring"):
+            connector = UnofficialBringConnector(data_dir / "config")
+            bring_automatic = connector.capabilities.uuid_create
+            connector.runner.close()
         return {
             "sync": True,
             "sync_history_proof": 1,
             "recipe_crud": True,
             "structured_import_preview": True,
             "chatgpt_personal_text": True,
-            "bring_automatic_mutations": False,
+            "bring_automatic_mutations": bring_automatic,
+            "shopping_view": True,
             "ai": settings_status(data_dir / "config").enabled,
             "media_upload": True,
             "image_recipe_import": ocr_available(),
@@ -659,6 +671,14 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 "requirements": list(shopping_projection(db, monday).values()),
             }
 
+    @app.get("/api/v1/planning/shopping", response_model=ShoppingSnapshot)
+    def shopping(s=Depends(session)):
+        return shopping_snapshot(database, UnofficialBringConnector)
+
+    @app.post("/api/v1/integrations/bring/verify", status_code=202)
+    def bring_verify(body: BringVerification, s=Depends(session)):
+        return request_verification(database, body)
+
     @app.post("/api/v1/suggestions/weekly", response_model=SuggestionPreview)
     def suggestions(
         monday: date,
@@ -775,6 +795,9 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         if str(body.list_id) not in {item["id"] for item in available}:
             raise DomainError("bring_list_not_found", 404)
         settings["list_id"] = str(body.list_id)
+        settings["list_name"] = next(
+            item["name"] for item in available if item["id"] == str(body.list_id)
+        )
         vault.save("bring", json.dumps(settings))
         with database.transaction() as db:
             enqueue(db, "shopping.reconcile", "shopping.current", {})

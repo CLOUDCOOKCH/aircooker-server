@@ -28,7 +28,14 @@ Do not put passwords in shell history. Use the console or a secret-aware adminis
 Disconnect deletes the saved credential and compatibility report, without deleting external
 list content.
 
-## Compatibility experiment
+## Packaged compatibility verification
+
+The PWA now offers the same explicit dedicated-test-list experiment through its durable
+worker. See [Shopping list](SHOPPING.md). No shell or external script is needed. Reports
+now also bind the exact saved credential/list configuration; old unbound reports must be
+verified again. Ordinary writes validate returned UUID/state before marking success.
+
+## Source-only compatibility experiment
 
 Run only against a dedicated disposable test list. The probe does not run by default.
 Set `BRING_EMAIL_FILE`, `BRING_PASSWORD_FILE`, `BRING_TEST_LIST_ID`,
@@ -39,7 +46,8 @@ Set `BRING_EMAIL_FILE`, `BRING_PASSWORD_FILE`, `BRING_TEST_LIST_ID`,
 python scripts/bring_compatibility.py
 ```
 
-The script is present in the source checkout, not installed as a runtime package command.
+The developer script is present in the source checkout, not installed as a runtime package command.
+Its report path must be the configured server config directory so it can bind the saved connection.
 Run it from an environment with the pinned SDK. Its assertions must pass; do not hand-write
 an affirmative report. Reports expire after 30 days and match SDK 1.1.2 plus the selected
 list UUID. This deliberate gate means unverified automatic mutations remain disabled.

@@ -589,6 +589,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/integrations/bring/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bring Verify */
+        post: operations["bring_verify_api_v1_integrations_bring_verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/integrations/chatgpt": {
         parameters: {
             query?: never;
@@ -887,6 +904,23 @@ export interface paths {
         head?: never;
         /** Update Entity */
         patch: operations["update_pantry"];
+        trace?: never;
+    };
+    "/api/v1/planning/shopping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Shopping */
+        get: operations["shopping_api_v1_planning_shopping_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/planning/shopping-projection": {
@@ -1433,6 +1467,19 @@ export interface components {
             email: string;
             /** Password */
             password: string;
+        };
+        /** BringVerification */
+        BringVerification: {
+            /**
+             * Dedicated Test List Confirmed
+             * @constant
+             */
+            dedicated_test_list_confirmed: true;
+            /**
+             * List Id
+             * Format: uuid
+             */
+            list_id: string;
         };
         /** BrowserSession */
         BrowserSession: {
@@ -2014,7 +2061,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "recipe.import" | "shopping.reconcile" | "unknown";
+            kind: "recipe.import" | "shopping.reconcile" | "bring.verify" | "unknown";
             /**
              * State
              * @enum {string}
@@ -2642,6 +2689,63 @@ export interface components {
             timezone: string;
             /** Username */
             username: string;
+        };
+        /** ShoppingItem */
+        ShoppingItem: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Sources */
+            sources: number;
+            /** Spec */
+            spec: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "not_sent" | "pending" | "synced" | "purchased" | "removed_by_user" | "manual";
+        };
+        /** ShoppingSnapshot */
+        ShoppingSnapshot: {
+            /** Calculated At */
+            calculated_at: number;
+            /**
+             * Connection State
+             * @enum {string}
+             */
+            connection_state: "not_configured" | "list_not_selected" | "compatibility_unverified" | "ready";
+            /** Error Code */
+            error_code: string | null;
+            /** Excluded Staples */
+            excluded_staples: string[];
+            /**
+             * Job State
+             * @enum {string}
+             */
+            job_state: "idle" | "queued" | "running" | "done" | "failed";
+            /** Last Success At */
+            last_success_at: number | null;
+            /** List Id */
+            list_id: string | null;
+            /** List Name */
+            list_name: string | null;
+            /**
+             * Period
+             * Format: date
+             */
+            period: string;
+            /** Planned Meals */
+            planned_meals: number;
+            /** Requirements */
+            requirements: components["schemas"]["ShoppingItem"][];
+            /** Verification Error */
+            verification_error: string | null;
+            /**
+             * Verification State
+             * @enum {string}
+             */
+            verification_state: "idle" | "queued" | "running" | "done" | "failed";
         };
         /** StepDetails */
         StepDetails: {
@@ -3973,6 +4077,39 @@ export interface operations {
             };
         };
     };
+    bring_verify_api_v1_integrations_bring_verify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BringVerification"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     status_api_v1_integrations_chatgpt_get: {
         parameters: {
             query?: never;
@@ -4783,6 +4920,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    shopping_api_v1_planning_shopping_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShoppingSnapshot"];
                 };
             };
         };

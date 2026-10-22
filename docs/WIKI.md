@@ -38,3 +38,5 @@ private configuration, screenshots containing secrets or local build output.
 Keep commands consistent with `compose.preview.yaml` and `compose.yaml`. The preview
 service is `mealf`; the source-build service is `aircooker`. Distinguish source-only
 features from published image capabilities and retain explicit unverified limitations.
+
+[Shopping requirements and manual Bring! sync](SHOPPING.md) explains item states, offline snapshots and the packaged compatibility check.

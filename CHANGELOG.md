@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a read-only weekly shopping view, persistent offline snapshot, per-item Bring! states,
+  manual sync and explicit queued/error/success feedback. Package the dedicated-test-list
+  UUID experiment in the durable worker, bind evidence to the configured credentials/list,
+  and verify ordinary write acknowledgements before claiming success.
+
 - Add optional personal ChatGPT text-recipe imports through the supported OSS OAuth flow,
   a standalone Windows-friendly pairing helper, session-owned encrypted credentials,
   account model selection and bounded streamed Responses validation. Preserve explicit

@@ -16,6 +16,9 @@ Optionally connect your personal ChatGPT plan for reviewed recipe-text imports u
 [Windows-friendly setup helper](docs/CHATGPT.md). Connections belong to an individual
 browser session, not the household. Live subscription eligibility remains unverified.
 
+Open **Calendar → Shopping list** to inspect current-week quantities, Bring! item states
+and failures, and use **Sync to Bring!**. See [shopping and safe verification](docs/SHOPPING.md).
+
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
