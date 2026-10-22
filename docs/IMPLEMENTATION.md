@@ -1,8 +1,51 @@
 # Implementation checklist and evidence
 
-**AI recipe import — implementation and synthetic validation:** the existing queue and explicit confirmation flow now accept bounded image, PDF and Gemini video inputs. Gemini is the initial provider option; OpenAI, OpenRouter and custom compatible APIs use configurable model IDs and per-model capabilities. Encrypted profiles retain independent credentials; website metadata precedes AI, and consent binds the displayed destination. Provider-neutral extraction follows the supplied v1 schema and preserves unknown facts, quantities, times and source text for review. Replay compatibility is covered for pre-metadata recipe mutations. See [configuration, architecture and limits](wiki/AI-Recipe-Import.md). Live cloud models, physical Apple devices and the independent native contract remain unverified. Current validation: 264 backend and 43 frontend tests, lint/type/contract checks, native image/PDF PWA review flows and existing PWA/admin/push Chromium regressions pass with synthetic cloud responses. Retained-database startup and Docker builder/wheel packaging pass. [Exact local evidence](validation/ai-recipe-import.json). Current Docker runtime validation is blocked by the cloud network policy for Alpine packages; this does not claim a released container.
+**AI recipe import — feature branch integrated with the published photo/theme/calendar work:**
+Encrypted provider profiles and explicit per-model input capabilities support bounded AI
+image/PDF imports and Gemini video requests. Website metadata precedes AI; consent binds
+the displayed provider destination. Every result remains an editable preview until saved.
+The existing camera/chooser retains local EN/DE OCR and its text-only optional-AI privacy
+contract. Migration 011 adds the AI tables without changing released migration 010 or
+legacy replay receipts. Regression tests preserve queued photos through upgrade and prevent
+cancelled attachment uploads from creating imports. Local combined validation passes 279
+backend and 50 frontend tests, Python/TypeScript checks, production build and contract/brand/
+licence checks. See [AI import configuration and limits](wiki/AI-Recipe-Import.md) and
+[merge validation](validation/ai-recipe-import-merge.json). Original branch-only evidence is
+retained separately in validation/ai-recipe-import.json. Cloud responses in tests are
+synthetic; live providers/models, physical Apple devices and the updated native contract
+remain unverified. Merging source does not publish a new container release.
 
-**Mobile calendar and form alignment, 2026-10-21 — implemented, local verification:**
+**Photo recipe import, 2026-10-21 — published and verified in `poc-20261021.10`:**
+PWA Import recipe offers Take photo and Choose image. Atomic image/job persistence,
+metadata-stripped upload and bounded local EN/DE OCR produce editable previews; only
+explicit Save creates a recipe. Unclear text stays correctable, with manual fallback.
+Optional text AI requires consent and never receives image bytes. Terminal-source
+retention preserves replay proofs; unused media remains under the existing quota.
+All six source CI jobs pass at db207a2: 240 backend tests per architecture, 45 web tests,
+real Chromium/WebKit OCR/offline-save/reload and Axe. The headless WebKit photo test
+explicitly models OS push unavailable; separate synthetic reminder tests verify the
+permission boundary, and Settings avoids native subscription discovery before consent.
+Both fresh native image scans/runtime gates, six public checksums/config identities,
+anonymous pull and published .9-to-.10 same-volume 5152 upgrade plus real EN/DE OCR pass.
+Native contract pin 32604a1 passes 90 core tests on each platform, Xcode 26.6 builds and
+existing simulator flows. Physical camera/iPhone and live AI/push remain unverified;
+full product acceptance remains open. See [photo import](IMAGE_IMPORT.md) and
+[exact release evidence](validation/github-image-import-preview.json).
+
+**Theme library, 2026-10-21 — published and verified in `poc-20261021.9`:** Settings offers Flo
+(existing system light/dark), After Dark (fixed dark romance palette) and Sunday
+(fixed light sage/linen). A shared early controller and semantic CSS cover PWA and
+console, native fields and browser metadata. Browser-local choice persists offline
+and propagates across tabs; storage failures are disclosed. Original PNGs, API and
+local/server database identities are unchanged. Real Chromium checks cover native radio
+keys, opposite OS modes, early boot, offline reload, admin sharing, denied storage,
+contrast and Axe. All six exact-source CI jobs pass, including persistent WebKit with
+real backend-outage cached reloads and narrow German controls. Both fresh image gates,
+six public checksums, config identities, anonymous pull and published .8-to-.9 same-volume
+5152 upgrade pass. Physical iPhone remains unverified. See [theme guide](THEMES.md) and
+[release evidence](validation/github-themes-preview.json).
+
+**Mobile calendar and form alignment, 2026-10-21 — published and verified in `poc-20261021.8`:**
 Day/3 days/Week selection persists per device. Multi-day columns remain readable and
 scroll horizontally. Explicit pointer/touch grips highlight destinations, scroll at
 edges and cancel on Escape, pointer cancellation, blur, hide or resize. Tap/keyboard
@@ -10,8 +53,11 @@ activation opens the existing move form. Committed moves reuse transactional off
 mutations and recurrence exceptions. Narrow dialog fields stack and date/select widths
 are constrained. Local 226 backend/39 frontend tests and full PWA flows pass; Chromium
 layout checks exercise actual offline touch moves/reload, pointer edge scrolling,
-cancellation, native scrolling and paired control bounds. WebKit CI/publication pending;
-physical iPhone remains unverified. See MOBILE_CALENDAR.md.
+cancellation, native scrolling and paired control bounds. Chromium/WebKit CI and all
+six exact-source jobs pass; both fresh image gates, six release checksums, anonymous
+pull and published .7-to-.8 same-volume 5152 upgrade pass. A duplicate tag event
+safely skipped image writes. Physical iPhone remains unverified. See MOBILE_CALENDAR.md
+and [release evidence](validation/github-mobile-calendar-preview.json).
 
 **Phone PWA viewport fix, 2026-10-21 — published and verified in `poc-20261021.7`:**
 mobile fields no longer inherit 12–14px label text, which can trigger iOS focus zoom.

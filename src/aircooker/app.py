@@ -57,6 +57,7 @@ from .bring_runtime import UnofficialBringConnector
 from .db import Database
 from .diagnostics import diagnostics, recent_jobs
 from .errors import DomainError
+from .image_import import ocr_available, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
 from .import_sources import ImportSourceInfo, put_source
 from .importing import bounded_fetch_html, extract, platform_for
@@ -69,7 +70,6 @@ from .models import (
     BringCredentials,
     Credentials,
     HouseholdSettings,
-    ImportPreview,
     ImportRequest,
     JobInfo,
     Mutation,
@@ -77,6 +77,7 @@ from .models import (
     PasswordChange,
     Pull,
     Push,
+    RecipeImportStatus,
     Refresh,
     SessionInfo,
     Setup,
@@ -154,6 +155,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                 fetch=bounded_fetch_html,
                 provider_factory=provider_for,
                 extractor=extract,
+                recognise=recognise_text,
             )
             return
         raise DomainError("unknown_job_kind")
@@ -358,6 +360,8 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             "bring_automatic_mutations": False,
             "ai": settings_status(data_dir / "config").enabled,
             "media_upload": True,
+            "image_recipe_import": ocr_available(),
+            "image_import_languages": ["en", "de"] if ocr_available() else [],
         }
 
     @app.post("/api/v1/setup", status_code=201, response_model=Tokens)
@@ -748,7 +752,11 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             if receipt["request_fingerprint"] != import_fingerprint(body.model_dump(mode="json")):
                 raise DomainError("idempotency_conflict", 409)
             return {"id": iid, "state": receipt["state"]}
-        platform = platform_for(body.source_url) if body.source_url else "supplied_text"
+        platform = (
+            "image"
+            if body.image_id
+            else (platform_for(body.source_url) if body.source_url else "supplied_text")
+        )
         source = None
         if body.source_id:
             with database.connect() as db:
@@ -766,10 +774,6 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             selected_ai = load_configuration(data_dir / "config") if body.use_ai else None
         except DomainError:
             selected_ai = None  # Structured metadata does not need an AI configuration.
-        with database.transaction() as db:
-            allowed = rate_limit(db, "imports", maximum=20, seconds=3600)
-        if not allowed:
-            raise DomainError("import_rate_limited", 429)
         with database.transaction() as db:
             previous = db.execute(
                 "SELECT state,request_fingerprint FROM import_draft WHERE id=?", (iid,)
@@ -792,10 +796,24 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                         "source_url": body.source_url,
                         "use_ai": body.use_ai,
                         "consent_external_ai": body.consent_external_ai,
+                        "image_id": str(body.image_id) if body.image_id else None,
+                        "source_id": str(body.source_id) if body.source_id else None,
+                        "ai_destination": list(body.ai_destination)
+                        if body.ai_destination
+                        else None,
                     }.items()
                 ):
                     raise DomainError("idempotency_conflict", 409)
                 return {"id": iid, "state": previous[0]}
+            if not rate_limit(db, "imports", maximum=20, seconds=3600):
+                raise DomainError("import_rate_limited", 429)
+            if (
+                body.image_id
+                and not db.execute(
+                    "SELECT 1 FROM recipe_media WHERE id=?", (str(body.image_id),)
+                ).fetchone()
+            ):
+                raise DomainError("image_not_found", 404)
             db.execute(
                 "INSERT INTO import_draft(id,source_url,source_platform,state,recipe,warnings,error_code,confirmed_recipe_id,created_at,request_fingerprint,source_id) VALUES (?,?,?,'queued',NULL,'[]',NULL,NULL,?,?,?)",
                 (
@@ -817,6 +835,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     "source_url": body.source_url,
                     "use_ai": body.use_ai,
                     "consent_external_ai": body.consent_external_ai,
+                    "image_id": str(body.image_id) if body.image_id else None,
                     "source_id": str(body.source_id) if body.source_id else None,
                     "ai_destination": list(body.ai_destination)
                     if body.ai_destination
@@ -831,7 +850,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             )
         return {"id": iid, "state": "queued"}
 
-    @app.get("/api/v1/imports/{import_id}", response_model=ImportPreview)
+    @app.get("/api/v1/imports/{import_id}", response_model=RecipeImportStatus)
     def get_import(import_id: UUID, s=Depends(session)):
         with database.connect() as db:
             row = db.execute("SELECT * FROM import_draft WHERE id=?", (str(import_id),)).fetchone()

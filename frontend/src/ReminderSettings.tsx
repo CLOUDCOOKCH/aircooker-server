@@ -77,10 +77,18 @@ export function ReminderSettings() {
             setTimeout(() => reject(new Error('worker_not_ready')), 10000),
           ),
         ]);
+        const permission = Notification.permission;
+        if (alive) {
+          setRegistration(worker);
+          setPermission(permission);
+        }
+        // A fresh Settings visit must not touch the platform push service before
+        // permission is granted. In particular, native WebKit subscription discovery
+        // may depend on an unavailable OS service. Connect performs it after consent.
+        if (permission !== 'granted') return;
         const subscription = await worker.pushManager.getSubscription();
         const value = subscription ? await subscriptionFingerprint(subscription) : null;
         if (alive) {
-          setRegistration(worker);
           setFingerprint(value);
           setBoundKey(subscription ? subscriptionServerKey(subscription) : null);
           setPermission(Notification.permission);

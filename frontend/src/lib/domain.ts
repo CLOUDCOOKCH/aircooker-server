@@ -3,11 +3,14 @@ import type { components } from '../api-schema';
 
 type Wire = components['schemas'];
 export type Kind = Wire['Mutation']['kind'];
-export type Ingredient = Omit<Wire['Ingredient'], 'quantity' | 'quantity_max'> & {
+export type Ingredient = Omit<Wire['Ingredient-Input'], 'quantity' | 'quantity_max'> & {
   quantity: string | null;
   quantity_max: string | null;
 };
-export type Recipe = Omit<Wire['Recipe'], 'ingredients' | 'steps' | 'servings' | 'provenance'> & {
+export type Recipe = Omit<
+  Wire['Recipe-Input'],
+  'ingredients' | 'steps' | 'servings' | 'provenance'
+> & {
   ingredients: Ingredient[];
   steps: string[];
   servings: string;

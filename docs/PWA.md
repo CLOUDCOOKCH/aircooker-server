@@ -66,13 +66,24 @@ cross-device collision keeps the local preview blocked for review. Settings can 
 and generate a new preview. Shared category/portion/repetition/leftover defaults and bounded
 learning from explicitly approved plans are implemented; see PLANNING_PREFERENCES.md.
 
-Imports accept URLs, supplied text, images/screenshots, PDFs and supported Gemini cooking videos. See [AI Recipe Import](wiki/AI-Recipe-Import.md) for provider settings, explicit consent, capabilities, limits and review. Website metadata still precedes AI. Structured extraction precedes optional configured
+Imports accept URLs, supplied content or a photo/screenshot of a written recipe. Use
+**Photo or screenshot → Take photo / Choose image** for local English/German OCR and an
+editable preview. An image request can queue offline; extraction starts after reconnection.
+The source image becomes the editable recipe cover. See [photo import](IMAGE_IMPORT.md)
+for supported formats, correction, privacy and recovery limits.
+The Link or text form also accepts **Image, PDF or cooking video** attachments for
+optional configured AI extraction. These are a separate, explicitly consented path;
+the Photo or screenshot path retains local OCR, with only recognized text sent if AI
+is selected. Settings exposes encrypted provider profiles and explicit per-model
+capabilities. See [AI recipe import](wiki/AI-Recipe-Import.md) for supported adapters,
+limits and provider disclosure. Live cloud models remain unverified.
+Structured extraction precedes optional configured
 AI. AI requires an explicit content-disclosure checkbox. Social adapters cannot bypass
 private content or platform restrictions. Editable previews are never silently saved;
 review quantities, servings and extraction warnings and choose Save. A failed source keeps
 its URL/text and offers manual creation. A manually completed fallback retains the source
-and supplied text; its old import request can be cancelled separately. Website cover-image import
-and broader HTML/social extraction remain partial; uploaded source-image OCR is available through configured vision models. Local cancellation is durably sent to
+and supplied text; its old import request can be cancelled separately. Broad image layouts,
+handwriting and broader HTML/social extraction remain partial. Local cancellation is durably sent to
 the backend on the next foreground sync.
 
 Bring! is configured in administration. The PWA never handles Bring credentials or calls

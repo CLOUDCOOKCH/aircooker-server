@@ -19,3 +19,6 @@ frontend/.vite/
 *.p12
 *.mobileprovision
 *.p8
+
+# Generated from the shared semantic palette before Vite.
+frontend/public/theme.css

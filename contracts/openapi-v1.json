@@ -1158,111 +1158,6 @@
         "title": "ImportDiagnostic",
         "type": "object"
       },
-      "ImportPreview": {
-        "additionalProperties": false,
-        "properties": {
-          "confirmed_recipe_id": {
-            "anyOf": [
-              {
-                "format": "uuid",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confirmed Recipe Id"
-          },
-          "created_at": {
-            "title": "Created At",
-            "type": "number"
-          },
-          "error_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Error Code"
-          },
-          "extraction": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ExtractionResult"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "id": {
-            "format": "uuid",
-            "title": "Id",
-            "type": "string"
-          },
-          "recipe": {
-            "anyOf": [
-              {
-                "additionalProperties": true,
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Recipe"
-          },
-          "source_platform": {
-            "title": "Source Platform",
-            "type": "string"
-          },
-          "source_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Url"
-          },
-          "state": {
-            "enum": [
-              "queued",
-              "preview",
-              "needs_input",
-              "confirmed",
-              "cancelled"
-            ],
-            "title": "State",
-            "type": "string"
-          },
-          "warnings": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Warnings",
-            "type": "array"
-          }
-        },
-        "required": [
-          "id",
-          "source_url",
-          "source_platform",
-          "state",
-          "recipe",
-          "warnings",
-          "error_code",
-          "confirmed_recipe_id",
-          "created_at"
-        ],
-        "title": "ImportPreview",
-        "type": "object"
-      },
       "ImportRequest": {
         "additionalProperties": false,
         "properties": {
@@ -1300,6 +1195,18 @@
             "default": false,
             "title": "Consent External Ai",
             "type": "boolean"
+          },
+          "image_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Id"
           },
           "request_id": {
             "format": "uuid",
@@ -1378,7 +1285,7 @@
         "title": "ImportSourceInfo",
         "type": "object"
       },
-      "Ingredient": {
+      "Ingredient-Input": {
         "additionalProperties": false,
         "properties": {
           "group": {
@@ -1451,6 +1358,99 @@
                 "minimum": 0.0,
                 "type": "number"
               },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Max"
+          },
+          "quantity_text": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Quantity Text",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "maxLength": 30,
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Ingredient",
+        "type": "object"
+      },
+      "Ingredient-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "notes": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Notes",
+            "type": "string"
+          },
+          "optional": {
+            "default": false,
+            "title": "Optional",
+            "type": "boolean"
+          },
+          "original_text": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Original Text",
+            "type": "string"
+          },
+          "preparation": {
+            "default": "",
+            "maxLength": 300,
+            "title": "Preparation",
+            "type": "string"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "quantity_max": {
+            "anyOf": [
               {
                 "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
                 "type": "string"
@@ -1799,7 +1799,7 @@
           "payload": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Recipe"
+                "$ref": "#/components/schemas/Recipe-Input"
               },
               {
                 "$ref": "#/components/schemas/Meal"
@@ -2369,7 +2369,7 @@
         "title": "PushTest",
         "type": "object"
       },
-      "Recipe": {
+      "Recipe-Input": {
         "additionalProperties": false,
         "properties": {
           "category": {
@@ -2416,7 +2416,7 @@
           },
           "ingredients": {
             "items": {
-              "$ref": "#/components/schemas/Ingredient"
+              "$ref": "#/components/schemas/Ingredient-Input"
             },
             "maxItems": 300,
             "title": "Ingredients",
@@ -2515,6 +2515,208 @@
             ],
             "default": "2",
             "title": "Servings"
+          },
+          "source_platform": {
+            "default": "manual",
+            "maxLength": 50,
+            "title": "Source Platform",
+            "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "maxLength": 2048,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "steps": {
+            "items": {
+              "maxLength": 5000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 200,
+            "title": "Steps",
+            "type": "array"
+          },
+          "tags": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Tags",
+            "type": "array"
+          },
+          "times": {
+            "$ref": "#/components/schemas/RecipeTimes"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "yield_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecipeYield"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "Recipe",
+        "type": "object"
+      },
+      "Recipe-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "cuisine": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine"
+          },
+          "description": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Description",
+            "type": "string"
+          },
+          "image_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Id"
+          },
+          "ingredients": {
+            "items": {
+              "$ref": "#/components/schemas/Ingredient-Output"
+            },
+            "maxItems": 300,
+            "title": "Ingredients",
+            "type": "array"
+          },
+          "instruction_details": {
+            "items": {
+              "$ref": "#/components/schemas/StepDetails"
+            },
+            "maxItems": 200,
+            "title": "Instruction Details",
+            "type": "array"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "notes": {
+            "default": "",
+            "maxLength": 10000,
+            "title": "Notes",
+            "type": "string"
+          },
+          "nutrition": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nutrition"
+          },
+          "nutrition_source": {
+            "anyOf": [
+              {
+                "maxLength": 2048,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nutrition Source"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 50,
+            "title": "Provenance",
+            "type": "object"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "maximum": 5.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "schema_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "servings": {
+            "default": "2",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Servings",
+            "type": "string"
           },
           "source_platform": {
             "default": "manual",
@@ -2729,6 +2931,121 @@
           "notes"
         ],
         "title": "RecipeContent",
+        "type": "object"
+      },
+      "RecipeImportStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmed_recipe_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed Recipe Id"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "number"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "extraction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "recipe": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Recipe-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recognized_text": {
+            "anyOf": [
+              {
+                "maxLength": 100000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recognized Text"
+          },
+          "source_platform": {
+            "title": "Source Platform",
+            "type": "string"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          },
+          "state": {
+            "enum": [
+              "queued",
+              "preview",
+              "needs_input",
+              "confirmed",
+              "cancelled"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "source_url",
+          "source_platform",
+          "state",
+          "recipe",
+          "warnings",
+          "error_code",
+          "confirmed_recipe_id",
+          "created_at"
+        ],
+        "title": "RecipeImportStatus",
         "type": "object"
       },
       "RecipeTimes": {
@@ -4744,7 +5061,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ImportPreview"
+                  "$ref": "#/components/schemas/RecipeImportStatus"
                 }
               }
             },

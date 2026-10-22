@@ -300,7 +300,7 @@ def test_structured_metadata_precedes_ai_even_when_requested(harness, monkeypatc
     assert response.status_code == 202
     process(app)
     recipe = client.get("/api/v1/imports/" + response.json()["id"]).json()["recipe"]
-    assert recipe["times"]["total_minutes"] == 45 and recipe["servings"] == "4"
+    assert recipe["times"]["totalMinutes"] == 45 and recipe["servings"] == "4"
     assert recipe["provenance"]["extractor"] == "schema.org-jsonld"
     unknown = extract(json.dumps({**source, "recipeYield": "12 cookies", "cookTime": "unknown"}))[0]
     assert unknown.yield_info.quantity == 12 and unknown.times.cook_minutes is None

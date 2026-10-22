@@ -107,3 +107,52 @@ test('queued source bytes survive reload and recovery export, then upload before
   assert.equal(task.extraction?.schemaVersion, '1.0.0');
   store.close();
 });
+
+test('cancelling a cloud source during upload prevents import creation and keeps cancellation durable', async () => {
+  const store = await LocalStore.open(uuid());
+  const id = uuid(),
+    sourceID = uuid(),
+    device = await store.device();
+  const task = {
+    id,
+    body: { source_id: sourceID, use_ai: true, consent_external_ai: true },
+    state: 'queued' as const,
+    source: { name: 'scan.pdf', blob: new Blob(['synthetic PDF']) },
+  };
+  await store.saveImport(task);
+  let submissions = 0;
+  const engine = new SyncEngine(store, {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      let response: unknown;
+      if (path.startsWith('/api/v1/sync/state'))
+        response = {
+          instance_id: store.instanceID,
+          cursor: 0,
+          token: 'root',
+          requested_cursor: 0,
+          requested_token: 'root',
+        };
+      else if (path.endsWith('/session')) response = { device_id: device, authenticated: true };
+      else if (path.startsWith('/api/v1/sync/pull'))
+        response = { changes: [], cursor: 0, cursor_token: 'root', has_more: false };
+      else if (path.startsWith('/api/v1/import-sources/')) {
+        await store.saveImport({ ...task, state: 'cancel_pending' });
+        response = { id: sourceID };
+      } else if (init?.method === 'DELETE') response = undefined;
+      else {
+        submissions++;
+        throw new Error('Unexpected import submission');
+      }
+      return response as T;
+    },
+    async upload() {
+      throw new Error('No recipe photo expected');
+    },
+  });
+  await engine.synchronise();
+  assert.equal((await store.imports())[0].state, 'cancel_pending');
+  await engine.synchronise();
+  assert.equal((await store.imports())[0].state, 'cancelled');
+  assert.equal(submissions, 0);
+  store.close();
+});

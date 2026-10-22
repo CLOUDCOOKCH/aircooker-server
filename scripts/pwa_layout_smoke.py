@@ -304,6 +304,8 @@ def main():
                         )
                         page.keyboard.press("Escape")
                         page.mouse.up()
+                        page.wait_for_timeout(50)
+                        expect(page.locator(".sheet")).to_have_count(0)
                         expect(page.locator(".meal-drag-preview")).to_have_count(0)
                         expect(
                             page.locator(f'[data-date="{target_date}"] [data-meal-id="{meal_id}"]')
@@ -331,10 +333,48 @@ def main():
                             )
                             # Native cancellation must clear the drag without moving the meal.
                             handle.evaluate(
-                                "e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'})"
+                                "e=>e.scrollIntoView({block:'center',inline:'center',behavior:'instant'})"
                             )
-                            a = handle.bounding_box()
-                            page.wait_for_timeout(250)
+                            handle.evaluate("""e=>{
+                                const day=e.closest('.calendar-day');
+                                const grid=e.closest('.calendar-week');
+                                grid.scrollTo({left:grid.scrollLeft+day.getBoundingClientRect().left-
+                                    grid.getBoundingClientRect().left,behavior:'instant'});
+                            }""")
+                            # Finish the preceding native inertial swipe before picking
+                            # coordinates for a new trusted touch. Layout visibility alone
+                            # does not prove that the grip receives a hit at those coordinates.
+                            previous = None
+                            stable = 0
+                            deadline = time.monotonic() + 5
+                            while time.monotonic() < deadline:
+                                position = handle.evaluate("""e=>{
+                                    const r=e.getBoundingClientRect();
+                                    const x=r.x+r.width/2,y=r.y+r.height/2;
+                                    const g=e.closest('.calendar-week'),d=e.closest('.calendar-day');
+                                    return {x,y,hit:e.contains(document.elementFromPoint(x,y)),
+                                      scroll:g.scrollLeft,range:g.scrollWidth-g.clientWidth,
+                                      gridX:g.getBoundingClientRect().x,gridWidth:g.clientWidth,
+                                      dayX:d.getBoundingClientRect().x,dayWidth:d.clientWidth};
+                                }""")
+                                stable = stable + 1 if position == previous else 0
+                                if stable >= 3:
+                                    if position["hit"]:
+                                        break
+                                    # A composited native fling can overwrite the first
+                                    # programmatic scroll. Reposition only after it settles.
+                                    handle.evaluate("""e=>{
+                                        const d=e.closest('.calendar-day'),g=e.closest('.calendar-week');
+                                        g.scrollTo({left:g.scrollLeft+d.getBoundingClientRect().left-
+                                            g.getBoundingClientRect().left,behavior:'instant'});
+                                    }""")
+                                    stable = 0
+                                previous = position
+                                page.wait_for_timeout(50)
+                            assert stable >= 3 and position["hit"], (
+                                "Cancellation grip never settled",
+                                position,
+                            )
                             a = handle.bounding_box()
                             session.send(
                                 "Input.dispatchTouchEvent",

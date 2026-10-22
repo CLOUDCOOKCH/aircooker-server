@@ -68,6 +68,13 @@ illustrative food only in a clearly separated demo, never seed household data im
 
 ## Product Principles
 
+Photo import extension, 2026-10-21: camera/image-chooser inputs accept a written recipe
+photo or screenshot. Local English/German OCR, a durable offline source queue and explicit
+editable review/save preserve the existing privacy and offline principles. Optional AI
+receives only recognised text after consent. This extends the incumbent PWA; themes,
+brand PNGs and the retained native UI remain unchanged. Physical-camera/iPhone validation
+is separate from browser chooser automation. See [IMAGE_IMPORT.md](docs/IMAGE_IMPORT.md).
+
 - Preserve unsynchronised local work and make its status visible.
 - Preview imports and suggestions before explicit approval.
 - Modify only identifiable mealf-owned Bring! items.

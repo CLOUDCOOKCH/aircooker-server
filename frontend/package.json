@@ -7,12 +7,12 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
+    "dev": "node scripts/theme-assets.mjs && vite --host 0.0.0.0",
     "api:generate": "openapi-typescript ../contracts/openapi-v1.json -o src/api-schema.d.ts",
     "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && vite build && node scripts/attributions.mjs && node scripts/build-worker.mjs",
+    "build": "tsc --noEmit && node scripts/theme-assets.mjs && vite build && node scripts/attributions.mjs && node scripts/build-worker.mjs",
     "test": "node --experimental-strip-types --test src/lib/*.test.ts",
-    "format:check": "prettier --check src scripts public/push-handler.js public/peach.js public/peach.css index.html licenses vite.config.ts tsconfig.json package.json"
+    "format:check": "prettier --check src scripts public/push-handler.js public/peach.js public/peach.css public/appearance.js index.html licenses vite.config.ts tsconfig.json package.json"
   },
   "dependencies": {
     "decimal.js": "10.6.0",

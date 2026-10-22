@@ -12,6 +12,7 @@ type Session = Drag & {
   startY: number;
   active: boolean;
   handle: HTMLElement;
+  tap: () => void;
 };
 
 /** Drag only from an explicit grip; ordinary cards and page gestures keep scrolling. */
@@ -30,6 +31,9 @@ export function useMealDrag(
     cancelAnimationFrame(frame.current);
     const current = session.current;
     session.current = null;
+    // Some engines emit a compatibility click even after Escape/lost capture.
+    // Eat that pointer click; a later keyboard activation must still work.
+    if (current) consume.current = current.source.key;
     if (current?.handle.hasPointerCapture(current.pointer))
       current.handle.releasePointerCapture(current.pointer);
     document.documentElement.classList.remove('meal-is-dragging');
@@ -91,12 +95,15 @@ export function useMealDrag(
       const current = session.current;
       if (!current || current.pointer !== event.pointerId) return;
       const target = destination(event.clientX, event.clientY);
-      if (current.active) consume.current = current.source.key;
+      consume.current = current.source.key;
+      const tapped =
+        !current.active &&
+        Math.hypot(event.clientX - current.startX, event.clientY - current.startY) < 8;
       stop();
       if (current.active && target) void commit.current(current.source, target);
+      else if (tapped) current.tap();
     };
     const cancel = () => {
-      consume.current = null;
       stop();
     };
     const escape = (event: KeyboardEvent) => {
@@ -131,7 +138,11 @@ export function useMealDrag(
       document.removeEventListener('visibilitychange', hidden);
     };
   }, [grid]);
-  const begin = (event: ReactPointerEvent<HTMLButtonElement>, source: MealDragSource) => {
+  const begin = (
+    event: ReactPointerEvent<HTMLButtonElement>,
+    source: MealDragSource,
+    tap: () => void,
+  ) => {
     if (disabled || !event.isPrimary || event.button !== 0) return;
     stop();
     consume.current = null;
@@ -148,6 +159,7 @@ export function useMealDrag(
       handle: event.currentTarget,
       active: false,
       target: null,
+      tap,
     };
   };
   const consumeClick = (key: string, detail: number) => {

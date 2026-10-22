@@ -101,12 +101,16 @@ export function MealRow({
           disabled={drag.disabled}
           onContextMenu={(event) => event.preventDefault()}
           onPointerDown={(event) =>
-            drag.begin(event, {
-              id: item.entity.id,
-              day: item.day,
-              key: item.key,
-              title: recipe?.payload.title ?? t('meals'),
-            })
+            drag.begin(
+              event,
+              {
+                id: item.entity.id,
+                day: item.day,
+                key: item.key,
+                title: recipe?.payload.title ?? t('meals'),
+              },
+              () => manage(item),
+            )
           }
           onClick={(event) => {
             if (!drag.consumeClick(item.key, event.detail)) manage(item);

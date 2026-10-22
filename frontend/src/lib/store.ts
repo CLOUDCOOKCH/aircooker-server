@@ -34,11 +34,12 @@ export type ImportTask = {
     | 'cancel_pending';
   recipe?: Payloads['recipe'];
   warnings?: string[];
+  recognizedText?: string;
   error?: string;
   attempts?: number;
   nextAttempt?: number;
   source?: { blob: Blob; name: string };
-  extraction?: components['schemas']['ImportPreview']['extraction'];
+  extraction?: components['schemas']['RecipeImportStatus']['extraction'];
 };
 type Anchor = components['schemas']['SyncAnchor'];
 interface Schema extends DBSchema {
@@ -425,8 +426,25 @@ export class LocalStore {
   async imports(): Promise<ImportTask[]> {
     return this.db.getAll('imports');
   }
-  async saveImport(task: ImportTask): Promise<void> {
-    await this.db.put('imports', task);
+  async saveImport(task: ImportTask, photo?: Photo): Promise<void> {
+    if (photo && photo.id !== task.body.image_id) throw new Error('invalid_import_photo');
+    const tx = this.db.transaction(['imports', 'photos'], 'readwrite');
+    const prior = await tx.objectStore('imports').get(task.id);
+    // An in-flight poll or upload must never undo a cancellation/confirmation.
+    if (
+      prior &&
+      ((['cancelled', 'confirmed'].includes(prior.state) && task.state !== prior.state) ||
+        (prior.state === 'cancel_pending' && !['cancel_pending', 'cancelled'].includes(task.state)))
+    ) {
+      await tx.done;
+      return;
+    }
+    if (photo) {
+      if (!(await tx.objectStore('photos').get(photo.id)))
+        await tx.objectStore('photos').put(photo);
+    }
+    await tx.objectStore('imports').put(task);
+    await tx.done;
   }
 
   async saveBatch(

@@ -290,3 +290,30 @@ drops, offline transactions and occurrence exceptions. Narrow <=480px dialogs st
 paired fields; two-column rows use minmax(0,1fr), constrained date controls and 48px
 paired-field heights. Original art and palette tokens stay intact. Chromium captures/
 behavior are genuine synthetic-data evidence; physical iPhone remains unverified.
+
+
+Theme library update, 2026-10-21: the user named the established appearance **Flo** and
+requested additional dark romance and light themes. Flo retains the exact approved
+system palettes above. **After Dark** uses ink/oxblood/rose, dark elevation and restrained
+gold details; **Sunday** uses linen whites/sage. Shared semantic roles, system type,
+solid forms, glass navigation and original art remain authoritative. Explicit choices
+override system media queries and set native field colour scheme. Settings provides
+native radio previews; the console header provides a select. Device-local persistence,
+metadata, offline shell and accessibility checks are described in [THEMES.md](docs/THEMES.md).
+This extends appearance selection; historical system-only notes above describe Flo.
+
+Theme validation follow-up: filled destructive buttons now use `--on-danger`, preserving
+4.5:1 contrast with pale dark-mode danger backgrounds. At narrow phone widths, German
+Settings navigation displays “Optionen” with the full “Einstellungen” accessible name.
+Equal-width navigation items shrink and connection/demo controls wrap to stay inside the
+viewport. The existing native fieldset/grid minima are bounded; no root overflow hiding
+is used to mask layout faults.
+
+Photo import extension, 2026-10-21: extend the existing import surface with a native
+Link or text / Photo or screenshot choice and Take photo / Choose image actions. Use
+shared theme roles and solid controls, a contained image preview, visible queue status
+and the existing recipe editor. Review notices explain uncertainty without jokes;
+recognised source text stays selectable. Existing Flo/After Dark/Sunday palettes, PNG
+brand artwork, glass navigation and mobile safe-area/field constraints remain authoritative.
+This is an ordinary task-flow extension, not a new visual world. Browser captures use
+synthetic printed recipes; camera hardware is outside that evidence.

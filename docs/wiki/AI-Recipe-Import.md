@@ -160,7 +160,12 @@ Rebuild and restart the existing service, preserving the `/data` volume:
 docker compose up --build -d
 ```
 
-No additional dependency or service is required. Migration `010_recipe_import.sql` creates
+The existing **Photo or screenshot** camera/chooser remains a local English/German OCR
+path and sends only recognized text when optional AI is selected. The attachment field
+under **Link or text** is the separate path that sends a file to the configured AI model,
+after explicit consent and capability checks. Both paths require review before saving.
+
+No additional dependency or service is required. Migration `011_recipe_import.sql` creates
 the private upload and AI-attempt tables and adds extraction data to import drafts. Released
 migrations are unchanged. Standard household JSON/ZIP exports contain reviewed recipes and
 their new metadata; they exclude provider credentials and transient source uploads.

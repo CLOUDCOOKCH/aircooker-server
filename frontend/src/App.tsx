@@ -378,7 +378,9 @@ function Kitchen({
                 initial: {
                   ...emptyRecipe(),
                   source_url: task.body.source_url ?? null,
-                  notes: task.body.text ?? '',
+                  notes: task.recognizedText ?? task.body.text ?? '',
+                  image_id: task.body.image_id ?? null,
+                  source_platform: task.body.image_id ? 'image' : 'manual',
                   provenance: { fallback: 'manual_review' },
                 },
                 draftID: 'manual-import:' + task.id,
@@ -430,13 +432,19 @@ function Kitchen({
               key={id}
               className={app.tab === id ? 'active' : ''}
               aria-current={app.tab === id ? 'page' : undefined}
+              aria-label={t(id)}
               onClick={() => {
                 app.setTab(id);
                 back();
               }}
             >
               <Icon size={22} strokeWidth={app.tab === id ? 2 : 1.6} />
-              <span>{t(id)}</span>
+              <span className={id === 'settings' ? 'nav-label-full' : undefined}>{t(id)}</span>
+              {id === 'settings' && (
+                <span className="nav-label-short" aria-hidden="true">
+                  {t('navSettings')}
+                </span>
+              )}
             </button>
           ))}
         </div>

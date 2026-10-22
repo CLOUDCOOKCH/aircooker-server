@@ -221,9 +221,10 @@ export class SyncEngine {
   }
 
   private async imports(): Promise<void> {
-    for (const task of (await this.store.imports()).slice(0, 100)) {
-      if (['confirmed', 'cancelled', 'needs_input', 'preview', 'saving'].includes(task.state))
-        continue;
+    const active = (await this.store.imports()).filter((task) =>
+      ['queued', 'processing', 'cancel_pending'].includes(task.state),
+    );
+    for (const task of active.slice(0, 100)) {
       const delay = (task.nextAttempt ?? 0) - Date.now();
       if (delay > 0 && delay <= 60_000) continue;
       try {
@@ -245,6 +246,16 @@ export class SyncEngine {
               body: data,
             });
           }
+          if (task.body.image_id) {
+            const photo = await this.store.photo(assertUUID(task.body.image_id));
+            if (!photo) throw new APIError('image_not_available_locally', 422);
+            if (photo.pending) {
+              await this.api.upload(photo.id, photo.blob);
+              await this.store.acknowledgePhoto(photo.id);
+            }
+          }
+          const current = (await this.store.imports()).find((item) => item.id === task.id);
+          if (current?.state === 'cancel_pending' || current?.state === 'cancelled') continue;
           const result = await this.api.request<{ id: string }>('/api/v1/imports', {
             method: 'POST',
             body: JSON.stringify({ ...task.body, request_id: task.id }),
@@ -264,6 +275,7 @@ export class SyncEngine {
           warnings?: unknown;
           error_code?: string;
           extraction?: Wire['ExtractionResult'];
+          recognized_text?: string | null;
         }>('/api/v1/imports/' + assertUUID(task.id));
         if (
           result.id !== task.id ||
@@ -284,6 +296,10 @@ export class SyncEngine {
           extraction: result.extraction,
           source: undefined,
           warnings,
+          recognizedText:
+            typeof result.recognized_text === 'string'
+              ? result.recognized_text.slice(0, 100000)
+              : undefined,
           error: typeof result.error_code === 'string' ? result.error_code : undefined,
         });
       } catch (error) {

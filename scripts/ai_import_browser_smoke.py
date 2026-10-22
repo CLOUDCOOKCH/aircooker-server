@@ -123,6 +123,7 @@ def main():
                 def upload(name, mime, raw):
                     navigate("Recipes")
                     page.get_by_role("button", name="Import recipe", exact=True).first.click()
+                    page.get_by_role("button", name="Link or text", exact=True).click()
                     page.get_by_label("Image, PDF or cooking video", exact=False).set_input_files(
                         {"name": name, "mimeType": mime, "buffer": raw}
                     )

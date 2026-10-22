@@ -77,3 +77,23 @@ This is a reproducible attribution/declaration check, not full legal clearance. 
 full dependency graph is audited separately in CI; Node and build packages are absent from
 the final Python runtime image. Continue the existing OS/bundled-library/source obligations
 review before stable distribution.
+
+## Local recipe text recognition
+
+Preview `.10` adds unmodified Alpine `tesseract-ocr=5.5.2-r0` and
+`tesseract-ocr-data-eng=5.5.2-r0` / `tesseract-ocr-data-deu=5.5.2-r0`. The official
+[3.24-stable package recipe](https://github.com/alpinelinux/aports/blob/3.24-stable/community/tesseract-ocr/APKBUILD)
+identifies Tesseract 5.5.2, tessdata_fast 4.1.0, Apache-2.0 declarations, source hashes and
+AMD64/ARM64 support. This is the source feasibility check; actual packaged engine/languages
+are exercised in each architecture’s Docker gate. Tesseract is a fixed local subprocess,
+not a new service or Python package; no OCR cloud account is required.
+
+The exact upstream Apache-2.0 licence texts from the official tagged Tesseract 5.5.2 and
+tessdata_fast 4.1.0 repositories are shipped in `aircooker/attributions/` as
+`tesseract-5.5.2.LICENSE` and `tessdata-4.1.0.LICENSE`.
+Source: https://github.com/tesseract-ocr/tesseract/tree/5.5.2 and
+https://github.com/tesseract-ocr/tessdata_fast/tree/4.1.0.
+The release’s architecture-specific SBOMs record installed OCR and transitive native
+packages. This does not replace the broader OS/transitive-library and corresponding-source
+review above or imply blanket legal clearance. OCR accuracy and provider/service terms
+are separate concerns. The synthetic fixture artwork contains no copied recipe content.

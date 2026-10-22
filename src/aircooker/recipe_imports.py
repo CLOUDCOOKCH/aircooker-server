@@ -2,7 +2,7 @@
 
 import json
 import time
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pydantic import ValidationError
 
@@ -10,10 +10,11 @@ from .ai import AIInput
 from .ai_settings import load_configuration
 from .auth import rate_limit
 from .errors import DomainError
+from .image_import import printed_recipe
 from .import_sources import youtube_url
 
 
-def process_import(database, payload, *, fetch, provider_factory, extractor):
+def process_import(database, payload, *, fetch, provider_factory, extractor, recognise):
     iid = payload["id"]
     with database.connect() as db:
         draft = db.execute("SELECT * FROM import_draft WHERE id=?", (iid,)).fetchone()
@@ -24,7 +25,27 @@ def process_import(database, payload, *, fetch, provider_factory, extractor):
     recipe = None
     try:
         source = None
-        if draft["source_id"]:
+        image_id = payload.get("image_id")
+        if image_id:
+            content = payload.get("text")
+            if not content:
+                with database.connect() as db:
+                    media = db.execute(
+                        "SELECT data FROM recipe_media WHERE id=?", (image_id,)
+                    ).fetchone()
+                if not media:
+                    raise DomainError("image_not_found", 404)
+                content = recognise(media["data"])
+            with database.transaction() as db:
+                updated = db.execute(
+                    "UPDATE import_draft SET recognized_text=? WHERE id=? AND state NOT IN ('cancelled','confirmed')",
+                    (content, iid),
+                ).rowcount
+            if not updated:
+                return
+            if not payload.get("use_ai"):
+                recipe, warnings = printed_recipe(content, image_id, draft["source_url"])
+        elif draft["source_id"]:
             with database.connect() as db:
                 source = db.execute(
                     "SELECT * FROM import_source WHERE id=?", (draft["source_id"],)
@@ -34,7 +55,7 @@ def process_import(database, payload, *, fetch, provider_factory, extractor):
             content = payload.get("text") or ""
         else:
             content = payload.get("text") or fetch(draft["source_url"])
-        if source is None:
+        if source is None and not image_id:
             try:
                 recipe, warnings = extractor(content, draft["source_url"], draft["source_platform"])
                 if not recipe.ingredients or not recipe.steps:
@@ -80,18 +101,29 @@ def process_import(database, payload, *, fetch, provider_factory, extractor):
                 )
             provider = provider_factory(config)
             try:
-                extraction = provider.extract(value)
+                if image_id:
+                    # Existing camera imports retain their text-only privacy contract.
+                    recipe = provider.extract_recipe(content)
+                else:
+                    extraction = provider.extract(value)
             finally:
                 provider.close()
-            recipe = extraction.reviewed_preview()
+            if extraction:
+                recipe = extraction.reviewed_preview()
             if recipe:
                 recipe.source_url = draft["source_url"]
                 recipe.source_platform = draft["source_platform"]
             warnings = ["ai_extracted_review_all_fields"]
             if value.kind in {"video", "youtube"}:
                 warnings.append("video_first_ten_minutes")
-            if extraction.recipe.servings is None:
+            if extraction and extraction.recipe.servings is None:
                 warnings.append("review_servings")
+            if image_id and recipe is not None:
+                recipe.image_id = UUID(image_id)
+                recipe.provenance["input"] = (
+                    "local-image-ocr" if not payload.get("text") else "user_corrected_image_text"
+                )
+                warnings.append("image_text_requires_review")
         with database.transaction() as db:
             db.execute(
                 "UPDATE import_draft SET state='preview',recipe=?,extraction=?,warnings=?,error_code=NULL WHERE id=? AND state NOT IN ('cancelled','confirmed')",

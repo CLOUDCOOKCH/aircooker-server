@@ -59,13 +59,22 @@ def main():
             "keys": {"p256dh": encoded(receiver), "auth": encoded(b"synthetic-auth!!")},
         }
         subscription_double = """fixture => {
+          window.TEST_ONLY_pushReads=0;
+          // Headless Chrome pre-denies prompts. Model an initial default permission
+          // explicitly; subsequent permission behavior comes from the real context.
+          const permission=Object.getOwnPropertyDescriptor(Notification,'permission');
+          Object.defineProperty(Notification,'permission',{configurable:true,get:()=>
+            localStorage.getItem('TEST-ONLY:permission-ready') ? permission.get.call(Notification) : 'default'});
           const storageKey='TEST-ONLY:push-subscription';
           const wrap=value=>value && ({endpoint:value.endpoint,
             options:{applicationServerKey:Uint8Array.from(value.key).buffer},
             toJSON:()=>({endpoint:value.endpoint,keys:fixture.keys}),
             unsubscribe:async()=>{localStorage.removeItem(storageKey);return true;}});
           const manager={
-            getSubscription:async()=>wrap(JSON.parse(localStorage.getItem(storageKey)||'null')),
+            getSubscription:async()=>{
+              window.TEST_ONLY_pushReads++;
+              return wrap(JSON.parse(localStorage.getItem(storageKey)||'null'));
+            },
             subscribe:async options=>{
               if(!options.userVisibleOnly || !options.applicationServerKey) throw Error('unsafe_options');
               const value={...fixture,key:[...new Uint8Array(options.applicationServerKey)]};
@@ -84,9 +93,7 @@ def main():
                     or shutil.which("google-chrome"),
                     args=["--no-sandbox"],
                 )
-                context = browser.new_context(
-                    viewport={"width": 1440, "height": 1000}, permissions=["notifications"]
-                )
+                context = browser.new_context(viewport={"width": 1440, "height": 1000})
                 context.add_init_script(
                     "(" + subscription_double + ")(" + json.dumps(fixture) + ")"
                 )
@@ -119,9 +126,16 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                expect(
+                    page.get_by_role("button", name="Connect notifications", exact=True)
+                ).to_be_enabled()
+                assert page.evaluate("window.TEST_ONLY_pushReads") == 0
+                context.grant_permissions(["notifications"])
+                page.evaluate("localStorage.setItem('TEST-ONLY:permission-ready','1')")
                 page.get_by_role("button", name="Connect notifications", exact=True).click()
                 enabled = page.get_by_label("Enable meal reminders", exact=True)
                 expect(enabled).to_be_visible()
+                assert page.evaluate("window.TEST_ONLY_pushReads") > 0
                 enabled.check()
                 page.locator('input[type="time"]').nth(2).fill("18:45")
                 page.get_by_role("button", name="Save reminder settings", exact=True).click()

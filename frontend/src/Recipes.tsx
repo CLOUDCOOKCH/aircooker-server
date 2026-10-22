@@ -499,6 +499,8 @@ export function RecipeEditor({
                 (
                   {
                     review_ingredient_quantities: 'warningQuantities',
+                    image_text_requires_review: 'warningImageText',
+                    ai_extracted_review_all_fields: 'warningAI',
                     review_servings: 'warningServings',
                     image_import_not_yet_available: 'warningImage',
                     ingredient_entries_omitted: 'warningOmitted',
@@ -510,6 +512,12 @@ export function RecipeEditor({
             </p>
           ))}
         </div>
+      )}
+      {task?.recognizedText && (
+        <details className="import-recognized">
+          <summary>{t('recognizedText')}</summary>
+          <pre className="import-source-text">{task.recognizedText}</pre>
+        </details>
       )}
       <form onSubmit={(event) => void save(event)} className="recipe-editor">
         <div className="editor-main">

@@ -1591,36 +1591,6 @@ export interface components {
              */
             state: "queued" | "preview" | "needs_input" | "confirmed" | "cancelled" | "unknown";
         };
-        /** ImportPreview */
-        ImportPreview: {
-            /** Confirmed Recipe Id */
-            confirmed_recipe_id: string | null;
-            /** Created At */
-            created_at: number;
-            /** Error Code */
-            error_code: string | null;
-            extraction?: components["schemas"]["ExtractionResult"] | null;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Recipe */
-            recipe: {
-                [key: string]: unknown;
-            } | null;
-            /** Source Platform */
-            source_platform: string;
-            /** Source Url */
-            source_url: string | null;
-            /**
-             * State
-             * @enum {string}
-             */
-            state: "queued" | "preview" | "needs_input" | "confirmed" | "cancelled";
-            /** Warnings */
-            warnings: string[];
-        };
         /** ImportRequest */
         ImportRequest: {
             /** Ai Destination */
@@ -1634,6 +1604,8 @@ export interface components {
              * @default false
              */
             consent_external_ai: boolean;
+            /** Image Id */
+            image_id?: string | null;
             /**
              * Request Id
              * Format: uuid
@@ -1664,7 +1636,7 @@ export interface components {
             id: string;
         };
         /** Ingredient */
-        Ingredient: {
+        "Ingredient-Input": {
             /** Group */
             group?: string | null;
             /**
@@ -1698,6 +1670,52 @@ export interface components {
             quantity?: number | string | null;
             /** Quantity Max */
             quantity_max?: number | string | null;
+            /**
+             * Quantity Text
+             * @default
+             */
+            quantity_text: string;
+            /**
+             * Unit
+             * @default
+             */
+            unit: string;
+        };
+        /** Ingredient */
+        "Ingredient-Output": {
+            /** Group */
+            group?: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /**
+             * Optional
+             * @default false
+             */
+            optional: boolean;
+            /**
+             * Original Text
+             * @default
+             */
+            original_text: string;
+            /**
+             * Preparation
+             * @default
+             */
+            preparation: string;
+            /** Quantity */
+            quantity?: string | null;
+            /** Quantity Max */
+            quantity_max?: string | null;
             /**
              * Quantity Text
              * @default
@@ -1875,7 +1893,7 @@ export interface components {
              */
             operation: "upsert" | "delete";
             /** Payload */
-            payload?: components["schemas"]["Recipe"] | components["schemas"]["Meal"] | components["schemas"]["Pantry"] | components["schemas"]["Leftover"] | components["schemas"]["Template"] | null;
+            payload?: components["schemas"]["Recipe-Input"] | components["schemas"]["Meal"] | components["schemas"]["Pantry"] | components["schemas"]["Leftover"] | components["schemas"]["Template"] | null;
         };
         /** MutationResult */
         MutationResult: {
@@ -2089,7 +2107,7 @@ export interface components {
             request_id: string;
         };
         /** Recipe */
-        Recipe: {
+        "Recipe-Input": {
             /** Category */
             category?: string | null;
             /** Cuisine */
@@ -2102,7 +2120,7 @@ export interface components {
             /** Image Id */
             image_id?: string | null;
             /** Ingredients */
-            ingredients?: components["schemas"]["Ingredient"][];
+            ingredients?: components["schemas"]["Ingredient-Input"][];
             /** Instruction Details */
             instruction_details?: components["schemas"]["StepDetails"][];
             /** Language */
@@ -2151,6 +2169,69 @@ export interface components {
             title: string;
             yield_info?: components["schemas"]["RecipeYield"] | null;
         };
+        /** Recipe */
+        "Recipe-Output": {
+            /** Category */
+            category?: string | null;
+            /** Cuisine */
+            cuisine?: string | null;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Image Id */
+            image_id?: string | null;
+            /** Ingredients */
+            ingredients?: components["schemas"]["Ingredient-Output"][];
+            /** Instruction Details */
+            instruction_details?: components["schemas"]["StepDetails"][];
+            /** Language */
+            language?: string | null;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /** Nutrition */
+            nutrition?: {
+                [key: string]: string;
+            } | null;
+            /** Nutrition Source */
+            nutrition_source?: string | null;
+            /** Provenance */
+            provenance?: {
+                [key: string]: string;
+            };
+            /** Rating */
+            rating?: number | null;
+            /**
+             * Schema Version
+             * @default 1.0.0
+             * @constant
+             */
+            schema_version: "1.0.0";
+            /**
+             * Servings
+             * @default 2
+             */
+            servings: string;
+            /**
+             * Source Platform
+             * @default manual
+             */
+            source_platform: string;
+            /** Source Url */
+            source_url?: string | null;
+            /** Steps */
+            steps?: string[];
+            /** Tags */
+            tags?: string[];
+            times?: components["schemas"]["RecipeTimes"];
+            /** Title */
+            title: string;
+            yield_info?: components["schemas"]["RecipeYield"] | null;
+        };
         /** RecipeContent */
         RecipeContent: {
             /** Category */
@@ -2175,6 +2256,35 @@ export interface components {
             /** Title */
             title: string | null;
             yield: components["schemas"]["RecipeYield"] | null;
+        };
+        /** RecipeImportStatus */
+        RecipeImportStatus: {
+            /** Confirmed Recipe Id */
+            confirmed_recipe_id: string | null;
+            /** Created At */
+            created_at: number;
+            /** Error Code */
+            error_code: string | null;
+            extraction?: components["schemas"]["ExtractionResult"] | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            recipe: components["schemas"]["Recipe-Output"] | null;
+            /** Recognized Text */
+            recognized_text?: string | null;
+            /** Source Platform */
+            source_platform: string;
+            /** Source Url */
+            source_url: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "preview" | "needs_input" | "confirmed" | "cancelled";
+            /** Warnings */
+            warnings: string[];
         };
         /** RecipeTimes */
         RecipeTimes: {
@@ -3391,7 +3501,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImportPreview"];
+                    "application/json": components["schemas"]["RecipeImportStatus"];
                 };
             };
             /** @description Validation Error */

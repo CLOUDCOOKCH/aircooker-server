@@ -30,7 +30,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.8`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.9`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
@@ -106,7 +106,8 @@ The glass-style PWA is the primary client. Native iOS code is retained for later
   synthetic coverage; unsupported Bring! writes remain disabled until compatibility is
   proven. No official Bring! affiliation is implied.
 - Social imports cannot bypass private content, authentication or platform restrictions.
-  Captions/transcripts and image extraction are incomplete; manual content remains available.
+  Captions/transcripts remain incomplete. Written-recipe image OCR is available in English
+  and German; other layouts/languages and handwriting may require correction/manual entry.
 - Web Push is optional and needs connectivity. The receiver/scheduler have automated tests,
   but live push vendors and physical iPhone delivery have not been validated. It cannot
   guarantee timed offline reminders. Native share extensions/widgets are not PWA features.
@@ -130,3 +131,22 @@ a configured workflow alone is not evidence of either.
 
 See the [feature/evidence checklist](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/IMPLEMENTATION.md)
 and [PWA guide](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/PWA.md).
+
+The `.9` preview adds **Settings → Theme library**. **Flo** preserves the existing
+peach/cream appearance and follows the device. **After Dark** stays dark with ink,
+oxblood and dusty rose; **Sunday** stays light with linen whites and sage. The console
+has the same choices in its header. Choices stay on this browser and origin, work
+offline and are separate from shared household data. Original art is unchanged.
+See [theme behavior and testing](THEMES.md). Keep your existing volume, port mapping,
+command and healthcheck, including `5152:5152`; update only the image reference.
+Save edits and accept the PWA update. No browser-data reset or reinstall is required.
+
+The `.10` preview adds **Import recipe → Photo or screenshot → Take photo / Choose image**.
+Your server recognizes printed English/German text locally and opens an editable preview;
+only Save adds the recipe. Images and jobs persist offline until the server is reachable.
+Optional configured AI receives only recognized text after consent. Clear full-recipe images
+work best; photos of a finished dish do not provide a recipe. Review quantities and
+instructions. See [photo import, privacy and limits](IMAGE_IMPORT.md). Keep the same volume,
+port mapping, command and healthcheck, including `5152:5152`; change only the image reference
+to `ghcr.io/cloudcookch/mealf-server:poc-20261021.10` and accept the PWA update.
+Do not clear browser data or reinstall while local work is pending.

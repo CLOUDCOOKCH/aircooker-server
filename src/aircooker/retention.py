@@ -17,7 +17,7 @@ def cleanup_database(database, *, now=None, dry_run=False):
         imports = db.execute(
             """SELECT id FROM import_draft WHERE state IN ('confirmed','cancelled')
             AND finished_at<? AND request_fingerprint IS NOT NULL
-            AND (recipe IS NOT NULL OR extraction IS NOT NULL OR warnings!='[]' OR error_code IS NOT NULL)
+            AND (recipe IS NOT NULL OR recognized_text IS NOT NULL OR extraction IS NOT NULL OR warnings!='[]' OR error_code IS NOT NULL)
             LIMIT ?""",
             (now - 30 * DAY, BATCH),
         ).fetchall()
@@ -25,7 +25,7 @@ def cleanup_database(database, *, now=None, dry_run=False):
         for row in imports:
             if not dry_run:
                 db.execute(
-                    "UPDATE import_draft SET recipe=NULL,extraction=NULL,warnings='[]',error_code=NULL WHERE id=?",
+                    "UPDATE import_draft SET recipe=NULL,recognized_text=NULL,extraction=NULL,warnings='[]',error_code=NULL WHERE id=?",
                     (row["id"],),
                 )
         jobs = db.execute(

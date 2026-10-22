@@ -3,12 +3,38 @@
 ## Unreleased
 
 - Add provider-independent AI recipe imports from images, PDFs, websites, text and supported Gemini videos, with encrypted provider profiles, configurable models, schema-validated editable drafts, bounded usage and Wiki documentation.
+- Add native camera/image choosing for recipe screenshots and photos of written recipes.
+  Local EN/DE OCR produces a durable editable preview; saving requires explicit review.
+  Persist source images and queued imports atomically offline, strip image metadata,
+  expose correctable recognized text and retain replay/cancellation semantics. Optional
+  configured AI receives only recognized text after consent. Cover real OCR, preview/save,
+  offline reload, lost replies, terminal-history queue starvation and synthetic AI privacy.
+  Settings avoids native push subscription discovery before notification permission;
+  synthetic opt-in boundary and existing reminder flows pass. Headless WebKit image tests
+  explicitly model OS push as unavailable; the photo pipeline stays real.
+  Published `.10`: all six exact-source checks, both fresh image gates, public pull,
+  checksums/config identities and same-volume 5152 upgrade with real EN/DE OCR pass.
+  Physical camera/iPhone and live AI/push remain unverified.
+  See docs/validation/github-image-import-preview.json.
+
+- Add a shared PWA/admin theme library: Flo (existing system appearance), After Dark
+  (fixed dark, ink/oxblood/rose) and Sunday (fixed light, linen/sage). Persist browser-local
+  choice, apply before React starts, match native controls and browser chrome, and keep
+  cross-tab administration and offline reloads in sync. Preserve original brand assets
+  and household/storage/API identities. EN/DE native-radio controls include previews.
+  Browser contrast/Axe, storage-failure, offline and OS-override checks are included.
+  Published `.9`: all six source CI jobs (including Chromium/WebKit), both fresh image
+  gates, public pull/checksums/config identities and .8-to-.9 same-volume 5152 upgrade
+  pass. Narrow German navigation/demo bounds and destructive contrast are corrected;
+  physical iPhone remains unverified.
 
 - Add per-device Day/3 days/Week calendar views and touch/pointer meal drag grips with
   target feedback, edge scrolling, cancellation and tap/keyboard move forms. Preserve
   offline durability, existing desktop drops and occurrence exceptions. Stack narrow
   dialog fields and constrain native date controls to prevent the reported overlap.
-  Local checks pass; WebKit CI and publication evidence tracked separately.
+  Published `poc-20261021.8`: all six source CI jobs, Chromium/WebKit interaction checks,
+  both fresh image gates and public pull/checksum/5152 same-volume upgrade checks pass.
+  WebKit tap/cancellation compatibility-click findings are fixed; physical iOS unverified.
 
 - Fix phone PWA enlargement/clipping risks: minimum 16px mobile form fields, explicit
   Safari text autosizing, all-edge safe-area layout, short touch-landscape navigation and

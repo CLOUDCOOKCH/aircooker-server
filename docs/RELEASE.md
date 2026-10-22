@@ -128,3 +128,41 @@ published `.6` → `.7` same-volume upgrade on internal 5152 passed. Packaged CS
 the minimum mobile font, text autosizing and safe-area rules. Original assets, sessions
 and household data remain intact. See [exact evidence](validation/github-phone-viewport-preview.json).
 The reported physical-phone installation/keyboard behavior still needs operator confirmation.
+
+## Mobile calendar preview
+
+`poc-20261021.8` from `4d614b0e21b9393db00d1fcd98108b9ca529e7d6` passed all six
+CI jobs in 39645754201, including Chromium/WebKit calendar interaction and form-geometry
+checks. Publication 39646222333 passed fresh native AMD64/ARM64 security and runtime
+checks. The image index is `sha256:211e26f02798b199f1606b0417847dc7d52400e0108a4ca00672e088ee552fe2`.
+Public pull, six asset checksums, build/config/report identities and the published
+`.7` → `.8` disposable same-volume 5152 upgrade pass. New calendar/pointer/grid code
+ships; household/session/recipe/sync proof and original assets persist. Duplicate tag
+event 39646224899 succeeded at the release gate and skipped verify-images/publish.
+Physical iPhone gestures/keyboard remain unverified. See [exact evidence](validation/github-mobile-calendar-preview.json).
+
+Theme-library update: `poc-20261021.9` from a9659effcd6bb85b77b37e1a81022fc9bd4c4823
+passed all six source jobs in 39652782031, including complete Chromium/WebKit theme,
+offline, native-control, contrast/Axe and narrow German layout checks. Publication
+39653391814 passed both fresh native scans/runtime gates and published digest
+`sha256:9cc1e8f386c4c47792727b52a0408564c0e1dc486514270167e57eb777ac10e8`.
+Public pull, all six release checksums, native build/scan/published config identities and
+a disposable published .8-to-.9 same-volume upgrade on internal 5152 pass. Both SBOMs
+identify Trivy 0.70.0, with zero HIGH/CRITICAL findings in both reports. Provenance,
+job IDs, intermediate browser findings and platform limits are recorded in
+validation/github-themes-preview.json and validation/mealf-themes-local.json.
+Physical iPhone and full-product acceptance remain open. Keep existing volume and custom
+port/command/healthcheck settings; update only the image and accept the PWA update after
+saving edits. No browser reset or reinstall is required.
+
+Photo import is published in `poc-20261021.10` from db207a2. Exact-source CI 39665948052
+passes all six jobs with 240 backend tests per architecture and 45 web tests; browser
+coverage includes actual OCR, offline image/edit reload and explicit save in Chromium
+and trusted-HTTPS WebKit. Headless WebKit explicitly models native push unavailable;
+push opt-in behavior retains separate synthetic fixtures and live delivery is unverified.
+Publication 39666575713 passes both fresh native image scans/runtime gates. Public asset
+checksums, native-build/config/scan identities, anonymous pull and the published AMD64
+.9-to-.10 same-volume 5152 upgrade plus real EN/DE OCR pass. Preserve user volumes,
+custom command/healthcheck and 5152:5152; accept the PWA update without clearing storage.
+Exact digest, jobs, prior failed test-helper attempts, attestation, assets and limits:
+validation/github-image-import-preview.json. This remains a development preview.

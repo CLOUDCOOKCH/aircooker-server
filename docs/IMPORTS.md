@@ -8,6 +8,12 @@ retains HTTPS, DNS/address pinning, redirect bounds, timeouts and size limits. U
 structured text follows the same preview path. Optional AI remains separately configured
 and requires explicit content-transfer consent; no AI is needed for the parser below.
 
+The PWA also provides **Photo or screenshot → Take photo / Choose image**. Local
+English/German OCR creates an editable preview from a written recipe; optional configured
+AI receives only recognised text after separate consent. Source images and queued requests
+are persisted together offline, and every import still needs explicit review/save. See
+[photo import, limits, privacy and recovery](IMAGE_IMPORT.md).
+
 The `metric-en-de-v1` parser recognises explicit amounts, numeric ranges, ordinary and mixed
 fractions, common Unicode fractions, metric units and a bounded set of English/German
 tablespoon/teaspoon/piece aliases. Decimal commas are accepted when unambiguous. For example,

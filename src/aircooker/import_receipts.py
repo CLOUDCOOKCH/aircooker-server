@@ -10,6 +10,8 @@ FIELDS = ("text", "source_url", "use_ai", "consent_external_ai")
 def fingerprint(values):
     fields = {key: values[key] for key in FIELDS}
     # Preserve historical receipts exactly for text/URL imports.
+    if values.get("image_id") is not None:
+        fields["image_id"] = str(values["image_id"])
     if values.get("source_id") is not None:
         fields["source_id"] = str(values["source_id"])
     if values.get("ai_destination") is not None:
