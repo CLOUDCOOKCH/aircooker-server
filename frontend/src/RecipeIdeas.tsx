@@ -6,6 +6,7 @@ import { PageHeader, Photo } from './components';
 import { payload, uuid } from './lib/domain';
 import type { Recipe } from './lib/domain';
 import { APIError } from './lib/api';
+import { ideaError } from './lib/idea-errors';
 
 type Status = components['schemas']['AISettingsStatus'];
 type Job = components['schemas']['IdeaStatus'];
@@ -30,7 +31,7 @@ export function RecipeIdeas({
   const [ready, setReady] = useState(false),
     [status, setStatus] = useState<Status | null>(null);
   const [consent, setConsent] = useState(false),
-    [error, setError] = useState(false),
+    [error, setError] = useState<string | null>(null),
     [busy, setBusy] = useState(false);
   const lock = useRef(false);
   const configured =
@@ -58,7 +59,7 @@ export function RecipeIdeas({
       .catch(() => {
         if (alive) {
           setReady(true);
-          setError(true);
+          setError('local_storage_unavailable');
         }
       });
     return () => {
@@ -66,7 +67,8 @@ export function RecipeIdeas({
     };
   }, [app.store]);
   useEffect(() => {
-    if (ready) void app.store.setSetting(CACHE, draft).catch(() => setError(true));
+    if (ready)
+      void app.store.setSetting(CACHE, draft).catch(() => setError('local_storage_unavailable'));
   }, [ready, draft, app.store]);
   useEffect(() => {
     if (!app.api || !app.online || app.demo) return;
@@ -79,8 +81,8 @@ export function RecipeIdeas({
           setConsent(false);
         }
       })
-      .catch(() => {
-        if (alive) setError(true);
+      .catch((e) => {
+        if (alive) setError(e instanceof APIError ? e.code : 'connection_unavailable');
       });
     return () => {
       alive = false;
@@ -108,11 +110,11 @@ export function RecipeIdeas({
         job.recipes?.forEach((recipe) => payload('recipe', recipe));
         if (alive) {
           setDraft((current) => ({ ...current, job }));
-          setError(false);
+          setError(null);
         }
       } catch (e) {
         if (alive) {
-          setError(true);
+          setError(e instanceof APIError ? e.code : 'connection_unavailable');
           if (e instanceof APIError && e.status >= 400 && e.status < 500) {
             setDraft((current) => ({
               ...current,
@@ -141,7 +143,7 @@ export function RecipeIdeas({
     if (lock.current || pending || !configured || !consent || !app.online || !app.api) return;
     lock.current = true;
     setBusy(true);
-    setError(false);
+    setError(null);
     try {
       const request: Request = {
         request_id: uuid(),
@@ -155,13 +157,17 @@ export function RecipeIdeas({
       await app.store.setSetting(CACHE, next);
       setDraft(next);
     } catch {
-      setError(true);
+      setError('local_storage_unavailable');
     } finally {
       lock.current = false;
       setBusy(false);
     }
   };
   const failed = draft.job?.state === 'failed' || draft.job?.state === 'expired';
+  const failure = ideaError(
+    error ?? draft.job?.error_code,
+    !error && draft.job?.state === 'expired',
+  );
   return (
     <>
       <PageHeader title={t('recipeIdeas')} subtitle={t('ideasIntro')} back={back} />
@@ -254,14 +260,25 @@ export function RecipeIdeas({
           )}
           {(error || failed) && (
             <div className="error-note" role="alert">
-              <p>
-                {t(
-                  draft.job?.error_code === 'ai_configuration_changed_review_consent'
-                    ? 'ideasConfigurationChanged'
-                    : 'ideasError',
-                )}
-              </p>
-              {error && pending && (
+              <p>{t(failure.message)}</p>
+              {failure.code && (
+                <p>
+                  {t('ideasErrorCode')} <code>{failure.code}</code>
+                </p>
+              )}
+              {failed && (
+                <button
+                  type="button"
+                  className="text-button"
+                  onClick={() => {
+                    back();
+                    app.setTab('settings');
+                  }}
+                >
+                  {t('ideasOpenSettings')}
+                </button>
+              )}
+              {error && !failed && (
                 <button type="button" className="text-button" onClick={() => location.reload()}>
                   {t('retry')}
                 </button>

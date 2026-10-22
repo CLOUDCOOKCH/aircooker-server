@@ -25,6 +25,7 @@ def main():
     captures.mkdir(parents=True, exist_ok=True)
     calls = []
     broken = False
+    failure_status = 200
 
     def transport(request):
         body = json.loads(request.content)
@@ -32,6 +33,10 @@ def main():
         assert "creative generation" in system and "tools" not in body
         source = json.loads(json.loads(body["contents"][0]["parts"][0]["text"])["untrusted_source"])
         calls.append(source)
+        if failure_status != 200:
+            return httpx.Response(
+                failure_status, json={"error": {"message": "private-provider-content"}}
+            )
         titles = (
             ["Spaghetti bolognese", "Beef pasta bake", "Spiced beef noodles"]
             if source["language"] == "en"
@@ -251,6 +256,52 @@ def main():
                         page.get_by_role("checkbox").check()
                         page.get_by_role("button", name="Gib mir drei Ideen", exact=True).click()
                         expect(page.get_by_role("alert")).to_be_visible(timeout=20000)
+                        expect(page.get_by_role("alert")).to_contain_text(
+                            "ai_schema_validation_failed"
+                        )
+                        expect(page.get_by_role("alert")).to_contain_text(
+                            "keine drei gültigen Rezepte"
+                        )
+                        broken = False
+                        for failure_status, code, explanation in [
+                            (404, "ai_model_or_endpoint_not_found", "API-Modell-ID"),
+                            (429, "ai_rate_limited", "Kontingentlimit"),
+                        ]:
+                            page.get_by_role(
+                                "button", name="Gib mir drei Ideen", exact=True
+                            ).click()
+                            expect(page.get_by_role("alert")).to_contain_text(code, timeout=20000)
+                            expect(page.get_by_role("alert")).to_contain_text(explanation)
+                            assert "private-provider-content" not in page.content()
+                            assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
+                            page.screenshot(
+                                path=str(captures / f"ideas-error-{failure_status}-phone-de.png"),
+                                full_page=True,
+                            )
+                        call_count = len(calls)
+                        page.reload()
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Rezepte", exact=True
+                        ).click()
+                        page.get_by_role("button", name="Rezeptideen", exact=False).click()
+                        expect(page.get_by_role("alert")).to_contain_text("ai_rate_limited")
+                        assert len(calls) == call_count
+                        page.set_viewport_size({"width": 1440, "height": 1000})
+                        page.screenshot(
+                            path=str(captures / "ideas-error-429-desktop-de.png"), full_page=True
+                        )
+                        page.evaluate(Path("frontend/node_modules/axe-core/axe.min.js").read_text())
+                        assert not page.evaluate(
+                            "async()=> (await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations"
+                        )
+                        page.get_by_role("button", name="Einstellungen öffnen", exact=True).click()
+                        settings_section(page, "KI-Rezeptimport")
+                        expect(page.get_by_label("Modellname", exact=True)).to_be_visible()
+                        model_field = page.get_by_label("Modellname", exact=True)
+                        model_field.fill("Gemini 3.8 Flash")
+                        assert not model_field.evaluate("input => input.checkValidity()")
+                        model_field.fill("gemini-3.8-flash")
+                        assert model_field.evaluate("input => input.checkValidity()")
                         assert len(operator.get("/api/v1/recipes").json()["items"]) == 1
                         assert not errors, errors
                         browser.close()
@@ -259,7 +310,7 @@ def main():
                 thread.join(timeout=20)
                 assert not thread.is_alive()
     print(
-        "PASS: actual AI adapters over synthetic provider HTTP, durable job/three-idea previews, ingredient and surprise privacy, no automatic save, offline edited Save/reload/sync, cached ideas, malformed-output failure, EN desktop/DE320 phone and Axe; no live provider/iPhone verification."
+        "PASS: actual AI adapters over synthetic provider HTTP, durable job/three-idea previews, ingredient and surprise privacy, no automatic save, offline edited Save/reload/sync, cached ideas, malformed-output/model/quota errors, no paid retry on reload, settings recovery and Gemini model-ID validation, EN desktop/DE320 phone and Axe; no live provider/iPhone verification."
     )
 
 

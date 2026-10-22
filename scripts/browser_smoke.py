@@ -223,6 +223,10 @@ def main():
                 page.locator('[data-page-link="ai"]').click()
                 ai = page.locator("#ai-form")
                 ai.locator('[name="enabled"]').check()
+                ai.locator('[name="model"]').fill("Gemini 3.8 Flash")
+                assert not ai.locator('[name="model"]').evaluate("input => input.checkValidity()")
+                ai.locator('[name="model"]').fill("gemini-3.8-flash")
+                assert ai.locator('[name="model"]').evaluate("input => input.checkValidity()")
                 # Hold a real profile request to prove that a late response cannot
                 # overwrite edits or race form submission during provider changes.
                 profile_requests = []
@@ -248,6 +252,29 @@ def main():
                 expect(page.locator("#status")).to_have_text(
                     "The provider returned a validated recipe for the connection test."
                 )
+                probe_url = "**/api/v1/admin/ai/test"
+                page.route(
+                    probe_url,
+                    lambda route: route.fulfill(
+                        status=502, content_type="text/html", body="<h1>private gateway body</h1>"
+                    ),
+                )
+                page.locator("#ai-test").click()
+                expect(page.locator("#status")).to_contain_text("reverse-proxy logs")
+                expect(page.locator("#status")).to_contain_text("http_502")
+                assert "private gateway body" not in page.locator("#status").inner_text()
+                page.unroute(probe_url)
+                page.route(
+                    probe_url,
+                    lambda route: route.fulfill(
+                        status=502,
+                        content_type="application/json",
+                        body=json.dumps({"error": {"code": "ai_model_or_endpoint_not_found"}}),
+                    ),
+                )
+                page.locator("#ai-test").click()
+                expect(page.locator("#status")).to_contain_text("ai_model_or_endpoint_not_found")
+                page.unroute(probe_url)
                 page.locator('[data-page-link="bring"]').click()
                 bring = page.locator("#bring-form")
                 bring.locator('[name="email"]').fill("cook@example.invalid")

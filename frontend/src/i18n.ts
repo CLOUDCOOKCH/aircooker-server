@@ -63,6 +63,38 @@ export const en = {
   ideasEmptyHint: 'Tell us what is in your kitchen, or go for something completely unexpected.',
   ideasError:
     'Could not finish these ideas. Check your connection and AI settings, then try again. Your ingredient text stays here.',
+  ideasErrorCode: 'Diagnostic code:',
+  ideasOpenSettings: 'Open settings',
+  ideasProviderError:
+    'The AI provider could not complete the request. Check its service status before trying again.',
+  ideasGatewayError:
+    'Mealf received an unreadable server response. Check your container and reverse-proxy logs; no AI error details were received.',
+  ideasAuthError:
+    'The AI provider refused access. Check the API key and its permissions in AI settings.',
+  ideasModelError:
+    'The AI model or endpoint was not found. Check the exact API model ID and base URL in AI settings.',
+  ideasRequestError:
+    'The AI provider rejected this request. Check whether the model supports the configured output format and options in AI settings.',
+  ideasBlockedError:
+    'The AI provider blocked this request or its response. Reword your ingredients before requesting new ideas.',
+  ideasTimeoutError:
+    'The AI provider did not reply in time. Check the timeout in AI settings before requesting new ideas.',
+  ideasRateError:
+    'The AI provider has reached a request or quota limit. Check your provider account and wait before trying again.',
+  ideasLocalLimitError:
+    'Mealf’s hourly AI request limit has been reached. Wait before requesting new ideas.',
+  ideasIncompleteError:
+    'The AI response ended before all three recipes were complete. No recipes were saved. You can explicitly request a new batch.',
+  ideasInvalidError:
+    'The AI response did not contain three valid recipes. No recipes were saved. Check the model and output settings before trying again.',
+  ideasInterruptedError:
+    'Generation was interrupted on your server. To avoid charging twice, Mealf did not repeat it automatically. Request new ideas when ready.',
+  ideasConnectionError:
+    'Mealf could not reach your server. Check the connection; the existing request will resume when connected.',
+  ideasStorageError:
+    'Mealf could not read or save the local draft. Check available browser storage before leaving this screen.',
+  ideasExpiredError:
+    'These unsaved ideas have expired on the server. You can request new ideas; saved recipes are unaffected.',
 
   shoppingTitle: 'Shopping list',
   shoppingWeek: 'Current household week',
@@ -533,6 +565,8 @@ export const en = {
   aiProvider: 'AI provider',
   aiEndpoint: 'API base URL',
   aiModel: 'Model name',
+  aiModelHint:
+    'Use the exact API model ID, for example gemini-3.8-flash, rather than its display name.',
   aiKey: 'API key',
   aiKeyStored: 'A key is stored. Leave blank to retain it for this provider and endpoint.',
   aiKeyHint: 'Enter a provider key if required. It stays on your server after saving.',
@@ -692,6 +726,38 @@ export const de: Record<Key, string> = {
   ideasEmptyHint: 'Verrate uns, was in deiner Küche liegt, oder probiere etwas ganz Unerwartetes.',
   ideasError:
     'Diese Ideen konnten nicht erstellt werden. Prüfe Verbindung und KI-Einstellungen und versuche es erneut. Deine Zutatenliste bleibt hier.',
+  ideasErrorCode: 'Diagnosecode:',
+  ideasOpenSettings: 'Einstellungen öffnen',
+  ideasProviderError:
+    'Der KI-Anbieter konnte die Anfrage nicht verarbeiten. Prüfe seinen Dienststatus vor einem neuen Versuch.',
+  ideasGatewayError:
+    'Mealf hat keine lesbare Serverantwort erhalten. Prüfe die Container- und Reverse-Proxy-Logs; es wurden keine KI-Fehlerdetails empfangen.',
+  ideasAuthError:
+    'Der KI-Anbieter hat den Zugriff abgelehnt. Prüfe den API-Schlüssel und seine Berechtigungen in den KI-Einstellungen.',
+  ideasModelError:
+    'Das KI-Modell oder der Endpunkt wurde nicht gefunden. Prüfe die genaue API-Modell-ID und die Basis-URL in den KI-Einstellungen.',
+  ideasRequestError:
+    'Der KI-Anbieter hat diese Anfrage abgelehnt. Prüfe in den KI-Einstellungen, ob das Modell das Ausgabeformat und die gewählten Optionen unterstützt.',
+  ideasBlockedError:
+    'Der KI-Anbieter hat die Anfrage oder seine Antwort blockiert. Formuliere deine Zutaten anders, bevor du neue Ideen anforderst.',
+  ideasTimeoutError:
+    'Der KI-Anbieter hat nicht rechtzeitig geantwortet. Prüfe die Zeitüberschreitung in den KI-Einstellungen, bevor du neue Ideen anforderst.',
+  ideasRateError:
+    'Beim KI-Anbieter ist ein Anfrage- oder Kontingentlimit erreicht. Prüfe dein Anbieterkonto und warte vor einem neuen Versuch.',
+  ideasLocalLimitError:
+    'Das stündliche KI-Anfragelimit von Mealf ist erreicht. Warte, bevor du neue Ideen anforderst.',
+  ideasIncompleteError:
+    'Die KI-Antwort endete, bevor alle drei Rezepte vollständig waren. Es wurde nichts gespeichert. Du kannst ausdrücklich neue Ideen anfordern.',
+  ideasInvalidError:
+    'Die KI-Antwort enthielt keine drei gültigen Rezepte. Es wurde nichts gespeichert. Prüfe Modell und Ausgabeformat vor einem neuen Versuch.',
+  ideasInterruptedError:
+    'Die Generierung wurde auf deinem Server unterbrochen. Damit keine doppelten Kosten entstehen, hat Mealf sie nicht automatisch wiederholt. Fordere bei Bedarf neue Ideen an.',
+  ideasConnectionError:
+    'Mealf konnte deinen Server nicht erreichen. Prüfe die Verbindung; die bestehende Anfrage wird bei Verbindung fortgesetzt.',
+  ideasStorageError:
+    'Mealf konnte den lokalen Entwurf nicht lesen oder speichern. Prüfe den verfügbaren Browserspeicher, bevor du diese Ansicht verlässt.',
+  ideasExpiredError:
+    'Diese ungespeicherten Ideen sind auf dem Server abgelaufen. Du kannst neue Ideen anfordern; gespeicherte Rezepte bleiben erhalten.',
 
   shoppingTitle: 'Einkaufsliste',
   shoppingWeek: 'Aktuelle Haushaltswoche',
@@ -1173,6 +1239,8 @@ export const de: Record<Key, string> = {
   aiProvider: 'KI-Anbieter',
   aiEndpoint: 'API-Basis-URL',
   aiModel: 'Modellname',
+  aiModelHint:
+    'Verwende die genaue API-Modell-ID, zum Beispiel gemini-3.8-flash, statt des Anzeigenamens.',
   aiKey: 'API-Schlüssel',
   aiKeyStored:
     'Ein Schlüssel ist gespeichert. Leer lassen, um ihn für diesen Anbieter und Endpunkt zu behalten.',

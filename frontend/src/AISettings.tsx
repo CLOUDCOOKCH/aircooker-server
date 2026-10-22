@@ -151,10 +151,15 @@ export function AISettings() {
                 <input
                   required={enabled}
                   maxLength={200}
+                  aria-describedby="ai-model-help"
+                  pattern={profile.provider === 'gemini' ? '\\S+' : undefined}
                   value={profile.model ?? ''}
                   onChange={(event) => update({ model: event.target.value })}
                 />
               </label>
+              <p className="muted" id="ai-model-help">
+                {t('aiModelHint')}
+              </p>
               <label>
                 {t('aiKey')}
                 <input

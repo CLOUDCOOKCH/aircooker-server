@@ -1,5 +1,16 @@
 # Implementation checklist and evidence
 
+**Recipe ideas diagnostics, 2026-10-22 — implemented locally, deployment pending:**
+allowlisted English/German provider errors survive the durable worker and cached PWA
+failure, with explicit recovery and no automatic paid retries. Gemini display names with
+whitespace are rejected before configuration is saved; API ID hints appear in the PWA and
+administration. Raw gateway errors are distinguished from structured provider errors.
+The household's immediate `http_502` remains unverified; no credentials or live data were
+accessed. See [configuration and troubleshooting](RECIPE_IDEAS.md).
+Local verification: 435 backend tests, 67 frontend tests, build/type/format, Ruff, mypy,
+OpenAPI drift, Chromium proposal/error/recovery and administration regressions pass.
+See [bounded review and genuine capture provenance](validation/recipe-ideas-errors.md).
+
 **Whole-PWA UX rework, 2026-10-22 — published and verified in `poc-20261022.9`:**
 Home leads with meals and explicit actions; Calendar has compact date/view controls and
 readable multi-day cards; Recipes has labelled import/create, search/rating sort and

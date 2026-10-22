@@ -12,6 +12,20 @@ def configuration(**changes):
     }
 
 
+def test_gemini_requires_api_identifier_instead_of_display_name(harness):
+    c, _, *_ = harness
+    response = c.put(
+        "/api/v1/admin/ai",
+        json=configuration(provider="gemini", model="Gemini 3.8 Flash"),
+    )
+    assert response.status_code == 422
+    assert response.json() == {"error": {"code": "invalid_gemini_model_id"}}
+    assert not c.get("/api/v1/admin/ai").json()["enabled"]
+    for model in ("gemini-3.8-flash", "models/gemini-3.8-flash"):
+        response = c.put("/api/v1/admin/ai", json=configuration(provider="gemini", model=model))
+        assert response.status_code == 200 and response.json()["model"] == model
+
+
 def test_saved_ai_settings_are_encrypted_and_never_return_keys(harness):
     c, app, _, _ = harness
     secret = "synthetic AI credential for test only"

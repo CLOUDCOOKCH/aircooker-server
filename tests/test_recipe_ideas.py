@@ -241,3 +241,43 @@ def test_expiry_retains_idempotency_without_prompt_or_recipe_content(harness):
             "SELECT request,recipes FROM recipe_idea_request WHERE id=?", (body["request_id"],)
         ).fetchone()
         assert tuple(row) == (None, None)
+
+
+@pytest.mark.parametrize(
+    ("status", "response", "code"),
+    [
+        (401, {}, "ai_authentication_failed"),
+        (403, {}, "ai_authentication_failed"),
+        (404, {}, "ai_model_or_endpoint_not_found"),
+        (400, {}, "ai_request_rejected"),
+        (429, {}, "ai_rate_limited"),
+        (503, {}, "ai_provider_failed"),
+        (200, {"promptFeedback": {"blockReason": "SAFETY"}}, "ai_content_blocked"),
+        (200, {"candidates": [{"finishReason": "SAFETY"}]}, "ai_content_blocked"),
+        (200, {"candidates": [{"finishReason": "MAX_TOKENS"}]}, "ai_output_incomplete"),
+    ],
+)
+def test_provider_failure_survives_worker_and_replay_without_leaking_or_retrying(
+    harness, status, response, code
+):
+    client, app, *_ = harness
+    configured(client)
+    body = request()
+    assert client.post("/api/v1/recipe-ideas", json=body).status_code == 202
+    calls = []
+
+    def transport(request):
+        calls.append(request)
+        return httpx.Response(status, json={**response, "private": "synthetic-secret-content"})
+
+    def factory(config):
+        return provider_for(config, httpx.MockTransport(transport))
+
+    process(app.state.database, {"id": body["request_id"]}, factory)
+    result = client.get("/api/v1/recipe-ideas/" + body["request_id"]).json()
+    assert result["state"] == "failed" and result["error_code"] == code
+    assert result["recipes"] == [] and "synthetic-secret-content" not in json.dumps(result)
+    assert client.post("/api/v1/recipe-ideas", json=body).json() == result
+    process(app.state.database, {"id": body["request_id"]}, factory)
+    assert len(calls) == 1
+    assert client.get("/api/v1/recipes").json()["items"] == []

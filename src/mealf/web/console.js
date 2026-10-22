@@ -54,7 +54,7 @@ function translate(){
   renderStorage();renderQueueCounts();translateSessions();translateJobs();
 }
 function message(key){$("status").dataset.i18n=key;delete $("status").dataset.errorCode;$("status").textContent=words[locale][key]||key;}
-function showError(code){$("status").dataset.i18n="error";$("status").dataset.errorCode=code;$("status").textContent=words[locale].error+code;}
+function showError(code){$("status").dataset.i18n=["http_502","http_504"].includes(code)?"gateway_error":code==="invalid_gemini_model_id"?"model_error":"error";$("status").dataset.errorCode=code;$("status").textContent=words[locale][$("status").dataset.i18n]+code;}
 function renderStorage(){
   if(!storageStatus)return;
   const bytes=value=>new Intl.NumberFormat(locale,{style:"unit",unit:"megabyte",maximumFractionDigits:1}).format(value/1000000);
@@ -92,7 +92,7 @@ async function request(path,options={}){
   const response=await fetch(path,{...options,headers:{"Content-Type":"application/json","X-CSRF-Token":csrf(),...options.headers},credentials:"same-origin",redirect:"error"});
   if(!response.ok){
     let code="http_"+response.status;
-    try{code=(await response.json()).error.code;}catch{}
+    try{const value=(await response.json()).error?.code;if(typeof value==="string")code=value;}catch{}
     if(response.status===401){signedOut(); message("session_ended");}
     throw new Error(code);
   }
@@ -111,8 +111,11 @@ function post(path,body={}){return request(path,{method:"POST",body:JSON.stringi
 function field(form,name){return form.elements.namedItem(name);}
 Object.assign(words.en, {ai_formats:"Model input formats", ai_formats_hint:"Enable only formats supported by the selected model. Text is always enabled.", ai_images:"Images and screenshots", ai_default_hint:"Saving selects this provider and model as the default. Other provider configurations remain encrypted on the server."});
 Object.assign(words.de, {ai_formats:"Eingabeformate des Modells", ai_formats_hint:"Aktiviere nur Formate, die das gewählte Modell unterstützt. Text bleibt aktiv.", ai_images:"Bilder und Screenshots", ai_default_hint:"Speichern wählt Anbieter und Modell als Standard. Andere Anbieterkonfigurationen bleiben verschlüsselt auf dem Server."});
+Object.assign(words.en, {ai_model_hint:"Use the exact API model ID, for example gemini-3.8-flash, rather than its display name.",model_error:"Gemini requires an API model ID without spaces, for example gemini-3.8-flash. Code: ",gateway_error:"No readable server error details were received. Check container and reverse-proxy logs. Code: "});
+Object.assign(words.de, {ai_model_hint:"Verwende die genaue API-Modell-ID, zum Beispiel gemini-3.8-flash, statt des Anzeigenamens.",model_error:"Gemini benötigt eine API-Modell-ID ohne Leerzeichen, zum Beispiel gemini-3.8-flash. Code: ",gateway_error:"Keine lesbaren Server-Fehlerdetails empfangen. Prüfe Container- und Reverse-Proxy-Logs. Code: "});
 function aiFormats(profile) {
   const form=$("ai-form");
+  if((profile.provider||field(form,"provider").value)==="gemini")field(form,"model").setAttribute("pattern","\\S+");else field(form,"model").removeAttribute("pattern");
   for(const format of ["image","pdf","video","youtube"]) {
     const input=field(form,"input_"+format);
     input.checked=(profile.input_formats||[]).includes(format);
