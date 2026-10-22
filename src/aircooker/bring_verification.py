@@ -16,6 +16,10 @@ def fingerprint(item):
     return hashlib.sha256(json.dumps([item.name, item.spec, item.completed]).encode()).hexdigest()
 
 
+class BringVerificationBlocked(DomainError):
+    terminal = True
+
+
 def verify(database, connector_factory, iid):
     try:
         return _verify(database, connector_factory, iid)
@@ -26,11 +30,7 @@ def verify(database, connector_factory, iid):
             "bring_verification_unsafe",
             "bring_verification_baseline_changed",
         }:
-            with database.transaction() as db:
-                db.execute(
-                    "UPDATE background_job SET attempts=8 WHERE dedupe_key='bring.verify' AND json_extract(payload,'$.id')=?",
-                    (iid,),
-                )
+            raise BringVerificationBlocked(exc.code, exc.status) from exc
         raise
 
 

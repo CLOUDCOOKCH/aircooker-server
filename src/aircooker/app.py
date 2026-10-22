@@ -236,6 +236,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                             job,
                             code,
                             retry_after=getattr(exc, "retry_after", None),
+                            terminal=getattr(exc, "terminal", False),
                         )
                     else:
                         await durable_work(finish, database, job)

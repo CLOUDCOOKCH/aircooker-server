@@ -12,6 +12,7 @@ from aircooker.bring_runtime import UnofficialBringConnector
 from aircooker.bring_verification import verify
 from aircooker.db import Database
 from aircooker.errors import DomainError
+from aircooker.jobs import claim, finish
 from aircooker.planning import week_start
 from aircooker.secrets import SecretVault
 from aircooker.shopping import BringVerification, configuration_hash, request_verification, snapshot
@@ -129,8 +130,11 @@ def test_uuid_rewrite_never_removes_unknown_item_and_fails_closed(tmp_path):
     connector = Connector()
     connector.rewrite_uuid = True
     iid = prepare(db, lid)
-    with pytest.raises(DomainError, match="bring_uuid_not_supported"):
+    job = claim(db)
+    with pytest.raises(DomainError, match="bring_uuid_not_supported") as error:
         verify(db, lambda _: connector, iid)
+    assert error.value.terminal
+    finish(db, job, error.value.code, terminal=error.value.terminal)
     assert connector.operations == [("add", "unexpected")]
     assert connector.items["manual"].spec == "my own"
     assert not (tmp_path / "config/bring-compatibility.json").exists()
@@ -139,7 +143,7 @@ def test_uuid_rewrite_never_removes_unknown_item_and_fails_closed(tmp_path):
             sql.execute(
                 "SELECT attempts FROM background_job WHERE dedupe_key='bring.verify'"
             ).fetchone()[0]
-            == 8
+            == 1
         )
 
 

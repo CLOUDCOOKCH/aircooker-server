@@ -50,3 +50,26 @@ def test_retry_backoff_and_failure(tmp_path):
         row = db.execute("SELECT * FROM background_job").fetchone()
         assert row["state"] == "queued" and row["error_code"] == "temporary"
         assert row["available_at"] > time.time()
+
+
+def test_terminal_failure_preserves_actual_attempt_count(tmp_path):
+    database = Database(tmp_path)
+    with database.transaction() as db:
+        enqueue(db, "bring.verify", "one", {})
+    job = claim(database)
+    finish(database, job, "bring_uuid_not_supported", terminal=True)
+    with database.connect() as db:
+        row = db.execute("SELECT * FROM background_job").fetchone()
+        assert row["state"] == "failed" and row["attempts"] == 1
+    assert claim(database) is None
+
+
+def test_newer_generation_survives_terminal_failure_of_running_attempt(tmp_path):
+    database = Database(tmp_path)
+    with database.transaction() as db:
+        enqueue(db, "test", "one", {"old": True})
+    job = claim(database)
+    with database.transaction() as db:
+        enqueue(db, "test", "one", {"new": True})
+    finish(database, job, "permanent_old_failure", terminal=True)
+    assert claim(database)["generation"] == 2
