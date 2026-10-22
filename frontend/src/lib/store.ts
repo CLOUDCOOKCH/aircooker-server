@@ -401,6 +401,48 @@ export class LocalStore {
   async anchor(): Promise<Anchor> {
     return this.setting('anchor', { cursor: 0, token: 'root' });
   }
+  async syncSummary() {
+    const tx = this.db.transaction(['entities', 'outbox', 'imports', 'meta'], 'readonly');
+    const records = Object.fromEntries(
+      ['recipe', 'meal', 'pantry', 'leftover', 'template'].map((kind) => [kind, 0]),
+    );
+    for (const row of await tx.objectStore('entities').getAll())
+      if (!row.deleted && Object.hasOwn(records, row.kind)) records[row.kind] += 1;
+    const pending = await tx.objectStore('outbox').getAll();
+    const imports: Record<string, number> = {};
+    for (const task of await tx.objectStore('imports').getAll()) {
+      const state = [
+        'queued',
+        'processing',
+        'preview',
+        'needs_input',
+        'confirmed',
+        'cancelled',
+        'saving',
+        'cancel_pending',
+      ].includes(task.state)
+        ? task.state
+        : 'unclassified';
+      imports[state] = (imports[state] ?? 0) + 1;
+    }
+    const anchor = (await tx.objectStore('meta').get('anchor')) as Anchor | undefined;
+    const device = await tx.objectStore('meta').get('device');
+    const lastSuccess = await tx.objectStore('meta').get('sync:last-success');
+    await tx.done;
+    return {
+      cursor: anchor?.cursor ?? 0,
+      token: anchor?.token ?? 'root',
+      device,
+      lastSuccess:
+        typeof lastSuccess === 'string' && /^\d{4}-\d{2}-\d{2}T[\d:.]+Z$/.test(lastSuccess)
+          ? lastSuccess
+          : null,
+      records,
+      pending: pending.length,
+      blocked: pending.filter((entry) => entry.blocked).length,
+      imports,
+    };
+  }
   async photos(): Promise<Photo[]> {
     return this.db.getAll('photos');
   }

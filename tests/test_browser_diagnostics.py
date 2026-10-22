@@ -20,6 +20,29 @@ ERROR = {
 FAILED = [{"url": URL, "outage": True}]
 
 
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ("&_mealf_sync=21ef346e-23a1-48c7-9a24-218e692f40aa", True),
+        ("&_mealf_sync=invalid", False),
+        ("&_mealf_sync=21ef346e-23a1-48c7-9a24-218e692f40aa&extra=1", False),
+        ("&other=21ef346e-23a1-48c7-9a24-218e692f40aa", False),
+    ],
+)
+def test_only_the_actual_sync_nonce_shape_extends_the_controlled_outage(query, expected):
+    error = {
+        **ERROR,
+        "message": ERROR["message"].replace("?cursor=0", "?cursor=0" + query),
+        "stack": ERROR["stack"].replace("?cursor=0", "?cursor=0" + query),
+    }
+    failed = [{"url": URL + query, "outage": True}]
+    assert browser.expected_webkit_outage("webkit", BASE, error, failed) is expected
+    assert not browser.expected_webkit_outage("webkit", BASE, error, [])
+    assert browser.unexpected_browser_errors("webkit", BASE, [error], failed, [{"kind": "error"}])[
+        0
+    ] == {"kind": "error"}
+
+
 def test_native_diagnostic_requires_a_real_matching_outage_request():
     assert browser.unexpected_browser_errors("webkit", BASE, [ERROR], FAILED, []) == []
     assert browser.unexpected_browser_errors("webkit", BASE, [ERROR], [], []) == [ERROR]

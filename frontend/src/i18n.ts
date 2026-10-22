@@ -330,6 +330,16 @@ export const en = {
   offline: 'Offline · changes saved here',
   syncing: 'Syncing…',
   synced: 'Up to date',
+  syncFailed: 'Sync failed',
+  syncNotChecked: 'Not checked yet',
+  syncIncomplete:
+    'Some server changes have not arrived yet. Retry sync. Your local edits are kept.',
+  syncDiagnostics: 'Check sync connection',
+  syncDiagnosticsHint:
+    'This report contains counts, connection status and error codes. It excludes recipes, passwords and tokens. Copy or export it for troubleshooting.',
+  syncReport: 'Sync report',
+  syncReportCopy: 'Copy report',
+  syncReportCopied: 'Report copied',
   pending: 'pending changes',
   sync: 'Sync now',
   retry: 'Try again',
@@ -917,6 +927,16 @@ export const de: Record<Key, string> = {
   offline: 'Offline · Änderungen lokal gespeichert',
   syncing: 'Synchronisierung…',
   synced: 'Aktuell',
+  syncFailed: 'Abgleich fehlgeschlagen',
+  syncNotChecked: 'Noch nicht geprüft',
+  syncIncomplete:
+    'Einige Serveränderungen sind noch nicht angekommen. Starte den Abgleich erneut. Deine lokalen Änderungen bleiben erhalten.',
+  syncDiagnostics: 'Synchronisierung prüfen',
+  syncDiagnosticsHint:
+    'Dieser Bericht enthält Anzahlen, Verbindungsstatus und Fehlercodes. Rezepte, Passwörter und Tokens sind nicht enthalten. Kopiere oder exportiere ihn zur Fehlersuche.',
+  syncReport: 'Synchronisierungsbericht',
+  syncReportCopy: 'Bericht kopieren',
+  syncReportCopied: 'Bericht kopiert',
   pending: 'ausstehende Änderungen',
   sync: 'Jetzt synchronisieren',
   retry: 'Erneut versuchen',

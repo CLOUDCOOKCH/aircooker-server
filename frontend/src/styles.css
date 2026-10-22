@@ -2899,6 +2899,17 @@ a.settings-row:hover {
   color: var(--accent-ink);
   border-radius: 16px;
 }
+.sync-report {
+  display: block;
+  margin-top: 8px;
+  font-family: ui-monospace, monospace;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.sync-report + .form-actions > button {
+  min-height: 44px;
+}
 .ideas-shortcut span {
   flex: 1;
   min-width: 0;

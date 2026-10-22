@@ -93,6 +93,8 @@ jobs:
         run: timeout 180s python scripts/chatgpt_browser_smoke.py
       - name: Recipe ideas, explicit review and offline save (synthetic provider HTTP)
         run: timeout 180s python scripts/recipe_ideas_browser_smoke.py
+      - name: Sync truthfulness, two devices, recovery and redacted diagnostics
+        run: timeout 180s python scripts/sync_status_browser_smoke.py
       - name: Shopping requirements and manual Bring sync with synthetic service
         run: timeout 180s python scripts/shopping_browser_smoke.py
       - name: Recipe fallbacks and reviewed source photos with synthetic network responses
@@ -131,6 +133,7 @@ jobs:
             build/ai-import-browser
             build/chatgpt-browser
             build/recipe-ideas-browser
+            build/sync-status-browser
             build/shopping-browser
             build/source-photo-browser
             build/theme-browser

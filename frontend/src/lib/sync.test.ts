@@ -8,6 +8,221 @@ import { LocalStore } from './store.ts';
 import { SyncEngine } from './sync.ts';
 
 type Wire = components['schemas'];
+test('an unreachable import endpoint cannot starve outgoing edits or incoming household records', async () => {
+  const store = await LocalStore.open(uuid()),
+    device = await store.device(),
+    localID = uuid(),
+    remoteID = uuid();
+  const localRecipe = { ...emptyRecipe(), title: 'Local saved recipe' };
+  const remoteRecipe = { ...emptyRecipe(), title: 'Other device recipe' };
+  await store.saveBatch([{ kind: 'recipe', id: localID, value: localRecipe }]);
+  await store.saveImport({
+    id: uuid(),
+    state: 'queued',
+    body: { text: 'Pending source', use_ai: false, consent_external_ai: false },
+  });
+  const engine = new SyncEngine(store, {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: store.instanceID,
+          cursor: 1,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      if (path.endsWith('/push')) {
+        const body = JSON.parse(String(init?.body));
+        return [
+          {
+            mutation_id: body.mutations[0].mutation_id,
+            status: 'accepted',
+            revision: 2,
+            conflict: false,
+          },
+        ] as T;
+      }
+      if (path.includes('/pull'))
+        return {
+          changes: [
+            {
+              kind: 'recipe',
+              entity_id: remoteID,
+              payload: remoteRecipe,
+              deleted: false,
+              revision: 1,
+              updated_at: '2026-10-22T00:00:00Z',
+            },
+            {
+              kind: 'recipe',
+              entity_id: localID,
+              payload: localRecipe,
+              deleted: false,
+              revision: 2,
+              updated_at: '2026-10-22T00:00:00Z',
+            },
+          ],
+          cursor: 2,
+          cursor_token: 'a'.repeat(32),
+          has_more: false,
+        } as T;
+      throw new APIError('connection_unavailable', 0);
+    },
+    async upload() {},
+  });
+  await assert.rejects(
+    engine.synchronise(),
+    (e: unknown) => e instanceof APIError && e.code === 'connection_unavailable',
+  );
+  assert.equal(engine.phase, 'imports');
+  assert.equal((await store.pending()).length, 0);
+  assert.equal((await store.entities('recipe')).length, 2);
+  assert.equal((await store.anchor()).cursor, 2);
+  assert.equal((await store.imports())[0].state, 'queued');
+  store.close();
+});
+test('a stale empty pull cannot claim success after the server reports newer changes', async () => {
+  const store = await LocalStore.open(uuid()),
+    device = await store.device();
+  const engine = new SyncEngine(store, {
+    async request<T>(path: string): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: store.instanceID,
+          cursor: 5,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+    },
+    async upload() {
+      throw new Error('Unexpected upload');
+    },
+  });
+  await assert.rejects(
+    engine.synchronise(),
+    (e: unknown) => e instanceof APIError && e.code === 'sync_incomplete',
+  );
+  assert.equal((await store.anchor()).cursor, 0);
+  assert.equal(engine.phase, 'receiving_changes');
+  store.close();
+});
+
+test('a stale pull after a committed write retains the recipe and recovers without replaying it', async () => {
+  const store = await LocalStore.open(uuid()),
+    device = await store.device(),
+    id = uuid();
+  const recipe = { ...emptyRecipe(), title: 'Keep committed edit' };
+  await store.saveBatch([{ kind: 'recipe', id, value: recipe }]);
+  let committed = false,
+    stale = true,
+    pushes = 0;
+  const api = {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      if (path.includes('/state'))
+        return {
+          instance_id: store.instanceID,
+          cursor: committed ? 1 : 0,
+          requested_cursor: 0,
+          requested_token: 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      if (path.endsWith('/push')) {
+        committed = true;
+        pushes++;
+        const body = JSON.parse(String(init?.body));
+        return [
+          {
+            mutation_id: body.mutations[0].mutation_id,
+            revision: 1,
+            status: 'accepted',
+            conflict: false,
+          },
+        ] as T;
+      }
+      return (
+        stale
+          ? { changes: [], cursor: 0, cursor_token: 'root', has_more: false }
+          : {
+              changes: [
+                {
+                  kind: 'recipe',
+                  entity_id: id,
+                  deleted: false,
+                  payload: recipe,
+                  revision: 1,
+                  updated_at: '2026-10-22T00:00:00Z',
+                },
+              ],
+              cursor: 1,
+              cursor_token: 'a'.repeat(32),
+              has_more: false,
+            }
+      ) as T;
+    },
+    async upload() {},
+  };
+  const engine = new SyncEngine(store, api);
+  await assert.rejects(
+    engine.synchronise(),
+    (e: unknown) => e instanceof APIError && e.code === 'sync_incomplete',
+  );
+  assert.equal((await store.anchor()).cursor, 0);
+  assert.equal((await store.entities('recipe'))[0].payload.title, recipe.title);
+  stale = false;
+  await engine.synchronise();
+  assert.equal(pushes, 1);
+  assert.equal((await store.anchor()).cursor, 1);
+  store.close();
+});
+
+test('bounded catch-up reports incomplete and resumes from its committed checkpoint', async () => {
+  const store = await LocalStore.open(uuid()),
+    device = await store.device();
+  const ids = Array.from({ length: 51 }, () => uuid());
+  const api = {
+    async request<T>(path: string): Promise<T> {
+      const cursor = Number(new URL(path, 'https://test.invalid').searchParams.get('cursor'));
+      if (path.includes('/state'))
+        return {
+          instance_id: store.instanceID,
+          cursor: 51,
+          requested_cursor: cursor,
+          requested_token: cursor ? 'a'.repeat(32) : 'root',
+        } as T;
+      if (path.endsWith('/session')) return { device_id: device } as T;
+      const revision = cursor + 1;
+      return {
+        changes: [
+          {
+            kind: 'recipe',
+            entity_id: ids[cursor],
+            payload: { ...emptyRecipe(), title: 'Catch up' },
+            deleted: false,
+            revision,
+            updated_at: '2026-10-22T00:00:00Z',
+          },
+        ],
+        cursor: revision,
+        cursor_token: 'a'.repeat(32),
+        has_more: revision < 51,
+      } as T;
+    },
+    async upload() {},
+  };
+  const engine = new SyncEngine(store, api);
+  await assert.rejects(
+    engine.synchronise(),
+    (e: unknown) => e instanceof APIError && e.code === 'sync_incomplete',
+  );
+  assert.equal((await store.anchor()).cursor, 50);
+  assert.equal((await store.entities('recipe')).length, 50);
+  await engine.synchronise();
+  assert.equal((await store.anchor()).cursor, 51);
+  assert.equal((await store.entities('recipe')).length, 51);
+  store.close();
+});
 test('sync pushes once and atomically records the returned delta and history proof', async () => {
   const instance = uuid();
   const store = await LocalStore.open(instance);
@@ -269,7 +484,19 @@ test('offline suggestion approval replays the immutable whole group after a part
         })) as T;
       }
       if (path.includes('/pull'))
-        return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+        return {
+          changes: group.mutations.map((mutation, i) => ({
+            kind: mutation.kind,
+            entity_id: mutation.entity_id,
+            payload: mutation.payload,
+            deleted: false,
+            revision: 2 + i,
+            updated_at: '2026-10-22T00:00:00Z',
+          })),
+          cursor: 1 + group.mutations.length,
+          cursor_token: 'a'.repeat(32),
+          has_more: false,
+        } as T;
       throw new Error(path);
     },
     async upload() {
@@ -367,9 +594,11 @@ test('a permanently rejected photo cannot poison unrelated outgoing recipes', as
       if (path.includes('/state'))
         return {
           instance_id: instance,
-          cursor: 0,
-          requested_cursor: 0,
-          requested_token: 'root',
+          cursor: pushes ? 1 : 0,
+          requested_cursor: Number(
+            new URL(path, 'https://test.invalid').searchParams.get('cursor'),
+          ),
+          requested_token: path.includes('cursor=0') ? 'root' : 'a'.repeat(32),
         } as T;
       if (path.endsWith('/session')) return { device_id: device } as T;
       if (path.endsWith('/push')) {
@@ -385,7 +614,21 @@ test('a permanently rejected photo cannot poison unrelated outgoing recipes', as
           },
         ] as T;
       }
-      return { changes: [], cursor: 0, cursor_token: 'root', has_more: false } as T;
+      return {
+        changes: [
+          {
+            kind: 'recipe',
+            entity_id: goodID,
+            payload: { ...emptyRecipe(), title: 'Unrelated recipe' },
+            deleted: false,
+            revision: 1,
+            updated_at: '2026-10-22T00:00:00Z',
+          },
+        ],
+        cursor: 1,
+        cursor_token: 'a'.repeat(32),
+        has_more: false,
+      } as T;
     },
     async upload() {
       uploads++;

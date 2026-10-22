@@ -13,6 +13,7 @@ const MAX_PAGES = 50;
 
 /** Foreground-only by design: durable server jobs continue independently after delivery. */
 export class SyncEngine {
+  phase = 'idle';
   private readonly store: LocalStore;
   private readonly api: Transport;
   private running: Promise<SyncProgress> | null = null;
@@ -40,6 +41,7 @@ export class SyncEngine {
   private async run(): Promise<SyncProgress> {
     if (await this.store.setting('demo', false)) throw new APIError('demo_server_unavailable', 0);
     const progress: SyncProgress = { sent: 0, received: 0, blocked: 0, hasMore: false };
+    this.phase = 'checking_server';
     const anchor = await this.store.anchor();
     const state = await this.api.request<Wire['SyncState']>(
       '/api/v1/sync/state?cursor=' + anchor.cursor,
@@ -50,11 +52,12 @@ export class SyncEngine {
       throw new APIError('invalid_server_response', 0);
     if (state.requested_token !== anchor.token || state.cursor < anchor.cursor)
       throw new APIError('sync_history_changed', 409);
+    let requiredCursor = state.cursor;
+    this.phase = 'checking_session';
     const session = await this.api.request<Wire['BrowserSession']>('/api/v1/pwa/auth/session');
     if (assertUUID(session.device_id) !== (await this.store.device()))
       throw new APIError('device_session_changed', 401);
 
-    await this.imports();
     const queue = await this.store.pending();
     const neededPhotos = new Set(
       queue.flatMap((entry) =>
@@ -67,6 +70,7 @@ export class SyncEngine {
       ),
     );
     const failedPhotos = new Set<string>();
+    this.phase = 'photos';
     for (const photo of await this.store.photos()) {
       if (!photo.pending || !neededPhotos.has(photo.id)) continue;
       if (photo.error) {
@@ -85,6 +89,7 @@ export class SyncEngine {
     }
     const blocked = new Set<string>();
     const approvals = new Set<string>();
+    this.phase = 'sending_changes';
     for (const entry of queue.slice(0, 100)) {
       const imageID =
         entry.mutation.kind === 'recipe' &&
@@ -124,6 +129,7 @@ export class SyncEngine {
           )
             throw new APIError('invalid_server_response', 0);
           for (const result of results) await this.store.acknowledge(result);
+          requiredCursor = Math.max(requiredCursor, ...results.map((result) => result.revision));
           progress.sent += results.length;
         } catch (error) {
           if (
@@ -152,6 +158,7 @@ export class SyncEngine {
         if (result.mutation_id !== entry.mutation.mutation_id)
           throw new APIError('invalid_server_response', 0);
         await this.store.acknowledge(result);
+        requiredCursor = Math.max(requiredCursor, result.revision);
         if (result.status === 'rejected_tombstone') {
           blocked.add(key);
           progress.blocked += 1;
@@ -176,6 +183,7 @@ export class SyncEngine {
         }
       }
     }
+    this.phase = 'receiving_changes';
     for (let page = 0; page < MAX_PAGES; page += 1) {
       const checkpoint = await this.store.anchor();
       const result = await this.api.request<Wire['Pull']>(
@@ -189,11 +197,19 @@ export class SyncEngine {
         throw new APIError('invalid_server_response', 0);
       if (result.has_more && result.cursor <= checkpoint.cursor)
         throw new APIError('invalid_server_response', 0);
+      if (!result.has_more && result.cursor < requiredCursor)
+        throw new APIError('sync_incomplete', 409);
       await this.store.merge(result.changes, { cursor: result.cursor, token: result.cursor_token });
       progress.received += result.changes.length;
       progress.hasMore = result.has_more;
       if (!result.has_more) break;
     }
+    if (progress.hasMore) throw new APIError('sync_incomplete', 409);
+    // A queued import/upload can fail independently of household record sync.
+    // Deliver and receive durable edits first so one import cannot starve them.
+    this.phase = 'imports';
+    await this.imports();
+    this.phase = 'complete';
     return progress;
   }
 

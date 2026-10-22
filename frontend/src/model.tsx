@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { APIClient, APIError } from './lib/api';
 import { LocalStore } from './lib/store';
@@ -44,6 +44,9 @@ function useRuntime(runtime: Runtime) {
     [notice, setNotice] = useState<Key | null>(null);
   const [online, setOnline] = useState(navigator.onLine),
     [ready, setReady] = useState(false);
+  const [syncChecked, setSyncChecked] = useState(false);
+  const syncWork = useRef<Promise<void> | null>(null);
+  const syncPhase = useRef('idle');
   const store = runtime.store;
   const engine = useMemo(
     () => (runtime.api ? new SyncEngine(store, runtime.api) : null),
@@ -65,23 +68,45 @@ function useRuntime(runtime: Runtime) {
     return current;
   };
   const sync = async () => {
+    if (syncWork.current) return syncWork.current;
     if (!runtime.api || !navigator.onLine) return;
     setSyncing(true);
+    const work = (async () => {
+      try {
+        syncPhase.current = 'sync';
+        const result = await engine!.synchronise();
+        setError(result.blocked ? 'blocked' : null);
+        syncPhase.current = 'household_settings';
+        const updated = await runtime.api!.request<Household>('/api/v1/household');
+        if (!updated.name || !['en', 'de'].includes(updated.language))
+          throw new Error('invalid_household');
+        new Intl.DateTimeFormat('en', { timeZone: updated.timezone });
+        await store.setSetting('household', updated);
+        setHousehold(updated);
+        await refreshPlanning();
+        if (!result.blocked && (await store.pending()).length === 0) {
+          await store.setSetting('sync:last-success', new Date().toISOString());
+          setSyncChecked(true);
+        }
+        syncPhase.current = 'complete';
+      } catch (e) {
+        setSyncChecked(false);
+        setError(e instanceof APIError ? e.code : 'connection_unavailable');
+      } finally {
+        setSyncing(false);
+        try {
+          await refresh();
+        } catch {
+          setSyncChecked(false);
+          setError('storage_error');
+        }
+      }
+    })();
+    syncWork.current = work;
     try {
-      const result = await engine!.synchronise();
-      setError(result.blocked ? 'blocked' : null);
-      const updated = await runtime.api.request<Household>('/api/v1/household');
-      if (!updated.name || !['en', 'de'].includes(updated.language))
-        throw new Error('invalid_household');
-      new Intl.DateTimeFormat('en', { timeZone: updated.timezone });
-      await store.setSetting('household', updated);
-      setHousehold(updated);
-      await refreshPlanning();
-    } catch (e) {
-      setError(e instanceof APIError ? e.code : 'connection_unavailable');
+      await work;
     } finally {
-      setSyncing(false);
-      await refresh();
+      syncWork.current = null;
     }
   };
   useEffect(() => {
@@ -175,6 +200,8 @@ function useRuntime(runtime: Runtime) {
     online,
     ready,
     syncing,
+    syncChecked,
+    syncPhase: () => (syncPhase.current === 'sync' ? (engine?.phase ?? 'idle') : syncPhase.current),
     error,
     setError,
     notice,

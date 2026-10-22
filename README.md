@@ -29,6 +29,10 @@ Open **Recipe ideas** on Home or in Recipes to enter ingredients you have or cho
 editing and Save; cached proposals and reviewed saves work offline. See
 [configuration, privacy and limits](docs/RECIPE_IDEAS.md).
 
+For missing updates, use **Settings → Check sync connection** and the
+[sync troubleshooting guide](docs/SYNC_TROUBLESHOOTING.md). A redacted report checks local/
+server progress without exporting recipe content or clearing pending work.
+
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
