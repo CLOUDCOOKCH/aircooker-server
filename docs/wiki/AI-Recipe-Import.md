@@ -84,6 +84,32 @@ It consumes quota and may incur charges. A successful text probe does not verify
 PDFs, video, or every model capability. The import preview is the relevant functional check
 for a particular source format.
 
+### Can I use my ChatGPT or Gemini subscription?
+
+MealF's implemented cloud adapters authenticate with API keys. Signing into the ChatGPT
+or Gemini consumer app does not configure an API key or enable MealF extraction.
+
+- **OpenAI:** API billing is separate from ChatGPT subscriptions. OpenAI also supports
+  subscription allowance sharing in eligible participating apps through Sign in with
+  ChatGPT; MealF has not implemented that integration. Do not use browser cookies,
+  consumer account passwords or tokens copied from another tool as an API credential.
+- **Gemini:** create a Gemini API project/key in Google AI Studio. Its free tier supports
+  certain models within account/model quotas; paid usage uses the project's separate Cloud
+  Billing configuration. A consumer subscription is not itself the API credential. Any
+  subscription credit benefit depends on Google's current eligibility and supported services.
+
+For a first test, create a free-tier Gemini API key if available for your account/region,
+select an available model with the required input formats, enter the key in MealF settings,
+save, and run the saved-configuration test in the console. Then import one non-sensitive
+sample recipe and review it before Save. Local English/German photo OCR remains available
+without a cloud account. Never paste the key into support chats or issues.
+
+Checked 2026-10-22 against the providers' official documentation:
+[OpenAI API billing](https://help.openai.com/en/articles/9039756-managing-billing-settings-on-chatgpt-web-and-platform),
+[ChatGPT in participating apps](https://help.openai.com/en/articles/20001542-using-your-chatgpt-plan-in-other-apps-and-sites),
+[Gemini API billing and free tier](https://ai.google.dev/gemini-api/docs/billing), and
+[Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key).
+
 ### Google Gemini
 
 | Setting | Value |

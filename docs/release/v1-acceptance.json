@@ -13,9 +13,10 @@
     {
       "id": "core_workflows",
       "status": "partial",
-      "detail": "Existing recipe/calendar/pantry/import tests pass; complete recurrence and published-image acceptance remains open.",
+      "detail": "309 backend tests per architecture, 51 frontend tests, Chromium/WebKit and published preview upgrade/OCR/restore pass; expanded recurrence acceptance remains open.",
       "evidence": [
-        "docs/validation/ai-recipe-import-merge.json"
+        "docs/validation/ai-recipe-import-merge.json",
+        "docs/validation/github-v1-readiness-preview.json"
       ]
     },
     {
@@ -30,19 +31,21 @@
     {
       "id": "backup_restore_upgrade",
       "status": "partial",
-      "detail": "Atomic verified WAL snapshot and transactional JSON/ZIP merge restore are implemented; candidate disaster recovery and broader upgrade/device matrix remain open.",
+      "detail": "Verified WAL snapshot and JSON/ZIP merge restore pass, including published .10-to-.1 same-volume 5152 upgrade and old ZIP/photo restore into clean .1; broader disaster recovery/device rehearsal remains open.",
       "evidence": [
-        "docs/BACKUP.md"
+        "docs/BACKUP.md",
+        "docs/validation/github-v1-readiness-preview.json"
       ]
     },
     {
       "id": "data_deletion",
       "status": "partial",
-      "detail": "Offline interactive erasure, server/maintenance exclusion, resumable fail-closed interruption, explicit backup choice, fresh identity and old-session rejection implemented; packaged Docker and real operator/device rehearsal remain.",
+      "detail": "Offline interactive erasure, server/maintenance exclusion, resumable interruption, explicit backup choice, fresh identity and old-session rejection pass unit tests and real-terminal packaged checks on both native architectures; real operator/device rehearsal remains.",
       "evidence": [
         "docs/BACKUP.md",
         "tests/test_household_deletion.py",
-        "scripts/operator_docker_smoke.py"
+        "scripts/operator_docker_smoke.py",
+        "docs/validation/github-v1-readiness-preview.json"
       ]
     },
     {
@@ -98,7 +101,7 @@
     {
       "id": "release_pipeline",
       "status": "partial",
-      "detail": "Candidate/stable channels and exact-source/native-image gates implemented; first real RC pipeline and protected environment setup remain open.",
+      "detail": "Candidate/stable policy tests and exact-source/native-image gates pass; preview publication of verified bytes is exercised; first real RC pipeline and protected environment setup remain open.",
       "evidence": [
         "docs/RELEASE.md"
       ]

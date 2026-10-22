@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-22",
+  "status": "published and verified preview; production acceptance incomplete",
+  "source": "bca0dbcaea68352729489c806ccc59934389abbd",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/2",
+  "scope": "Merged AI imports plus frozen PWA v1 scope, storage/worker/shutdown hardening, verified atomic backups, interactive offline household deletion and fail-closed RC/stable publication policy",
+  "ci": {
+    "run_id": 39725084279,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39725084279",
+    "backend_tests_per_architecture": 309,
+    "frontend_tests": 51,
+    "jobs": [
+      {
+        "id": 119647032151,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      },
+      {
+        "id": 119647032346,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      },
+      {
+        "id": 119647032361,
+        "name": "pwa-core",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      },
+      {
+        "id": 119647032421,
+        "name": "browser",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      },
+      {
+        "id": 119647032428,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      },
+      {
+        "id": 119647032492,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "bca0dbcaea68352729489c806ccc59934389abbd"
+      }
+    ],
+    "browser": "Real Chromium application/admin/offline/AI review; Chromium and WebKit layout/theme/photo OCR/offline/reload/Axe. External AI/Bring/push responses are synthetic; no physical iPhone evidence."
+  },
+  "publication": {
+    "run_id": 39725448566,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39725448566",
+    "jobs": [
+      {
+        "id": 119648179963,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119648225245,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119648225280,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119648862352,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.1",
+    "release_id": 420325799,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.1",
+    "index_digest": "sha256:39962f0575cfc7625a82c9c1d24caa7df13c1fb8b0ed666d8ff1985a5ba8cbd5",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "8e9405f7c711e16cf2acf9faa8c885ac0c7afa5e748af0681f60292c84577ef4"
+      },
+      "container-security-amd64.json": {
+        "sha256": "462dc837d08f1e47530840992128a725b7bdb91b621e5cf27e1406ea1a456f57"
+      },
+      "container-security-arm64.json": {
+        "sha256": "35d14a09cad879b06407cab46b45d76ca333125a60e44996188fab12442894d8"
+      },
+      "openapi-v1.json": {
+        "sha256": "af56aa063bce6f48265d3d537a53725899ae36f09c6e58eb92bd34f5df36b934"
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "2db023c88d785557f6eb55d3fd3ea170dacca221e311a04c022a556519dc3b1f"
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "f7432f87304e8460579293acdbdf24ca42fc25106a24f13c85596b0532fc0f21"
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:5be7bd3ea50b443301d69f3aad6cb970f52e55a74221f0a1b03a4c73c35b7d4f",
+        "config": "sha256:7f674e88116927d1c6c3ffab7cd424d746b1ba30e9f0faeb099cff5cefb7e095",
+        "high_critical": 0
+      },
+      "arm64": {
+        "manifest": "sha256:1d0e34f5355444d5c4489322b1e2623514d0a395601599304d1a889184d04091",
+        "config": "sha256:7071b3525d9a48487f3f6e6d92ac9f304ad3c48908aa575955deca251aa9a3e0",
+        "high_critical": 0
+      }
+    },
+    "scanner": "Trivy 0.70.0; unsuppressed HIGH/CRITICAL gate",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58500478",
+    "native_image_checks": "Both architectures pass real non-root/read-only persistent Docker workflows and packaged backup/deletion CLI tests. Native build-log image IDs equal registry manifest configs and downloaded Trivy ImageIDs. Images transferred/published without rebuilding.",
+    "sbom": "Both public CycloneDX SBOMs include 123 components and Tesseract plus English/German language data at 5.5.2-r0."
+  },
+  "post_publication": {
+    "anonymous_pull": "Passed with empty temporary Docker credential configuration",
+    "assets": "Six anonymous downloads match GitHub checksums; Compose and OpenAPI equal tagged source",
+    "upgrade": "Passed disposable published .10-to-.1 same-volume upgrade using internal 5152; household UUID/session/recipe/photo/history proof preserved; same offline mutation replayed idempotently",
+    "ocr": "Real local English/German recipe-image fixtures become editable previews; neither automatically creates a recipe",
+    "restore": "Old .10 ZIP restored into clean .1 installation; recipe and normalized-photo SHA-256 preserved",
+    "local_environment": "Initial disposable .10 start failed with host ENOSPC before upgrade; cleared reproducible Docker build/npm caches only, reran all checks successfully; no deployment or user volume accessed"
+  },
+  "release_policy": {
+    "preview": "Published; does not create rc or latest-stable",
+    "rc_stable": "Code/policy tests pass; no real RC run or protected-environment rehearsal yet",
+    "stable_acceptance": "Register remains partial/blocked; no stable release approval or publication"
+  },
+  "limits": [
+    "Dedicated repository security review blocked by unavailable skill preflight resources/tools; dependency/secret/container CI is separate evidence",
+    "Physical iPhone/Home Screen camera/accessibility/update and actual Web Push unverified",
+    "Live provider/model, dedicated Bring ownership/purchase/rollover and household pilot unverified",
+    "Guided non-recipe archive reconstruction and browser recovery-file import remain independent engineering work",
+    "Expanded recurrence/resource/load/slow-client/decoder/physical disk fault acceptance remains open",
+    "Native app and pinned native contract intentionally unchanged by this PWA hardening phase; no native feature parity claim"
+  ]
+}

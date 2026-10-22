@@ -94,7 +94,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional development client, genuine reviewed desktop/phone captures, 45 offline/planning/sync/notification tests and real Chromium flows; physical Safari and remaining features open |
+| PWA | Functional development client, genuine reviewed desktop/phone captures, 51 core tests and real Chromium/WebKit flows; physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
@@ -103,15 +103,15 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | PWA reminders | Opt-in controls/offline drafts, durable scheduling/retries and real receiver with synthetic vendor tests; live delivery/iPhone unverified ([guide](docs/REMINDERS.md)) |
 | Retention | Bounded hourly terminal-source/diagnostic/session cleanup, startup transfer cleanup and local dry-run CLI; sync/Bring/media proofs retained ([policy](docs/RETENTION.md)) |
 | Recommendations | Local/server previews use ratings, history, variety and leftover reservations; atomic live approval and replay tested; shared defaults and bounded explicit-approval learning have offline/API/browser coverage ([guide](docs/PLANNING_PREFERENCES.md)) |
-| Photo recipe import | Published `.10`: real local EN/DE OCR, offline camera/image queue and explicit reviewed save; Chromium/WebKit CI and native container checks pass; physical camera unverified ([guide](docs/IMAGE_IMPORT.md)) |
+| Photo recipe import | Published in the current preview: real local EN/DE OCR, offline camera/image queue and explicit reviewed save; Chromium/WebKit CI and native container checks pass; physical camera unverified ([guide](docs/IMAGE_IMPORT.md)) |
 | Website recipe import | JSON-LD previews and conservative metric/EN/DE fractions/ranges parsing; images and broader HTML extraction remain partial |
 | Photo/screenshot recipe import | Camera/chooser, local EN/DE OCR, durable offline image queue and editable explicit-save previews; real Chromium tested, physical camera/iPhone unverified ([guide](docs/IMAGE_IMPORT.md)) |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |
 | AI recipe import | Configurable Gemini (default), OpenAI, OpenRouter and compatible APIs; cloud vision for images/PDFs and supported Gemini videos, metadata-first websites, editable drafts and encrypted profiles ([guide](docs/wiki/AI-Recipe-Import.md)); live model compatibility unverified |
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
-| Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; deletion/extended diagnostics remain partial |
+| Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; household deletion uses the tested offline operator CLI; extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |
-| Releases | [POC .10 photo imports](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261021.10) published for AMD64/ARM64; anonymous pull, public assets and same-volume 5152 upgrade/OCR checks passed; stable acceptance remains open |
+| Releases | [POC 20261022.1 AI imports and hardening](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.1) published for AMD64/ARM64; fresh scans/runtime/operator checks, anonymous pull, public assets and same-volume 5152 upgrade/OCR/restore passed; stable acceptance remains open |
 
 The project is independent and is not endorsed by Bring! Labs AG, Apple or any recipe source.
 Use recipe text/images only when you have the necessary rights.

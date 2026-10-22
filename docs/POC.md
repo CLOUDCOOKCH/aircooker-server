@@ -4,15 +4,17 @@ This is an installable **development preview**, not the finished product or a st
 release. The browser app and self-hosted backend run together in one container on
 **linux/amd64** and **linux/arm64**. You do not need a Mac, Xcode or an App Store account.
 
-## Current preview candidate
+## Current published preview
 
 `poc-20261022.1` includes the merged configurable AI providers, image/PDF inputs,
 Gemini video requests, editable extraction previews, provider settings and operator guides.
 The local camera/OCR path remains available without AI. It also freezes the PWA v1 scope
 and introduces fail-closed candidate/stable release policy, SQLite storage limits, worker
-recovery, verified local backups and explicit offline household deletion. A preview is available only
-once its GitHub prerelease and GHCR manifest have actually been published successfully;
-source changes or a tag alone do not establish publication. Live providers/Bring/push,
+recovery, verified local backups and explicit offline household deletion. The
+[prerelease](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.1)
+is published for AMD64/ARM64; native scans/runtime checks, anonymous pull, public assets,
+same-volume 5152 upgrade, real local OCR and old ZIP/photo restore pass. See
+[exact validation evidence](validation/github-v1-readiness-preview.json). Live providers/Bring/push,
 physical iPhone and full production acceptance remain open. See [v1 readiness](V1_READINESS.md).
 
 ## Install
@@ -125,8 +127,10 @@ The glass-style PWA is the primary client. Native iOS code is retained for later
 - Real iPhone/Safari testing is outstanding. Chromium coverage does not prove Safari behavior.
 - Supplied peach/wordmark artwork is installed in this PWA/console release. Physical iPhone
   Home Screen icon refresh is unverified; retained native artwork remains separate later work.
-- Full household deletion, destructive restore, broader archive reconstruction, safe media
-  compaction, quotas and the remaining security/release review are not delivered by this POC.
+- Household deletion is an explicit offline operator command, not an in-app button; read
+  [backup/deletion instructions](BACKUP.md) before use. Destructive replacement restore,
+  broader archive reconstruction, safe media compaction, expanded resource acceptance and
+  the remaining security/release review are incomplete.
 
 ## Publication checks
 

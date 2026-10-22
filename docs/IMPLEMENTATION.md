@@ -9,9 +9,17 @@ recovery/deletion/resource work and blocked physical/live-service/security-audit
 SQLite caps, redacted storage failures, durable-worker retry/shutdown, verified atomic local
 backups and interactive offline deletion now have local regression coverage. Current local
 validation passes 309 backend/51 frontend tests, type/lint/contract/brand/licence checks and
-real PWA/OCR Chromium flows. Packaged operator checks are required on both architectures.
-See [local evidence](validation/v1-readiness-local.json). `poc-20261022.1` is the next preview
-candidate; publication must be verified separately.
+real PWA/OCR Chromium flows. All six exact-main-source CI jobs pass at bca0dbc, including
+309 backend tests on each architecture, 51 frontend tests and real Chromium/WebKit checks.
+`poc-20261022.1` is published: both fresh native scans/runtime/operator gates, public pull,
+six asset checksums/config identities and the published .10-to-.1 same-volume 5152 upgrade
+pass. Existing identity/session/history and idempotent offline replay survive; real EN/DE
+OCR stays preview-only and a .10 ZIP restores its recipe/photo into a clean .1 install.
+See [local evidence](validation/v1-readiness-local.json) and
+[publication/upgrade evidence](validation/github-v1-readiness-preview.json).
+Guided recovery, expanded resource/recurrence acceptance, the dedicated security review,
+physical/live-service/pilot evidence and a real RC rehearsal remain open. No stable release
+or production acceptance is claimed.
 
 **AI recipe import — feature branch integrated with the published photo/theme/calendar work:**
 Encrypted provider profiles and explicit per-model input capabilities support bounded AI

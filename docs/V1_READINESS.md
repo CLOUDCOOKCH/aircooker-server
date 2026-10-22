@@ -45,10 +45,10 @@ or `blocked` entries fail closed. Do not mark a gate passed just to trigger a re
 
 | Gate | Current evidence and remaining work |
 | --- | --- |
-| Core workflows | 279 backend and 50 frontend tests plus Chromium/WebKit and native Docker checks pass for merged source 932e2ce; expanded recurrence and published-candidate checks remain |
+| Core workflows | 309 backend tests per architecture, 51 frontend tests, Chromium/WebKit and native Docker checks pass at bca0dbc; published preview upgrade/OCR/restore pass; expanded recurrence acceptance remains |
 | Offline/recovery | Atomic outbox/replay/tombstone and snapshot archival tests exist; guided non-recipe recovery and browser recovery-import UX remain |
-| Backup/upgrade | Consistent SQLite backup and transactional JSON/ZIP merge restore exist; candidate disaster-recovery and compatibility rehearsal remain |
-| Deletion | Interactive offline command, running-server exclusion, interruption/resume, explicit backup choice and fresh identity have unit coverage; packaged Docker verification and operator/device rehearsal remain |
+| Backup/upgrade | Consistent SQLite backup and transactional JSON/ZIP merge restore pass; published .10-to-.1 same-volume 5152 upgrade and old ZIP/photo restore pass; broader disaster-recovery/device rehearsal remains |
+| Deletion | Interactive offline command, running-server exclusion, interruption/resume, explicit backup choice and fresh identity have unit coverage; packaged real-terminal checks pass on both native architectures; operator/device rehearsal remains |
 | Resources | Configurable SQLite growth cap, real FULL rollback/retry, persistent client outbox and worker/shutdown recovery have tests; slow-client/load, physical disk faults and decoder stress remain |
 | Security | Dependency/secret/container gates run; the dedicated repository audit is blocked because its required preflight assets/tools are unavailable in this session |
 | Physical iPhone | Home Screen install, keyboard/camera, safe areas, drag/cancel, VoiceOver and update/offline lifecycle require real-device evidence |
@@ -59,6 +59,9 @@ or `blocked` entries fail closed. Do not mark a gate passed just to trigger a re
 Synthetic fixtures are explicit test doubles, not successful external integration claims.
 The [device/service checklist](release/DEVICE_AND_SERVICE_ACCEPTANCE.md) records the checks
 that require external access. No production user data or credentials belong in evidence.
+The first execution step is complete for `poc-20261022.1`; exact CI, image, scanner,
+anonymous-download and isolated upgrade evidence is recorded in
+[the preview validation report](validation/github-v1-readiness-preview.json).
 
 ## Execution order
 
