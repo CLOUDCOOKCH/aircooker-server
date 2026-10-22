@@ -1,0 +1,736 @@
+/* Mealf task hierarchy: one operating language across the primary PWA screens. */
+.app-shell h1 {
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+}
+.app-shell h2 {
+  font-size: 1.125rem;
+}
+.app-shell .page-header {
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.app-shell .page-header .muted {
+  max-width: 58ch;
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.app-shell .text-button,
+.app-shell .back-link {
+  min-height: 44px;
+}
+.app-shell .back-link {
+  padding-bottom: 0;
+  margin-bottom: 8px;
+}
+.app-shell .main-shell {
+  padding-top: 16px;
+}
+.app-shell .connection-bar {
+  margin-bottom: 20px;
+  max-width: 1160px;
+  margin-inline: auto;
+}
+.app-shell .connection-bar > .text-button {
+  min-height: 44px;
+}
+.mobile-wordmark {
+  display: none;
+}
+.app-shell .page-content {
+  min-height: calc(100dvh - 180px);
+}
+.app-shell .app-footer {
+  padding-top: 32px;
+}
+.app-shell .header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.app-shell button,
+.app-shell a {
+  -webkit-tap-highlight-color: transparent;
+}
+.home-date-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 4px 6px;
+}
+.home-date-control > strong {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.home-date-control > .text-button {
+  padding-inline: 8px;
+}
+.app-shell .home-columns {
+  margin-top: 24px;
+  gap: 32px;
+  grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr);
+}
+.app-shell .featured-photo-button > .food-photo {
+  height: 240px;
+}
+.app-shell .featured-caption {
+  padding: 16px 20px;
+}
+.app-shell .featured-caption h3 {
+  font-size: 1.25rem;
+}
+.app-shell .featured-caption .text-button {
+  margin-top: 0;
+}
+.app-shell .slot-heading .icon-button {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+}
+.app-shell .empty-slot {
+  min-height: 44px;
+  padding-bottom: 8px;
+}
+.app-shell .meal-slot {
+  padding-block: 8px;
+}
+.app-shell .meal-slot h3 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.home-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+}
+.home-quick-actions > button {
+  flex: 1 1 auto;
+  font-size: 0.8125rem;
+  padding: 10px 12px;
+}
+.app-shell .suggestion-panel {
+  padding: 20px;
+  background: var(--surface);
+}
+.app-shell .suggestion-panel h2 {
+  margin-top: 0;
+}
+.app-shell .suggestion-panel p {
+  margin-top: 8px;
+  font-size: 0.875rem;
+}
+.app-shell .suggestion-panel .secondary {
+  margin-top: 14px;
+}
+.app-shell .week-summary {
+  padding: 20px;
+}
+.app-shell .week-summary > p {
+  font-size: 0.875rem;
+}
+.app-shell .home-aside > section + section {
+  margin-top: 24px;
+}
+.app-shell .week-control {
+  padding: 4px 8px 8px;
+}
+.app-shell .week-strip {
+  gap: 3px;
+}
+.app-shell .week-strip button {
+  min-height: 64px;
+  gap: 5px;
+  padding: 8px 2px;
+  border-radius: 10px;
+}
+.calendar-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block: 16px 12px;
+}
+.calendar-toolbar .calendar-view-switch {
+  margin-top: 0;
+}
+.calendar-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.calendar-toolbar-actions .text-button {
+  padding-inline: 8px;
+}
+.calendar-help {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.calendar-help > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+.calendar-help > summary::after {
+  content: '+';
+  font: inherit;
+  margin-left: 4px;
+}
+.calendar-help[open] > summary::after {
+  content: '−';
+}
+.calendar-help .calendar-drag-hint {
+  margin: 0 0 12px;
+}
+.app-shell .calendar-week[data-view] {
+  padding-top: 0;
+  gap: 10px;
+}
+.app-shell .calendar-day > h2 button {
+  padding-block: 12px;
+}
+.app-shell .calendar-week[data-view] .calendar-slot {
+  min-height: 178px;
+  padding: 8px;
+}
+.app-shell .calendar-week[data-view='day'] .calendar-slot {
+  min-height: 112px;
+}
+.app-shell .calendar-add {
+  min-height: 44px;
+}
+.calendar-shopping {
+  margin-top: 16px;
+}
+.library-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: -6px 0 20px;
+  font-size: 0.8125rem;
+}
+.library-toolbar > .muted {
+  flex: 1;
+}
+.library-sort {
+  margin: 0;
+  flex-direction: row;
+}
+.library-sort select {
+  border: 0;
+  background: var(--soft);
+  min-height: 44px;
+  font-size: 1rem;
+  padding-block: 8px;
+}
+.library-toolbar > .text-button {
+  font-size: 0.8125rem;
+}
+.app-shell .recipe-grid {
+  gap: 20px;
+}
+.app-shell .recipe-card {
+  text-align: start;
+}
+.recipe-jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 28px;
+}
+.recipe-jump-links > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--soft);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 550;
+}
+.recipe-jump-links > a:hover {
+  background: var(--hover);
+}
+#recipe-ingredients,
+#recipe-instructions,
+#editor-basics,
+#editor-ingredients,
+#editor-instructions {
+  scroll-margin-top: 24px;
+}
+.app-shell .detail-photo {
+  max-height: 340px;
+}
+.editor-intro {
+  font-size: 0.9375rem;
+}
+.editor-main > h2 {
+  margin-bottom: 24px;
+}
+.editor-optional {
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.editor-optional > summary {
+  min-height: 48px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.editor-optional[open] > summary {
+  margin-bottom: 16px;
+}
+.app-shell .ingredient-editor {
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 12px;
+}
+.app-shell .ingredient-editor .form-row {
+  margin-top: 12px;
+}
+.app-shell .step-actions > .icon-button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+}
+.app-shell .editor-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: var(--glass-shadow);
+  margin-top: 24px;
+}
+.app-shell .editor-footer .primary {
+  min-width: 120px;
+}
+.settings-hub {
+  max-width: 820px;
+}
+.settings-hub > div {
+  display: contents;
+}
+.settings-disclosure {
+  border-bottom: 1px solid var(--line);
+}
+.settings-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 78px;
+  padding: 18px 4px;
+  list-style: none;
+  cursor: pointer;
+}
+.settings-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.settings-disclosure > summary > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.settings-disclosure > summary strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.settings-disclosure > summary small {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.settings-disclosure > summary svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 160ms ease-out;
+}
+.settings-disclosure[open] > summary svg {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+.settings-disclosure > summary:hover strong {
+  color: var(--accent);
+}
+.settings-disclosure-body {
+  padding: 4px 0 24px;
+}
+.settings-disclosure-body > .settings-group {
+  margin: 0;
+}
+.settings-disclosure-body > .settings-group > h2,
+.settings-disclosure-body > .theme-library > legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.settings-disclosure .settings-surface {
+  border-radius: 12px;
+}
+.settings-disclosure .settings-row {
+  min-height: 56px;
+  padding: 14px 18px;
+}
+.settings-disclosure .settings-row label {
+  margin: 0;
+}
+.settings-disclosure .settings-copy {
+  padding: 18px;
+}
+.pantry-help {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+}
+.pantry-help > summary {
+  min-height: 44px;
+  cursor: pointer;
+}
+.app-shell .add-staple {
+  margin-bottom: 24px;
+}
+.app-shell .pantry-item {
+  min-height: 80px;
+}
+.app-shell .pantry-item .check-row {
+  min-height: 44px;
+}
+.app-shell .shopping-intro {
+  font-size: 0.9375rem;
+  max-width: 65ch;
+}
+.app-shell .shopping-connection {
+  border-radius: 12px;
+  padding: 20px;
+}
+.app-shell .shopping-requirements {
+  border-radius: 12px;
+}
+.app-shell .import-panel {
+  border-radius: 12px;
+}
+@media (max-width: 1000px) {
+  .app-shell .home-columns {
+    grid-template-columns: minmax(0, 1.4fr) minmax(230px, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 800px), (hover: none) and (pointer: coarse) and (max-height: 500px) {
+  .mobile-wordmark {
+    display: block;
+    margin-right: auto;
+  }
+  .connection-bar > .connection-status {
+    margin-left: auto;
+  }
+  .app-shell .connection-bar {
+    margin-bottom: 20px;
+    gap: 8px;
+  }
+  .app-shell .connection-bar > .text-button {
+    margin-left: 0;
+  }
+  .mobile-wordmark .brand-wordmark {
+    width: 62px;
+  }
+  .mobile-wordmark .brand-peach {
+    width: 24px;
+    height: 24px;
+  }
+  .connection-bar:has(.demo-label) .mobile-wordmark {
+    display: none;
+  }
+  .app-shell .page-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .app-shell .page-header > div:first-child {
+    flex: 1 1 220px;
+    min-width: 0;
+  }
+  .app-shell .page-header > .header-actions {
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .app-shell .page-header > .header-actions > .compact {
+    width: auto;
+    height: auto;
+    min-height: 44px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+  }
+  .app-shell .page-header > .header-actions > .compact > span {
+    display: inline;
+  }
+  .app-shell .page-header > .header-actions > .compact > svg {
+    width: 18px;
+    height: 18px;
+  }
+  .app-shell .home-columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .app-shell .home-aside {
+    display: block;
+  }
+  .app-shell .featured-photo-button > .food-photo {
+    height: 200px;
+  }
+  .app-shell .home-aside > section + section {
+    margin-top: 24px;
+  }
+  .app-shell .week-summary {
+    padding: 18px;
+  }
+  .app-shell .editor-footer {
+    bottom: calc(88px + var(--safe-bottom));
+  }
+  .app-shell .editor-footer > .primary {
+    width: auto;
+  }
+  .app-shell .editor-footer > p {
+    flex: 1 1 140px;
+  }
+  .app-shell .recipe-grid {
+    gap: 0;
+  }
+  .settings-disclosure > summary {
+    min-height: 84px;
+  }
+  .calendar-toolbar-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .calendar-toolbar-actions > .text-button {
+    margin-right: auto;
+  }
+  .app-shell .calendar-week[data-view] .calendar-slot {
+    min-height: 156px;
+  }
+}
+@media (max-width: 480px) {
+  .app-shell h1 {
+    font-size: 1.75rem;
+  }
+  .app-shell .main-shell {
+    padding-top: 8px;
+  }
+  .app-shell .page-header .muted {
+    font-size: 0.875rem;
+  }
+  .app-shell .page-header > .header-actions {
+    width: 100%;
+  }
+  .app-shell .page-header > .header-actions > .primary {
+    flex: 1;
+  }
+  .app-shell .header-actions > .secondary {
+    flex: 1;
+  }
+  .app-shell .home-date-control > strong {
+    font-size: 0.8125rem;
+  }
+  .app-shell .home-date-control .text-button {
+    font-size: 0.8125rem;
+  }
+  .app-shell .featured-photo-button > .food-photo {
+    height: 176px;
+  }
+  .app-shell .featured-caption {
+    padding: 14px 16px;
+  }
+  .app-shell .featured-caption h3 {
+    font-size: 1.0625rem;
+  }
+  .home-quick-actions > button {
+    flex-basis: calc(50% - 4px);
+  }
+  .home-quick-actions > button:last-child {
+    flex-basis: 100%;
+  }
+  .library-toolbar {
+    gap: 8px;
+  }
+  .library-toolbar > .text-button {
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+  .library-toolbar .library-sort {
+    max-width: 65%;
+  }
+  .recipe-jump-links > a {
+    padding-inline: 12px;
+    font-size: 0.8125rem;
+  }
+  .app-shell .shopping-connection {
+    padding: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .settings-disclosure > summary svg {
+    transition: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .app-shell .editor-footer {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .app-shell .editor-footer {
+    background: var(--surface);
+  }
+}
+/* Keep the calendar board and recipe results in the first phone viewport. */
+.calendar-toolbar .calendar-view-switch {
+  flex: 1 1 auto;
+  max-width: 270px;
+}
+.calendar-toolbar .calendar-view-switch > button {
+  flex: 1;
+  min-width: 0;
+  padding-inline: 10px;
+}
+.calendar-toolbar .calendar-tools {
+  flex-shrink: 0;
+  padding-inline: 12px;
+}
+.week-heading > span {
+  flex: 1;
+  text-align: center;
+}
+.week-heading > .week-today {
+  font-size: 0.8125rem;
+  padding-inline: 8px;
+}
+.calendar-bottom-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+.calendar-bottom-actions .calendar-help {
+  flex: 1;
+  margin-bottom: 0;
+}
+.calendar-help > summary::after {
+  content: none;
+}
+.calendar-help[open] > summary::after {
+  content: none;
+}
+.calendar-help > summary svg {
+  transition: transform 160ms ease-out;
+}
+.calendar-help[open] > summary svg {
+  transform: rotate(90deg);
+}
+.import-help {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+.import-help > summary,
+.import-alternative > summary {
+  display: list-item;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 550;
+}
+.import-help p {
+  margin-bottom: 12px;
+}
+.import-alternative {
+  margin: 8px 0 20px;
+  font-size: 0.875rem;
+}
+.import-alternative[open] > summary {
+  margin-bottom: 16px;
+}
+@media (max-width: 800px) {
+  .library-toolbar > .muted {
+    display: none;
+  }
+  .library-toolbar > .text-button {
+    flex-basis: auto;
+    order: 1;
+  }
+  .library-toolbar > .library-sort {
+    order: 2;
+    margin-left: auto;
+    max-width: 55%;
+  }
+  .library-sort select {
+    font-size: 1rem;
+  }
+  .app-shell .calendar-week[data-view='day'] .calendar-slot {
+    min-height: 112px;
+  }
+}
+.sync-label-short {
+  display: none;
+}
+.app-shell .calendar-week[data-view]:not([data-view='day']) .meal-open {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+}
+.app-shell .calendar-week[data-view]:not([data-view='day']) .meal-open > .food-photo,
+.app-shell .calendar-week[data-view]:not([data-view='day']) .meal-open > .photo-placeholder {
+  width: 40px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.app-shell .calendar-week[data-view] .meal-open > span {
+  min-width: 0;
+}
+@media (min-width: 1100px) {
+  .app-shell .calendar-week[data-view='week'] {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .app-shell .calendar-week[data-view='week'] > .calendar-day {
+    padding: 10px;
+  }
+  .app-shell .calendar-week[data-view='week'] .calendar-slot {
+    padding: 4px;
+  }
+}
+@media (max-width: 360px) {
+  .connection-bar .sync-label {
+    display: none;
+  }
+  .connection-bar .sync-label-short {
+    display: inline;
+  }
+  .app-shell .connection-bar {
+    flex-wrap: nowrap;
+  }
+}

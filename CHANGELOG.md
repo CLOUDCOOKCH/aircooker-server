@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Rework PWA task hierarchy across Home, Calendar, Recipes, Pantry, Shopping and Settings.
+  Add labelled actions, compact date/view controls, recipe search/sort and section links,
+  optional editor metadata, an always-available Save bar and grouped Settings disclosures.
+  Keep original Mealf artwork, all themes, six destinations and offline/sync safeguards.
+
 - Fix false “Up to date” status after failed/unchecked sync and reject stale/incomplete
   pull responses. Resist URL-keyed proxy caching of sync reads, deliver household records
   before imports so an unreachable import cannot starve them, and add redacted connection

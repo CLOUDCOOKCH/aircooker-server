@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
 from mealf.app import create_app
@@ -164,6 +165,7 @@ def main():
                 check("flo", "light")
                 page.get_by_role("button", name="Explore the demo").click()
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                settings_section(page, "Theme library")
                 expect(page.get_by_role("group", name="Theme library")).to_be_visible()
                 expect(page.get_by_role("radio", name="Flo", exact=True)).to_be_checked()
                 for theme, label, mode in [
@@ -187,6 +189,7 @@ def main():
                         page.get_by_role("navigation").get_by_role(
                             "button", name="Settings"
                         ).click()
+                        settings_section(page, "Theme library")
                         page.set_viewport_size({"width": 390, "height": 844})
                     # Explicit palettes hold under the opposite system setting.
                     page.emulate_media(color_scheme="dark")
@@ -214,11 +217,14 @@ def main():
                 page.reload()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                settings_section(page, "Theme library")
                 expect(page.get_by_role("radio", name="After Dark", exact=True)).to_be_checked()
                 choose("Sunday")
                 page.reload()
                 expect(page.locator("html")).to_have_attribute("data-theme", "sunday")
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                settings_section(page, "Theme library")
+                settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 expect(page.get_by_role("group", name="Design-Bibliothek")).to_be_visible()
                 check("sunday", "light")
@@ -278,6 +284,7 @@ def main():
                     "button", name="Start", exact=True
                 ).click()
                 page.get_by_role("navigation").get_by_role("button", name="Einstellungen").click()
+                settings_section(page, "Design-Bibliothek")
                 page.set_viewport_size({"width": 320, "height": 568})
                 check("after-dark", "dark")
                 page.screenshot(path=str(captures / "after-dark-settings-320-de.png"))
@@ -300,6 +307,8 @@ def main():
                 expect(page.locator("html")).to_have_attribute("data-theme", "flo")
                 admin.get_by_label("Theme", exact=True).select_option("sunday")
                 page.get_by_role("navigation").get_by_role("button", name="Einstellungen").click()
+                settings_section(page, "Design-Bibliothek")
+                settings_section(page, "Dein Haushalt")
                 page.get_by_label("Sprache", exact=True).select_option("en")
                 page.set_viewport_size({"width": 1440, "height": 1000})
                 page.get_by_role("radio", name="Sunday", exact=True).scroll_into_view_if_needed()

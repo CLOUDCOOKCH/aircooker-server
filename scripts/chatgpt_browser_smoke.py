@@ -14,6 +14,7 @@ from uuid import uuid4
 import httpx
 import jwt
 import uvicorn
+from browser_settings import settings_section
 from cryptography.hazmat.primitives.asymmetric import rsa
 from playwright.sync_api import expect, sync_playwright
 
@@ -167,6 +168,7 @@ def main():
                     page.get_by_role("navigation").get_by_role(
                         "button", name="Settings", exact=True
                     ).click()
+                    settings_section(page, "Your ChatGPT plan")
                     panel = page.locator(".chatgpt-settings")
                     expect(
                         panel.get_by_role("button", name="Connect ChatGPT", exact=True)
@@ -292,9 +294,12 @@ def main():
                     page.get_by_role("navigation").get_by_role(
                         "button", name="Settings", exact=True
                     ).click()
+                    settings_section(page, "Your household")
                     page.get_by_label("Language", exact=True).select_option("de")
+                    settings_section(page, "Design-Bibliothek")
                     page.get_by_role("radio", name="After Dark", exact=False).check()
                     page.set_viewport_size({"width": 390, "height": 844})
+                    settings_section(page, "Dein ChatGPT-Abo")
                     panel = page.locator(".chatgpt-settings")
                     expect(
                         panel.get_by_text("Mit deinem ChatGPT-Abo verbunden", exact=True)

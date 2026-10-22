@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 import uvicorn
+from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
 from mealf.app import create_app
@@ -165,6 +166,7 @@ def main():
                         "Some server changes have not arrived"
                     )
                     nav(page, "Settings")
+                    settings_section(page, "This device")
                     page.get_by_role("button", name="Check sync connection", exact=True).click()
                     report = page.get_by_label("Sync report", exact=True)
                     expect(report).to_be_visible()
@@ -252,6 +254,8 @@ def main():
                     page.get_by_role("button", name="Sync now", exact=True).click()
                     expect(page.locator(".connection-status")).to_have_text("Up to date")
                     nav(page, "Settings")
+                    settings_section(page, "This device")
+                    settings_section(page, "Your household")
                     page.get_by_label("Language", exact=True).select_option("de")
                     page.evaluate("window.mealfAppearance.set('after-dark')")
                     page.set_viewport_size({"width": 390, "height": 844})

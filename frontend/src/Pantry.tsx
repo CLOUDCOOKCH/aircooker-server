@@ -28,11 +28,11 @@ export function Pantry() {
   };
   return (
     <>
-      <PageHeader title={t('pantry')} />
-      <div className="pantry-intro">
-        <h2>{t('pantryHeading')}</h2>
+      <PageHeader title={t('pantry')} subtitle={t('pantryIntro')} />
+      <details className="pantry-help">
+        <summary>{t('pantryHeading')}</summary>
         <p>{t('pantryBody')}</p>
-      </div>
+      </details>
       <form className="add-staple" onSubmit={(e) => void add(e)}>
         <label className="sr-only" htmlFor="staple">
           {t('pantryName')}
@@ -61,6 +61,7 @@ export function Pantry() {
           <input
             type="search"
             placeholder={t('searchPantry')}
+            aria-label={t('searchPantry')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

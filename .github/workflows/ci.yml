@@ -95,6 +95,11 @@ jobs:
         run: timeout 180s python scripts/recipe_ideas_browser_smoke.py
       - name: Sync truthfulness, two devices, recovery and redacted diagnostics
         run: timeout 180s python scripts/sync_status_browser_smoke.py
+      - name: PWA task hierarchy, settings disclosures and offline recipe editing
+        env:
+          MEALF_CAPTURE: '1'
+          MEALF_UX_SCREENSHOT_DIR: build/pwa-ux-browser
+        run: timeout 180s python scripts/pwa_ux_browser_smoke.py
       - name: Shopping requirements and manual Bring sync with synthetic service
         run: timeout 180s python scripts/shopping_browser_smoke.py
       - name: Recipe fallbacks and reviewed source photos with synthetic network responses
@@ -134,6 +139,7 @@ jobs:
             build/chatgpt-browser
             build/recipe-ideas-browser
             build/sync-status-browser
+            build/pwa-ux-browser
             build/shopping-browser
             build/source-photo-browser
             build/theme-browser

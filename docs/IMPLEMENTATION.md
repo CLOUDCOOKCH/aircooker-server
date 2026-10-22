@@ -1,5 +1,21 @@
 # Implementation checklist and evidence
 
+**Whole-PWA UX rework, 2026-10-22 — implemented and tested locally; publication pending:**
+Home leads with meals and explicit actions; Calendar has compact date/view controls and
+readable multi-day cards; Recipes has labelled import/create, search/rating sort and
+section links. Optional editor metadata folds without losing values, with persistent
+draft feedback and a sticky Save bar. Imports progressively expose text/file inputs.
+Settings groups configuration behind native disclosures; Pantry and Shopping share the
+same hierarchy. Original brand assets, all themes, six destinations, native/admin/API/
+database/sync contracts and existing offline/review/ownership behaviors are retained.
+Local 425 backend/66 frontend tests, type/format/Ruff/mypy/OpenAPI and all Chromium
+PWA/import/AI/photo/ideas/push/shopping/sync/layout regressions pass. Provider transports
+are synthetic. Fresh full UI review found one misleading unconfigured/queued Shopping
+state; a readiness-aware UI fix was scored 1 resolved, 0 partial, 0 unresolved. The verdict
+is ship at that listed-fix scope, not product acceptance. Local WebKit binary is absent;
+exact-source CI must provide engine evidence. Physical iPhone/live-service acceptance
+remains open. See [guide](PWA_UX.md) and [review](validation/pwa-ux-review.md).
+
 **Sync investigation, 2026-10-22 — published and verified in `poc-20261022.8`:**
 Reproduced old false-success acceptance of a stale pull and import failures starving all
 record exchange. Header failure/unchecked states, required revision checks, fresh sync reads,

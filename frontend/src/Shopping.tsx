@@ -106,7 +106,8 @@ export function Shopping() {
     }
   };
   const inProgress =
-    data?.job_state === 'running' || (data?.job_state === 'queued' && !data.error_code);
+    data?.connection_state === 'ready' &&
+    (data.job_state === 'running' || (data.job_state === 'queued' && !data.error_code));
   const verifying = data?.verification_state === 'running' || data?.verification_state === 'queued';
   const dateTime = (value: number) =>
     new Intl.DateTimeFormat(app.language, {
@@ -169,7 +170,9 @@ export function Shopping() {
               </p>
             </div>
             <button
-              className="primary shopping-sync"
+              className={
+                (data.connection_state === 'ready' ? 'primary' : 'secondary') + ' shopping-sync'
+              }
               onClick={() => void action()}
               disabled={
                 busy ||
@@ -181,7 +184,11 @@ export function Shopping() {
               }
             >
               <RefreshCw size={18} />
-              {t(busy || inProgress ? 'shoppingSyncing' : 'shoppingSync')}
+              {t(
+                (data.connection_state === 'ready' && busy) || inProgress
+                  ? 'shoppingSyncing'
+                  : 'shoppingSync',
+              )}
             </button>
             <div className="shopping-sync-status" role="status" aria-live="polite">
               {data.error_code &&
@@ -200,7 +207,14 @@ export function Shopping() {
               )}
             </div>
             {data.connection_state !== 'ready' && (
-              <a className="text-button" href="/admin/#bring" target="_blank" rel="noreferrer">
+              <a
+                className={
+                  data.connection_state === 'compatibility_unverified' ? 'text-button' : 'primary'
+                }
+                href="/admin/#bring"
+                target="_blank"
+                rel="noreferrer"
+              >
                 {t('shoppingConfigure')} <ArrowUpRight size={16} />
               </a>
             )}

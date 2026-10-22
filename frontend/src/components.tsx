@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, CookingPot, Plus, X } from 'lucide-react';
 import { useApp } from './model';
-import { addDays, displayDate, monday } from './lib/domain';
+import { addDays, displayDate, monday, today } from './lib/domain';
 export function IconButton({
   label,
   children,
@@ -135,7 +135,7 @@ export function Photo({
   ) : null;
 }
 export function WeekStrip({ day, onChange }: { day: string; onChange: (day: string) => void }) {
-  const { t, language } = useApp();
+  const { t, language, household } = useApp();
   const week = monday(day);
   return (
     <div className="week-control">
@@ -144,6 +144,12 @@ export function WeekStrip({ day, onChange }: { day: string; onChange: (day: stri
           <ChevronLeft size={20} />
         </IconButton>
         <span>{displayDate(week, language, { month: 'long', year: 'numeric' })}</span>
+        <button
+          className="text-button week-today"
+          onClick={() => onChange(today(household.timezone))}
+        >
+          {t('goToday')}
+        </button>
         <IconButton label={t('weekAfter')} onClick={() => onChange(addDays(day, 7))}>
           <ChevronRight size={20} />
         </IconButton>

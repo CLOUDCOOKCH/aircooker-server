@@ -1,5 +1,32 @@
 # mealf PWA operating surface
 
+## Direction contract — whole-PWA UX rework, 2026-10-22
+
+THESIS: Make everyday meal planning feel orderly and immediate. The user finds the whole
+PWA insufficiently neat; replace competing actions, long configuration walls and vague
+icon-only entry points with clear task hierarchy while preserving every working feature.
+
+OWN-WORLD: Keep the original peach/wordmark, Flo/After Dark/Sunday semantic palettes,
+system typography, solid readable surfaces and restrained glass navigation. This is an
+operating-experience rework inside the approved world, not a replacement identity.
+
+STORY: Home answers what is cooking today; Calendar arranges the week; Recipes finds,
+imports and edits food; Shopping explains requirements and Bring status; Pantry controls
+staples; Settings reveals one understandable configuration group at a time. Saved/offline/
+error states remain truthful and unsynchronised work survives.
+
+FIRST VIEWPORT: A compact connection row and clear screen title lead into actual content.
+Home begins with today's meals and a compact date selector, followed by explicit quick
+actions. Calendar groups date/view controls above its board. Recipe search precedes cards.
+Settings is a compact list of labelled, expandable groups rather than open forms.
+
+FORM: User-directed task-flow extension of the established Operate surface, code-led;
+no new visual world or concept seed. Preserve six destinations, source/AI consent,
+explicit import review/Save, safe Bring ownership and persisted editor drafts.
+
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review,
+the verdict, DESIGN.md, and every shipping raster carrying its provenance
+
 Mode: Operate. Approved purpose/platform: PWA-first, retaining native code; user confirmation
 on 2026-10-21. Preserve the approved native concept and product requirements. Stack choice
 is delegated by the master prompt. The confirmed mealf name/asset rebrand applies to the
@@ -356,3 +383,54 @@ design/schema or shipped specialist pass is claimed. Physical iPhone/Safari, liv
 provider/deployment behavior, exact-source CI and publication remain outside this record.
 DESIGN.md/design.json and their historical five-destination/layout/system-only-appearance
 drift remain preserved without repair.
+
+Whole-PWA UX rework handoff, 2026-10-22: the first Direction contract in this file
+governs the user's request for everything to feel neater and nicer. This is an ordinary
+Operate rework within the established original peach/wordmark, system typography,
+Flo/After Dark/Sunday palette roles, solid reading surfaces and restrained glass world.
+No new visual identity, approved comp, seed or token refresh is introduced. Preserve
+six primary destinations, durable drafts/outbox, source/AI consent, editable review and
+explicit Save, manual Bring! ownership/verification and the unchanged native pin.
+
+Home now leads with the selected day's meals and compact previous/Today/next controls;
+labelled import/create/inspiration actions follow the meals. Calendar groups week/view
+controls above its board, with labelled Tools and secondary suggestions/movement help
+below. Recipes prioritizes labelled Import/New recipe, search and name/rating sorting.
+Detail/editor section links lead to ingredients and method; optional editor metadata
+is disclosed, retained while closed and revealed for invalid fields. A sticky glass
+Save bar distinguishes device drafts from explicit Save. Settings is a named disclosure
+list with mounted retained forms; errors reveal This device and blocked work remains
+open for attention. Import and Pantry disclose longer explanations/alternate inputs.
+See the [screen guide](../../docs/PWA_UX.md) for entry points and section names.
+
+The [bounded UX review](../../docs/validation/pwa-ux-review.md) records the fresh
+reviewer's initial source/all-15-capture inspection and **ship at the listed-fix scope**
+verdict after one P2 Shopping state finding: **1 resolved, 0 partial, 0 unresolved**.
+An unconfigured queued projection no longer implies reconciliation; progress requires
+a ready connection, unready sync is secondary/disabled and setup is prominent. The
+implementation rebuilt once and recaptured the same 15 views; the same reviewer
+confirmed the fix. The final browser evidence checks the real unconfigured state and
+an explicitly intercepted ready/queued UI response. This is not whole-product acceptance.
+
+This documentation handoff inspected changed UI sources, the new task-layout.css,
+authorities, browser script/logs and all 15 final genuine Chromium images in
+`.impeccable/review/pwa-ux/`: Home/Calendar/Settings Flo desktop at 1440×1000; all six
+destinations in German After Dark at 390×844; English After Dark recipe detail/editor/
+import at 390×844; German Calendar/Settings After Dark and Home Sunday at 320×740.
+Full-document exports keep fixed navigation/sticky Save in their initial viewport
+bands; the documents remain scrollable. Captures do not establish motion. Data is
+synthetic and the chicken is the existing original demo illustration with provenance;
+no stock/new raster or implicit household samples were introduced.
+
+Supplied logs pass 425 backend/66 frontend tests, real FastAPI/SQLite six-destination/
+disclosure/EN-DE/theme/search-sort/anchor/metadata/offline Save-reload-sync workflows
+and desktop/390px/320px Axe/width checks. Existing PWA, sync, Shopping, layout, ChatGPT,
+AI import, source-photo, recipe-ideas, image-import and push regressions pass with their
+documented synthetic external services. Local WebKit is blocked by a missing executable;
+CI remains pending, and no local WebKit pass is claimed. Launcher/detector were absent
+(detector attempted); no design/schema or unavailable specialist-definition pass is
+claimed. This documentation handoff reran no tests/browser checks. Live services,
+physical iPhone/Safari, user deployment, exact-source CI and publication remain outside
+this evidence. DESIGN.md/design.json remain byte-for-byte preserved; historical
+five-destination, layout/type/image and system-only-appearance snapshot drift is reported
+without unasked repair. API/sync schema and native code remain outside this layout change.

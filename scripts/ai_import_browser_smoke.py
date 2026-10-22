@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 
 import httpx
 import uvicorn
+from browser_settings import settings_section
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
 
@@ -100,6 +101,7 @@ def main():
 
                 def configure(provider, model, key):
                     navigate("Settings")
+                    settings_section(page, "AI recipe import")
                     form = page.locator(".ai-settings-form")
                     form.get_by_label("Enable AI extraction", exact=True).check()
                     form.get_by_label("AI provider", exact=True).select_option(provider)
@@ -154,6 +156,7 @@ def main():
                 Image.new("RGB", (80, 80), "white").save(image, format="PNG")
                 upload("synthetic-scan.png", "image/png", image.getvalue())
                 assert rows() == []
+                page.locator(".editor-optional > summary").click()
                 expect(page.get_by_label("Preparation time (minutes)", exact=True)).to_have_value(
                     "10"
                 )

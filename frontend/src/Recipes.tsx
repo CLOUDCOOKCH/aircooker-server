@@ -32,6 +32,7 @@ export function Recipes({
 }) {
   const { entities, t } = useApp();
   const [query, setQuery] = useState('');
+  const [sort, setSort] = useState('name');
   const all = entities('recipe');
   const recipes = all
     .filter((row) =>
@@ -39,24 +40,23 @@ export function Recipes({
         .toLocaleLowerCase()
         .includes(query.toLocaleLowerCase()),
     )
-    .sort((a, b) => a.payload.title.localeCompare(b.payload.title));
+    .sort(
+      (a, b) =>
+        (sort === 'rating' ? (b.payload.rating ?? 0) - (a.payload.rating ?? 0) : 0) ||
+        a.payload.title.localeCompare(b.payload.title),
+    );
   return (
     <>
-      <PageHeader title={t('recipes')}>
-        <IconButton label={t('importRecipe')} onClick={importRecipe}>
-          <Upload size={21} />
-        </IconButton>
-        <IconButton label={t('addRecipe')} onClick={create}>
-          <Plus size={23} />
-        </IconButton>
+      <PageHeader title={t('recipes')} subtitle={t('recipeLibraryHint')}>
+        <button className="secondary compact" aria-label={t('importRecipe')} onClick={importRecipe}>
+          <Upload size={18} />
+          {t('quickImport')}
+        </button>
+        <button className="primary compact" aria-label={t('addRecipe')} onClick={create}>
+          <Plus size={18} />
+          {t('addRecipe')}
+        </button>
       </PageHeader>
-      <button className="ideas-shortcut" onClick={ideas}>
-        <Sparkles size={20} />
-        <span>
-          <strong>{t('recipeIdeas')}</strong>
-          <small>{t('ideasShortcut')}</small>
-        </span>
-      </button>
       <label className="search-field">
         <Search size={20} />
         <input
@@ -72,6 +72,26 @@ export function Recipes({
           </IconButton>
         )}
       </label>
+      <div className="library-toolbar">
+        <span className="muted" role="status">
+          {recipes.length} {t('recipeSearchCount')}
+        </span>
+        <label className="library-sort">
+          <span className="sr-only">{t('recipeSort')}</span>
+          <select
+            aria-label={t('recipeSort')}
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+          >
+            <option value="name">{t('sortName')}</option>
+            <option value="rating">{t('sortRating')}</option>
+          </select>
+        </label>
+        <button className="text-button" aria-label={t('recipeIdeas')} onClick={ideas}>
+          <Sparkles size={18} />
+          {t('recipeIdeas')}
+        </button>
+      </div>
       {!all.length ? (
         <Empty title={t('emptyRecipes')} body={t('emptyRecipesBody')}>
           <button className="primary" onClick={create}>
@@ -186,8 +206,12 @@ export function RecipeDetail({
           <Star size={16} fill="currentColor" /> {recipe.rating} / 5
         </p>
       )}
+      <div className="recipe-jump-links" role="group" aria-label={t('recipeContents')}>
+        <a href="#recipe-ingredients">{t('ingredients')}</a>
+        <a href="#recipe-instructions">{t('instructions')}</a>
+      </div>
       <div className="recipe-detail-columns">
-        <section>
+        <section id="recipe-ingredients">
           <div className="section-heading">
             <h2>{t('ingredients')}</h2>
             <label className="servings-control">
@@ -226,7 +250,7 @@ export function RecipeDetail({
             <p className="muted">{t('noIngredients')}</p>
           )}
         </section>
-        <section>
+        <section id="recipe-instructions">
           <h2>{t('instructions')}</h2>
           {recipe.steps.length ? (
             <ol className="method-list">
@@ -549,8 +573,29 @@ export function RecipeEditor({
           <pre className="import-source-text">{task.recognizedText}</pre>
         </details>
       )}
-      <form onSubmit={(event) => void save(event)} className="recipe-editor">
+      <p className="editor-intro muted">{t('recipeEditorHint')}</p>
+      <div
+        className="recipe-jump-links editor-jump-links"
+        role="group"
+        aria-label={t('recipeContents')}
+      >
+        <a href="#editor-basics">{t('recipeBasics')}</a>
+        <a href="#editor-ingredients">{t('ingredients')}</a>
+        <a href="#editor-instructions">{t('instructions')}</a>
+      </div>
+      <form
+        onSubmit={(event) => void save(event)}
+        className="recipe-editor"
+        onInvalidCapture={(event) => {
+          let parent = (event.target as HTMLElement).parentElement;
+          while (parent) {
+            if (parent instanceof HTMLDetailsElement) parent.open = true;
+            parent = parent.parentElement;
+          }
+        }}
+      >
         <div className="editor-main">
+          <h2 id="editor-basics">{t('recipeBasics')}</h2>
           <label>
             {t('title')}
             <input
@@ -562,84 +607,89 @@ export function RecipeEditor({
             />
           </label>
           <label>
-            {t('description')}
-            <textarea
-              maxLength={5000}
-              rows={2}
-              value={recipe.description}
-              onChange={(e) => patch({ description: e.target.value })}
+            {t('servings')}
+            <input
+              required
+              inputMode="decimal"
+              type="number"
+              min="0.01"
+              max="1000000"
+              step="any"
+              aria-invalid={task?.extraction?.recipe.servings === null || undefined}
+              value={recipe.servings}
+              onChange={(e) => patch({ servings: e.target.value })}
             />
           </label>
-          <div className="form-row">
+          <details className="editor-optional">
+            <summary>{t('recipeDetails')}</summary>{' '}
             <label>
-              {t('servings')}
-              <input
-                required
-                inputMode="decimal"
-                type="number"
-                min="0.01"
-                max="1000000"
-                step="any"
-                aria-invalid={task?.extraction?.recipe.servings === null || undefined}
-                value={recipe.servings}
-                onChange={(e) => patch({ servings: e.target.value })}
+              {t('description')}
+              <textarea
+                maxLength={5000}
+                rows={2}
+                value={recipe.description}
+                onChange={(e) => patch({ description: e.target.value })}
               />
             </label>
-            <label>
-              {t('rating')}
-              <select
-                value={recipe.rating ?? ''}
-                onChange={(e) => patch({ rating: e.target.value ? Number(e.target.value) : null })}
-              >
-                <option value="">{t('unrated')}</option>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <option key={n} value={n}>
-                    {n} / 5
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="form-row">
-            {(['prepMinutes', 'cookMinutes', 'totalMinutes'] as const).map((name) => (
-              <label key={name}>
-                {t(name)}
-                <input
-                  type="number"
-                  min={0}
-                  max={525600}
-                  step={1}
-                  value={recipe.times?.[name] ?? ''}
-                  onChange={(event) =>
-                    patch({
-                      times: {
-                        ...recipe.times,
-                        [name]: event.target.value === '' ? null : Number(event.target.value),
-                      },
-                    })
+            <div className="form-row">
+              <label>
+                {t('rating')}
+                <select
+                  value={recipe.rating ?? ''}
+                  onChange={(e) =>
+                    patch({ rating: e.target.value ? Number(e.target.value) : null })
                   }
+                >
+                  <option value="">{t('unrated')}</option>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <option key={n} value={n}>
+                      {n} / 5
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="form-row">
+              {(['prepMinutes', 'cookMinutes', 'totalMinutes'] as const).map((name) => (
+                <label key={name}>
+                  {t(name)}
+                  <input
+                    type="number"
+                    min={0}
+                    max={525600}
+                    step={1}
+                    value={recipe.times?.[name] ?? ''}
+                    onChange={(event) =>
+                      patch({
+                        times: {
+                          ...recipe.times,
+                          [name]: event.target.value === '' ? null : Number(event.target.value),
+                        },
+                      })
+                    }
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="form-row">
+              <label>
+                {t('recipeCategory')}
+                <input
+                  maxLength={5000}
+                  value={recipe.category ?? ''}
+                  onChange={(event) => patch({ category: event.target.value || null })}
                 />
               </label>
-            ))}
-          </div>
-          <div className="form-row">
-            <label>
-              {t('recipeCategory')}
-              <input
-                maxLength={5000}
-                value={recipe.category ?? ''}
-                onChange={(event) => patch({ category: event.target.value || null })}
-              />
-            </label>
-            <label>
-              {t('recipeCuisine')}
-              <input
-                maxLength={5000}
-                value={recipe.cuisine ?? ''}
-                onChange={(event) => patch({ cuisine: event.target.value || null })}
-              />
-            </label>
-          </div>
+              <label>
+                {t('recipeCuisine')}
+                <input
+                  maxLength={5000}
+                  value={recipe.cuisine ?? ''}
+                  onChange={(event) => patch({ cuisine: event.target.value || null })}
+                />
+              </label>
+            </div>
+          </details>
           <label>
             {t('photo')}
             <input
@@ -668,7 +718,7 @@ export function RecipeEditor({
               {t('remove')} {t('photo').toLocaleLowerCase()}
             </button>
           )}
-          <section>
+          <section id="editor-ingredients">
             <h2>{t('ingredients')}</h2>
             {recipe.ingredients.map((item, index) => (
               <fieldset className="ingredient-editor" key={item.id}>
@@ -753,7 +803,7 @@ export function RecipeEditor({
               {t('addIngredient')}
             </AddButton>
           </section>
-          <section>
+          <section id="editor-instructions">
             <h2>{t('instructions')}</h2>
             {recipe.steps.map((step, i) => (
               <div key={i} className="step-editor">

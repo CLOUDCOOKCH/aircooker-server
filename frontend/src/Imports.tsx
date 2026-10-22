@@ -253,7 +253,7 @@ export function Imports({
   };
   return (
     <>
-      <PageHeader title={t('importRecipe')} back={back} />
+      <PageHeader title={t('importRecipe')} subtitle={t('importIntro')} back={back} />
       <div className="import-layout">
         <section
           onPaste={(event) => {
@@ -409,29 +409,11 @@ export function Imports({
                   </>
                 ) : (
                   <>
-                    <p className="intro-copy">{t('importHint')}</p>
-                    <p className="muted">{t('importMetadataFirst')}</p>
-                    <label>
-                      {t('importFile')}
-                      <input
-                        ref={fileInput}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"
-                        onChange={(event) => {
-                          const next = event.target.files?.[0] ?? null;
-                          setFile(next);
-                          setSourceID(null);
-                          if (next) {
-                            setAI(true);
-                            setConsent(false);
-                          }
-                        }}
-                      />
-                      <small>{t('importFileHint')}</small>
-                    </label>
-                    {(file || sourceID) && (
-                      <p className="info-note">{file?.name ?? t('importRetainedSource')}</p>
-                    )}
+                    <details className="import-help">
+                      <summary>{t('importHelp')}</summary>
+                      <p className="intro-copy">{t('importHint')}</p>
+                      <p className="muted">{t('importMetadataFirst')}</p>
+                    </details>
                     <label>
                       {t('importURL')}
                       <span className="input-icon">
@@ -445,15 +427,42 @@ export function Imports({
                         />
                       </span>
                     </label>
-                    <label>
-                      {t('importText')}
-                      <textarea
-                        rows={7}
-                        maxLength={100000}
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                      />
-                    </label>
+                    <details
+                      className="import-alternative"
+                      open={Boolean(text || file || sourceID) || undefined}
+                    >
+                      <summary>{t('importAlternative')}</summary>{' '}
+                      <label>
+                        {t('importText')}
+                        <textarea
+                          rows={7}
+                          maxLength={100000}
+                          value={text}
+                          onChange={(e) => setText(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        {t('importFile')}
+                        <input
+                          ref={fileInput}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"
+                          onChange={(event) => {
+                            const next = event.target.files?.[0] ?? null;
+                            setFile(next);
+                            setSourceID(null);
+                            if (next) {
+                              setAI(true);
+                              setConsent(false);
+                            }
+                          }}
+                        />
+                        <small>{t('importFileHint')}</small>
+                      </label>
+                      {(file || sourceID) && (
+                        <p className="info-note">{file?.name ?? t('importRetainedSource')}</p>
+                      )}
+                    </details>
                   </>
                 )}
                 {account === 'household' && (
