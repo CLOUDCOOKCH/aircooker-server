@@ -12,10 +12,10 @@ Use Docker Engine with Compose v2 and a local filesystem-backed named volume:
 
 ```sh
 docker compose up --build -d
-docker compose logs aircooker
+docker compose logs mealf
 ```
 
-Set `BASE_URL` in Compose to the external HTTPS origin. Open that origin, enter the one-time
+Set `BASE_URL` in Compose to the external HTTPS origin. Open `/admin/` on that origin, enter the one-time
 token and create the household. Copy `setup_token` from the startup log entry with event
 `setup_required`; a container manager's Logs view works without opening a terminal.
 The token is generated from 48 random bytes and also stored in the protected data directory.
@@ -24,7 +24,7 @@ retain an existing token. Setup is transactional and locks after one household. 
 starts do not log a token. Old log records remain subject to the container log retention
 policy, but their token cannot be reused after setup. Keep container logs operator-only;
 `LOG_SETUP_TOKEN=false` disables this bootstrap-only disclosure.
-Use `docker compose exec -it aircooker python -m aircooker.cli recover` for local administrator
+Use `docker compose exec -it mealf python -m mealf.cli recover` for local administrator
 password recovery. It revokes all sessions; no public recovery/reset endpoint exists.
 
 For a NAS/container-manager console, use `/bin/bash` (included since POC `.2`) or `/bin/sh`,
@@ -60,7 +60,7 @@ be read-only; `/tmp` is a bounded tmpfs. Keep the single-worker process model.
 Console-saved encrypted AI settings override these AI environment values, including when
 AI is disabled in the console. See [administration](ADMINISTRATION.md).
 
-Persistent layout: `database/aircooker.sqlite3` (+ WAL/SHM), `media/`, `jobs/`, `backups/`,
+Persistent layout: `database/mealf.sqlite3` (+ WAL/SHM), `media/`, `jobs/`, `backups/`,
 `config/setup-token`, `config/integrations.key`, encrypted integration files and optional
 Bring compatibility report. Queue records currently live in SQLite, not job files.
 
@@ -96,13 +96,17 @@ Do not configure an arbitrary CIDR merely to make forwarded headers work. Health
 plain HTTP only inside the container; iOS and browser ingress must use HTTPS. No WebSocket
 or streaming ingress is required.
 
+A separate root landing page can share the origin. Route `/admin`, `/admin/*`, `/app/*`
+and `/api/v1/*` to this backend without stripping prefixes; serve `/` from the landing
+host. See the [path-routing example and upgrade notes](MEALF_MIGRATION.md).
+
 ## Cloudflare Tunnel
 
 Run cloudflared as an operator-managed ingress, outside the mandatory backend container.
 Map the public hostname to `http://127.0.0.1:8080` for a host tunnel, or an isolated service
 address for a container tunnel. Match `BASE_URL` to the public HTTPS origin. Restrict the
 origin listener, trust only the tunnel process/network and keep application authentication
-enabled. Tunnel credentials are never part of the aircooker image. An interactive Cloudflare
+enabled. Tunnel credentials are never part of the mealf image. An interactive Cloudflare
 Access login may block the native client; do not assume an Access-protected origin works
 with a plain URLSession client.
 
@@ -126,7 +130,7 @@ retain the URL and provide a structured recipe or manually enter the missing con
 ## Routine maintenance
 
 Bounded hourly SQLite retention and startup-only stale transfer cleanup run inside this
-container. Inspect candidates with `docker compose exec aircooker python -m aircooker.cli
+container. Inspect candidates with `docker compose exec mealf python -m mealf.cli
 cleanup --dry-run`; apply an extra pass by omitting `--dry-run`. Output contains counts only.
 Offline sync/Bring replay history and uploaded images remain protected. See RETENTION.md
 for windows, upgrade grace, failure logs and remaining compaction limits.

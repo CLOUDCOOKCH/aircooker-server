@@ -1,20 +1,36 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { APIClient, APIError } from './api.ts';
+import { APIClient, APIError, csrfToken } from './api.ts';
+
+test('previous cookies remain readable until rotation; an explicit current cookie takes precedence', () => {
+  const priorDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+  const document = { cookie: 'aircooker_pwa_csrf=existing' };
+  Object.defineProperty(globalThis, 'document', { configurable: true, value: document });
+  try {
+    assert.equal(csrfToken(), 'existing');
+    document.cookie += '; mealf_pwa_csrf=current';
+    assert.equal(csrfToken(), 'current');
+    document.cookie = 'aircooker_pwa_csrf=existing; mealf_pwa_csrf=';
+    assert.equal(csrfToken(), '');
+  } finally {
+    if (priorDocument) Object.defineProperty(globalThis, 'document', priorDocument);
+    else Reflect.deleteProperty(globalThis, 'document');
+  }
+});
 
 test('concurrent expired requests share one refresh and retry with browser cookies', async () => {
   const priorFetch = globalThis.fetch;
   const priorDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
   Object.defineProperty(globalThis, 'document', {
     configurable: true,
-    value: { cookie: 'aircooker_pwa_csrf=test-csrf' },
+    value: { cookie: 'mealf_pwa_csrf=test-csrf' },
   });
   let refreshed = false;
   let refreshCalls = 0;
   globalThis.fetch = async (input, init) => {
     assert.equal(init?.credentials, 'same-origin');
     const headers = new Headers(init?.headers);
-    assert.equal(headers.get('X-Aircooker-Client'), 'pwa');
+    assert.equal(headers.get('X-Mealf-Client'), 'pwa');
     if (String(input).endsWith('/refresh')) {
       assert.equal(headers.get('X-CSRF-Token'), 'test-csrf');
       refreshCalls += 1;
@@ -43,13 +59,13 @@ test('concurrent expired requests share one refresh and retry with browser cooki
 test('a parallel CSRF rotation retries once; unrelated forbidden errors are surfaced', async () => {
   const priorFetch = globalThis.fetch;
   const priorDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
-  const document = { cookie: 'aircooker_pwa_csrf=before' };
+  const document = { cookie: 'mealf_pwa_csrf=before' };
   Object.defineProperty(globalThis, 'document', { configurable: true, value: document });
   let calls = 0;
   globalThis.fetch = async (_input, init) => {
     calls += 1;
     if (calls === 1) {
-      document.cookie = 'aircooker_pwa_csrf=after';
+      document.cookie = 'mealf_pwa_csrf=after';
       return Response.json({ error: { code: 'csrf_failed' } }, { status: 403 });
     }
     assert.equal(new Headers(init?.headers).get('X-CSRF-Token'), 'after');

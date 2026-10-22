@@ -10,11 +10,11 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
 
-from aircooker.db import Database
-from aircooker.errors import DomainError
-from aircooker.jobs import claim, finish
-from aircooker.reminders import PushDeliveryError, Reminders, due_at
-from aircooker.webpush import PushResponse, encoded, retry_delay
+from mealf.db import Database
+from mealf.errors import DomainError
+from mealf.jobs import claim, finish
+from mealf.reminders import PushDeliveryError, Reminders, due_at
+from mealf.webpush import PushResponse, encoded, retry_delay
 
 PATH = "/api/v1/notifications/push"
 NOW = datetime(2026, 10, 21, 16, 0, tzinfo=UTC)  # 18:00 in Europe/Zurich.
@@ -253,8 +253,8 @@ def test_actual_encryption_and_vapid_signature_use_a_pinned_vendor_socket(harnes
         def close(self):
             pass
 
-    monkeypatch.setattr("aircooker.webpush.public_addresses", lambda host, port: ["17.0.0.1"])
-    monkeypatch.setattr("aircooker.webpush.PinnedHTTPS", Connection)
+    monkeypatch.setattr("mealf.webpush.public_addresses", lambda host, port: ["17.0.0.1"])
+    monkeypatch.setattr("mealf.webpush.PinnedHTTPS", Connection)
     message = {"title": "mealf", "body": "Private test", "url": "/app/"}
     assert transport.send(body, message, "stable-tag", 900).status == 201
     method, path, encrypted, headers = sent[0]
@@ -282,7 +282,7 @@ def test_actual_encryption_and_vapid_signature_use_a_pinned_vendor_socket(harnes
 def test_vendor_dns_rebinding_is_rejected_before_a_socket_is_created(harness, monkeypatch):
     body, _, _ = registration()
     monkeypatch.setattr(
-        "aircooker.importing.socket.getaddrinfo",
+        "mealf.importing.socket.getaddrinfo",
         lambda *args, **kwargs: [(None, None, None, None, ("127.0.0.1", 443))],
     )
     with pytest.raises(DomainError, match="source_address_forbidden"):
@@ -374,11 +374,11 @@ def test_manual_retry_is_device_scoped_and_subscription_secrets_are_not_exported
 def test_push_controls_apply_browser_csrf_and_device_rate_limits(harness):
     from fastapi.testclient import TestClient
 
-    from aircooker.pwa_auth import AUTH_PATH, CSRF_COOKIE
+    from mealf.pwa_auth import AUTH_PATH, CSRF_COOKIE
 
     _, app, _, _ = harness
     with TestClient(app, base_url="https://kitchen.example") as browser:
-        browser.headers.update({"Origin": "https://kitchen.example", "X-Aircooker-Client": "pwa"})
+        browser.headers.update({"Origin": "https://kitchen.example", "X-Mealf-Client": "pwa"})
         assert browser.get(PATH).status_code == 401
         signed = browser.post(
             AUTH_PATH + "/login",

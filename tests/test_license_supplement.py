@@ -6,8 +6,7 @@ import pytest
 def test_supplemental_notice_is_exactly_version_and_licence_bound():
     notice = runpy.run_path("scripts/license_inventory.py")["supplemental_notice"]
     assert (
-        notice("http-ece", "1.2.1", "MIT")[0]["path"]
-        == "aircooker:attributions/http-ece-1.2.1.LICENSE"
+        notice("http-ece", "1.2.1", "MIT")[0]["path"] == "mealf:attributions/http-ece-1.2.1.LICENSE"
     )
     assert notice("unreviewed-package", "1", "MIT") == []
     with pytest.raises(SystemExit, match="version/licence mismatch"):

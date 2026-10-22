@@ -1,4 +1,5 @@
 import type { components } from '../api-schema';
+import { legacy } from './legacy.ts';
 
 export type BrowserSession = components['schemas']['BrowserSession'];
 export class APIError extends Error {
@@ -12,10 +13,12 @@ export class APIError extends Error {
 }
 
 export function csrfToken(): string {
-  const entry = document.cookie
-    .split(';')
-    .find((part) => part.trim().startsWith('aircooker_pwa_csrf='));
-  return entry ? decodeURIComponent(entry.trim().slice('aircooker_pwa_csrf='.length)) : '';
+  const cookies = document.cookie.split(';').map((part) => part.trim());
+  const key = cookies.some((part) => part.startsWith('mealf_pwa_csrf='))
+    ? 'mealf_pwa_csrf'
+    : legacy.csrf;
+  const entry = cookies.find((part) => part.startsWith(key + '='));
+  return entry ? decodeURIComponent(entry.slice(key.length + 1)) : '';
 }
 
 /** Same-origin only. Credentials remain in Secure/HttpOnly cookies, never in app storage. */
@@ -26,7 +29,7 @@ export class APIClient {
     if (!path.startsWith('/api/v1/') || path.includes('://'))
       throw new APIError('invalid_api_path', 0);
     const headers = new Headers(init.headers);
-    headers.set('X-Aircooker-Client', 'pwa');
+    headers.set('X-Mealf-Client', 'pwa');
     if (!['GET', 'HEAD'].includes(init.method ?? 'GET')) headers.set('X-CSRF-Token', csrfToken());
     if (typeof init.body === 'string') headers.set('Content-Type', 'application/json');
     try {
@@ -78,7 +81,10 @@ export class APIClient {
       await this.decode(await this.perform('/api/v1/pwa/auth/refresh', { method: 'POST' }));
     };
     const pending = (async () => {
-      if (navigator.locks) await navigator.locks.request('aircooker-auth-refresh', renew);
+      if (navigator.locks)
+        await navigator.locks.request('mealf-auth-refresh', () =>
+          navigator.locks.request(legacy.refreshLock, renew),
+        );
       else await renew();
     })();
     this.refreshing = pending.finally(() => {

@@ -18,9 +18,9 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
-from aircooker.jobs import claim, finish
-from aircooker.webpush import PushResponse, encoded
+from mealf.app import create_app
+from mealf.jobs import claim, finish
+from mealf.webpush import PushResponse, encoded
 
 
 def main():
@@ -83,7 +83,7 @@ def main():
           };
           Object.defineProperty(ServiceWorkerRegistration.prototype,'pushManager',{get:()=>manager});
         }"""
-        captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/push-browser"))
+        captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/push-browser"))
         captures.mkdir(parents=True, exist_ok=True)
         try:
             with sync_playwright() as playwright:
@@ -141,7 +141,7 @@ def main():
                 page.get_by_role("button", name="Save reminder settings", exact=True).click()
                 expect(page.get_by_text("Reminder settings saved.", exact=True)).to_be_visible()
                 status = page.evaluate(
-                    "async()=> (await fetch('/api/v1/notifications/push',{headers:{'X-Aircooker-Client':'pwa'}})).json()"
+                    "async()=> (await fetch('/api/v1/notifications/push',{headers:{'X-Mealf-Client':'pwa'}})).json()"
                 )
                 assert status["subscribed"] and status["preferences"]["dinner"] == "18:45"
                 group = page.locator(".settings-group").filter(

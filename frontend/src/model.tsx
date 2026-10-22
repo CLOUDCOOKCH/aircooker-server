@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { APIClient, APIError } from './lib/api';
 import { LocalStore } from './lib/store';
+import { legacy } from './lib/legacy';
 import { SyncEngine } from './lib/sync';
 import { reminderTarget } from './lib/notifications';
 import { DEFAULT_PLANNING, PLANNING_PATH, parsePlanningContext } from './lib/preferences';
@@ -27,7 +28,7 @@ export type Runtime = {
   demo: boolean;
   household: Household;
 };
-const LAST = 'aircooker:last-kitchen';
+const LAST = 'mealf:last-kitchen';
 export const api = new APIClient();
 const Context = createContext<ReturnType<typeof useRuntime> | null>(null);
 function useRuntime(runtime: Runtime) {
@@ -116,9 +117,7 @@ function useRuntime(runtime: Runtime) {
       }
     };
     const channel =
-      typeof BroadcastChannel === 'undefined'
-        ? null
-        : new BroadcastChannel('aircooker:' + store.instanceID);
+      typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel(store.namespace);
     if (channel)
       channel.onmessage = () => {
         void refresh();
@@ -144,7 +143,7 @@ function useRuntime(runtime: Runtime) {
   const changed = async () => {
     await refresh();
     if (typeof BroadcastChannel !== 'undefined') {
-      const channel = new BroadcastChannel('aircooker:' + store.instanceID);
+      const channel = new BroadcastChannel(store.namespace);
       channel.postMessage('changed');
       channel.close();
     }
@@ -198,7 +197,14 @@ export function useApp() {
   return value;
 }
 export async function restoreRuntime(): Promise<Runtime | null> {
-  const last = localStorage.getItem(LAST);
+  const last = localStorage.getItem(LAST) ?? localStorage.getItem(legacy.kitchen);
+  if (last && !localStorage.getItem(LAST)) {
+    try {
+      localStorage.setItem(LAST, last);
+    } catch {
+      /* Preserve readable legacy state when storage is full. */
+    }
+  }
   if (!last) return null;
   const connection = JSON.parse(last) as { instance: string; demo: boolean };
   if (connection.demo) {
@@ -293,5 +299,6 @@ export async function leaveRuntime(runtime: Runtime): Promise<void> {
   if (runtime.api) await runtime.api.request('/api/v1/pwa/auth/logout', { method: 'POST' }, false);
   await runtime.store.setSetting('unlocked', false);
   localStorage.removeItem(LAST);
+  localStorage.removeItem(legacy.kitchen);
   runtime.store.close();
 }

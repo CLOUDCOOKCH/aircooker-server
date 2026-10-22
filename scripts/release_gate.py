@@ -41,7 +41,7 @@ def release_version(tag):
 def validate_metadata(root, tag):
     expected, candidate = release_version(tag)
     project = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
-    assignments = ast.parse((root / "src/aircooker/__init__.py").read_text()).body
+    assignments = ast.parse((root / "src/mealf/__init__.py").read_text()).body
     versions = [
         ast.literal_eval(node.value)
         for node in assignments

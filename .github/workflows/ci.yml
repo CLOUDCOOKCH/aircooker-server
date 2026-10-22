@@ -48,12 +48,12 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu
       - run: python -m ruff check src tests scripts
       - run: python -m ruff format --check src tests scripts
-      - run: python -m mypy src/aircooker --ignore-missing-imports
+      - run: python -m mypy src/mealf --ignore-missing-imports
       - run: python scripts/license_inventory.py --check
       - run: python scripts/build_brand_assets.py --check
       - run: python -m pytest -q --junitxml=build/tests.xml
       - run: python scripts/export_contract.py --check
-      - run: docker build -t aircooker-server:development .
+      - run: docker build -t mealf-server:development .
       - run: python scripts/docker_smoke.py
       - run: timeout 180s python scripts/operator_docker_smoke.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -84,8 +84,8 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu
       - name: Exercise PWA offline and device workflows in installed Chrome
         env:
-          AIRCOOKER_SCREENSHOT_DIR: build/pwa-browser
-          AIRCOOKER_CAPTURE: '1'
+          MEALF_SCREENSHOT_DIR: build/pwa-browser
+          MEALF_CAPTURE: '1'
         run: python scripts/pwa_browser_smoke.py
       - name: Exercise image/PDF imports and provider settings with synthetic cloud responses
         run: python scripts/ai_import_browser_smoke.py
@@ -95,15 +95,15 @@ jobs:
         run: timeout 180s python scripts/shopping_browser_smoke.py
       - name: Recipe fallbacks and reviewed source photos with synthetic network responses
         env:
-          AIRCOOKER_SCREENSHOT_DIR: build/source-photo-browser
+          MEALF_SCREENSHOT_DIR: build/source-photo-browser
         run: timeout 180s python scripts/source_photo_browser_smoke.py
       - name: Exercise push settings/offline/receiver with explicit delivery doubles
         env:
-          AIRCOOKER_SCREENSHOT_DIR: build/push-browser
+          MEALF_SCREENSHOT_DIR: build/push-browser
         run: python scripts/push_browser_smoke.py
       - name: Exercise console in installed Chrome
         env:
-          AIRCOOKER_SCREENSHOT_DIR: build/browser
+          MEALF_SCREENSHOT_DIR: build/browser
         run: python scripts/browser_smoke.py
       - name: Exercise phone layout and focus in Chrome and WebKit
         run: |
@@ -111,12 +111,12 @@ jobs:
           python scripts/theme_browser_smoke.py
           python scripts/image_import_browser_smoke.py
           timeout 300s python -m playwright install --with-deps webkit
-          AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
-          AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
+          MEALF_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
+          MEALF_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
           python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
           sudo install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
           sudo update-ca-certificates
-          timeout 180s env PYTHONUNBUFFERED=1 MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" AIRCOOKER_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
+          timeout 180s env PYTHONUNBUFFERED=1 MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" MEALF_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -147,13 +147,13 @@ jobs:
       - run: python -m pip_audit -r requirements.lock --strict
       - name: Scan secrets
         run: docker run --rm -v "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 dir /repo --config /repo/.gitleaks.toml --redact
-      - run: docker build -t aircooker-server:scan .
+      - run: docker build -t mealf-server:scan .
       - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         env:
           TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db:2
         with:
           version: v0.70.0
-          image-ref: aircooker-server:scan
+          image-ref: mealf-server:scan
           severity: HIGH,CRITICAL
           exit-code: '1'
           ignore-unfixed: false

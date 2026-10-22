@@ -2,6 +2,7 @@ import { openDB } from 'idb';
 import type { DBSchema, IDBPDatabase } from 'idb';
 import Decimal from 'decimal.js';
 import { cloneRecipe } from './planning.ts';
+import { databaseExists, legacy } from './legacy.ts';
 import type { components } from '../api-schema';
 import { assertUUID, entityKey, payload, uuid, validateChange } from './domain.ts';
 import type { Change, Entity, Kind, Leftover, Meal, Mutation, Payloads, Recipe } from './domain.ts';
@@ -99,7 +100,16 @@ export class LocalStore {
 
   static async open(instanceID: string): Promise<LocalStore> {
     instanceID = assertUUID(instanceID);
-    const db = await openDB<Schema>('aircooker:' + instanceID, 1, {
+    const current = 'mealf:' + instanceID,
+      previous = legacy.prefix + ':' + instanceID;
+    const [hasCurrent, hasPrevious] = await Promise.all([
+      databaseExists(current),
+      databaseExists(previous),
+    ]);
+    if (hasCurrent && hasPrevious) throw new Error('local_storage_namespace_conflict');
+    // Existing IDs/outbox/photos remain in their exact database. Copying a live DB
+    // would race older tabs and could lose offline edits or exhaust browser storage.
+    const db = await openDB<Schema>(hasPrevious ? previous : current, 1, {
       upgrade(database) {
         const entities = database.createObjectStore('entities', { keyPath: 'key' });
         entities.createIndex('kind', 'kind');
@@ -119,6 +129,12 @@ export class LocalStore {
       },
     });
     return new LocalStore(instanceID, db);
+  }
+  get namespace(): string {
+    return this.db.name;
+  }
+  get syncLock(): string {
+    return this.db.name.replace(':', '-sync:');
   }
   close(): void {
     this.db.close();
@@ -189,7 +205,7 @@ export class LocalStore {
     const draftValues = await tx.objectStore('drafts').getAll();
     const photos = await tx.objectStore('photos').getAll();
     const result = {
-      format: 'aircooker-browser-recovery',
+      format: 'mealf-browser-recovery',
       version: 1,
       instance_id: this.instanceID,
       entities: await tx.objectStore('entities').getAll(),

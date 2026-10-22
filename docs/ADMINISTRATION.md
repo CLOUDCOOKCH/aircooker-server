@@ -99,7 +99,7 @@ pip install --no-deps -e .
 python scripts/browser_smoke.py
 ```
 
-Set `CHROMIUM_EXECUTABLE` for another installation path. `AIRCOOKER_SCREENSHOT_DIR` changes
+Set `CHROMIUM_EXECUTABLE` for another installation path. `MEALF_SCREENSHOT_DIR` changes
 the output directory (default `docs/screenshots`). The script runs a temporary loopback
 server with synthetic household data and explicit test-only AI/Bring adapters. Production
 still requires HTTPS. It exercises real browser forms, cookie/CSRF requests, household
@@ -123,6 +123,6 @@ names and external integration inputs are synthetic; the AI and Bring services a
 The captures show the actual running console. They are not native iOS screenshots.
 
 Local administrators can inspect/apply a bounded retention pass with the packaged CLI
-`python -m aircooker.cli cleanup --dry-run` / `cleanup`. Hourly automatic passes preserve
+`python -m mealf.cli cleanup --dry-run` / `cleanup`. Hourly automatic passes preserve
 pending work and replay identities; see RETENTION.md. No public deletion/cleanup endpoint
 is introduced, and this is not full household data deletion.

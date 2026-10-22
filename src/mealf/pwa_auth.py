@@ -12,11 +12,12 @@ from fastapi.responses import JSONResponse, Response
 
 from .auth import authenticate, digest, rate_limit, refresh_session, revoke_refresh_capability
 from .errors import DomainError
+from .legacy import HEADER_PREFIX, PREFIX, cookie
 from .models import Credentials, Model, Setup, Tokens
 
-ACCESS_COOKIE = "aircooker_pwa_session"
-REFRESH_COOKIE = "aircooker_pwa_refresh"
-CSRF_COOKIE = "aircooker_pwa_csrf"
+ACCESS_COOKIE = "mealf_pwa_session"
+REFRESH_COOKIE = "mealf_pwa_refresh"
+CSRF_COOKIE = "mealf_pwa_csrf"
 AUTH_PATH = "/api/v1/pwa/auth"
 
 
@@ -30,7 +31,8 @@ class BrowserSession(Model):
 def is_pwa(request: Request) -> bool:
     return (
         request.url.path.startswith(AUTH_PATH + "/")
-        or request.headers.get("x-aircooker-client") == "pwa"
+        or request.headers.get("x-mealf-client") == "pwa"
+        or request.headers.get(HEADER_PREFIX + "-client") == "pwa"
     )
 
 
@@ -41,9 +43,9 @@ def require_origin(request: Request):
 
 
 def require_csrf(request: Request, *, pwa: bool):
-    cookie = request.cookies.get(CSRF_COOKIE if pwa else "aircooker_csrf", "")
+    csrf_cookie = cookie(request, CSRF_COOKIE if pwa else "mealf_csrf")
     header = request.headers.get("x-csrf-token", "")
-    if not cookie or not hmac.compare_digest(cookie.encode(), header.encode()):
+    if not csrf_cookie or not hmac.compare_digest(csrf_cookie.encode(), header.encode()):
         raise DomainError("csrf_failed", 403)
     require_origin(request)
 
@@ -76,10 +78,23 @@ def set_session(tokens: Tokens, device_id: UUID, status_code: int = 200) -> JSON
     response.set_cookie(
         CSRF_COOKIE, secrets.token_urlsafe(32), secure=True, samesite="strict", path="/"
     )
+    clear_legacy_session(response)
     return response
 
 
+def clear_legacy_session(response):
+    for name, path in ((ACCESS_COOKIE, "/api/v1"), (REFRESH_COOKIE, AUTH_PATH), (CSRF_COOKIE, "/")):
+        response.delete_cookie(
+            name.replace("mealf", PREFIX, 1),
+            path=path,
+            secure=True,
+            httponly=name != CSRF_COOKIE,
+            samesite="strict",
+        )
+
+
 def clear_session(response: Response):
+    clear_legacy_session(response)
     for name, path in ((ACCESS_COOKIE, "/api/v1"), (REFRESH_COOKIE, AUTH_PATH), (CSRF_COOKIE, "/")):
         response.delete_cookie(
             name, path=path, secure=True, httponly=name != CSRF_COOKIE, samesite="strict"
@@ -109,7 +124,7 @@ def register_routes(app, database, login, setup):
         if not allowed:
             raise DomainError("rate_limited", 429)
         try:
-            tokens = refresh_session(database, request.cookies.get(REFRESH_COOKIE, ""))
+            tokens = refresh_session(database, cookie(request, REFRESH_COOKIE))
         except DomainError as exc:
             response = JSONResponse({"error": {"code": exc.code}}, status_code=exc.status)
             clear_session(response)
@@ -124,10 +139,10 @@ def register_routes(app, database, login, setup):
     def browser_logout(request: Request):
         require_csrf(request, pwa=True)
         # Refresh-secret capability works when the short-lived access cookie has expired.
-        refresh = request.cookies.get(REFRESH_COOKIE, "")
+        refresh = cookie(request, REFRESH_COOKIE)
         if refresh:
             revoke_refresh_capability(database, refresh)
-        access = request.cookies.get(ACCESS_COOKIE, "")
+        access = cookie(request, ACCESS_COOKIE)
         if access:
             with database.transaction() as db:
                 db.execute("UPDATE session SET revoked=1 WHERE access_hash=?", (digest(access),))
@@ -136,7 +151,7 @@ def register_routes(app, database, login, setup):
         return response
 
     def current_session(request: Request):
-        token = request.cookies.get(ACCESS_COOKIE, "")
+        token = cookie(request, ACCESS_COOKIE)
         with database.connect() as db:
             return authenticate(db, token)
 

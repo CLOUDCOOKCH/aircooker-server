@@ -13,6 +13,7 @@ from uuid import UUID, uuid4
 from pydantic import Field
 
 from .errors import DomainError
+from .legacy import ARCHIVE_FORMAT as LEGACY_ARCHIVE_FORMAT
 from .media import MAX_IMAGE_BYTES, MediaInfo, info_for, insert_media, validate_archived_image
 from .models import ENTITY_MODELS, EntityKind, HouseholdSettings, Model, Mutation
 from .planning_preferences import PlanningPreferences, context
@@ -35,7 +36,7 @@ class ExportMedia(MediaInfo):
 
 
 class HouseholdExport(Model):
-    format: str = "aircooker-household"
+    format: str = "mealf-household"
     version: int = 3
     exported_at: str
     household: dict[str, str]
@@ -48,7 +49,7 @@ class HouseholdExport(Model):
 
 
 class ArchiveManifest(Model):
-    format: str = "aircooker-household-archive"
+    format: str = "mealf-household-archive"
     version: int = 1
     household: HouseholdExport
     media: list[MediaInfo] = Field(max_length=5000)
@@ -114,7 +115,9 @@ def export_household(database):
 
 
 def apply_restore(db, body: HouseholdExport, device_id: str):
-    if body.format != "aircooker-household" or body.version not in (1, 2, 3):
+    from .legacy import EXPORT_FORMAT
+
+    if body.format not in ("mealf-household", EXPORT_FORMAT) or body.version not in (1, 2, 3):
         raise DomainError("unsupported_export_format", 422)
     if body.version < 3 and (body.planning_preferences is not None or body.accepted_suggestions):
         raise DomainError("unsupported_export_fields", 422)
@@ -277,7 +280,7 @@ def import_archive(database, path: Path, device_id: str):
                 raise DomainError("archive_manifest_invalid", 422)
             manifest = ArchiveManifest.model_validate_json(archive.read("manifest.json"))
             if (
-                manifest.format != "aircooker-household-archive"
+                manifest.format not in ("mealf-household-archive", LEGACY_ARCHIVE_FORMAT)
                 or manifest.version != 1
                 or manifest.household.media
             ):

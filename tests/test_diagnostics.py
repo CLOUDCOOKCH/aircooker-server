@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.jobs import enqueue
+from mealf.jobs import enqueue
 
 
 @pytest.mark.parametrize("path", ["/api/v1/admin/jobs", "/api/v1/admin/diagnostics"])

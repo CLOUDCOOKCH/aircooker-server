@@ -1,8 +1,8 @@
 import pytest
 
-from aircooker.bring import Capabilities, Item, reconcile
-from aircooker.db import Database
-from aircooker.errors import DomainError
+from mealf.bring import Capabilities, Item, reconcile
+from mealf.db import Database
+from mealf.errors import DomainError
 
 
 class Connector:

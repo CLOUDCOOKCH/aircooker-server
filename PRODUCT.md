@@ -41,7 +41,7 @@ account, payments, analytics or tracking. Third-party AI is optional and needs e
 
 ## Brand Commitments
 
-mealf (formerly aircooker). The user supplied a flirty peach icon and a lowercase mealf
+Mealf. The user supplied a flirty peach icon and a lowercase mealf
 wordmark on 2026-10-21. Both original PNGs are now in `assets/brand/originals/` and used in
 the PWA/console. Preserve them byte-for-byte; never redraw or regenerate substitutes.
 Only transparent margins/output sizes and installation-icon canvases are adjusted.

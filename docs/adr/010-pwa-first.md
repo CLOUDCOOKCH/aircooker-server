@@ -3,8 +3,8 @@
 Status: accepted by the user, 2026-10-21.
 
 The user chose PWA-first after reviewing iPhone limitations and explained that no Mac is
-available. Retain aircooker-ios and its tested code; pause its feature work. Implement the
-primary client under aircooker-server/frontend and serve compiled assets at /app/ in the
+available. Retain mealf-ios and its tested code; pause its feature work. Implement the
+primary client under mealf-server/frontend and serve compiled assets at /app/ in the
 existing container. Administration stays separate. Do not create a mandatory third repo.
 
 Use React/TypeScript for maintainable stateful forms and planning views, Vite for a static

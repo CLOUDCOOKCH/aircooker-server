@@ -1,4 +1,11 @@
-# mealf PWA proof of concept
+# Mealf preview
+
+Next candidate: **poc-20261022.5**. Renames current packages/targets to Mealf,
+serves the administration console at `/admin/`, and reserves `/` for the separate
+landing page. Existing volumes, sessions and browser offline work have explicit
+compatibility handling. See [upgrade and reverse-proxy instructions](MEALF_MIGRATION.md).
+Publication and image acceptance are pending until exact-tag CI and image gates pass.
+
 
 ## Current published preview
 

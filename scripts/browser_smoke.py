@@ -19,9 +19,9 @@ from uuid import uuid4
 import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
-import aircooker.app as application
-from aircooker.jobs import enqueue
-from aircooker.models import Ingredient, Recipe
+import mealf.app as application
+from mealf.jobs import enqueue
+from mealf.models import Ingredient, Recipe
 
 LIST_ID = "11111111-1111-4111-8111-111111111111"
 
@@ -64,7 +64,7 @@ def main():
     )
     if not executable:
         raise SystemExit("Chromium/Chrome is required for the browser smoke test")
-    with TemporaryDirectory(prefix="aircooker-console-") as temporary:
+    with TemporaryDirectory(prefix="mealf-console-") as temporary:
         root = Path(temporary)
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
@@ -103,7 +103,11 @@ def main():
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 page.on("dialog", lambda dialog: dialog.accept())
-                page.goto(base)
+                page.goto(base + "/admin")
+                assert page.url == base + "/admin/"
+                assert context.request.get(base + "/").status == 404
+                assert context.request.get(base + "/console.js").status == 404
+                assert context.request.get(base + "/console.css").status == 404
                 expect(page).to_have_title("mealf · household console")
                 expect(page.get_by_role("link", name="mealf", exact=True)).to_be_visible()
                 page.wait_for_function(
@@ -150,7 +154,7 @@ def main():
                 assert page.locator("#peach-reaction").evaluate(
                     "e => { const r=e.getBoundingClientRect(); return r.left>=15 && r.right<=innerWidth-15 && r.top>=7 && r.bottom<=innerHeight-7; }"
                 )
-                path = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
+                path = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "docs/screenshots"))
                 path.mkdir(parents=True, exist_ok=True)
                 page.screenshot(
                     path=str(path / "peach-console-reduced-phone-de-dark.png"), full_page=True
@@ -161,7 +165,7 @@ def main():
                 expect(page.locator("#peach-reaction")).to_be_empty(timeout=5000)
                 login = page.locator("#login")
                 expect(login.locator('[name="username"]')).to_be_visible()
-                screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
+                screenshots = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "docs/screenshots"))
                 screenshots.mkdir(parents=True, exist_ok=True)
                 palette("light")
                 audit("setup light")
@@ -267,7 +271,7 @@ def main():
                 )
                 page.locator('[data-page-link="data"]').click()
                 document = {
-                    "format": "aircooker-household",
+                    "format": "mealf-household",
                     "version": 2,
                     "exported_at": datetime.now(UTC).isoformat(),
                     "household": {
@@ -335,7 +339,7 @@ def main():
                         audit(f"{key} {scheme}")
                 page.emulate_media(color_scheme="light")
                 # One batched capture pass: real UI, synthetic household, EN/DE and themes.
-                screenshots = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "docs/screenshots"))
+                screenshots = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "docs/screenshots"))
                 screenshots.mkdir(parents=True, exist_ok=True)
                 page.locator('[data-page-link="overview"]').click()
                 page.screenshot(path=str(screenshots / "admin-desktop.png"), full_page=True)

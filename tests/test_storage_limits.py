@@ -7,8 +7,8 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-import aircooker.app as application
-from aircooker.db import Database
+import mealf.app as application
+from mealf.db import Database
 
 
 @pytest.mark.parametrize("value", ["not-a-size", "0", "-1", str(65 * 1024**3)])

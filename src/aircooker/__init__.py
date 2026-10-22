@@ -1,1 +1,1 @@
-__version__ = "0.1.0"
+"""Deprecated command compatibility for existing container configurations. Use mealf."""

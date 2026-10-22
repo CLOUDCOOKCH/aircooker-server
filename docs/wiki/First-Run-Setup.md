@@ -1,7 +1,7 @@
 # First-run setup
 
 Before creating an account, start the backend, configure HTTPS and set `BASE_URL`
-to the exact public origin, such as `https://meals.example.com`. The console at `/`
+to the exact public origin, such as `https://meals.example.com`. The console at `/admin/`
 and the PWA at `/app/` share that origin. See [Installation](Installation).
 
 ## Find the one-time setup token
@@ -19,15 +19,15 @@ Alternatively, read the restricted file from the running container:
 docker compose -f compose.preview.yaml exec mealf cat /data/config/setup-token
 ```
 
-For a source build, use `docker compose logs aircooker` and
-`docker compose exec aircooker cat /data/config/setup-token`. Do not paste the token
+For a source build, use `docker compose logs mealf` and
+`docker compose exec mealf cat /data/config/setup-token`. Do not paste the token
 or unredacted startup logs into support issues. Set `LOG_SETUP_TOKEN=false` in the
 backend's Compose environment if you prefer file-only retrieval, then recreate the
 container. The token remains available in the file until successful setup.
 
 ## Create the household
 
-1. Open the public HTTPS origin in your browser. You can also choose **Open your kitchen**
+1. Open `/admin/` on the public HTTPS origin in your browser. You can also choose **Open your kitchen**
    from the PWA onboarding screen.
 2. Enter the setup token.
 3. Choose your own username and password. The password must contain at least 12 characters.
@@ -57,13 +57,13 @@ AI, Bring! and notifications are optional; configure them only when needed.
 A local Docker administrator can run the interactive recovery command:
 
 ```sh
-docker compose -f compose.preview.yaml exec -it mealf python -m aircooker.cli recover
+docker compose -f compose.preview.yaml exec -it mealf python -m mealf.cli recover
 ```
 
 For a source build:
 
 ```sh
-docker compose exec -it aircooker python -m aircooker.cli recover
+docker compose exec -it mealf python -m mealf.cli recover
 ```
 
 Enter the new password twice when prompted. Recovery changes the password and revokes

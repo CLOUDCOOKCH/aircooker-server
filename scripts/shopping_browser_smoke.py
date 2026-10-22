@@ -18,12 +18,12 @@ import uvicorn
 from bring_api.types import BringItemOperation
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
-from aircooker.bring import Item
-from aircooker.bring_runtime import UnofficialBringConnector
-from aircooker.errors import DomainError
-from aircooker.planning import week_start
-from aircooker.secrets import SecretVault
+from mealf.app import create_app
+from mealf.bring import Item
+from mealf.bring_runtime import UnofficialBringConnector
+from mealf.errors import DomainError
+from mealf.planning import week_start
+from mealf.secrets import SecretVault
 
 
 class SyntheticBring(UnofficialBringConnector):
@@ -64,7 +64,7 @@ def main():
         base = f"http://127.0.0.1:{port}"
         os.environ["BASE_URL"] = base
         os.environ["LOG_SETUP_TOKEN"] = "false"
-        with patch("aircooker.app.UnofficialBringConnector", SyntheticBring):
+        with patch("mealf.app.UnofficialBringConnector", SyntheticBring):
             app = create_app(root)
             lid = str(uuid4())
             SecretVault(root / "config").save(

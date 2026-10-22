@@ -1,7 +1,7 @@
 # MealF Wiki
 
 MealF is a self-hosted household meal planner with an installable browser app (PWA).
-One backend container serves the PWA at `/app/`, the administration console at `/`,
+One backend container serves the PWA at `/app/`, the administration console at `/admin/`,
 the API and a durable background worker. SQLite and private configuration live in one
 persistent `/data` volume. Cloudflare Tunnel or another HTTPS reverse proxy provides
 the public entry point.
@@ -42,6 +42,6 @@ default credentials or separate administrator roles. Keep the data volume, conta
 logs, tunnel credentials and exports private. Never run two backend instances against
 the same SQLite volume.
 
-The product was previously called **aircooker**. Existing package, Compose, API and
+The product was previously called **mealf**. Existing package, Compose, API and
 storage names retain that identifier for compatibility; do not rename volumes during
 an upgrade. See the [branding and compatibility notes](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BRANDING.md).

@@ -36,7 +36,7 @@ async def main():
             for i in baseline.items.purchase + baseline.items.recently
         }
         own_id = str(uuid4())
-        name = "aircooker-compatibility-" + str(uuid4())[:8]
+        name = "mealf-compatibility-" + str(uuid4())[:8]
         item = {"uuid": own_id, "itemId": name, "spec": "one"}
 
         def lookup(response):
@@ -63,8 +63,8 @@ async def main():
         )
         report = os.environ.get("BRING_COMPATIBILITY_REPORT")
         if report:
-            from aircooker.secrets import SecretVault
-            from aircooker.shopping import configuration_hash
+            from mealf.secrets import SecretVault
+            from mealf.shopping import configuration_hash
 
             path = Path(report)
             saved_configuration = SecretVault(path.parent).load("bring")

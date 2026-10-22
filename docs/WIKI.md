@@ -29,14 +29,14 @@ Links to code, release information and engineering documents are absolute reposi
 `Home.md` is the Wiki landing page; `_Sidebar.md` supplies navigation on every page.
 
 To publish, a repository maintainer must first enable the Wiki in GitHub settings and
-create its initial page if necessary. Clone `aircooker-server.wiki.git` separately,
+create its initial page if necessary. Clone `mealf-server.wiki.git` separately,
 copy the Markdown files from `docs/wiki/` into its root, inspect the diff, then commit
 and push that Wiki repository. Preserve any existing Wiki pages that are not represented
 here; do not delete them automatically. Only copy `docs/wiki/*.md`, not this source index,
 private configuration, screenshots containing secrets or local build output.
 
 Keep commands consistent with `compose.preview.yaml` and `compose.yaml`. The preview
-service is `mealf`; the source-build service is `aircooker`. Distinguish source-only
+service is `mealf`; the source-build service is `mealf`. Distinguish source-only
 features from published image capabilities and retain explicit unverified limitations.
 
 [Shopping requirements and manual Bring! sync](SHOPPING.md) explains item states, offline snapshots and the packaged compatibility check.

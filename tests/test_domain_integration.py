@@ -3,8 +3,8 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
-from aircooker.planning import shopping_projection
+from mealf.app import create_app
+from mealf.planning import shopping_projection
 
 
 def commit(c, m):
@@ -186,7 +186,7 @@ def test_browser_session_cookie_and_csrf(harness):
                 "/api/v1/admin/logout",
                 headers={
                     "Origin": "https://localhost",
-                    "X-CSRF-Token": browser.cookies["aircooker_csrf"],
+                    "X-CSRF-Token": browser.cookies["mealf_csrf"],
                 },
             ).status_code
             == 204

@@ -16,7 +16,7 @@ from tempfile import TemporaryDirectory
 import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 def contrast(first, second):
@@ -32,9 +32,9 @@ def contrast(first, second):
 
 
 def main():
-    engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
+    engine = os.environ.get("MEALF_LAYOUT_ENGINE", "chromium")
     outage = engine == "webkit" or os.environ.get("MEALF_THEME_NETWORK_OUTAGE") == "1"
-    captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/theme-browser")) / engine
+    captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/theme-browser")) / engine
     captures.mkdir(parents=True, exist_ok=True)
     evidence = []
     with TemporaryDirectory(prefix="mealf-themes-") as temporary:
@@ -245,7 +245,7 @@ def main():
                 else:
                     context.set_offline(False)
                 admin = context.new_page()
-                admin.goto(base)
+                admin.goto(base + "/admin/")
                 check("sunday", "light", admin)
                 admin.get_by_label("Theme", exact=True).select_option("after-dark")
                 expect(page.locator("html")).to_have_attribute("data-theme", "after-dark")

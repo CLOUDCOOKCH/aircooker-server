@@ -14,7 +14,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs, urlencode, urlsplit
 
 helper = runpy.run_path(
-    str(Path(__file__).resolve().parents[1] / "src/aircooker/chatgpt_helper.py")
+    str(Path(__file__).resolve().parents[1] / "src/mealf/chatgpt_helper.py")
 )
 
 

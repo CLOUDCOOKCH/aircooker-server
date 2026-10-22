@@ -16,12 +16,12 @@ from tempfile import TemporaryDirectory
 import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 def main():
-    engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
-    captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/pwa-layout")) / engine
+    engine = os.environ.get("MEALF_LAYOUT_ENGINE", "chromium")
+    captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/pwa-layout")) / engine
     captures.mkdir(parents=True, exist_ok=True)
     evidence = []
     with TemporaryDirectory(prefix="mealf-layout-") as temporary:

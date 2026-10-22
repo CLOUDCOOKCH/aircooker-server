@@ -45,8 +45,8 @@ Features added after your release require a newer published image or a source bu
 Use this route when you need changes that have not been included in a published image:
 
 ```sh
-git clone https://github.com/CLOUDCOOKCH/aircooker-server.git
-cd aircooker-server
+git clone https://github.com/CLOUDCOOKCH/aircooker-server.git mealf-server
+cd mealf-server
 ```
 
 Check out the source revision you intend to run. Edit `compose.yaml` to set the
@@ -57,11 +57,11 @@ not override them. Then run:
 ```sh
 docker compose up --build -d
 docker compose ps
-docker compose logs --tail=100 aircooker
+docker compose logs --tail=100 mealf
 ```
 
 Docker builds the frontend automatically; Node is not a separate running service.
-Use service name `aircooker` for this route, rather than the preview's `mealf`.
+The Compose project names differ between source and preview deployments.
 The two Compose files create different named volumes. Do not switch between them
 expecting existing data to move automatically. See [Backup and recovery](Backup-and-Recovery).
 

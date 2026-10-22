@@ -75,7 +75,7 @@ export function MealRow({
           return;
         }
         e.dataTransfer.setData(
-          'application/aircooker-meal',
+          'application/mealf-meal',
           JSON.stringify({ id: item.entity.id, day: item.day }),
         );
         e.dataTransfer.effectAllowed = 'move';
@@ -469,7 +469,7 @@ export function Calendar({
   const drop = async (e: React.DragEvent, date: string, category: Category) => {
     e.preventDefault();
     try {
-      const value = JSON.parse(e.dataTransfer.getData('application/aircooker-meal'));
+      const value = JSON.parse(e.dataTransfer.getData('application/mealf-meal'));
       await move(value, date, category);
     } catch {
       setError(t('invalid'));
@@ -541,8 +541,7 @@ export function Calendar({
                 data-date={date}
                 data-category={category}
                 onDragOver={(e) => {
-                  if (e.dataTransfer.types.includes('application/aircooker-meal'))
-                    e.preventDefault();
+                  if (e.dataTransfer.types.includes('application/mealf-meal')) e.preventDefault();
                 }}
                 onDrop={(e) => void drop(e, date, category)}
               >

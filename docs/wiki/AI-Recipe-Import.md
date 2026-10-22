@@ -60,7 +60,7 @@ serving-default review warning for compatibility.
 ## Configure a provider
 
 Sign in to the PWA, open **Settings → AI recipe import**, and enable extraction. The
-administration console at `/` also provides the configuration under **Optional AI extraction**.
+administration console at `/admin/` also provides the configuration under **Optional AI extraction**.
 MealF currently uses its existing shared household account for administration; it does
 not introduce a new role or a public registration mechanism.
 
@@ -266,7 +266,7 @@ is a model/endpoint capability; leave its checkbox off when uncertain.
 
 ### New provider adapter
 
-The common interface in `src/aircooker/ai.py` is:
+The common interface in `src/mealf/ai.py` is:
 
 ```python
 class AIProvider(Protocol):

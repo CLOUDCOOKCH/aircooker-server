@@ -79,7 +79,7 @@ The PWA v1 scope is frozen; see [readiness and execution order](V1_READINESS.md)
 [machine-readable acceptance](release/v1-acceptance.json). No gate is marked passed
 without concrete evidence. A candidate is not a production claim.
 
-Prepare matching `pyproject.toml` and `src/aircooker/__init__.py` versions: PEP 440
+Prepare matching `pyproject.toml` and `src/mealf/__init__.py` versions: PEP 440
 `1.0.0rc1` for tag `v1.0.0-rc.1`, or `1.0.0` for `v1.0.0`. Beta/arbitrary suffixes,
 leading-zero versions and mismatched API/package versions are rejected. The full six-job
 main-branch CI matrix must pass on the exact tagged commit. That CI installs the OCR

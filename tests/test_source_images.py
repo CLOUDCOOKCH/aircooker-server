@@ -6,13 +6,13 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from aircooker.errors import DomainError
-from aircooker.importing import FetchedPage, extract, fetch_page, fetch_resource, public_addresses
-from aircooker.jobs import claim, finish
-from aircooker.media import normalise_image
-from aircooker.recipe_extraction import ExtractionResult
-from aircooker.retention import DAY, cleanup_database
-from aircooker.source_images import bounded_source_photo, image_candidates, source_photo
+from mealf.errors import DomainError
+from mealf.importing import FetchedPage, extract, fetch_page, fetch_resource, public_addresses
+from mealf.jobs import claim, finish
+from mealf.media import normalise_image
+from mealf.recipe_extraction import ExtractionResult
+from mealf.retention import DAY, cleanup_database
+from mealf.source_images import bounded_source_photo, image_candidates, source_photo
 
 
 def picture():
@@ -93,7 +93,7 @@ def test_photo_download_rejects_bad_first_candidate_and_strips_metadata(monkeypa
             raise DomainError("source_content_type_unsupported", 422)
         return picture(), "image/jpeg", url
 
-    monkeypatch.setattr("aircooker.source_images.fetch_resource", download)
+    monkeypatch.setattr("mealf.source_images.fetch_resource", download)
     data, width, height, origin = source_photo(page.url, page)
     assert len(calls) == 2 and origin.endswith("/dish.jpg") and (width, height) == (80, 60)
     with Image.open(io.BytesIO(data)) as image:
@@ -113,9 +113,7 @@ class Response:
 
 def transport(monkeypatch, responses):
     calls = []
-    monkeypatch.setattr(
-        "aircooker.importing.public_addresses", lambda host, port: ["93.184.216.34"]
-    )
+    monkeypatch.setattr("mealf.importing.public_addresses", lambda host, port: ["93.184.216.34"])
 
     class Connection:
         def __init__(self, host, address):
@@ -133,7 +131,7 @@ def transport(monkeypatch, responses):
         def close(self):
             pass
 
-    monkeypatch.setattr("aircooker.importing.PinnedHTTPS", Connection)
+    monkeypatch.setattr("mealf.importing.PinnedHTTPS", Connection)
     return calls
 
 
@@ -155,7 +153,7 @@ def test_redirected_page_carries_actual_base_for_relative_photos(monkeypatch):
 
 def test_image_redirect_to_private_or_mixed_dns_is_rejected_before_connection(monkeypatch):
     calls = transport(monkeypatch, [Response(302, {"Location": "https://127.0.0.1/secret"})])
-    monkeypatch.setattr("aircooker.importing.public_addresses", public_addresses)
+    monkeypatch.setattr("mealf.importing.public_addresses", public_addresses)
     monkeypatch.setattr(
         "socket.getaddrinfo",
         lambda host, *a, **kw: [
@@ -192,11 +190,9 @@ def test_source_photo_is_reviewed_saved_and_replay_safe(harness, mutation, monke
     use_ai = ai_state != "metadata"
     url = "https://example.org/recipes/soup/"
     content = '<meta property="og:image" content="photo.jpg">' if use_ai else metadata()
+    monkeypatch.setattr("mealf.app.bounded_fetch_page", lambda source: FetchedPage(content, url))
     monkeypatch.setattr(
-        "aircooker.app.bounded_fetch_page", lambda source: FetchedPage(content, url)
-    )
-    monkeypatch.setattr(
-        "aircooker.source_images.fetch_resource",
+        "mealf.source_images.fetch_resource",
         lambda *args: (picture(), "image/jpeg", url + "photo.jpg"),
     )
     calls = []
@@ -205,7 +201,7 @@ def test_source_photo_is_reviewed_saved_and_replay_safe(harness, mutation, monke
         calls.append((source, page.url))
         return source_photo(source, page)
 
-    monkeypatch.setattr("aircooker.app.bounded_source_photo", photo)
+    monkeypatch.setattr("mealf.app.bounded_source_photo", photo)
     if use_ai:
         client.put(
             "/api/v1/admin/ai",
@@ -229,7 +225,7 @@ def test_source_photo_is_reviewed_saved_and_replay_safe(harness, mutation, monke
             def close(self):
                 pass
 
-        monkeypatch.setattr("aircooker.app.provider_for", lambda config: Provider())
+        monkeypatch.setattr("mealf.app.provider_for", lambda config: Provider())
     queued = client.post(
         "/api/v1/imports", json={"source_url": url, "use_ai": use_ai, "consent_external_ai": use_ai}
     ).json()
@@ -273,9 +269,7 @@ def test_photo_failure_or_cancellation_does_not_save_a_recipe_or_orphan_media(
 ):
     client, app, _, _ = harness
     url = "https://example.org/recipe"
-    monkeypatch.setattr(
-        "aircooker.app.bounded_fetch_page", lambda source: FetchedPage(metadata(), url)
-    )
+    monkeypatch.setattr("mealf.app.bounded_fetch_page", lambda source: FetchedPage(metadata(), url))
     queued = client.post("/api/v1/imports", json={"source_url": url}).json()
 
     def photo(*args):
@@ -289,13 +283,13 @@ def test_photo_failure_or_cancellation_does_not_save_a_recipe_or_orphan_media(
         data, width, height = normalise_image(picture(), "image/jpeg")
         return data, width, height, url + "/photo.jpg"
 
-    monkeypatch.setattr("aircooker.app.bounded_source_photo", photo)
+    monkeypatch.setattr("mealf.app.bounded_source_photo", photo)
     if failure == "quota":
 
         def no_space(*args):
             raise DomainError("media_storage_limit", 409)
 
-        monkeypatch.setattr("aircooker.recipe_imports.insert_media", no_space)
+        monkeypatch.setattr("mealf.recipe_imports.insert_media", no_space)
     job = claim(app.state.database)
     app.state.process_job(job)
     finish(app.state.database, job)

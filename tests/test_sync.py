@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 def push(client, *mutations):

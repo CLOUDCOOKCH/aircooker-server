@@ -2,8 +2,8 @@ from datetime import date
 from decimal import Decimal
 from uuid import uuid4
 
-from aircooker.models import Ingredient, Meal, Recipe, Recurrence
-from aircooker.planning import occurrences, scaled, week_start
+from mealf.models import Ingredient, Meal, Recipe, Recurrence
+from mealf.planning import occurrences, scaled, week_start
 
 
 def test_range_and_non_numeric_scaling():

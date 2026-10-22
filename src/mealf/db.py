@@ -4,6 +4,8 @@ from contextlib import contextmanager
 from importlib.resources import files
 from pathlib import Path
 
+from .legacy import migrate_database
+
 
 class Database:
     def __init__(self, data_dir: Path):
@@ -16,12 +18,13 @@ class Database:
         self.root = data_dir
         for name in ("database", "media", "jobs", "backups", "config"):
             (data_dir / name).mkdir(parents=True, exist_ok=True, mode=0o700)
-        self.path = data_dir / "database" / "aircooker.sqlite3"
+        self.path = data_dir / "database" / "mealf.sqlite3"
+        migrate_database(self.path.parent)
         with self.connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
             db.execute("CREATE TABLE IF NOT EXISTS schema_migration(version TEXT PRIMARY KEY)")
             for migration in sorted(
-                files("aircooker").joinpath("migrations").iterdir(), key=lambda p: p.name
+                files("mealf").joinpath("migrations").iterdir(), key=lambda p: p.name
             ):
                 if migration.name.endswith(".sql"):
                     # Single application process; startup migrations still hold a write lock.

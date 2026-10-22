@@ -29,7 +29,7 @@ port/command/healthcheck settings. Never start a second backend against the same
 Never use `down -v` for an upgrade.
 
 For a source build, check out the intended revision, build it with `docker compose build`,
-then stop `aircooker` and use `docker compose up -d` in the same project. Review any
+then stop `mealf` and use `docker compose up -d` in the same project. Review any
 Compose changes rather than replacing the deployment's configuration blindly.
 
 ## Verify after the update
@@ -90,14 +90,14 @@ Current source includes these conservative windows:
 Inspect extra cleanup candidates locally:
 
 ```sh
-docker compose -f compose.preview.yaml exec mealf python -m aircooker.cli cleanup --dry-run
+docker compose -f compose.preview.yaml exec mealf python -m mealf.cli cleanup --dry-run
 ```
 
-Apply a bounded pass by removing `--dry-run`. For source builds use service `aircooker`
+Apply a bounded pass by removing `--dry-run`. For source builds use service `mealf`
 with the source Compose file. Output contains category counts. This is maintenance,
 not full household deletion or guaranteed forensic erasure. Backups and exports have
 their own operator-managed retention; the application does not delete them for you.
 
 Source: [deployment](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/DEPLOYMENT.md),
 [retention policy](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/RETENTION.md)
-and [retention implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/aircooker/retention.py).
+and [retention implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/mealf/retention.py).

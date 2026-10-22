@@ -12,7 +12,7 @@ FROM base AS builder
 WORKDIR /build
 COPY pyproject.toml requirements.lock ./
 COPY src ./src
-COPY --from=frontend /build/frontend/dist ./src/aircooker/web/pwa
+COPY --from=frontend /build/frontend/dist ./src/mealf/web/pwa
 RUN --mount=type=secret,id=proxy_ca \
     if [ -f /run/secrets/proxy_ca ]; then export PIP_CERT=/run/secrets/proxy_ca; fi; \
     python -m pip wheel --require-hashes --wheel-dir /wheels -r requirements.lock && \
@@ -21,12 +21,12 @@ FROM base AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DATA_DIR=/data LOG_LEVEL=info TRUSTED_PROXY_CIDRS=""
 RUN --mount=type=secret,id=proxy_ca,target=/etc/ssl/cert.pem \
     apk add --no-cache bash=5.3.9-r1 tesseract-ocr=5.5.2-r0 tesseract-ocr-data-eng=5.5.2-r0 tesseract-ocr-data-deu=5.5.2-r0
-RUN addgroup -g 10001 aircooker && adduser -u 10001 -G aircooker -D -H aircooker && mkdir /data && chown 10001:10001 /data
+RUN addgroup -g 10001 mealf && adduser -u 10001 -G mealf -D -H mealf && mkdir /data && chown 10001:10001 /data
 COPY --from=builder /wheels /wheels
-RUN pip install --no-cache-dir --no-index --find-links=/wheels aircooker-server && rm -rf /wheels
+RUN pip install --no-cache-dir --no-index --find-links=/wheels mealf-server && rm -rf /wheels
 WORKDIR /app
 USER 10001:10001
 VOLUME ["/data"]
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/v1/system/health', timeout=3)"]
-CMD ["python", "-m", "aircooker"]
+CMD ["python", "-m", "mealf"]

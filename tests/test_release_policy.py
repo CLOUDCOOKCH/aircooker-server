@@ -38,9 +38,9 @@ def test_invalid_or_ambiguous_tags_never_select_a_release_channel(policy, tag):
 def test_rc_and_stable_have_distinct_versions_and_channel_decisions(policy, tmp_path):
     assert policy.release_version("v1.0.0-rc.2") == ("1.0.0rc2", True)
     assert policy.release_version("v1.0.0") == ("1.0.0", False)
-    (tmp_path / "src/aircooker").mkdir(parents=True)
+    (tmp_path / "src/mealf").mkdir(parents=True)
     (tmp_path / "pyproject.toml").write_text('[project]\nversion="1.0.0rc2"\n')
-    (tmp_path / "src/aircooker/__init__.py").write_text('__version__ = "1.0.0rc2"\n')
+    (tmp_path / "src/mealf/__init__.py").write_text('__version__ = "1.0.0rc2"\n')
     assert policy.validate_metadata(tmp_path, "v1.0.0-rc.2")
     with pytest.raises(ValueError, match="must match"):
         policy.validate_metadata(tmp_path, "v1.0.0")

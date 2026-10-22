@@ -13,7 +13,7 @@ compared/replaced; late network responses cannot undo disconnection. The receipt
 outlives session cleanup to prevent cross-session import replay. No released migration or
 existing sync history is rewritten. See [ADR 015](adr/015-personal-chatgpt.md).
 
-Schema is executable in `src/aircooker/migrations`. Migrations run once in a locked startup
+Schema is executable in `src/mealf/migrations`. Migrations run once in a locked startup
 transaction, tracked by filename. Released migrations must never be edited in place.
 
 | Table | Responsibility and invariants |

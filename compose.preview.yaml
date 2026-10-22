@@ -1,7 +1,7 @@
 name: mealf-preview
 services:
   mealf:
-    image: ${MEALF_IMAGE:-ghcr.io/cloudcookch/mealf-server:poc-20261022.4}
+    image: ${MEALF_IMAGE:-ghcr.io/cloudcookch/mealf-server:poc-20261022.5}
     restart: unless-stopped
     ports:
       - "127.0.0.1:8080:8080"

@@ -1,7 +1,8 @@
 # mealf server
 
-Formerly aircooker. The product name is **mealf**. Existing repository/package identifiers
-remain compatible; see [branding and migration](docs/BRANDING.md).
+**Mealf** is the product and package name. The administration console is at `/admin/`,
+the PWA at `/app/`, and `/` is reserved for a separately hosted landing page.
+Existing volumes and offline work are preserved; see [upgrade compatibility](docs/MEALF_MIGRATION.md).
 
 **PWA-first delivery.** Open `/app/` on the configured HTTPS backend to use the primary
 installable browser application. Home, Calendar, Recipes, Pantry, Settings, offline editing,
@@ -58,7 +59,7 @@ pip install --require-hashes -r requirements-dev.lock
 pip install --no-deps -e .
 export DATA_DIR="$PWD/data"
 export BASE_URL=https://localhost
-python -m aircooker
+python -m mealf
 ```
 
 The API binds port 8080. Use an HTTPS reverse proxy for browser login (cookies are always
@@ -71,7 +72,7 @@ this operator-requested bootstrap log entry.
 python -m pytest -q
 python -m ruff check src tests scripts
 python -m ruff format --check src tests scripts
-python -m mypy src/aircooker --ignore-missing-imports
+python -m mypy src/mealf --ignore-missing-imports
 PYTHONPATH=src python scripts/export_contract.py --check
 ```
 
@@ -83,10 +84,10 @@ The source-build development path remains:
 
 ```sh
 docker compose up --build -d
-docker compose logs aircooker
+docker compose logs mealf
 ```
 
-Open the configured HTTPS public URL and complete setup. The username and password must be
+Open `/admin/` on the configured HTTPS origin and complete setup. The username and password must be
 chosen by the administrator. There is no default account and no public registration after
 setup. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYMENT.md),
 [security](docs/SECURITY_MODEL.md), [backup](docs/BACKUP.md), [API](docs/API.md) and
@@ -95,9 +96,10 @@ setup. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYME
 ## Repositories
 
 This folder is the root of the independent
-[`CLOUDCOOKCH/aircooker-server`](https://github.com/CLOUDCOOKCH/aircooker-server) repository.
-[`aircooker-ios`](https://github.com/CLOUDCOOKCH/aircooker-ios) is a separate companion,
-not a package or submodule of this repository. Both development histories are published.
+[`mealf-server`](https://github.com/CLOUDCOOKCH/aircooker-server) repository.
+[`mealf-ios`](https://github.com/CLOUDCOOKCH/aircooker-ios) is a separate companion,
+not a package or submodule of this repository. Both development histories are published. Their actual remote names remain unchanged
+until the owner renames them in GitHub Settings.
 The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy and SHA-256.
 
 ## Feature status

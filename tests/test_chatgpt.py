@@ -11,8 +11,8 @@ import jwt
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from aircooker.chatgpt_protocol import AUTHORIZE, DISCOVERY, ISSUER, JWKS, RESOURCE, SCOPES, TOKEN
-from aircooker.jobs import claim, finish
+from mealf.chatgpt_protocol import AUTHORIZE, DISCOVERY, ISSUER, JWKS, RESOURCE, SCOPES, TOKEN
+from mealf.jobs import claim, finish
 
 PREFIX = "/api/v1/integrations/chatgpt"
 
@@ -356,7 +356,7 @@ def test_refresh_rotation_is_serialized_and_persists_across_service_restart(harn
         thread.join(timeout=10)
         assert not thread.is_alive()
     assert len(results) == 2 and results[0] == results[1] and provider.refreshes == 1
-    from aircooker.chatgpt import ChatGPTConnections
+    from mealf.chatgpt import ChatGPTConnections
 
     restarted = ChatGPTConnections(app.state.database, app.state.chatgpt.protocol)
     assert restarted.token(str(tokens["session_id"]), cid) == results[0]
@@ -424,7 +424,7 @@ def test_pairing_expiry_cancel_and_helper_download(harness, provider):
 
 
 def test_retention_clears_revoked_credentials_and_expired_pairings(harness, provider):
-    from aircooker.retention import cleanup_database
+    from mealf.retention import cleanup_database
 
     client, app, _, tokens = harness
     connected(harness, provider)

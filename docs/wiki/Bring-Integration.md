@@ -11,7 +11,7 @@ after a calendar change has synchronised to the backend.
 
 ## Connect an account and list
 
-1. Sign in to the administration console at `/` and open **Bring!**.
+1. Sign in to the administration console at `/admin/` and open **Bring!**.
 2. Enter the Bring! account credentials and save them. Saving alone does not verify login.
 3. Connect/retrieve the available existing lists.
 4. Select a list returned for that account and save the selection.

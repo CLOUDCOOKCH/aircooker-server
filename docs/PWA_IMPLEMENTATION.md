@@ -7,7 +7,7 @@ client, not a declaration that the entire project or release checklist is finish
 
 ## Implemented and tested
 
-- Same-container `/app/` client and focused original administration console at `/`.
+- Same-container `/app/` client and focused original administration console at `/admin/`.
 - Onboarding/setup, one-time administrator token, isolated Secure/HttpOnly rotating browser
   credentials, CSRF/origin checks and independent device sessions. No JS-stored auth secrets.
 - Home, Calendar, Recipes, Pantry and Settings in the approved food/glass direction. Native

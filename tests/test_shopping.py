@@ -7,15 +7,15 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from aircooker.bring import Capabilities, Item, reconcile
-from aircooker.bring_runtime import UnofficialBringConnector
-from aircooker.bring_verification import verify
-from aircooker.db import Database
-from aircooker.errors import DomainError
-from aircooker.jobs import claim, finish
-from aircooker.planning import week_start
-from aircooker.secrets import SecretVault
-from aircooker.shopping import BringVerification, configuration_hash, request_verification, snapshot
+from mealf.bring import Capabilities, Item, reconcile
+from mealf.bring_runtime import UnofficialBringConnector
+from mealf.bring_verification import verify
+from mealf.db import Database
+from mealf.errors import DomainError
+from mealf.jobs import claim, finish
+from mealf.planning import week_start
+from mealf.secrets import SecretVault
+from mealf.shopping import BringVerification, configuration_hash, request_verification, snapshot
 
 
 class Connector:

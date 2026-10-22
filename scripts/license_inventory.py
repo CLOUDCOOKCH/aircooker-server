@@ -19,11 +19,11 @@ def supplemental_notice(name: str, version: str, expression: str):
         return []
     if entry["version"] != version or entry["license_expression"] != expression:
         raise SystemExit("Supplemental attribution version/licence mismatch: " + name)
-    content = importlib.resources.files("aircooker").joinpath(entry["resource"]).read_bytes()
+    content = importlib.resources.files("mealf").joinpath(entry["resource"]).read_bytes()
     digest = hashlib.sha256(content).hexdigest()
     if digest != entry["sha256"] or not content:
         raise SystemExit("Supplemental attribution checksum mismatch: " + name)
-    return [{"path": "aircooker:" + entry["resource"], "sha256": digest}]
+    return [{"path": "mealf:" + entry["resource"], "sha256": digest}]
 
 
 def inventory(lock: Path) -> dict:
@@ -69,7 +69,7 @@ def inventory(lock: Path) -> dict:
             }
         )
     return {
-        "format": "aircooker-runtime-wheel-licenses",
+        "format": "mealf-runtime-wheel-licenses",
         "version": 1,
         "lock_sha256": hashlib.sha256(lock.read_bytes()).hexdigest(),
         "scope": "Installed Python runtime wheels and explicitly pinned app-shipped supplemental notices; not OS or native-library clearance",

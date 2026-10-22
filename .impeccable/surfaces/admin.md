@@ -1,6 +1,6 @@
 # mealf administration surface
 
-Mode: Operate. The user explicitly requested the approved Mealf palette and cheeky food voice across the whole administration console and PWA on 2026-10-21. Preserve the self-hosted administration purpose, existing secured workflows and all API/session/storage identities. The independent native app remains untouched for later.
+Mode: Operate. The user explicitly requested the approved Mealf palette and cheeky food voice across the whole administration console and PWA on 2026-10-21. Preserve the self-hosted administration purpose and existing secured workflows. Current product/package names use Mealf; explicit compatibility reads preserve existing volumes, sessions/cookies, browser databases, offline work and backups while current writes use Mealf names. Keep the `/api/v1/` contract and stable household/device/mutation identities; see [migration behavior](../../docs/MEALF_MIGRATION.md). The independent native app remains separate for later.
 
 Visual authority: [PRODUCT.md](../../PRODUCT.md), [DESIGN.md](../../DESIGN.md), the supplied original peach/wordmark and the implemented PWA glass/system-type vocabulary. Earlier green screenshots are historical references. Cream/coral/peach light and cocoa/peach dark colours now come from the exact shared `/app/theme.css` export. `console.css` aliases canvas/ink/surface/line/accent-soft; it does not maintain a second colour system. Raspberry danger roles remain separate.
 
@@ -27,3 +27,28 @@ requested a fixed dark-romance palette (After Dark: ink/oxblood/rose/gold) and a
 light palette (Sunday: linen/sage). Both use the same shared semantic tokens and original
 art, with native field colour schemes. Browser-local choice covers PWA/console and
 persists offline; no API/storage identity change. See docs/THEMES.md and DESIGN.md.
+
+Administration-route refinement, 2026-10-22: the console, login and setup now live at
+`/admin/`; `/admin` redirects there with status 307. Console assets are
+`/admin/console.js` and `/admin/console.css`, and the wordmark returns to `/admin/`.
+Settings opens `/admin/`; Bring! administration links open `/admin/#bring`. The meal
+planner remains at `/app/` and API operations at `/api/v1/`. The backend returns 404 at
+`/` without a redirect or landing mockup; that path is reserved for the user's separately
+hosted landing page. Shared brand, theme and peach assets continue under `/app/`.
+Active identity is Mealf. Previous-name reads are deliberate upgrade compatibility.
+Valid GitHub URLs remain until the owner renames the remotes; immutable migration/release
+history and historical evidence retain their original identifiers.
+
+This refinement preserves original peach/wordmark bytes, system typography, glass
+navigation, Flo/After Dark/Sunday palettes and literal secured workflows; it introduces
+no visual-system tokens. The [routing finish review](../../docs/validation/mealf-admin-routing-review.md)
+records **ship within the reviewed name, routing and incumbent-preservation scope**,
+with zero material findings. Genuine current [desktop login](../../docs/screenshots/mealf-routing-admin-login-desktop.png)
+and [German dark phone login](../../docs/screenshots/mealf-routing-admin-login-phone-de-dark.png) captures, plus connected
+overview captures at `build/admin-routing-browser/admin-desktop.png` and
+`admin-mobile-de.png`, are evidence for that bounded review. The implementation handoff
+reports passing synthetic browser-console workflows and root/old-root-asset 404 assertions.
+This documentation pass inspected sources and supplied login captures; it did not rerun
+browser or device checks. Launcher/detector/schema passes remain unavailable or unperformed;
+physical iPhone/Safari, screen-reader delivery and live external integrations remain
+unverified. The route refinement does not establish complete-product acceptance.
