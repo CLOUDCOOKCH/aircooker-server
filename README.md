@@ -5,7 +5,7 @@ the PWA at `/app/`, and `/` is reserved for a separately hosted landing page.
 Existing volumes and offline work are preserved; see [upgrade compatibility](docs/MEALF_MIGRATION.md).
 
 **PWA-first delivery.** Open `/app/` on the configured HTTPS backend to use the primary
-installable browser application. Home, Calendar, Recipes, Pantry, Settings, offline editing,
+installable browser application. Home, Calendar, Recipes, Pantry, Shopping list, Settings, offline editing,
 reviewed imports and two-device synchronisation have real Chromium acceptance coverage.
 The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
 and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md). Choose Flo, After Dark or
@@ -21,7 +21,7 @@ Recipes without a usable picture show the original Mealf peach. URL imports, inc
 AI-assisted imports, try source recipe/preview images and retain them through review and
 offline viewing. See [recipe photos and limits](docs/RECIPE_PHOTOS.md).
 
-Open **Calendar → Shopping list** to inspect current-week quantities, Bring! item states
+Open **Shopping list** in the main navigation to inspect current-week quantities, Bring! item states
 and failures, and use **Sync to Bring!**. See [shopping and safe verification](docs/SHOPPING.md).
 
 Self-hosted household meal planning with a primary PWA and a retained native companion.

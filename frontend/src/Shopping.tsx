@@ -15,7 +15,7 @@ const itemLabels: Record<string, Key> = {
   removed_by_user: 'shoppingRemoved',
   manual: 'shoppingManual',
 };
-export function Shopping({ back }: { back: () => void }) {
+export function Shopping() {
   const app = useApp(),
     { t } = app;
   const [data, setData] = useState<ShoppingSnapshot | null>(null);
@@ -126,7 +126,6 @@ export function Shopping({ back }: { back: () => void }) {
     <div className="shopping-page">
       <PageHeader
         title={t('shoppingTitle')}
-        back={back}
         subtitle={
           data
             ? `${displayDate(data.period, app.language)} – ${displayDate(addDays(data.period, 6), app.language)}`

@@ -1,7 +1,8 @@
 # Shopping requirements and manual Bring! sync
 
-Open **Calendar → Shopping list**, the Shopping list row on Home, or
-**Settings → Bring! → Shopping list**. This is a read-only view of mealf's calculated
+Open **Shopping list** in the desktop sidebar or **Shop** (**Einkauf** in German) in
+the mobile navigation. Shortcuts on Home, Calendar and **Settings → Bring! → Shopping list**
+open the same destination. This is a read-only view of mealf's calculated
 requirements; the actual shopping experience remains inside Bring!.
 
 The view shows the current household-local Monday–Sunday period, scaled/combined

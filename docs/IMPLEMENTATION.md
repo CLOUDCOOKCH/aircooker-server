@@ -1,5 +1,13 @@
 # Implementation checklist and evidence
 
+**Shopping navigation, 2026-10-22 — implemented locally:** Shopping list is the sixth
+primary PWA destination on desktop/mobile. Existing shortcuts select the same tab.
+English/German labels, keyboard activation, one current destination, 320px target/label
+bounds, manual sync/manual-item preservation and cached offline reopening pass real
+Chromium checks with a synthetic Bring transport. Local validation passes 392 backend
+and 59 frontend tests, build/type/format, Ruff/mypy/OpenAPI and mobile layout checks.
+Exact-source CI, preview publication and physical iPhone checks remain pending.
+
 **Recipe photos — published and verified in `poc-20261022.4`:** the original peach fills
 missing/unreadable recipe pictures across the PWA. Public URL imports try source metadata
 images through bounded pinned-HTTPS fetching, store a local sanitized image and retain

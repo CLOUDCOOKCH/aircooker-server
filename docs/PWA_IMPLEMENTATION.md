@@ -10,7 +10,7 @@ client, not a declaration that the entire project or release checklist is finish
 - Same-container `/app/` client and focused original administration console at `/admin/`.
 - Onboarding/setup, one-time administrator token, isolated Secure/HttpOnly rotating browser
   credentials, CSRF/origin checks and independent device sessions. No JS-stored auth secrets.
-- Home, Calendar, Recipes, Pantry and Settings in the approved food/glass direction. Native
+- Home, Calendar, Recipes, Pantry, Shopping list and Settings in the approved food/glass direction. Native
   code and original artwork retained independently; explicit demo never touches household APIs.
 - Recipe editor/detail, searchable library, draft persistence, selected photos, fractions/
   decimals/ranges, proportional ingredient scaling, original source/provenance/notes/rating,
