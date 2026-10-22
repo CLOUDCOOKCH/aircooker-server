@@ -65,9 +65,14 @@ jobs:
             build/runtime-licenses.json
   browser:
     runs-on: ubuntu-24.04
-    # Include the separately bounded 10-minute WebKit/dependency installation in
-    # addition to both engines' full workflows; a slow mirror must not cancel
-    # otherwise passing application checks before that installation can finish.
+    # Match requirements-browser.lock. The official test image already contains
+    # both browser engines and their system libraries; no per-run WebKit apt
+    # download is needed. This container never becomes the production image.
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.62.0-noble@sha256:aa81288e738725378becba5b3e06cb0f3a7f012a610e87e8d767a090ea3f740d
+      options: --shm-size=1g
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -77,6 +82,20 @@ jobs:
       - run: |
           python -m pip install --require-hashes -r requirements-browser.lock
           python -m pip install --no-deps -e .
+      - name: Verify pinned browser engines and expose Chromium to smoke scripts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from importlib.metadata import version
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+
+          assert version("playwright") == "1.62.0", "Update the CI image with the browser lock"
+          with sync_playwright() as browsers:
+              for engine in (browsers.chromium, browsers.webkit):
+                  assert Path(engine.executable_path).is_file(), engine.executable_path
+              Path("/usr/local/bin/chromium").symlink_to(browsers.chromium.executable_path)
+          PY
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
@@ -84,7 +103,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm --prefix frontend ci --ignore-scripts --no-fund
       - run: npm --prefix frontend run build
-      - run: sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu
+      - run: apt-get update -qq && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu
       - name: Exercise PWA offline and device workflows in installed Chrome
         env:
           MEALF_SCREENSHOT_DIR: build/pwa-browser
@@ -122,12 +141,11 @@ jobs:
           python scripts/pwa_layout_smoke.py
           python scripts/theme_browser_smoke.py
           python scripts/image_import_browser_smoke.py
-          timeout 600s python -m playwright install --with-deps webkit
           MEALF_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
           MEALF_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
           python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
-          sudo install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
-          sudo update-ca-certificates
+          install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
+          update-ca-certificates
           timeout 180s env PYTHONUNBUFFERED=1 MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" MEALF_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
