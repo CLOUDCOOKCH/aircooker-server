@@ -12,7 +12,7 @@ references apply to the conversation only; preserve the approved decisions, not 
 
 First viewport: Your kitchen heading and compact import/create actions, household civil-week
 strip, today's actual meals with one strong food photo when present, accessible empty-slot
-actions and visible offline/demo status. Bottom glass five-destination navigation on phones;
+actions and visible offline/demo status. Bottom glass six-destination navigation on phones;
 adapt content density and navigation on desktop. Existing account data never gains samples.
 
 Current colour: cream/coral/peach light appearance and cocoa/peach dark appearance, with separate raspberry danger roles and warm food photography. Follow system appearance. System UI typography is intentional continuity with
@@ -182,7 +182,7 @@ CI/device evidence remain unverified here. Historical design-document drift rema
 preserved. This is an established task-flow extension without a new approved comp,
 seed or design card, and does not declare production acceptance or a security audit.
 
-Shopping extension, 2026-10-22: Home, Calendar and Settings open one Shopping task page
+Historical Shopping extension before primary navigation, 2026-10-22: Home, Calendar and Settings open one Shopping task page
 within the existing five-destination shell. Preserve original artwork, system type,
 Flo/After Dark/Sunday theme roles, solid reading surfaces and glass navigation. Lead
 with the current household Monday–Sunday requirements and a prominent manual Bring!
@@ -235,3 +235,35 @@ exact-source CI and publication remain outside this record. Original artwork, PR
 DESIGN.md/design.json and native code are preserved; historical mobile-calendar/theme-library
 drift is acknowledged without repair. This is an ordinary extension, not whole-product or
 security acceptance, and this documentation handoff reran no tests/browser checks.
+
+Shopping navigation refinement, 2026-10-22: the user requested the shopping list as a
+menu point. The primary shell now has six destinations in this order: Home, Calendar,
+Recipes, Pantry, Shopping list and Settings. Shopping uses the existing bag icon,
+accent-soft current-state treatment and full localized accessible name. Desktop shows
+“Shopping list” / “Einkaufsliste”; phone navigation shows “Shop” / “Einkauf” and retains
+“Settings” / “Optionen”. Home, Calendar and Settings shortcuts select this same primary
+tab. Shopping has no subordinate Back action. Keep the existing current-week page,
+manual Bring! consent/sync/ownership behavior, cached offline state, original PNGs,
+system type, Flo/After Dark/Sunday roles and glass material. `/app/` and `/admin/`
+locations and administration behavior are unchanged.
+
+At the existing phone/short-touch-landscape breakpoint, six equal-flex controls have
+44px minimum widths, 55px minimum heights, 2px gaps and compact single-line labels.
+The glass container reserves safe-area edges and uses
+`min(520px, calc(100vw - 24px - var(--safe-left) - var(--safe-right)))`.
+At widths up to 360px it uses `calc(100vw - 16px - var(--safe-left) - var(--safe-right))`,
+6px vertical/4px horizontal container padding, zero item gaps and zero button inline
+padding; the minimum target sizes remain in force so labels fit at 320px.
+The [bounded navigation review](../../docs/validation/shopping-navigation-ui-review.md)
+records **ship within this navigation change**, with no material findings. The fresh
+reviewer inspected all five genuine Chromium captures and source/semantic/320px
+evidence; this documenter separately opened those captures and inspected final sources.
+Supplied local evidence passes 392 backend/59 frontend tests, lint/type/format/build/
+contract checks, real Chromium Shopping verification/failure/success/manual-item/
+offline flows and mobile layout checks. Bring transport is synthetic. This documentation
+handoff reran no tests or browser checks and claims no unavailable launcher/detector
+pass. Physical iPhone/Safari and live Bring! remain unverified; exact-source CI and
+publication are pending at this handoff. DESIGN.md/design.json remain preserved;
+their historical five-destination, layout and system-only-appearance statements are
+snapshot drift, not instructions to undo this ordinary refinement. No new visual world,
+approved comp or whole-product/security acceptance is asserted.
