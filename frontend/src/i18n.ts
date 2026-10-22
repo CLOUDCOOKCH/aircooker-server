@@ -207,6 +207,8 @@ export const en = {
   sync: 'Sync now',
   retry: 'Try again',
   syncError: 'Your changes are safe on this device. Reconnect or sign in to sync them.',
+  serverStorageError:
+    'Your server cannot write data. Your pending changes remain on this device. Ask your administrator to check storage space and the database limit, then retry.',
   signInAgain: 'Sign in again',
   saved: 'Saved on this device',
   demo: 'Demo kitchen',
@@ -661,6 +663,8 @@ export const de: Record<Key, string> = {
   retry: 'Erneut versuchen',
   syncError:
     'Deine Änderungen sind auf diesem Gerät sicher. Verbinde dich oder melde dich zum Synchronisieren an.',
+  serverStorageError:
+    'Dein Server kann keine Daten speichern. Ausstehende Änderungen bleiben auf diesem Gerät. Lass freien Speicher und das Datenbanklimit prüfen und versuche es erneut.',
   signInAgain: 'Erneut anmelden',
   saved: 'Auf diesem Gerät gespeichert',
   demo: 'Demo-Küche',

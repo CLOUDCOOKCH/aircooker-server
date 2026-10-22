@@ -5,6 +5,7 @@ import logging
 import os
 import secrets
 import shutil
+import sqlite3
 import tempfile
 import time
 from contextlib import asynccontextmanager, suppress
@@ -61,6 +62,7 @@ from .image_import import ocr_available, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
 from .import_sources import ImportSourceInfo, put_source
 from .importing import bounded_fetch_html, extract, platform_for
+from .instance_lock import InstanceLock
 from .jobs import claim, enqueue, finish
 from .media import MAX_UPLOAD_BYTES, MediaInfo, info_for, put_media
 from .models import (
@@ -107,6 +109,21 @@ bearer = HTTPBearer(auto_error=False)
 
 
 def create_app(data_dir: Path | None = None, run_worker: bool = True):
+    data_dir = data_dir or Path(os.environ.get("DATA_DIR", "/data"))
+    lease = InstanceLock(data_dir) if run_worker else None
+    try:
+        if (data_dir / ".household-deletion.json").exists():
+            raise RuntimeError(
+                "Household deletion is incomplete; resume the offline deletion command"
+            )
+        return _create_app(data_dir, run_worker, lease)
+    except BaseException:
+        if lease:
+            lease.close()
+        raise
+
+
+def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
     data_dir = data_dir or Path(os.environ.get("DATA_DIR", "/data"))
     database = Database(data_dir)
     cleanup_startup_transfers(data_dir)
@@ -160,42 +177,67 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             return
         raise DomainError("unknown_job_kind")
 
+    async def durable_work(function, *args, **kwargs):
+        # Cancelling to_thread does not stop its thread. Keep the volume lease
+        # until in-flight maintenance/job writes have actually finished.
+        task = asyncio.create_task(asyncio.to_thread(function, *args, **kwargs))
+        try:
+            return await asyncio.shield(task)
+        except asyncio.CancelledError:
+            with suppress(Exception):
+                await task
+            raise
+
     async def worker():
         last_periodic = 0.0
         last_cleanup = -3600.0
         while True:
-            if time.monotonic() - last_cleanup >= 3600:
-                try:
-                    counts = await asyncio.to_thread(cleanup_database, database)
-                    if any(counts.values()):
-                        logging.getLogger(__name__).info(
-                            json.dumps({"event": "maintenance_cleanup", "counts": counts})
+            try:
+                if time.monotonic() - last_cleanup >= 3600:
+                    try:
+                        counts = await durable_work(cleanup_database, database)
+                        if any(counts.values()):
+                            logging.getLogger(__name__).info(
+                                json.dumps({"event": "maintenance_cleanup", "counts": counts})
+                            )
+                    except Exception:
+                        logging.getLogger(__name__).warning(
+                            '{"event":"maintenance_cleanup_failed"}'
                         )
-                except Exception:
-                    logging.getLogger(__name__).warning('{"event":"maintenance_cleanup_failed"}')
-                last_cleanup = time.monotonic()
-            if time.monotonic() - last_periodic > 60:
-                await asyncio.to_thread(reminders.enqueue_due)
-                with database.transaction() as db:
-                    prior = db.execute(
-                        "SELECT state FROM background_job WHERE dedupe_key='shopping.current'"
-                    ).fetchone()
-                    if prior is None or prior[0] == "done":
-                        enqueue(db, "shopping.reconcile", "shopping.current", {})
-                last_periodic = time.monotonic()
-            job = await asyncio.to_thread(claim, database)
-            if job:
-                try:
-                    await asyncio.to_thread(process_job, job)
-                except Exception as exc:
-                    code = exc.code if isinstance(exc, DomainError) else "job_processing_failed"
-                    await asyncio.to_thread(
-                        finish, database, job, code, retry_after=getattr(exc, "retry_after", None)
-                    )
+                    last_cleanup = time.monotonic()
+                if time.monotonic() - last_periodic > 60:
+                    await durable_work(reminders.enqueue_due)
+                    with database.transaction() as db:
+                        prior = db.execute(
+                            "SELECT state FROM background_job WHERE dedupe_key='shopping.current'"
+                        ).fetchone()
+                        if prior is None or prior[0] == "done":
+                            enqueue(db, "shopping.reconcile", "shopping.current", {})
+                    last_periodic = time.monotonic()
+                job = await durable_work(claim, database)
+                if job:
+                    try:
+                        await durable_work(process_job, job)
+                    except Exception as exc:
+                        code = exc.code if isinstance(exc, DomainError) else "job_processing_failed"
+                        await durable_work(
+                            finish,
+                            database,
+                            job,
+                            code,
+                            retry_after=getattr(exc, "retry_after", None),
+                        )
+                    else:
+                        await durable_work(finish, database, job)
                 else:
-                    await asyncio.to_thread(finish, database, job)
-            else:
-                await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.5)
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                # Storage/transient failures during claim or finish must not kill
+                # the only durable worker. Running leases remain replayable.
+                logging.getLogger(__name__).warning('{"event":"worker_retry"}')
+                await asyncio.sleep(2)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -221,11 +263,15 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                             flush=True,
                         )
         task = asyncio.create_task(worker()) if run_worker else None
-        yield
-        if task:
-            task.cancel()
-            with suppress(asyncio.CancelledError):
-                await task
+        try:
+            yield
+        finally:
+            if task:
+                task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await task
+            if lease:
+                lease.close()
 
     app = FastAPI(
         title="mealf server",
@@ -241,6 +287,19 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     @app.exception_handler(DomainError)
     async def domain_error(request, exc):
         return JSONResponse({"error": {"code": exc.code}}, status_code=exc.status)
+
+    @app.exception_handler(sqlite3.OperationalError)
+    async def storage_error(request, exc):
+        # A failed transaction keeps the client's mutation pending. Never echo SQL,
+        # household content or paths, including on a physically full data volume.
+        unavailable = getattr(exc, "sqlite_errorcode", 0) & 0xFF in {
+            sqlite3.SQLITE_FULL,
+            sqlite3.SQLITE_IOERR,
+            sqlite3.SQLITE_CANTOPEN,
+        }
+        code = "storage_unavailable" if unavailable else "database_operation_failed"
+        logging.getLogger(__name__).warning(json.dumps({"event": code}))
+        return JSONResponse({"error": {"code": code}}, status_code=503 if unavailable else 500)
 
     @app.exception_handler(RequestValidationError)
     @app.exception_handler(ValidationError)
@@ -735,9 +794,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
             if not allowed:
                 raise DomainError("import_rate_limited", 429)
             raw = await file.read(MAX_UPLOAD_BYTES + 1)
-            return await asyncio.to_thread(
-                put_source, database, source_id, raw, file.content_type or ""
-            )
+            return await durable_work(put_source, database, source_id, raw, file.content_type or "")
         finally:
             await file.close()
 
@@ -1012,9 +1069,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     async def upload_photo(image_id: UUID, file: UploadFile = File(...), s=Depends(session)):
         try:
             raw = await file.read(MAX_UPLOAD_BYTES + 1)
-            return await asyncio.to_thread(
-                put_media, database, image_id, raw, file.content_type or ""
-            )
+            return await durable_work(put_media, database, image_id, raw, file.content_type or "")
         finally:
             await file.close()
 
@@ -1055,7 +1110,7 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
     )
     async def download_archive(s=Depends(session)):
         async with archive_slots:
-            path = await asyncio.to_thread(export_archive, database)
+            path = await durable_work(export_archive, database)
         return FileResponse(
             path,
             media_type="application/zip",
@@ -1088,8 +1143,8 @@ def create_app(data_dir: Path | None = None, run_worker: bool = True):
                     count += len(chunk)
                     if count > MAX_ARCHIVE:
                         raise DomainError("archive_size_limit", 413)
-                    await asyncio.to_thread(output.write, chunk)
-            return await asyncio.to_thread(import_archive, database, path, s["device_id"])
+                    await durable_work(output.write, chunk)
+            return await durable_work(import_archive, database, path, s["device_id"])
         finally:
             if path:
                 path.unlink(missing_ok=True)

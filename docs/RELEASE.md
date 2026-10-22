@@ -73,6 +73,43 @@ See [exact source, images, jobs and limits](validation/github-preview-retry.json
 
 ## Stable releases
 
+### Current candidate/stable policy
+
+The PWA v1 scope is frozen; see [readiness and execution order](V1_READINESS.md) and
+[machine-readable acceptance](release/v1-acceptance.json). No gate is marked passed
+without concrete evidence. A candidate is not a production claim.
+
+Prepare matching `pyproject.toml` and `src/aircooker/__init__.py` versions: PEP 440
+`1.0.0rc1` for tag `v1.0.0-rc.1`, or `1.0.0` for `v1.0.0`. Beta/arbitrary suffixes,
+leading-zero versions and mismatched API/package versions are rejected. The full six-job
+main-branch CI matrix must pass on the exact tagged commit. That CI installs the OCR
+language packages before the tests; the release gate does not run an incomplete substitute.
+
+Both native architectures are rebuilt, freshly scanned without HIGH/CRITICAL suppressions,
+and exercised with the existing Docker persistence/restore smoke. The verified images are
+saved and only those bytes are pushed to `ghcr.io/cloudcookch/mealf-server`; publication
+does not rebuild them. SBOMs and provenance accompany the image. `compose.release.yaml`
+pins its default to the actual published manifest digest and retains the existing Compose
+project/volume settings. Existing operators should update their own image reference while
+retaining their volume, ingress and custom port/command/healthcheck (including 5152:5152).
+
+RC publication uses the `release-candidate` GitHub environment and moving `:rc` channel;
+GitHub releases remain prereleases. Stable uses the separately protected `release`
+environment and `:latest-stable`. Configure required reviewers and restricted tag policy
+in repository settings before using it. The stable environment must additionally contain
+`RELEASE_ACCEPTANCE_VERIFIED=true`, and all 14 evidence-backed gates must be passed in the
+version-matching acceptance JSON. The variable alone cannot bypass open gates.
+
+Completed matching releases are successful no-ops on retry. A partially pushed version
+without a completed matching release is never overwritten: inspect the failure and use a
+fresh version. Authentication/rate-limit/network errors do not make a release tag free.
+These rules have synthetic regression coverage; the first real RC and stable protected
+environment rehearsal remains a release gate. Workflow code is not proof of configured
+GitHub environment protection or successful live distribution.
+
+The following early release notes are historical; the executable policy above supersedes
+their old release-workflow description.
+
 Both repositories and their first CI runs are published. Configure private vulnerability
 reporting and a protected `release` environment before publishing. CI runs locked tests,
 format/type checks, OpenAPI drift, Docker E2E, pip-audit, redacted Gitleaks and Trivy.

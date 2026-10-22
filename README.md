@@ -17,6 +17,10 @@ Self-hosted household meal planning with a primary PWA and a retained native com
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
 
+**PWA v1 scope is frozen.** Production readiness, remaining engineering work and the
+physical-device/live-service acceptance checklist are tracked in [v1 readiness](docs/V1_READINESS.md).
+Preview publication does not imply stable acceptance.
+
 For step-by-step operator guides, start with the [Wiki guide index](docs/WIKI.md):
 installation, first-run setup, Cloudflare Tunnel, HTTPS, configuration, backups and recovery.
 These maintained Wiki sources are prepared for publication in the separate GitHub Wiki.

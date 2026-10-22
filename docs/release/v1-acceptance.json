@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "gates": [
+    {
+      "id": "scope",
+      "status": "passed",
+      "detail": "Frozen PWA v1 scope; native capabilities remain a separately tracked product.",
+      "evidence": [
+        "docs/V1_READINESS.md"
+      ]
+    },
+    {
+      "id": "core_workflows",
+      "status": "partial",
+      "detail": "Existing recipe/calendar/pantry/import tests pass; complete recurrence and published-image acceptance remains open.",
+      "evidence": [
+        "docs/validation/ai-recipe-import-merge.json"
+      ]
+    },
+    {
+      "id": "offline_recovery",
+      "status": "partial",
+      "detail": "Transactional outbox, tombstones and snapshot archives are tested; guided non-recipe reconstruction and recovery import remain open.",
+      "evidence": [
+        "docs/PWA.md",
+        "docs/PWA_IMPLEMENTATION.md"
+      ]
+    },
+    {
+      "id": "backup_restore_upgrade",
+      "status": "partial",
+      "detail": "Atomic verified WAL snapshot and transactional JSON/ZIP merge restore are implemented; candidate disaster recovery and broader upgrade/device matrix remain open.",
+      "evidence": [
+        "docs/BACKUP.md"
+      ]
+    },
+    {
+      "id": "data_deletion",
+      "status": "partial",
+      "detail": "Offline interactive erasure, server/maintenance exclusion, resumable fail-closed interruption, explicit backup choice, fresh identity and old-session rejection implemented; packaged Docker and real operator/device rehearsal remain.",
+      "evidence": [
+        "docs/BACKUP.md",
+        "tests/test_household_deletion.py",
+        "scripts/operator_docker_smoke.py"
+      ]
+    },
+    {
+      "id": "resource_limits",
+      "status": "partial",
+      "detail": "SQLite growth cap, real FULL rollback/identical retry, worker recovery, shutdown lease and pending-client preservation have tests; broad load/slow-client/decoder/disk-fault verification remains.",
+      "evidence": [
+        "docs/RETENTION.md",
+        "tests/test_storage_limits.py",
+        "tests/test_household_deletion.py"
+      ]
+    },
+    {
+      "id": "security_review",
+      "status": "blocked",
+      "detail": "Dedicated scan preflight resources/tools are unavailable in this session; no completed audit is claimed.",
+      "evidence": [
+        "docs/SECURITY_MODEL.md"
+      ]
+    },
+    {
+      "id": "physical_iphone",
+      "status": "blocked",
+      "detail": "Requires a physical iPhone: Home Screen install, keyboard, camera, gestures, offline lifecycle and update safety.",
+      "evidence": [
+        "docs/release/DEVICE_AND_SERVICE_ACCEPTANCE.md"
+      ]
+    },
+    {
+      "id": "live_ai",
+      "status": "blocked",
+      "detail": "Requires administrator-configured live provider/model accounts; synthetic responses are not live proof.",
+      "evidence": [
+        "docs/wiki/AI-Recipe-Import.md"
+      ]
+    },
+    {
+      "id": "live_bring",
+      "status": "blocked",
+      "detail": "Requires a dedicated Bring test account/list and live ownership/purchase/rollover evidence.",
+      "evidence": [
+        "docs/BRING.md"
+      ]
+    },
+    {
+      "id": "live_reminders",
+      "status": "blocked",
+      "detail": "Requires live Web Push and physical-device permission/delivery/lifecycle testing.",
+      "evidence": [
+        "docs/REMINDERS.md"
+      ]
+    },
+    {
+      "id": "release_pipeline",
+      "status": "partial",
+      "detail": "Candidate/stable channels and exact-source/native-image gates implemented; first real RC pipeline and protected environment setup remain open.",
+      "evidence": [
+        "docs/RELEASE.md"
+      ]
+    },
+    {
+      "id": "operator_documentation",
+      "status": "partial",
+      "detail": "Guides exist; refresh all feature statuses and rehearse clean installation, upgrade and recovery.",
+      "evidence": [
+        "docs/WIKI.md"
+      ]
+    },
+    {
+      "id": "household_pilot",
+      "status": "blocked",
+      "detail": "Needs real household use of a versioned release candidate with issue evidence and a final acceptance decision.",
+      "evidence": [
+        "docs/release/DEVICE_AND_SERVICE_ACCEPTANCE.md"
+      ]
+    }
+  ]
+}

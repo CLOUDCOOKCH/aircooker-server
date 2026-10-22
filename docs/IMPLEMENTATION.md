@@ -1,5 +1,18 @@
 # Implementation checklist and evidence
 
+**PWA v1 readiness:** feature scope is frozen in [V1_READINESS.md](V1_READINESS.md).
+The candidate/stable workflow now requires exact main-source CI, fresh native scans and
+runtime checks, publication of verified bytes, matching package/API versions and separate
+RC/stable channels. Stable distribution additionally requires every machine-readable
+acceptance gate and protected operator approval. The register honestly retains open
+recovery/deletion/resource work and blocked physical/live-service/security-audit evidence.
+SQLite caps, redacted storage failures, durable-worker retry/shutdown, verified atomic local
+backups and interactive offline deletion now have local regression coverage. Current local
+validation passes 309 backend/51 frontend tests, type/lint/contract/brand/licence checks and
+real PWA/OCR Chromium flows. Packaged operator checks are required on both architectures.
+See [local evidence](validation/v1-readiness-local.json). `poc-20261022.1` is the next preview
+candidate; publication must be verified separately.
+
 **AI recipe import — feature branch integrated with the published photo/theme/calendar work:**
 Encrypted provider profiles and explicit per-model input capabilities support bounded AI
 image/PDF imports and Gemini video requests. Website metadata precedes AI; consent binds

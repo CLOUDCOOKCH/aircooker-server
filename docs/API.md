@@ -6,6 +6,11 @@ is `/api/v1/openapi.json`. API-major 1 and sync-protocol 1 are exposed by system
 The current contract describes implemented routes only. Missing operations remain on the
 implementation checklist; the suggested product endpoint list is not falsely advertised.
 
+If SQLite cannot write because its configured cap or disk/I/O storage is unavailable,
+mutations return 503 `storage_unavailable` without SQL, paths or submitted content.
+Transactions roll back, no success receipt is issued, and clients retain the same pending
+mutation UUID for retry after storage recovery. Do not clear a browser outbox to fix it.
+
 ## Read-only administration diagnostics
 
 Authenticated `GET /api/v1/admin/diagnostics?limit=20` returns a UTC capture timestamp,

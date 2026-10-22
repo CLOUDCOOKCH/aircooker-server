@@ -1,63 +1,180 @@
-name: Publish backend release
+name: Publish mealf release candidate or stable
 on:
   push:
     tags: ['v*']
 permissions:
   contents: read
+concurrency:
+  group: publish-mealf-release
+  cancel-in-progress: false
 jobs:
-  release:
+  gate:
     runs-on: ubuntu-24.04
-    environment: release
+    outputs:
+      already_published: ${{ steps.release.outputs.already_published }}
+      channel: ${{ steps.release.outputs.channel }}
+      environment: ${{ steps.release.outputs.environment }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Validate release version, channel, stable evidence and immutable retry
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/release_gate.py metadata
+      - name: Require complete successful CI on the exact tagged main commit
+        if: steps.release.outputs.already_published != 'true'
+        id: ci
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p build
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$GITHUB_SHA" -f branch=main -f status=success -f per_page=100 > build/preview-runs.json
+          python3 scripts/release_gate.py run build/preview-runs.json
+      - name: Reject skipped or incomplete CI matrices
+        if: steps.release.outputs.already_published != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_RUN: ${{ steps.ci.outputs.run_id }}
+        run: |
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN/jobs?per_page=100" > build/preview-jobs.json
+          python3 scripts/release_gate.py jobs build/preview-jobs.json
+  verify-images:
+    timeout-minutes: 20
+    needs: gate
+    if: needs.gate.outputs.already_published != 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Build the image that will be scanned, exercised and published
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: |
+          docker build --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" --label "org.opencontainers.image.revision=$GITHUB_SHA" --label "org.opencontainers.image.version=$GITHUB_REF_NAME" --label 'org.opencontainers.image.title=mealf release' --label 'org.opencontainers.image.licenses=Apache-2.0' -t "mealf-release-verified:$IMAGE_ARCH" .
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        env:
+          TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db:2
+        with:
+          version: v0.70.0
+          image-ref: mealf-release-verified:${{ matrix.arch }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: false
+          format: json
+          output: container-security.json
+      - name: Exercise this exact image with isolated persistent data
+        env:
+          AIRCOOKER_TEST_IMAGE: mealf-release-verified:${{ matrix.arch }}
+        run: |
+          python scripts/docker_smoke.py
+          timeout 180s python scripts/operator_docker_smoke.py
+      - name: Generate software bill of materials
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: trivy image --format cyclonedx --output sbom.cdx.json "mealf-release-verified:$IMAGE_ARCH"
+      - name: Preserve the verified image without rebuilding
+        env:
+          IMAGE_ARCH: ${{ matrix.arch }}
+        run: docker save "mealf-release-verified:$IMAGE_ARCH" | gzip > image.tar.gz
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-release-${{ matrix.arch }}
+          path: |
+            image.tar.gz
+            container-security.json
+            sbom.cdx.json
+          compression-level: 0
+          retention-days: 14
+  publish:
+    needs: [gate, verify-images]
+    if: needs.gate.outputs.already_published != 'true'
+    runs-on: ubuntu-24.04
+    environment: ${{ needs.gate.outputs.environment }}
     permissions:
       contents: write
       packages: write
       id-token: write
       attestations: write
     steps:
-      - name: Require recorded acceptance before distribution
+      - name: Require operator acceptance for the stable channel
+        if: needs.gate.outputs.channel == 'stable'
         env:
           ACCEPTANCE_VERIFIED: ${{ vars.RELEASE_ACCEPTANCE_VERIFIED }}
-        run: python3 -c 'import os; assert os.environ.get("ACCEPTANCE_VERIFIED") == "true", "Product acceptance gates have not been recorded"'
+        run: python3 -c 'import os; assert os.environ.get("ACCEPTANCE_VERIFIED") == "true", "Production acceptance and protected release approval are required"'
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          python-version: '3.12'
-      - name: Validate version and test before publication
-        run: |
-          python -c 'import os,tomllib; assert os.environ["GITHUB_REF_NAME"] == "v"+tomllib.load(open("pyproject.toml","rb"))["project"]["version"]'
-          python -m pip install --require-hashes -r requirements-dev.lock
-          python -m pip install --no-deps -e .
-          python -m pytest -q
-          python scripts/export_contract.py --check
-          python scripts/license_inventory.py --check
-      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+          pattern: verified-release-*
+          path: verified
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
       - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Image coordinates
+      - name: Push verified bytes and assemble both architectures
         id: image
         run: |
-          python -c 'import os; p="ghcr.io/"+os.environ["GITHUB_REPOSITORY"].lower(); open(os.environ["GITHUB_OUTPUT"],"a").write("name="+p+"\n")'
-      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
-        id: build
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          provenance: mode=max
-          sbom: true
-          tags: |
-            ${{ steps.image.outputs.name }}:${{ github.ref_name }}
-            ${{ steps.image.outputs.name }}:latest-stable
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/mealf-server"
+          # A partial earlier push requires a fresh version, never an overwrite.
+          for SUFFIX in "" -amd64 -arm64; do
+            if docker buildx imagetools inspect "$IMAGE:$GITHUB_REF_NAME$SUFFIX" > existing-manifest.txt 2> existing-manifest.err; then
+              echo "Version image already exists without a completed release. Use a fresh version tag." >&2
+              exit 1
+            elif ! grep -Eq 'manifest unknown|: not found' existing-manifest.err; then
+              cat existing-manifest.err >&2
+              exit 1
+            fi
+          done
+          for ARCH in amd64 arm64; do
+            docker load -i "verified/verified-release-$ARCH/image.tar.gz"
+            docker tag "mealf-release-verified:$ARCH" "$IMAGE:$GITHUB_REF_NAME-$ARCH"
+            docker push "$IMAGE:$GITHUB_REF_NAME-$ARCH"
+          done
+          CHANNEL="${{ needs.gate.outputs.channel }}"
+          if [ "$CHANNEL" = stable ]; then CHANNEL=latest-stable; fi
+          docker buildx imagetools create -t "$IMAGE:$GITHUB_REF_NAME" -t "$IMAGE:$CHANNEL" "$IMAGE:$GITHUB_REF_NAME-amd64" "$IMAGE:$GITHUB_REF_NAME-arm64"
+          docker buildx imagetools inspect "$IMAGE:$GITHUB_REF_NAME" > manifest.txt
+          DIGEST="$(awk '$1 == "Digest:" {print $2; exit}' manifest.txt)"
+          [[ "$DIGEST" =~ ^sha256:[a-f0-9]{64}$ ]]
+          echo "name=$IMAGE" >> "$GITHUB_OUTPUT"
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "Published $IMAGE@$DIGEST" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/attest-build-provenance@96b4a1ef7235a096b17240c259729fdd70c83d45 # v2
         with:
           subject-name: ${{ steps.image.outputs.name }}
-          subject-digest: ${{ steps.build.outputs.digest }}
+          subject-digest: ${{ steps.image.outputs.digest }}
           push-to-registry: true
-      - name: Publish contract and generated release notes
+      - name: Publish versioned install assets and release notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" contracts/openapi-v1.json build/runtime-licenses.json --verify-tag --generate-notes
+          PUBLISHED_IMAGE: ${{ steps.image.outputs.name }}
+          PUBLISHED_DIGEST: ${{ steps.image.outputs.digest }}
+          RELEASE_CHANNEL: ${{ needs.gate.outputs.channel }}
+        run: |
+          mkdir -p release-assets
+          cp contracts/openapi-v1.json release-assets/
+          python3 scripts/release_assets.py
+          for ARCH in amd64 arm64; do
+            cp "verified/verified-release-$ARCH/container-security.json" "release-assets/container-security-$ARCH.json"
+            cp "verified/verified-release-$ARCH/sbom.cdx.json" "release-assets/sbom-$ARCH.cdx.json"
+          done
+          printf 'Image: `%s@%s`\n\n' "$PUBLISHED_IMAGE" "$PUBLISHED_DIGEST" > release-assets/NOTES.md
+          cat docs/V1_READINESS.md >> release-assets/NOTES.md
+          FLAGS=()
+          if [ "$RELEASE_CHANNEL" = rc ]; then FLAGS+=(--prerelease); fi
+          gh release create "$GITHUB_REF_NAME" release-assets/*.json release-assets/*.yaml --verify-tag "${FLAGS[@]}" --title "mealf $GITHUB_REF_NAME" --notes-file release-assets/NOTES.md

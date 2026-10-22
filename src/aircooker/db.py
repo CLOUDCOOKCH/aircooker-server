@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from contextlib import contextmanager
 from importlib.resources import files
@@ -6,6 +7,12 @@ from pathlib import Path
 
 class Database:
     def __init__(self, data_dir: Path):
+        try:
+            self.max_bytes = int(os.environ.get("DATABASE_MAX_BYTES", str(2 * 1024**3)))
+        except ValueError as exc:
+            raise ValueError("DATABASE_MAX_BYTES must be an integer") from exc
+        if not 1024**2 <= self.max_bytes <= 64 * 1024**3:
+            raise ValueError("DATABASE_MAX_BYTES must be between 1 MiB and 64 GiB")
         self.root = data_dir
         for name in ("database", "media", "jobs", "backups", "config"):
             (data_dir / name).mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -43,11 +50,15 @@ class Database:
     @contextmanager
     def connect(self):
         db = sqlite3.connect(self.path, timeout=10, isolation_level=None)
-        db.row_factory = sqlite3.Row
-        db.execute("PRAGMA foreign_keys=ON")
-        db.execute("PRAGMA synchronous=FULL")
-        db.execute("PRAGMA busy_timeout=10000")
         try:
+            db.row_factory = sqlite3.Row
+            db.execute("PRAGMA foreign_keys=ON")
+            db.execute("PRAGMA synchronous=FULL")
+            db.execute("PRAGMA busy_timeout=10000")
+            page_size = db.execute("PRAGMA page_size").fetchone()[0]
+            # Every connection needs its own cap. SQLite never truncates an existing
+            # database when configured below its current size; it prevents growth.
+            db.execute(f"PRAGMA max_page_count={self.max_bytes // page_size}")
             yield db
         finally:
             db.close()

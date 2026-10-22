@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Freeze PWA v1 scope and add an evidence-backed acceptance register and device/service
+  pilot checklist. Harden candidate/stable publication with exact-source CI, native
+  image scans/runtime tests, immutable retries and digest-pinned install assets.
+  RC tags never advance the stable channel; unfinished acceptance blocks production.
+- Add configurable SQLite growth limits, rollback-safe storage errors and durable-worker
+  retries. Preserve in-flight writes through shutdown. Add verified atomic local backups
+  and interactive offline household erasure with process exclusion, resumable interruption,
+  explicit backup handling and fresh household identity.
+
 - Add provider-independent AI recipe imports from images, PDFs, websites, text and supported Gemini videos, with encrypted provider profiles, configurable models, schema-validated editable drafts, bounded usage and Wiki documentation.
 - Add native camera/image choosing for recipe screenshots and photos of written recipes.
   Local EN/DE OCR produces a durable editable preview; saving requires explicit review.
