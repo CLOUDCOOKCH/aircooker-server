@@ -62,3 +62,13 @@ expired-session rotation, failed/no-outbox status, stale-page rejection and copy
 diagnostics. Only stale-page and 503 responses are injected test faults. The existing PWA
 browser suite also covers concurrent edits, deletion/tombstone recovery and import review.
 Desktop/390px Axe and 320px layout evidence do not establish physical-iPhone acceptance.
+
+## Published update
+
+`ghcr.io/cloudcookch/mealf-server:poc-20261022.8` contains these fixes. All six exact-source
+CI jobs and fresh AMD64/ARM64 image security/runtime gates pass. Public assets, image
+identities, anonymous pull and a disposable published .7-to-.8 same-volume upgrade on
+internal port 5152 are verified; [exact evidence](validation/github-sync-preview.json).
+Retain your volume and custom command/healthcheck. Save editors, accept the PWA update on
+each device and retry Sync now. If updates remain missing, copy the connection report here
+for diagnosis. Publishing this fix does not verify the cause on the user's installation.

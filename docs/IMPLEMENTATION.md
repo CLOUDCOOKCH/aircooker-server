@@ -1,6 +1,6 @@
 # Implementation checklist and evidence
 
-**Sync investigation, 2026-10-22 — implemented, local validation; publication pending:**
+**Sync investigation, 2026-10-22 — published and verified in `poc-20261022.8`:**
 Reproduced old false-success acceptance of a stale pull and import failures starving all
 record exchange. Header failure/unchecked states, required revision checks, fresh sync reads,
 record-first delivery, coalesced full sync and allowlisted content-free diagnostics are
@@ -8,7 +8,14 @@ implemented. Local checks pass 425 backend/66 frontend tests, types/format/Ruff/
 real browser two-device/offline/expired-session/stale-page/503/report checks pass. API and
 canonical sync schema are unchanged, so the independent native contract is deliberately
 retained. The actual user's deployed failure remains unconfirmed until their report is
-available. See [safe investigation and limits](SYNC_TROUBLESHOOTING.md).
+available. All six exact-main-source CI jobs pass at `708365b0`, including Chromium/WebKit
+and both architecture security checks. Both fresh native publication image scan/runtime
+gates, six public asset checksums, manifest/config identities/SBOMs and anonymous pull pass.
+A published .7-to-.8 same-volume 5152 upgrade retains identity/session/history/recipe and
+shopping quantities; published Settings diagnostics, EN/DE navigation and cached offline
+shopping pass. Physical iPhone and live deployment acceptance remain open. See
+[safe investigation and limits](SYNC_TROUBLESHOOTING.md) and
+[exact release evidence](validation/github-sync-preview.json).
 
 **Recipe ideas, 2026-10-22 — published and verified in `poc-20261022.7`:**
 Home/Recipes offers ingredient-based or surprise generation using configured household AI.

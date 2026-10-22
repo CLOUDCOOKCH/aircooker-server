@@ -1,13 +1,26 @@
 # Mealf preview
 
-## Sync reliability candidate
+## Published preview: sync reliability
 
-`poc-20261022.8` is prepared, with publication pending. It fixes false synced status,
-rejects stale/incomplete pull responses, moves record exchange before imports and adds
-Settings → Check sync connection. No server data migration or native contract change.
-See [troubleshooting and confirmed/unconfirmed scope](SYNC_TROUBLESHOOTING.md).
-The last verified published preview remains `.7` below until exact-source CI, fresh native
-image gates and public/runtime checks pass. Retain existing volumes and `5152:5152` settings.
+`poc-20261022.8` is published and verified for **AMD64 and ARM64**. It fixes false synced
+status, rejects stale/incomplete pull responses, moves record exchange before imports and
+adds Settings → Check sync connection. No server data migration or native contract change.
+The user's deployed cause remains unconfirmed; see
+[troubleshooting and confirmed/unconfirmed scope](SYNC_TROUBLESHOOTING.md).
+
+All six exact-main-source CI jobs pass at `708365b0`: 425 backend tests per architecture,
+66 frontend tests, Chromium/WebKit regressions and security checks. Both fresh native image
+scan/runtime gates, six public asset checksums, image identities/SBOMs, anonymous pull and
+a published .7-to-.8 same-volume upgrade on internal port 5152 pass. Identity, active
+session, history and recipe/shopping data are retained. Published PWA diagnostics,
+EN/DE navigation and narrow-phone cached offline shopping pass Chromium checks.
+Physical iPhone and the actual deployment remain unverified. This is a preview, not v1.
+
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.8`. Retain existing volumes and
+custom `5152:5152` command/healthcheck. Save editors, accept the PWA update on each device,
+and retry Sync now. If changes remain missing, use Settings → Check sync connection →
+Copy report. Do not clear browser storage or reinstall the PWA to diagnose this issue.
+See [exact source, image and upgrade evidence](validation/github-sync-preview.json).
 
 ## Published preview: Recipe ideas
 

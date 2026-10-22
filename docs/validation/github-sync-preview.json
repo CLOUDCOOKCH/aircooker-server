@@ -1,0 +1,205 @@
+{
+  "source_commit": "708365b0356724d830df677f4d8b0a1f14f92ac9",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/10",
+  "ci": {
+    "id": 39763469341,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39763469341",
+    "head_sha": "708365b0356724d830df677f4d8b0a1f14f92ac9",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "jobs": [
+    {
+      "id": 119773084439,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119773084724,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119773084822,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119773084943,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119773084966,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119773085047,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "pr_ci": {
+    "id": 39762860863,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39762860863",
+    "head_sha": "d72c8d56f9afa50e8e355244340709eb3b84ad4e",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "pr_jobs": [
+    {
+      "id": 119771045615,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119771045693,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119771045700,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119771045801,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119771045850,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119771045851,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "publication": {
+    "id": 39764406201,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39764406201",
+    "head_sha": "708365b0356724d830df677f4d8b0a1f14f92ac9",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "publication_jobs": [
+    {
+      "id": 119776159577,
+      "name": "gate",
+      "conclusion": "success"
+    },
+    {
+      "id": 119776231086,
+      "name": "verify-images (ubuntu-24.04-arm, arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119776231108,
+      "name": "verify-images (ubuntu-24.04, amd64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119777046136,
+      "name": "publish",
+      "conclusion": "success"
+    }
+  ],
+  "release_id": 420594188,
+  "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.8",
+  "attestation": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58596392",
+  "public": {
+    "source_revision": "708365b0356724d830df677f4d8b0a1f14f92ac9",
+    "release_id": 420594188,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.8",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.8",
+    "index_digest": "sha256:a25275942b0fb33eb3794c0a199d51a540132652b17fc304fa448ab9e702f8e9",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "de104ae4e57cee921da9e2d24a24a37790fb31c53ed2090abb3f2dcdaa18f5de",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "f8d38c4860dc7a03d565249b6563644ab524a7ea09a90796ee4bd52b8b1c1cf1",
+        "size": 186531
+      },
+      "container-security-arm64.json": {
+        "sha256": "029432ef0f00f3e5b877324b0380c693e8c574798172af6e424195a20b8ed436",
+        "size": 186612
+      },
+      "openapi-v1.json": {
+        "sha256": "dc237dc99bfa290f1a6b5c24830105369e6b3681ce072adb77bf1036f401eb6d",
+        "size": 208582
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "9c97d983abf1ac9cae3d75847234a134c7f91f230dff1a3f48dc2e277876a706",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "d9fed291c9d9961c626105c34689ec472c703e3b1265318e4c6fda9a2c167497",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:f6b11ad8d85a4195b09195dcf329e66effaee5b916a2b62e0f3c238c22de7054",
+        "config": "sha256:1d3e8b3641ab6d18cdcda097114f95f8b6bc063f7bdbd23ce5be071a83c455f0",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:e248388f6dbbc8e233cb47cc6cfe9c91fb8dca763ebaa2fa3d94e4c9c02d3413",
+        "config": "sha256:2046972a2890b1aec4d1facdfba39b452167cf5e7617a821e3dd96989083260f",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "published_runtime": {
+    "sync_diagnostics": "published Settings/report available; correct local/server recipe counts and history/device matches; no private content export",
+    "runtime_kind": "published immutable image",
+    "recipe_ideas": "migration015/table/authenticated API present; unconfigured generation rejected without external requests",
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:27be26b7e6193ee3795415fd872786280b6930998668e515df087aebc62c40aa",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:a25275942b0fb33eb3794c0a199d51a540132652b17fc304fa448ab9e702f8e9",
+    "same_volume_5152_upgrade": "passed; instance identity, active session, sync history proof and planned recipe/400 g projection preserved",
+    "published_pwa": "six primary destinations; EN/DE Shopping selection, six >=44px nonoverlapping 320px targets, real cached offline reload and disabled Bring action passed in Chromium",
+    "routes": "/admin/ and assets200, root404, PWA /app/",
+    "scope": "Disposable synthetic volume/containers only; no user deployment accessed, live Bring calls or physical iPhone evidence"
+  },
+  "local": {
+    "backend_tests": 425,
+    "frontend_tests": 66,
+    "mypy_source_files": 50,
+    "ruff_format_files": 118,
+    "contract": "unchanged; existing independent native pin deliberately retained",
+    "before_fix": "old SyncEngine source reproduced stale empty success and import starvation; build/sync-investigation/before-fix.log",
+    "browser": "actual FastAPI/SQLite/two independent browser sessions; recipe/calendar/pantry delivery, offline Save/reload/replay, expired-session rotation, stale-pull/503 rejection and report copy/redaction",
+    "faults": "only stale pages/503 responses injected; no external provider or user deployment accessed",
+    "accessibility": "desktop and German390 Axe plus new report actions>=44px;320 layout/overflow and detail capture",
+    "ui_review": "Fresh full review found two40pxreportactions; scoped44pxfix resolved1partial0unresolved0; no further requiredfixes",
+    "limits": [
+      "Actual deployed root cause unconfirmed; user reports synced indicator and missing everything",
+      "Physical iPhone/Safari unverified",
+      "No local reset, server volume deletion, history rewrite or credential export"
+    ],
+    "ci_fixture": "Native WebKit controlled-outage matcher accepts only an optional canonical UUIDv4nonce and matching actual failed URL; arbitrary queries/window errors remain fatal"
+  },
+  "native_contract": {
+    "source_commit": "d3bd441052e21d2d790404a20182cb98feb25824",
+    "change": "none; existing independent pin deliberately retained because OpenAPI and sync wire schema are unchanged",
+    "validation": "local scripts/check_contract.py passed; no new Xcode/device claim"
+  },
+  "limitations": [
+    "Actual user deployment root cause remains unconfirmed; no live household was accessed or repaired",
+    "Physical iPhone/Safari acceptance unverified",
+    "Only stale-page and 503 responses are injected browser faults; household sync uses real SQLite and independent cookie sessions",
+    "No live Bring or AI validation in this task",
+    "Preview is not production v1"
+  ]
+}
