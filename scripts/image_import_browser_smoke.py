@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from browser_test_errors import unexpected_browser_errors
 from playwright.sync_api import expect, sync_playwright
 
 
@@ -122,7 +123,36 @@ def main():
                     context.add_init_script("Reflect.deleteProperty(window, 'PushManager')")
                 page = context.new_page()
                 errors = []
-                page.on("pageerror", lambda error: errors.append(str(error)))
+                window_errors = []
+                failed_requests = []
+                outage_active = False
+                page.on(
+                    "pageerror",
+                    lambda error: errors.append(
+                        {
+                            "name": error.name,
+                            "message": error.message,
+                            "stack": error.stack,
+                            "outage": outage_active,
+                        }
+                    ),
+                )
+                page.on(
+                    "requestfailed",
+                    lambda request: failed_requests.append(
+                        {
+                            "url": request.url,
+                            "outage": outage_active,
+                        }
+                    ),
+                )
+                page.expose_function(
+                    "recordTestRuntimeError", lambda detail: window_errors.append(detail)
+                )
+                context.add_init_script("""for (const kind of ['error', 'unhandledrejection']) window.addEventListener(kind, event => {
+                  const error = event.error ?? event.reason;
+                  void window.recordTestRuntimeError({kind, name: error?.name, message: error?.message ?? event.message, stack: error?.stack});
+                });""")
                 page.on(
                     "response",
                     lambda response: print(
@@ -142,7 +172,9 @@ def main():
                     assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
 
                 def outage(offline):
-                    nonlocal server
+                    nonlocal server, outage_active
+                    if offline:
+                        outage_active = True
                     if not real_outage:
                         context.set_offline(offline)
                     elif offline:
@@ -150,6 +182,8 @@ def main():
                         assert server.poll() is not None
                     else:
                         server = start_backend()
+                    if not offline:
+                        outage_active = False
 
                 def import_page():
                     page.get_by_role("button", name="Import recipe", exact=True).click()
@@ -291,7 +325,12 @@ def main():
                 page.screenshot(path=str(captures / "image-review-phone-de-dark.png"))
                 # Two extraction jobs were delivered, only one explicitly saved recipe exists.
                 assert len(recipes()) == 1
-                assert errors == [], errors
+                unexpected = unexpected_browser_errors(
+                    engine, base, errors, failed_requests, window_errors
+                )
+                assert unexpected == [], unexpected
+                if errors:
+                    print("Verified native WebKit outage diagnostics:", len(errors), flush=True)
                 phase("German OCR/phone/axe passed; closing context")
                 context.close()
                 phase("context closed")
@@ -299,6 +338,8 @@ def main():
                 json.dumps(
                     {
                         "engine": engine,
+                        "native_outage_diagnostics": len(errors),
+                        "uncaught_errors_and_rejections": len(window_errors),
                         "backend": "real",
                         "ocr": "real Tesseract eng+deu",
                         "native_push": "unavailable OS capability fixture"
