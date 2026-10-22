@@ -71,3 +71,10 @@ Local Chromium checks do not establish physical iPhone, camera, installed-PWA ke
 VoiceOver or live-service acceptance. The API, database schema and native contract are
 unchanged. Final review and exact-source publication status are recorded in
 [implementation progress](IMPLEMENTATION.md); this is still a preview product.
+
+`ghcr.io/cloudcookch/mealf-server:poc-20261022.9` is published for AMD64/ARM64. Exact-source
+CI also passes Linux WebKit layout/theme/image-import/OCR/offline checks. Both fresh native
+image gates, public checksums/config identities, anonymous pull and the published .8-to-.9
+same-volume 5152 upgrade pass; [release evidence](validation/github-pwa-ux-preview.json).
+Retain your volume and port/command/healthcheck configuration, save editors and accept the
+PWA update on each device. The evidence above does not establish physical-iPhone acceptance.

@@ -1,0 +1,229 @@
+{
+  "source_commit": "76fe799594f3d1ebaae9827e32c03d8e7fe69dc4",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/11",
+  "ci": {
+    "id": 39772921188,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39772921188",
+    "head_sha": "76fe799594f3d1ebaae9827e32c03d8e7fe69dc4",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "jobs": [
+    {
+      "id": 119804659726,
+      "name": "browser",
+      "conclusion": "success"
+    },
+    {
+      "id": 119804660018,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119804660022,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119804660056,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119804660076,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119804660136,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    }
+  ],
+  "pr_ci": {
+    "id": 39772132722,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39772132722",
+    "head_sha": "00aa705a270dc4c3d388ddb6393a57ec726d9279",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "pr_jobs": [
+    {
+      "id": 119802243223,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119802243379,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119802243479,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119802243508,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119802243526,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119802243624,
+      "name": "browser",
+      "conclusion": "success"
+    }
+  ],
+  "publication": {
+    "id": 39774473265,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39774473265",
+    "head_sha": "76fe799594f3d1ebaae9827e32c03d8e7fe69dc4",
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "publication_jobs": [
+    {
+      "id": 119809840480,
+      "name": "gate",
+      "conclusion": "success"
+    },
+    {
+      "id": 119809912215,
+      "name": "verify-images (ubuntu-24.04, amd64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119809912221,
+      "name": "verify-images (ubuntu-24.04-arm, arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119810715822,
+      "name": "publish",
+      "conclusion": "success"
+    }
+  ],
+  "release_id": 420667099,
+  "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.9",
+  "attestation": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58623847",
+  "public": {
+    "source_revision": "76fe799594f3d1ebaae9827e32c03d8e7fe69dc4",
+    "release_id": 420667099,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.9",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.9",
+    "index_digest": "sha256:7bc31b803b7aebf43e175af70ab9d60c114104a3ef3d63d45f7ba68960debb9b",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "8bb2c9bfe8ad12ba14389e78c5310639f2478b2eebaa3460f5b75ef78b335d27",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "c1ce1f01d7c986df7d06ce54ea67cbcc1a099a6db920e27379c39cda052692d4",
+        "size": 186532
+      },
+      "container-security-arm64.json": {
+        "sha256": "e256c6d21942d4d77ceea1d313337bb24b61ab1a3e7cc9a14103dcd14c5f5146",
+        "size": 186612
+      },
+      "openapi-v1.json": {
+        "sha256": "dc237dc99bfa290f1a6b5c24830105369e6b3681ce072adb77bf1036f401eb6d",
+        "size": 208582
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "29f826c712fe4b233d09b92faaf7db45e5a32932c6caf27becded7f1e0f50b2e",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "bccc464f82679b5580cf142bb6e5727c62a4750e8526ad0a0562fe782a176283",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:f733c17467ffce890608ea5172d4f7635d1e9065de2a8f46f5f995fd633ac044",
+        "config": "sha256:7c65ad45f2fea07891c33882feb1acf1e723b3758b5ecba161a7be1b9329ea0e",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:2612a273deff3fab9a7d9d62774c611577f7c003a367f46474240556f00f8cb8",
+        "config": "sha256:96135cf5f550d1f422081399fc111f40a10fcd6cf1d2d834ce2b6f4326add170",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "published_runtime": {
+    "ux": "published disclosure groups and scoped task-layout CSS loaded; Settings/report and language controls reachable through actual disclosures; correct local/server counts and history/device matches",
+    "runtime_kind": "published immutable image",
+    "recipe_ideas": "migration015/table/authenticated API present; unconfigured generation rejected without external requests",
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:a25275942b0fb33eb3794c0a199d51a540132652b17fc304fa448ab9e702f8e9",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:7bc31b803b7aebf43e175af70ab9d60c114104a3ef3d63d45f7ba68960debb9b",
+    "same_volume_5152_upgrade": "passed; instance identity, active session, sync history proof and planned recipe/400 g projection preserved",
+    "published_pwa": "six primary destinations; EN/DE Shopping selection, six >=44px nonoverlapping 320px targets, real cached offline reload and disabled Bring action passed in Chromium",
+    "routes": "/admin/ and assets200, root404, PWA /app/",
+    "scope": "Disposable synthetic volume/containers only; no user deployment accessed, live Bring calls or physical iPhone evidence"
+  },
+  "local": {
+    "backend_tests": 425,
+    "frontend_tests": 66,
+    "mypy_source_files": 50,
+    "ruff_format_files": 120,
+    "openapi": "unchanged; scripts/export_contract.py --check passed",
+    "native_contract": "unchanged deliberate pin at d3bd441; scripts/check_contract.py passed",
+    "browser_suites": [
+      "pwa_ux",
+      "pwa",
+      "layout chromium",
+      "sync_status",
+      "shopping",
+      "image_import",
+      "ai_import",
+      "chatgpt",
+      "push",
+      "source_photo",
+      "recipe_ideas",
+      "theme chromium"
+    ],
+    "ux_browser": "real FastAPI/SQLite6destinations, disclosures, EN/DE themes, search/rating sort, recipe anchors, metadata fold/retention, offline Save/reload/reconnect; Axe desktop390320",
+    "review": "fresh full review15captures found1P2 Shopping setup/progress hierarchy; corrected and scored1resolved0partial0unresolved",
+    "shopping_fixture": "real unconfigured+queued household assertion; ready+queued progress is explicit intercepted HTTP UI-response fixture, not live Bring",
+    "webkit_local": "not run: executable missing; exact-source GitHub engine checks required",
+    "first_backend_attempt": "417 passed/8 OCR prerequisites failed; added local eng/deu tessdata via per-command TESSDATA_PREFIX; full425 then passed without skipping tests",
+    "first_ui_attempts": "harness corrected upload200 status, exact localized control names and canonical server prep_minutes field; no product assertions suppressed",
+    "bundle": "Vite build passed with existing nonblocking >500KB chunk warning; no performance or size improvement claim",
+    "limits": [
+      "Physical iPhone/Safari unverified",
+      "Live Bring/AI/push identity/transport unverified",
+      "No API/schema/migration/native/admin behavior changes; existing data/outbox preserved"
+    ],
+    "theme_ci_followup": "Initial PR browser job reached theme suite, then failed its old all-settings-open assumption. Added actual disclosure navigation only; every contrast, keyboard, offline, cross-tab, denied-storage assertion remains. Local full Chromium theme suite passed."
+  },
+  "ci_browser": "Chrome and Linux WebKit layout/theme/image chooser/OCR/offline workflows passed on final PR head and exact merged commit; new UX suite passed with captures",
+  "initial_pr_attempt": {
+    "run": 39771455991,
+    "browser_job": 119799742887,
+    "source": "d882425565d0f67dea70582e70bf7655b6459633",
+    "finding": "Legacy theme suite expected all Settings forms already open; added actual summary navigation with no assertion removed or weakened. Final PR head00aa705 and main76fe799 all six gates pass."
+  },
+  "native_contract": {
+    "source_commit": "d3bd441052e21d2d790404a20182cb98feb25824",
+    "change": "none; independent native pin deliberately retained, OpenAPI/sync wire schema unchanged",
+    "validation": "local scripts/check_contract.py passed; no new Xcode/device claim"
+  },
+  "limitations": [
+    "Physical iPhone/installed-PWA keyboard/VoiceOver acceptance unverified",
+    "Live Bring/AI/push provider account/transport unverified; integration browser fixtures explicitly synthetic",
+    "Ready/queued Shopping presentation uses an explicitly intercepted HTTP response fixture; unconfigured/queued case uses actual server jobs",
+    "No user deployment was accessed or modified",
+    "Preview is not production v1"
+  ]
+}

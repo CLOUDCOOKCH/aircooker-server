@@ -1,14 +1,24 @@
 # Mealf preview
 
-## PWA UX rework candidate
+## Published preview: PWA UX rework
 
-`poc-20261022.9` is prepared; publication is pending exact-source CI and fresh native
-AMD64/ARM64 image gates. The rework keeps Mealf's original branding, glass, all themes
+`poc-20261022.9` is published and verified for **AMD64 and ARM64**.
+The rework keeps Mealf's original branding, glass, all themes
 and six destinations while simplifying Home, calendar controls, recipe navigation,
 imports and Settings. Shopping prioritizes required Bring setup before progress.
 See [the screen guide](PWA_UX.md) and [scoped UI review](validation/pwa-ux-review.md).
-Keep existing volumes and the custom `5152:5152` command/healthcheck when updating.
-The last verified published preview remains `.8` below until publication completes.
+All six exact-main-source CI jobs pass at `76fe7995`, including 425 backend tests per
+architecture, 66 frontend tests and Chromium/WebKit workflows. Both fresh native image
+scan/runtime gates, six public asset checksums, image identities/SBOMs, anonymous pull
+and a published .8-to-.9 same-volume upgrade on internal port 5152 pass. Instance identity,
+active session, history, recipes and shopping quantities are retained; the new Settings
+disclosures/report, EN/DE navigation and cached offline shopping work in the pulled image.
+See [exact release evidence](validation/github-pwa-ux-preview.json). Physical iPhone and
+live-service acceptance remain open; this is a preview, not production v1.
+
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.9`. Keep existing volumes and the
+custom `5152:5152` command/healthcheck when updating. Save open editors, accept the PWA
+update and reopen the app. Clearing browser storage or reinstalling the PWA is unnecessary.
 
 ## Published preview: sync reliability
 

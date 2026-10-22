@@ -1,6 +1,6 @@
 # Implementation checklist and evidence
 
-**Whole-PWA UX rework, 2026-10-22 — implemented and tested locally; publication pending:**
+**Whole-PWA UX rework, 2026-10-22 — published and verified in `poc-20261022.9`:**
 Home leads with meals and explicit actions; Calendar has compact date/view controls and
 readable multi-day cards; Recipes has labelled import/create, search/rating sort and
 section links. Optional editor metadata folds without losing values, with persistent
@@ -13,8 +13,14 @@ PWA/import/AI/photo/ideas/push/shopping/sync/layout regressions pass. Provider t
 are synthetic. Fresh full UI review found one misleading unconfigured/queued Shopping
 state; a readiness-aware UI fix was scored 1 resolved, 0 partial, 0 unresolved. The verdict
 is ship at that listed-fix scope, not product acceptance. Local WebKit binary is absent;
-exact-source CI must provide engine evidence. Physical iPhone/live-service acceptance
-remains open. See [guide](PWA_UX.md) and [review](validation/pwa-ux-review.md).
+final PR and exact-main CI supply passing Linux WebKit layout/theme/OCR/offline evidence.
+All six exact-main-source jobs pass at `76fe7995`. Both fresh native image scan/runtime
+gates, six public asset checksums, image identities/SBOMs and anonymous pull pass. A
+published .8-to-.9 same-volume 5152 upgrade preserves identity/session/history/recipe/
+shopping data and exercises the new Settings disclosures, report and EN/DE offline
+navigation. Initial PR theme-test navigation assumptions were corrected without weakening
+assertions. Physical iPhone/live-service acceptance remains open. See [guide](PWA_UX.md),
+[review](validation/pwa-ux-review.md) and [exact publication evidence](validation/github-pwa-ux-preview.json).
 
 **Sync investigation, 2026-10-22 — published and verified in `poc-20261022.8`:**
 Reproduced old false-success acceptance of a stale pull and import failures starving all
