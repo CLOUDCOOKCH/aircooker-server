@@ -14,7 +14,9 @@ from .image_import import printed_recipe
 from .import_sources import youtube_url
 
 
-def process_import(database, payload, *, fetch, provider_factory, extractor, recognise):
+def process_import(
+    database, payload, *, fetch, provider_factory, extractor, recognise, personal_extract=None
+):
     iid = payload["id"]
     with database.connect() as db:
         draft = db.execute("SELECT * FROM import_draft WHERE id=?", (iid,)).fetchone()
@@ -64,7 +66,32 @@ def process_import(database, payload, *, fetch, provider_factory, extractor, rec
                 if not payload.get("use_ai"):
                     raise DomainError("structured_recipe_not_found_use_manual_entry", 422)
                 recipe = None
-        if recipe is None:
+        if recipe is None and payload.get("ai_account") == "chatgpt":
+            with database.connect() as db:
+                owner = db.execute(
+                    "SELECT * FROM chatgpt_import WHERE import_id=?", (iid,)
+                ).fetchone()
+            if (
+                not owner
+                or personal_extract is None
+                or not payload.get("consent_chatgpt_background")
+                or not payload.get("consent_external_ai")
+            ):
+                raise DomainError("chatgpt_plan_permission_required", 409)
+            destination = payload.get("ai_destination")
+            if not destination or destination[:2] != ["chatgpt", "https://api.openai.com/v1"]:
+                raise DomainError("chatgpt_configuration_changed", 409)
+            extraction = personal_extract(
+                owner["session_id"], owner["connection_id"], destination[2], content
+            )
+            recipe = extraction.reviewed_preview()
+            if recipe:
+                recipe.source_platform = "supplied_text"
+                recipe.provenance["extractor"] = "chatgpt-personal-plan"
+            warnings = ["ai_extracted_review_all_fields"]
+            if extraction.recipe.servings is None:
+                warnings.append("review_servings")
+        elif recipe is None:
             config = load_configuration(database.root / "config")
             if config is None:
                 raise DomainError("ai_not_configured", 409)

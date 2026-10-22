@@ -7,6 +7,7 @@ import { ReminderSettings } from './ReminderSettings';
 import { ThemeLibrary } from './ThemeLibrary';
 import { PlanningSettings } from './PlanningSettings';
 import { AISettings } from './AISettings';
+import { ChatGPTSettings } from './ChatGPTSettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
 import { cloneRecipe } from './lib/planning';
@@ -134,6 +135,7 @@ export function Settings({
           <PlanningSettings />
           <ReminderSettings />
           <AISettings />
+          <ChatGPTSettings />
           <section className="settings-group">
             <h2>{t('bring')}</h2>
             <div className="settings-surface">

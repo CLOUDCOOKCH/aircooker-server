@@ -1,5 +1,12 @@
 # Conservative retention and maintenance
 
+Personal ChatGPT pairing capabilities expire after ten minutes. Bounded hourly maintenance
+removes expired pairings and clears encrypted ChatGPT credentials for revoked or expired
+mealf sessions. Minimal registration identity and import ownership/replay receipts remain;
+portable exports exclude credentials. Logical clearing does not erase previous backups/WAL
+pages. Disconnect attempts remote revocation immediately; ordinary mealf logout prevents
+local use but does not claim remote OAuth revocation. See [personal connection](CHATGPT.md).
+
 The backend makes bounded hourly database maintenance passes and removes stale temporary
 archive transfers at startup before serving requests. No extra service or scheduled host
 command is required. Maintenance uses server timestamps, not device clocks. Fixed policy:

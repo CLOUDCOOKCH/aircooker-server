@@ -23,6 +23,14 @@ const errorKeys = {
   ai_input_format_unsupported: 'importFormatUnsupported',
   ai_configuration_changed_review_consent: 'importProviderChanged',
   import_source_expired: 'importExtractionError',
+  chatgpt_connection_changed: 'chatgptConnectionError',
+  chatgpt_configuration_changed: 'chatgptConnectionError',
+  chatgpt_reconnect_required: 'chatgptConnectionError',
+  chatgpt_session_ended: 'chatgptConnectionError',
+  chatgpt_plan_permission_required: 'chatgptConnectionError',
+  chatgpt_usage_limit: 'chatgptAllowanceError',
+  chatgpt_usage_unavailable: 'chatgptAllowanceError',
+  chatgpt_not_eligible: 'chatgptConnectionError',
 } as const;
 function BlobPreview({ blob, alt }: { blob: Blob; alt: string }) {
   const [url, setURL] = useState<string>();
@@ -49,6 +57,8 @@ export function Imports({
   const [file, setFile] = useState<File | null>(null);
   const [sourceID, setSourceID] = useState<string | null>(null);
   const [status, setStatus] = useState<components['schemas']['AISettingsStatus'] | null>(null);
+  const [chatgpt, setChatGPT] = useState<components['schemas']['ChatGPTStatus'] | null>(null);
+  const [account, setAccount] = useState<'household' | 'chatgpt'>('household');
   const fileInput = useRef<HTMLInputElement>(null);
   const submitting = useRef(false);
   useEffect(() => {
@@ -58,6 +68,13 @@ export function Imports({
         .request<components['schemas']['AISettingsStatus']>('/api/v1/admin/ai')
         .then((value) => {
           if (alive) setStatus(value);
+        })
+        .catch(() => undefined);
+    if (app.api && !app.demo)
+      void app.api
+        .request<components['schemas']['ChatGPTStatus']>('/api/v1/integrations/chatgpt')
+        .then((value) => {
+          if (alive) setChatGPT(value);
         })
         .catch(() => undefined);
     return () => {
@@ -119,6 +136,32 @@ export function Imports({
     submitting.current = true;
     setSaving(true);
     try {
+      if (account === 'chatgpt') {
+        if (!text.trim() || !consent || !chatgpt?.model || chatgpt.state !== 'connected') {
+          setError('invalid');
+          return;
+        }
+        const importID = uuid();
+        await app.store.saveImport({
+          id: importID,
+          state: 'queued',
+          body: {
+            text,
+            use_ai: true,
+            consent_external_ai: true,
+            consent_chatgpt_background: true,
+            ai_account: 'chatgpt',
+            chatgpt_connection_id: chatgpt.connection_id,
+            ai_destination: ['chatgpt', 'https://api.openai.com/v1', chatgpt.model],
+          },
+        });
+        setText('');
+        setConsent(false);
+        setError(null);
+        setQueuedFocus(importID);
+        await app.changed();
+        return;
+      }
       if (mode === 'image' ? !selected : !url && !text.trim() && !file && !sourceID) {
         setError('invalid');
         return;
@@ -198,6 +241,7 @@ export function Imports({
       setImageTextOpen(Boolean(task.body.image_id));
       setSelected(task.body.image_id ? await app.store.photo(task.body.image_id) : undefined);
       setAI(Boolean(task.body.use_ai));
+      setAccount(task.body.ai_account === 'chatgpt' ? 'chatgpt' : 'household');
       setConsent(false);
       setError(null);
       document
@@ -235,6 +279,7 @@ export function Imports({
                     aria-pressed={mode === method}
                     onClick={() => {
                       setMode(method);
+                      setAccount('household');
                       setConsent(false);
                       setError(null);
                     }}
@@ -245,7 +290,40 @@ export function Imports({
                 ))}
               </div>
               <form onSubmit={(e) => void submit(e)}>
-                {mode === 'image' ? (
+                {mode === 'link' &&
+                  ((chatgpt?.state === 'connected' && chatgpt.model) || account === 'chatgpt') && (
+                    <label>
+                      {t('chatgptImportAccount')}
+                      <select
+                        aria-label={t('chatgptImportAccount')}
+                        value={account}
+                        onChange={(event) => {
+                          setAccount(event.target.value as 'household' | 'chatgpt');
+                          setConsent(false);
+                        }}
+                      >
+                        <option value="household">{t('chatgptHousehold')}</option>
+                        <option value="chatgpt">{t('chatgptPersonal')}</option>
+                      </select>
+                    </label>
+                  )}
+                {account === 'chatgpt' ? (
+                  <>
+                    <p className="intro-copy">{t('chatgptTextOnly')}</p>
+                    <p className="muted">
+                      {chatgpt?.account_label} · {chatgpt?.model} · https://api.openai.com/v1
+                    </p>
+                    <label>
+                      {t('importText')}
+                      <textarea
+                        rows={9}
+                        maxLength={50000}
+                        value={text}
+                        onChange={(event) => setText(event.target.value)}
+                      />
+                    </label>
+                  </>
+                ) : mode === 'image' ? (
                   <>
                     <p className="intro-copy">{t('imageImportHint')}</p>
                     <div className="image-source-actions">
@@ -378,26 +456,28 @@ export function Imports({
                     </label>
                   </>
                 )}
-                <label className="check-row">
-                  <input
-                    type="checkbox"
-                    checked={ai}
-                    disabled={mode === 'link' && (!!file || !!sourceID)}
-                    onChange={(e) => {
-                      setAI(e.target.checked);
-                      setConsent(false);
-                    }}
-                  />
-                  {t('useAI')}
-                </label>
-                {ai && (
+                {account === 'household' && (
+                  <label className="check-row">
+                    <input
+                      type="checkbox"
+                      checked={ai}
+                      disabled={mode === 'link' && (!!file || !!sourceID)}
+                      onChange={(e) => {
+                        setAI(e.target.checked);
+                        setConsent(false);
+                      }}
+                    />
+                    {t('useAI')}
+                  </label>
+                )}
+                {ai && account === 'household' && (
                   <p className="muted">
                     {status?.enabled
                       ? `${t('aiDefault')}: ${status.provider} · ${status.model} · ${status.base_url}`
                       : t('importAIUnavailable')}
                   </p>
                 )}
-                {ai && (
+                {(ai || account === 'chatgpt') && (
                   <label className="check-row">
                     <input
                       type="checkbox"
@@ -405,7 +485,13 @@ export function Imports({
                       required
                       onChange={(e) => setConsent(e.target.checked)}
                     />
-                    {t(mode === 'image' ? 'imageAIConsent' : 'aiConsent')}
+                    {t(
+                      account === 'chatgpt'
+                        ? 'chatgptImportConsent'
+                        : mode === 'image'
+                          ? 'imageAIConsent'
+                          : 'aiConsent',
+                    )}
                   </label>
                 )}
                 {error && (
@@ -418,8 +504,12 @@ export function Imports({
                   disabled={
                     saving ||
                     choosing ||
-                    (mode === 'image' ? !selected : !url && !text.trim() && !file && !sourceID) ||
-                    (ai && !consent)
+                    (account === 'chatgpt'
+                      ? !text.trim() || !consent || !chatgpt?.model || chatgpt.state !== 'connected'
+                      : (mode === 'image'
+                          ? !selected
+                          : !url && !text.trim() && !file && !sourceID) ||
+                        (ai && !consent))
                   }
                 >
                   {t('queueImport')}

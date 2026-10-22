@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add optional personal ChatGPT text-recipe imports through the supported OSS OAuth flow,
+  a standalone Windows-friendly pairing helper, session-owned encrypted credentials,
+  account model selection and bounded streamed Responses validation. Preserve explicit
+  review/Save, offline queue identity and same-account consent; never pool household usage
+  or silently switch to paid API billing. Live subscription validation remains separate.
 - Freeze PWA v1 scope and add an evidence-backed acceptance register and device/service
   pilot checklist. Harden candidate/stable publication with exact-source CI, native
   image scans/runtime tests, immutable retries and digest-pinned install assets.

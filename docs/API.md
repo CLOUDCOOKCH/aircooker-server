@@ -1,5 +1,25 @@
 # API and offline sync protocol v1
 
+## Personal ChatGPT connection
+
+`/api/v1/integrations/chatgpt` is scoped to the authenticated session, including when two
+sessions claim the same device UUID. GET returns redacted connection/model state, PUT
+selects an account-available model, and DELETE clears local credentials and reports whether
+remote revocation was confirmed. POST `/pairing` requires explicit personal-use confirmation;
+DELETE cancels it. GET `/models` lists visible account models. GET `/helper` downloads the
+packaged standalone connector without authentication or secrets.
+
+POST `/pairing/claim` and `/pairing/complete` use a ten-minute, one-use, high-entropy pairing
+capability in the request body, never a URL. Only the helper receives registration hints and
+OAuth credential-transfer fields. The PWA never receives OAuth tokens. Protected cookie
+mutations use the existing CSRF protection. Pairing and external requests are rate-limited.
+
+Personal text imports use `ai_account=chatgpt`, the displayed connection ID/model/destination,
+`use_ai`, external-transfer consent and explicit background consent. They reject URL/media
+inputs and preserve session ownership through replay. Replaced/revoked connections cannot
+silently rebind queued work. Existing callers retain household defaults and their previous
+receipt fingerprints. See [connection guide](CHATGPT.md) for error recovery and limitations.
+
 The canonical generated contract is `contracts/openapi-v1.json`. Generate with
 `PYTHONPATH=src python scripts/export_contract.py`; CI checks exact drift. The live contract
 is `/api/v1/openapi.json`. API-major 1 and sync-protocol 1 are exposed by system info.

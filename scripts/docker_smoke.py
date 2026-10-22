@@ -125,6 +125,8 @@ def main():
                 "Container readiness timed out: " + docker("logs", "--tail", "40", name)
             )
         assert docker("inspect", "--format", "{{.Config.User}}", name) == "10001:10001"
+        helper = request(base, "/api/v1/integrations/chatgpt/helper")
+        assert helper == Path("src/aircooker/chatgpt_helper.py").read_bytes()
         shell = request(base, "/app/")
         assert b"manifest.webmanifest" in shell and b"/app/assets/" in shell
         assert json.loads(request(base, "/app/manifest.webmanifest"))["start_url"] == "/app/"

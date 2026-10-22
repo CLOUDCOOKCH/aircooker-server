@@ -16,6 +16,10 @@ def fingerprint(values):
         fields["source_id"] = str(values["source_id"])
     if values.get("ai_destination") is not None:
         fields["ai_destination"] = list(values["ai_destination"])
+    if values.get("ai_account") == "chatgpt":
+        fields["ai_account"] = "chatgpt"
+        fields["chatgpt_connection_id"] = str(values.get("chatgpt_connection_id"))
+        fields["consent_chatgpt_background"] = values.get("consent_chatgpt_background", False)
     return hashlib.sha256(
         json.dumps(fields, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()

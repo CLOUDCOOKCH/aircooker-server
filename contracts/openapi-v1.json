@@ -482,6 +482,340 @@
         "title": "Change",
         "type": "object"
       },
+      "ChatGPTBootstrap": {
+        "additionalProperties": false,
+        "properties": {
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          },
+          "host_id": {
+            "title": "Host Id",
+            "type": "string"
+          },
+          "id_token_hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id Token Hint"
+          },
+          "nonce": {
+            "title": "Nonce",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nonce",
+          "client_id",
+          "host_id"
+        ],
+        "title": "ChatGPTBootstrap",
+        "type": "object"
+      },
+      "ChatGPTClaim": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "format": "password",
+            "maxLength": 128,
+            "minLength": 32,
+            "title": "Code",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "ChatGPTClaim",
+        "type": "object"
+      },
+      "ChatGPTComplete": {
+        "additionalProperties": false,
+        "properties": {
+          "client_id": {
+            "pattern": "^oaiapp_[A-Za-z0-9_-]{3,200}$",
+            "title": "Client Id",
+            "type": "string"
+          },
+          "code": {
+            "format": "password",
+            "maxLength": 128,
+            "minLength": 32,
+            "title": "Code",
+            "type": "string",
+            "writeOnly": true
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/ChatGPTTokenSet"
+          }
+        },
+        "required": [
+          "code",
+          "client_id",
+          "tokens"
+        ],
+        "title": "ChatGPTComplete",
+        "type": "object"
+      },
+      "ChatGPTDisconnect": {
+        "additionalProperties": false,
+        "properties": {
+          "remote_revocation_confirmed": {
+            "title": "Remote Revocation Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "remote_revocation_confirmed"
+        ],
+        "title": "ChatGPTDisconnect",
+        "type": "object"
+      },
+      "ChatGPTModel": {
+        "additionalProperties": false,
+        "properties": {
+          "display_name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "slug": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "display_name"
+        ],
+        "title": "ChatGPTModel",
+        "type": "object"
+      },
+      "ChatGPTModelCatalog": {
+        "additionalProperties": false,
+        "properties": {
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/ChatGPTModel"
+            },
+            "maxItems": 100,
+            "title": "Models",
+            "type": "array"
+          }
+        },
+        "required": [
+          "models"
+        ],
+        "title": "ChatGPTModelCatalog",
+        "type": "object"
+      },
+      "ChatGPTPairRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "personal_use_confirmed": {
+            "const": true,
+            "title": "Personal Use Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "personal_use_confirmed"
+        ],
+        "title": "ChatGPTPairRequest",
+        "type": "object"
+      },
+      "ChatGPTPairing": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "expires_at": {
+            "title": "Expires At",
+            "type": "number"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "expires_at"
+        ],
+        "title": "ChatGPTPairing",
+        "type": "object"
+      },
+      "ChatGPTSelection": {
+        "additionalProperties": false,
+        "properties": {
+          "connection_id": {
+            "format": "uuid",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "model": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Model",
+            "type": "string"
+          }
+        },
+        "required": [
+          "connection_id",
+          "model"
+        ],
+        "title": "ChatGPTSelection",
+        "type": "object"
+      },
+      "ChatGPTStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "account_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Label"
+          },
+          "connection_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connection Id"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "input_formats": {
+            "default": [
+              "text"
+            ],
+            "items": {
+              "const": "text",
+              "type": "string"
+            },
+            "title": "Input Formats",
+            "type": "array"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "state": {
+            "enum": [
+              "disconnected",
+              "connected",
+              "reconnect_required"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "title": "ChatGPTStatus",
+        "type": "object"
+      },
+      "ChatGPTTokenSet": {
+        "additionalProperties": false,
+        "properties": {
+          "access_token": {
+            "format": "password",
+            "maxLength": 16384,
+            "minLength": 1,
+            "title": "Access Token",
+            "type": "string",
+            "writeOnly": true
+          },
+          "earliest_refresh_at": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Earliest Refresh At",
+            "type": "number"
+          },
+          "expires_in": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 86400.0,
+            "title": "Expires In",
+            "type": "integer"
+          },
+          "id_token": {
+            "format": "password",
+            "maxLength": 16384,
+            "minLength": 1,
+            "title": "Id Token",
+            "type": "string",
+            "writeOnly": true
+          },
+          "refresh_token": {
+            "format": "password",
+            "maxLength": 16384,
+            "minLength": 1,
+            "title": "Refresh Token",
+            "type": "string",
+            "writeOnly": true
+          },
+          "scope": {
+            "maxLength": 2048,
+            "title": "Scope",
+            "type": "string"
+          },
+          "token_type": {
+            "maxLength": 20,
+            "title": "Token Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token",
+          "id_token",
+          "token_type",
+          "expires_in",
+          "scope"
+        ],
+        "title": "ChatGPTTokenSet",
+        "type": "object"
+      },
       "Credentials": {
         "additionalProperties": false,
         "properties": {
@@ -1161,6 +1495,15 @@
       "ImportRequest": {
         "additionalProperties": false,
         "properties": {
+          "ai_account": {
+            "default": "household",
+            "enum": [
+              "household",
+              "chatgpt"
+            ],
+            "title": "Ai Account",
+            "type": "string"
+          },
           "ai_destination": {
             "anyOf": [
               {
@@ -1190,6 +1533,23 @@
               }
             ],
             "title": "Ai Destination"
+          },
+          "chatgpt_connection_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chatgpt Connection Id"
+          },
+          "consent_chatgpt_background": {
+            "default": false,
+            "title": "Consent Chatgpt Background",
+            "type": "boolean"
           },
           "consent_external_ai": {
             "default": false,
@@ -5334,6 +5694,258 @@
           }
         ],
         "summary": "Bring Status"
+      }
+    },
+    "/api/v1/integrations/chatgpt": {
+      "delete": {
+        "operationId": "disconnect_api_v1_integrations_chatgpt_delete",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTDisconnect"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Disconnect"
+      },
+      "get": {
+        "operationId": "status_api_v1_integrations_chatgpt_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Status"
+      },
+      "put": {
+        "operationId": "select_api_v1_integrations_chatgpt_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatGPTSelection"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Select"
+      }
+    },
+    "/api/v1/integrations/chatgpt/helper": {
+      "get": {
+        "operationId": "helper_api_v1_integrations_chatgpt_helper_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Helper"
+      }
+    },
+    "/api/v1/integrations/chatgpt/models": {
+      "get": {
+        "operationId": "models_api_v1_integrations_chatgpt_models_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTModelCatalog"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Models"
+      }
+    },
+    "/api/v1/integrations/chatgpt/pairing": {
+      "delete": {
+        "operationId": "cancel_api_v1_integrations_chatgpt_pairing_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cancel"
+      },
+      "post": {
+        "operationId": "prepare_api_v1_integrations_chatgpt_pairing_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatGPTPairRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTPairing"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Prepare"
+      }
+    },
+    "/api/v1/integrations/chatgpt/pairing/claim": {
+      "post": {
+        "operationId": "claim_api_v1_integrations_chatgpt_pairing_claim_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatGPTClaim"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTBootstrap"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Claim"
+      }
+    },
+    "/api/v1/integrations/chatgpt/pairing/complete": {
+      "post": {
+        "operationId": "complete_api_v1_integrations_chatgpt_pairing_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatGPTComplete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatGPTStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Complete"
       }
     },
     "/api/v1/leftovers": {

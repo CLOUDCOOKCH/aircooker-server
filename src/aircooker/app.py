@@ -55,6 +55,8 @@ from .backup import (
 )
 from .bring import reconcile
 from .bring_runtime import UnofficialBringConnector
+from .chatgpt import ChatGPTConnections
+from .chatgpt_routes import register_routes as register_chatgpt
 from .db import Database
 from .diagnostics import diagnostics, recent_jobs
 from .errors import DomainError
@@ -131,6 +133,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
     archive_slots = asyncio.Semaphore(1)
     SecretVault(data_dir / "config")
     reminders = Reminders(database, data_dir / "config")
+    chatgpt = ChatGPTConnections(database)
     token_file = data_dir / "config" / "setup-token"
     with database.connect() as db:
         configured = db.execute("SELECT 1 FROM household").fetchone()
@@ -173,6 +176,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 provider_factory=provider_for,
                 extractor=extract,
                 recognise=recognise_text,
+                personal_extract=chatgpt.extract,
             )
             return
         raise DomainError("unknown_job_kind")
@@ -385,6 +389,8 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             return authenticate(db, token)
 
     register_reminders(app, session, reminders)
+    register_chatgpt(app, session, chatgpt)
+    app.state.chatgpt = chatgpt
     app.state.reminders = reminders
     register_planning_preferences(app, session, database)
 
@@ -416,6 +422,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             "sync_history_proof": 1,
             "recipe_crud": True,
             "structured_import_preview": True,
+            "chatgpt_personal_text": True,
             "bring_automatic_mutations": False,
             "ai": settings_status(data_dir / "config").enabled,
             "media_upload": True,
@@ -806,6 +813,12 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 "SELECT state,request_fingerprint FROM import_draft WHERE id=?", (iid,)
             ).fetchone()
         if receipt and receipt["request_fingerprint"] is not None:
+            with database.connect() as db:
+                owner = db.execute(
+                    "SELECT session_id FROM chatgpt_import WHERE import_id=?", (iid,)
+                ).fetchone()
+            if owner and owner["session_id"] != s["id"]:
+                raise DomainError("chatgpt_import_owner_mismatch", 403)
             if receipt["request_fingerprint"] != import_fingerprint(body.model_dump(mode="json")):
                 raise DomainError("idempotency_conflict", 409)
             return {"id": iid, "state": receipt["state"]}
@@ -815,6 +828,10 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             else (platform_for(body.source_url) if body.source_url else "supplied_text")
         )
         source = None
+        if body.ai_account == "chatgpt":
+            personal = chatgpt.connection(s["id"], str(body.chatgpt_connection_id))
+            if not body.ai_destination or body.ai_destination[2] != personal["model"]:
+                raise DomainError("chatgpt_configuration_changed", 409)
         if body.source_id:
             with database.connect() as db:
                 source = db.execute(
@@ -836,6 +853,11 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 "SELECT state,request_fingerprint FROM import_draft WHERE id=?", (iid,)
             ).fetchone()
             if previous and previous["request_fingerprint"] is not None:
+                owner = db.execute(
+                    "SELECT session_id FROM chatgpt_import WHERE import_id=?", (iid,)
+                ).fetchone()
+                if owner and owner["session_id"] != s["id"]:
+                    raise DomainError("chatgpt_import_owner_mismatch", 403)
                 if previous["request_fingerprint"] != import_fingerprint(
                     body.model_dump(mode="json")
                 ):
@@ -888,6 +910,11 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 "import:" + iid,
                 {
                     "id": iid,
+                    **(
+                        {"ai_account": "chatgpt", "consent_chatgpt_background": True}
+                        if body.ai_account == "chatgpt"
+                        else {}
+                    ),
                     "text": body.text,
                     "source_url": body.source_url,
                     "use_ai": body.use_ai,
@@ -905,6 +932,11 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                     else [],
                 },
             )
+            if body.ai_account == "chatgpt":
+                db.execute(
+                    "INSERT INTO chatgpt_import VALUES (?,?,?)",
+                    (iid, s["id"], str(body.chatgpt_connection_id)),
+                )
         return {"id": iid, "state": "queued"}
 
     @app.get("/api/v1/imports/{import_id}", response_model=RecipeImportStatus)

@@ -149,3 +149,35 @@ requested a fixed dark-romance palette (After Dark: ink/oxblood/rose/gold) and a
 light palette (Sunday: linen/sage). Both use the same shared semantic tokens and original
 art, with native field colour schemes. Browser-local choice covers PWA/console and
 persists offline; no API/storage identity change. See docs/THEMES.md and DESIGN.md.
+
+Personal ChatGPT text-import extension, 2026-10-22: Settings adds an optional connection
+owned by the signed-in browser session. Other household members connect their own
+accounts; the connection is not pooled. Preserve the established system type, shared
+theme roles, solid Settings/import surfaces, glass navigation and original artwork.
+Literal ordered instructions download/run a Windows-friendly Python standard-library
+helper on the browser computer, then paste a private one-use pairing code and return
+to choose an available model. Keep command/account wrapping, selectable code, expiry,
+Copy/Cancel, reconnect/disconnect and allowance/revocation guidance understandable.
+
+The personal import choice accepts supplied recipe text only in this first milestone.
+Show the selected account/model/destination and require explicit consent to send the
+text and allow this import to finish after the app closes. Bind durable queued approval
+to that connection/model; preserve the existing editable preview and explicit Save.
+Reviewed recipes become shared household content. Credentials remain encrypted on the
+server; this UI documentation does not independently audit their handling. See the
+[setup and behavior guide](../../docs/CHATGPT.md).
+
+The [bounded finish review](../../docs/validation/chatgpt-ui-review.md) records **ship
+within the reviewed UI scope**, independent persistence pass and TYPE/MATERIAL/GROUND
+match, with no material UI fixes. Four genuine Chromium synthetic-household captures
+show desktop pairing/connected sections, a German dark phone connected section and
+the full-document German dark personal import page. Phone wrapping is an accepted
+adaptation. Supplied local browser evidence passes real PWA/server/helper loopback,
+signed-token verification, model choice, reviewed Save, offline replay and desktop/phone
+Axe; OpenAI identity/inference and HTTPS helper-origin routing are explicit doubles.
+The documentation handoff opened the captures and inspected sources, without rerunning
+those checks. Launcher/detector were unavailable and no passes are claimed. Live
+subscription eligibility, actual Windows execution, physical iPhone and exact-source
+CI/device evidence remain unverified here. Historical design-document drift remains
+preserved. This is an established task-flow extension without a new approved comp,
+seed or design card, and does not declare production acceptance or a security audit.

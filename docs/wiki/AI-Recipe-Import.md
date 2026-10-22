@@ -91,7 +91,8 @@ or Gemini consumer app does not configure an API key or enable MealF extraction.
 
 - **OpenAI:** API billing is separate from ChatGPT subscriptions. OpenAI also supports
   subscription allowance sharing in eligible participating apps through Sign in with
-  ChatGPT; MealF has not implemented that integration. Do not use browser cookies,
+  ChatGPT; the optional [personal ChatGPT text-import connection](../CHATGPT.md) implements
+  that separate flow with a desktop helper and session-owned authorization. Do not use browser cookies,
   consumer account passwords or tokens copied from another tool as an API credential.
 - **Gemini:** create a Gemini API project/key in Google AI Studio. Its free tier supports
   certain models within account/model quotas; paid usage uses the project's separate Cloud

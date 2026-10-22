@@ -13,6 +13,23 @@ def cleanup_database(database, *, now=None, dry_run=False):
     now = time.time() if now is None else now
     counts = {}
     with database.transaction() as db:
+        pairs = db.execute(
+            "SELECT id FROM chatgpt_pairing WHERE expires_at<? LIMIT ?", (now, BATCH)
+        ).fetchall()
+        counts["chatgpt_pairings"] = len(pairs)
+        if not dry_run:
+            db.executemany("DELETE FROM chatgpt_pairing WHERE id=?", [(row[0],) for row in pairs])
+        connections = db.execute(
+            "SELECT c.id FROM chatgpt_connection c JOIN session s ON s.id=c.session_id "
+            "WHERE c.credentials IS NOT NULL AND (s.revoked=1 OR s.refresh_expires<=?) LIMIT ?",
+            (now, BATCH),
+        ).fetchall()
+        counts["chatgpt_credentials"] = len(connections)
+        if not dry_run:
+            db.executemany(
+                "UPDATE chatgpt_connection SET credentials=NULL,error_code='chatgpt_session_ended' WHERE id=?",
+                [(row[0],) for row in connections],
+            )
         # A draft's minimal request receipt and final state remain available indefinitely.
         imports = db.execute(
             """SELECT id FROM import_draft WHERE state IN ('confirmed','cancelled')

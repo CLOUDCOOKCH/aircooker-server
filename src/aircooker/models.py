@@ -235,6 +235,9 @@ class Refresh(Model):
 
 
 class ImportRequest(Model):
+    ai_account: Literal["household", "chatgpt"] = "household"
+    chatgpt_connection_id: UUID | None = None
+    consent_chatgpt_background: bool = False
     image_id: UUID | None = None
     request_id: UUID = Field(default_factory=uuid4)
     use_ai: bool = False
@@ -253,6 +256,26 @@ class ImportRequest(Model):
 
     @model_validator(mode="after")
     def has_content(self):
+        if self.ai_account == "chatgpt":
+            if (
+                not self.use_ai
+                or not self.consent_external_ai
+                or not self.consent_chatgpt_background
+                or not self.chatgpt_connection_id
+                or not self.text
+                or not self.text.strip()
+                or len(self.text.encode()) > 50000
+                or self.source_url
+                or self.image_id
+                or self.source_id
+                or not self.ai_destination
+                or self.ai_destination[:2] != ("chatgpt", "https://api.openai.com/v1")
+            ):
+                raise ValueError(
+                    "Personal ChatGPT imports require recipe text and explicit personal/background consent"
+                )
+        elif self.chatgpt_connection_id or self.consent_chatgpt_background:
+            raise ValueError("Choose the personal ChatGPT connection explicitly")
         if not self.source_url and not self.text and not self.source_id and not self.image_id:
             raise ValueError("Provide a URL or source text")
         if self.source_id and self.image_id:

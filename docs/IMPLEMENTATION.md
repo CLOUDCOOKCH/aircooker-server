@@ -1,5 +1,17 @@
 # Implementation checklist and evidence
 
+**Personal ChatGPT imports — implemented; preview validation in progress:** the supported
+open-source OAuth/PKCE loopback helper pairs a personal account with one authenticated
+mealf session. Encrypted server credentials, verified signed tokens, account model discovery,
+serialized refresh, explicit per-import background consent and a pinned durable text-only
+request lead to the existing editable preview and Save. No household pooling, browser token
+storage, unofficial consumer endpoints or paid API fallback is used. Existing household
+providers and local photo OCR remain available. See [setup and limits](CHATGPT.md),
+[architecture](adr/015-personal-chatgpt.md) and [bounded UI review](validation/chatgpt-ui-review.md).
+Live OpenAI registration/allowance/inference and physical-iPhone checks remain unverified.
+The retained native repository is deliberately unchanged: additive API-v1 routes do not
+alter its existing sync contract; this connection interface is PWA-only for now.
+
 **PWA v1 readiness:** feature scope is frozen in [V1_READINESS.md](V1_READINESS.md).
 The candidate/stable workflow now requires exact main-source CI, fresh native scans and
 runtime checks, publication of verified bytes, matching package/API versions and separate
