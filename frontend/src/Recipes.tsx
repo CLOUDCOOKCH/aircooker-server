@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { ArrowDown, ArrowUp, Check, Plus, Search, Star, Trash2, Upload, X } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  Plus,
+  Search,
+  Star,
+  Sparkles,
+  Trash2,
+  Upload,
+  X,
+} from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useApp } from './model';
 import { AddButton, Empty, IconButton, PageHeader, Photo, safeURL, Sheet } from './components';
@@ -12,10 +23,12 @@ export function Recipes({
   open,
   create,
   importRecipe,
+  ideas,
 }: {
   open: (id: string) => void;
   create: () => void;
   importRecipe: () => void;
+  ideas: () => void;
 }) {
   const { entities, t } = useApp();
   const [query, setQuery] = useState('');
@@ -37,6 +50,13 @@ export function Recipes({
           <Plus size={23} />
         </IconButton>
       </PageHeader>
+      <button className="ideas-shortcut" onClick={ideas}>
+        <Sparkles size={20} />
+        <span>
+          <strong>{t('recipeIdeas')}</strong>
+          <small>{t('ideasShortcut')}</small>
+        </span>
+      </button>
       <label className="search-field">
         <Search size={20} />
         <input
@@ -480,9 +500,20 @@ export function RecipeEditor({
   return (
     <>
       <PageHeader
-        title={task ? t('reviewImport') : entity ? t('edit') : t('newRecipe')}
+        title={
+          task
+            ? t('reviewImport')
+            : entity
+              ? t('edit')
+              : initialRecipe?.source_platform === 'ai_generated'
+                ? t('ideasReview')
+                : t('newRecipe')
+        }
         back={back}
       />
+      {initialRecipe?.source_platform === 'ai_generated' && (
+        <p className="info-note">{t('ideasReviewHint')}</p>
+      )}
       {task && (
         <div className="info-note">
           <p>{t('reviewHint')}</p>

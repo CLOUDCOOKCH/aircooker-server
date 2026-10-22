@@ -1,5 +1,9 @@
 # mealf v1 production readiness
 
+Explicit user scope addition, 2026-10-22: ingredient-based/random Recipe ideas. This extends
+the freeze for that feature only and satisfies no outstanding release acceptance by itself.
+See [implementation/evidence](RECIPE_IDEAS.md).
+
 The v1 scope is now frozen. New features wait until the following production gates are
 closed; fixes, validation, recovery and documentation continue. This is a **PWA/server v1**.
 The original native product specification remains a later milestone and is not declared

@@ -1,5 +1,19 @@
 # API and offline sync protocol v1
 
+## Creative recipe ideas
+
+Authenticated `POST /api/v1/recipe-ideas` accepts `IdeaRequest`, returning 202 `IdeaStatus`:
+UUID request_id, mode (`ingredients`/`surprise`), language (`en`/`de`), explicit true AI
+consent and displayed `(provider, base_url, model)` destination. Ingredients requires nonempty
+text (maximum 2000 characters); surprise requires empty text. Same UUID/body replays;
+changed payload returns 409. Configuration/consent mismatch returns 409, invalid input 422,
+quota exhaustion 429. Existing authentication/CSRF protections apply.
+
+Authenticated `GET /api/v1/recipe-ideas/{request_id}` returns queued/running/ready/failed/expired
+state, a redacted error and complete proposals when ready; unknown IDs return 404. Neither
+route inserts recipe entities or sync mutations. Ordinary sync Save creates reviewed library
+records. See [retention and failure behavior](RECIPE_IDEAS.md).
+
 `GET /api/v1/planning/shopping` returns a typed current-household-week shopping/status snapshot
 without a remote request. `POST /api/v1/integrations/bring/verify` explicitly confirms a
 selected dedicated test list and queues a resumable UUID experiment. Manual reconciliation

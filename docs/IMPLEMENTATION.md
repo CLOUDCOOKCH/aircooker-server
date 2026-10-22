@@ -1,5 +1,15 @@
 # Implementation checklist and evidence
 
+**Recipe ideas, 2026-10-22 — implemented, locally tested; release verification pending:**
+Home/Recipes offers ingredient-based or surprise generation using configured household AI.
+Three complete proposals require editor review/Save; no automatic library/calendar/Bring!
+changes. Migration 015, idempotent delivery, pinned consent, recovery without duplicate
+billing, redaction and preview retention are covered. Local validation passes 408 backend
+and 59 frontend tests, Ruff/mypy/OpenAPI, build and real Chromium ingredient/random/offline
+review-save-reload-sync/Axe using provider HTTP doubles. Live provider/physical iPhone remain
+unverified. Explicit user scope addition: [guide](RECIPE_IDEAS.md),
+[decision](adr/016-creative-recipe-ideas.md). Native UI remains unchanged.
+
 **Shopping navigation, 2026-10-22 — published and verified in `poc-20261022.6`:** Shopping list is the sixth
 primary PWA destination on desktop/mobile. Existing shortcuts select the same tab.
 English/German labels, keyboard activation, one current destination, 320px target/label

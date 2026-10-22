@@ -1,5 +1,15 @@
 # Mealf preview
 
+## Recipe ideas candidate
+
+`poc-20261022.7` is prepared for the next preview; publication is pending. Home/Recipes
+offers three ingredient-based or surprise recipes from configured household AI, with
+explicit consent and review/Save. Cached proposals and reviewed offline saves persist.
+See [usage/privacy](RECIPE_IDEAS.md) and [scoped UI review](validation/recipe-ideas-ui-review.md).
+The last verified published image remains `.6` below until new exact-source CI, native
+image scans and runtime/upgrade verification succeed. Preserve the existing volume and
+custom internal/external `5152:5152` command/healthcheck. This remains a preview, not v1.
+
 ## Published preview: primary Shopping navigation
 
 `poc-20261022.6` is published and verified for **AMD64 and ARM64**.

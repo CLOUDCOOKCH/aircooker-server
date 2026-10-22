@@ -2886,3 +2886,132 @@ a.settings-row:hover {
     padding-inline: 0;
   }
 }
+
+.ideas-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+  text-align: left;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-radius: 16px;
+}
+.ideas-shortcut span {
+  flex: 1;
+  min-width: 0;
+}
+.ideas-shortcut strong,
+.ideas-shortcut small {
+  display: block;
+}
+.ideas-shortcut small {
+  font-weight: 400;
+  color: var(--accent-muted);
+  margin-top: 4px;
+}
+.ideas-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+  gap: 40px;
+  align-items: start;
+}
+.ideas-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.ideas-form legend {
+  font-weight: 650;
+  margin-bottom: 16px;
+}
+.ideas-form fieldset > label {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+.ideas-form fieldset > .check-row {
+  display: flex;
+}
+.ideas-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.ideas-modes .check-row {
+  min-height: 44px;
+  width: auto;
+  gap: 10px;
+}
+.ideas-modes input[type='radio'] {
+  appearance: auto;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  flex: 0 0 20px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+.ideas-provider {
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+  margin-top: 24px;
+}
+.ideas-form button.full {
+  margin-top: 20px;
+}
+.ideas-results {
+  min-width: 0;
+}
+.idea-result {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+.idea-result > .photo-placeholder,
+.idea-result > .food-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+}
+.idea-result p {
+  color: var(--muted);
+}
+.idea-result details {
+  margin: 16px 0;
+}
+.idea-result ul {
+  padding-left: 20px;
+  line-height: 1.7;
+}
+.ideas-empty {
+  padding: 40px 0;
+}
+.ideas-empty > svg {
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+@media (max-width: 800px) {
+  .ideas-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 360px) {
+  .idea-result {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .idea-result > .photo-placeholder,
+  .idea-result > .food-photo {
+    width: 64px;
+    height: 64px;
+  }
+}

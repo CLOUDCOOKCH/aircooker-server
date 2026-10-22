@@ -267,3 +267,45 @@ publication are pending at this handoff. DESIGN.md/design.json remain preserved;
 their historical five-destination, layout and system-only-appearance statements are
 snapshot drift, not instructions to undo this ordinary refinement. No new visual world,
 approved comp or whole-product/security acceptance is asserted.
+
+Recipe ideas extension, 2026-10-22: the user explicitly requested AI recipes from
+entered home ingredients or random inspiration. Home and Recipes open a dedicated
+task page within the existing six-destination shell. Keep the original peach/wordmark,
+shared cream/coral/peach Flo and existing After Dark/Sunday roles, system typography,
+solid forms and glass navigation. Desktop places the request and proposals side by
+side; phones stack them and wrap mode choices/provider destinations. This is an
+ordinary Operate extension, with no new visual world, token values or system refresh.
+
+Offer “Use what I have” and “Surprise me”. Display the configured household AI
+provider/model/base URL and require explicit request consent; surprise sends no
+ingredient text. Never silently substitute a personal ChatGPT plan or billing source.
+Show three complete proposals with ingredients available for inspection and a
+“Review recipe” action into the normal editor. Keep the warning about extra ingredients,
+AI mistakes and review literal. Only explicit Save adds the edited recipe to the local
+library/outbox; generation/review adds nothing to the library, calendar or Bring! list.
+Retain provider/model provenance and the original peach placeholder, without invented
+dish imagery, nutrition or source attribution. Inputs and downloaded proposals persist
+locally; offline generation is disabled while cached review/edit/Save remains available.
+Queued, configuration-change and failure guidance must preserve the draft and require
+renewed consent where appropriate. See [behavior/privacy](../../docs/RECIPE_IDEAS.md).
+
+The [bounded Recipe ideas finish review](../../docs/validation/recipe-ideas-ui-review.md)
+records **ship within the reviewed Recipe ideas UI scope**, with no material findings
+or required fixes. The fresh read-only reviewer opened all five genuine Chromium
+captures and inspected source authorities. This documentation handoff separately
+opened all five and inspected feature sources, browser assertions and supplied logs.
+Captures show English Flo desktop input/ready and German After Dark surprise at
+390px/320px plus cached offline at 390px, using explicitly synthetic provider proposals.
+Fixed navigation over a document band is full-page capture behavior; existing bottom
+space allows scrolling. Supplied local evidence passes 408 backend/59 frontend tests,
+build/Ruff/mypy/OpenAPI and real PWA/server/worker ingredient/surprise privacy,
+reviewed offline Save/reload/sync, cached proposals and malformed-output failure.
+Axe ran on desktop and German 390px; 320px establishes layout/overflow only.
+
+This documentation handoff reran no tests or browser checks. Context launcher and
+detector were attempted but absent; no automated design/schema pass is claimed.
+Live provider inference/billing, physical iPhone/Safari, native UI, exact-source CI and
+publication are outside this evidence. DESIGN.md/design.json and their historical
+five-destination/layout/system-only-appearance drift remain preserved, without repair.
+The reviewed code is unpublished at this handoff; the verdict is not whole-product,
+production or security acceptance.

@@ -24,11 +24,17 @@ offline viewing. See [recipe photos and limits](docs/RECIPE_PHOTOS.md).
 Open **Shopping list** in the main navigation to inspect current-week quantities, Bring! item states
 and failures, and use **Sync to Bring!**. See [shopping and safe verification](docs/SHOPPING.md).
 
+Open **Recipe ideas** on Home or in Recipes to enter ingredients you have or choose
+**Surprise me**. Your configured household AI proposes three recipes for explicit review,
+editing and Save; cached proposals and reviewed saves work offline. See
+[configuration, privacy and limits](docs/RECIPE_IDEAS.md).
+
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
 
-**PWA v1 scope is frozen.** Production readiness, remaining engineering work and the
+**PWA v1 scope is frozen except explicitly requested additions**, including Recipe ideas.
+Production readiness, remaining engineering work and the
 physical-device/live-service acceptance checklist are tracked in [v1 readiness](docs/V1_READINESS.md).
 Preview publication does not imply stable acceptance.
 

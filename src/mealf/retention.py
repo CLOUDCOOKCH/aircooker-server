@@ -13,6 +13,21 @@ def cleanup_database(database, *, now=None, dry_run=False):
     now = time.time() if now is None else now
     counts = {}
     with database.transaction() as db:
+        ideas = db.execute(
+            "SELECT id FROM recipe_idea_request WHERE state IN ('ready','failed') AND updated_at<? LIMIT ?",
+            (now - 30 * DAY, BATCH),
+        ).fetchall()
+        counts["recipe_idea_previews"] = len(ideas)
+        if not dry_run:
+            for row in ideas:
+                db.execute(
+                    "UPDATE recipe_idea_request SET state='expired',request=NULL,recipes=NULL,error_code=NULL WHERE id=?",
+                    (row[0],),
+                )
+                db.execute(
+                    "DELETE FROM background_job WHERE dedupe_key=? AND state IN ('done','failed')",
+                    ("ideas:" + row[0],),
+                )
         pairs = db.execute(
             "SELECT id FROM chatgpt_pairing WHERE expires_at<? LIMIT ?", (now, BATCH)
         ).fetchall()

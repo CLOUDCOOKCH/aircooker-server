@@ -23,7 +23,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import ValidationError
 from starlette.background import BackgroundTask
 
-from . import __version__
+from . import __version__, recipe_ideas
 from .ai import provider_for
 from .ai_settings import (
     AIProviderCatalog,
@@ -175,6 +175,9 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                 raise DomainError("bring_list_not_selected", 409)
             with UnofficialBringConnector(data_dir / "config") as connector:
                 reconcile(database, connector, settings["list_id"], str(monday), desired)
+            return
+        if job["kind"] == "recipe.ideas":
+            recipe_ideas.process(database, payload, provider_for)
             return
         if job["kind"] == "recipe.import":
             process_import(
@@ -831,6 +834,14 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             return await durable_work(put_source, database, source_id, raw, file.content_type or "")
         finally:
             await file.close()
+
+    @app.post("/api/v1/recipe-ideas", response_model=recipe_ideas.IdeaStatus, status_code=202)
+    def generate_recipe_ideas(body: recipe_ideas.IdeaRequest, s=Depends(session)):
+        return recipe_ideas.start(database, body)
+
+    @app.get("/api/v1/recipe-ideas/{request_id}", response_model=recipe_ideas.IdeaStatus)
+    def read_recipe_ideas(request_id: UUID, s=Depends(session)):
+        return recipe_ideas.status(database, request_id)
 
     @app.post("/api/v1/imports", status_code=202)
     def start_import(body: ImportRequest, s=Depends(session)):

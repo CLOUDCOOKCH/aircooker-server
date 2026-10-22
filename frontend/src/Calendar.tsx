@@ -169,6 +169,7 @@ export function Home({
   manage,
   create,
   importRecipe,
+  ideas,
   suggest,
   shopping,
 }: {
@@ -179,6 +180,7 @@ export function Home({
   manage: (item: Occurrence) => void;
   create: () => void;
   importRecipe: () => void;
+  ideas: () => void;
   suggest: () => void;
   shopping: () => void;
 }) {
@@ -203,6 +205,14 @@ export function Home({
           <span>{t('addRecipe')}</span>
         </button>
       </PageHeader>
+      <button className="ideas-shortcut" onClick={ideas}>
+        <Sparkles size={20} />
+        <span>
+          <strong>{t('recipeIdeas')}</strong>
+          <small>{t('ideasShortcut')}</small>
+        </span>
+        <ArrowRight size={18} />
+      </button>
       <WeekStrip day={day} onChange={setDay} />
       <div className="home-columns">
         <section className="today-section">

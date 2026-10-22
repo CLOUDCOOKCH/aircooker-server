@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add Recipe ideas on Home/Recipes: three generated recipes from entered ingredients or
+  a surprise request, configured household AI with explicit consent, durable idempotent
+  jobs, strict validation, cached offline proposals and reviewed Save. Generation never
+  automatically changes the library/calendar or personal ChatGPT billing.
+
 - Promote Shopping list to the main PWA navigation, with consistent selected state from
   existing shortcuts, English/German labels and six usable destinations on narrow phones.
 
