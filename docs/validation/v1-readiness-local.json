@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-10-22T04:46:23.482381+00:00",
+  "source": {
+    "base": "932e2ce4ae4b581f0d48a6b6868d4f9cdeeac850",
+    "branch": "release/v1-readiness",
+    "scope": "Candidate working tree; exact remote head/CI results are recorded in its PR and preview release"
+  },
+  "backend": {
+    "passed": 309,
+    "failed": 0,
+    "junit": "build/v1-readiness-tests.xml"
+  },
+  "frontend": {
+    "passed": 51,
+    "failed": 0
+  },
+  "checks": {
+    "ruff_lint": "passed",
+    "ruff_format": "passed",
+    "mypy": "passed (40 source files)",
+    "openapi_drift": "passed; contract unchanged",
+    "frontend_type_format_build": "passed",
+    "brand_assets": "passed",
+    "license_inventory": "passed",
+    "workflow_yaml": "ci/preview/release parsed with host YAML parser",
+    "whitespace": "passed"
+  },
+  "browser": {
+    "pwa_offline_sync": "passed; real Chromium",
+    "image_ocr_offline_review": "passed; real local English/German OCR and Chromium"
+  },
+  "operator": {
+    "offline_deletion": "unit and real-PTY CLI tests pass, wrong-confirmation/running-server refusal, fail-closed interruption/resume and retained/explicit backup deletion",
+    "backup": "verified SQLite WAL snapshot, atomic no-overwrite publication, partial-copy cleanup and destination-race preservation pass",
+    "shutdown": "volume lease remains held until in-flight worker finishes",
+    "storage": "real SQLITE_FULL rollback/identical retry, reconnect cap and persistent unblocked browser queue pass"
+  },
+  "limitations": [
+    "Native AMD64/ARM64 Docker builds, scans and packaged operator checks await exact-source GitHub CI",
+    "Local fresh source Docker build is blocked by denied Alpine package host; no TLS/policy bypass attempted",
+    "Dedicated Codex Security preflight assets/tools unavailable; no repository audit completion claimed",
+    "No live AI/Bring/push, physical iPhone or real household pilot evidence",
+    "RC/stable workflow code has policy tests but no real RC/protected-environment rehearsal",
+    "Guided non-recipe archive reconstruction and recovery import remain engineering work",
+    "Not production acceptance"
+  ]
+}

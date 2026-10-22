@@ -76,7 +76,9 @@ jobs:
       - name: Exercise this exact image with isolated persistent data
         env:
           AIRCOOKER_TEST_IMAGE: mealf-verified:${{ matrix.arch }}
-        run: python scripts/docker_smoke.py
+        run: |
+          python scripts/docker_smoke.py
+          python scripts/operator_docker_smoke.py
       - name: Generate software bill of materials
         env:
           IMAGE_ARCH: ${{ matrix.arch }}

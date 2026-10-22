@@ -404,3 +404,47 @@ test('a permanently rejected photo cannot poison unrelated outgoing recipes', as
   assert.equal((await store.photo(imageID))?.error, undefined);
   store.close();
 });
+
+test('server storage failure keeps the same mutation pending and unblocked across restart', async () => {
+  const instance = uuid();
+  let store = await LocalStore.open(instance);
+  const device = await store.device();
+  await store.saveBatch([
+    { kind: 'recipe', id: uuid(), value: { ...emptyRecipe(), title: 'Keep offline edit' } },
+  ]);
+  const original = (await store.pending())[0].mutation;
+  const engine = new SyncEngine(store, {
+    async request<T>(path: string, init?: RequestInit): Promise<T> {
+      let value: unknown;
+      if (path.startsWith('/api/v1/sync/state'))
+        value = {
+          instance_id: instance,
+          cursor: 0,
+          token: 'root',
+          requested_cursor: 0,
+          requested_token: 'root',
+        };
+      else if (path.endsWith('/session')) value = { device_id: device };
+      else if (path.endsWith('/push')) {
+        assert.deepEqual(JSON.parse(String(init?.body)).mutations, [original]);
+        throw new APIError('storage_unavailable', 503);
+      } else throw new Error('Unexpected request: ' + path);
+      return value as T;
+    },
+    async upload() {
+      throw new Error('No photo expected');
+    },
+  });
+  await assert.rejects(
+    engine.synchronise(),
+    (error: unknown) => error instanceof APIError && error.code === 'storage_unavailable',
+  );
+  store.close();
+  store = await LocalStore.open(instance);
+  const pending = await store.pending();
+  assert.equal(pending.length, 1);
+  assert.deepEqual(pending[0].mutation, original);
+  assert.equal(pending[0].blocked, undefined);
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Keep offline edit');
+  store.close();
+});

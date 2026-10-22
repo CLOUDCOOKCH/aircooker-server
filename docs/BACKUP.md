@@ -42,9 +42,10 @@ docker compose exec aircooker python -m aircooker.cli backup --output /data/back
 ```
 
 The output must not exist. SQLite's online backup API creates a consistent snapshot while
-WAL writes continue. Permissions are 0600. It includes database records, password hashes,
-sessions, import data and ownership history. Photo files and configuration/encryption keys
-are separate and must also be backed up. Encrypt it before copying it off-host; this CLI
+WAL writes continue. The staged copy passes quick/foreign-key checks and is atomically
+published without overwriting an existing destination. Permissions are 0600. It includes database records, password hashes,
+sessions, import data and ownership history. Recipe photo BLOBs are included in this SQLite snapshot. Configuration/encryption keys
+and any separately stored files must also be backed up. Encrypt it before copying it off-host; this CLI
 does not encrypt automatically and is explicitly a local administrator operation.
 
 For complete recovery, stop the container and securely back up the entire local volume,
@@ -88,3 +89,46 @@ subscription/auth secrets and must remain private. See REMINDERS.md.
 Maintenance prunes eligible terminal source/diagnostic data logically while retaining replay
 proofs and offline media dependencies. It never deletes private backup files or household
 exports. SQLite pages/WAL/volume snapshots can retain older data; see RETENTION.md.
+
+## Offline household deletion
+
+The installed local command `python -m aircooker.cli delete-household` erases the current
+household, sessions, recipes/media, sync history, jobs, setup state and saved integration
+keys/credentials. It requires an interactive terminal, the exact `DELETE <instance UUID>`
+confirmation and an exclusive volume lease. A running server or another deletion process
+makes it refuse before changing data. Stop the service first; do not terminate individual
+worker threads or edit database tables as a workaround.
+
+For the preview service, run from the host in the **existing Compose project**:
+
+```sh
+docker compose stop mealf
+docker compose run --rm --no-deps --entrypoint python mealf -m aircooker.cli delete-household
+docker compose up -d mealf
+```
+
+Use your existing Compose filename/flags and service (`aircooker` in the source-build
+example). The one-off container must use the same existing `/data` volume; creating a new
+project/volume does not delete the original household. This command cannot run successfully
+inside the ordinary still-running server container. NAS operators can run an equivalent
+one-off container with the same image/volume and an interactive terminal after stopping
+the server. Keep the normal non-root user and security settings.
+
+Application-managed `/data/backups` is preserved by default and may still contain all
+private household content. Add `--include-backups` only to explicitly erase those backups
+too. External/off-host backups, snapshots, logs, environment-mounted keys, AI/Bring accounts
+and already cached offline device data are unaffected. Remove or reconfigure those
+separately if intended. No external Bring items are manipulated by deletion. File unlinking
+is not a forensic erasure guarantee.
+
+An interruption leaves a private `.household-deletion.json` marker and startup refuses to
+serve a partial household. Resume the same command with the original backup choice; it
+continues the same deletion rather than making a new household. Unexpected symlinked data
+or malformed markers fail closed and require operator recovery. The lease and marker live
+outside erased directories; normal shutdown keeps the lease until in-flight worker writes
+finish. A hard process exit releases the OS lease, with SQLite/queue recovery on restart.
+
+After completion, startup generates fresh setup credentials and a new household identity
+on configuration. Old sessions are invalid. Offline clients retain their old household cache
+and pending work; they cannot silently submit it to the new identity. Export needed local
+work before deleting, and remove local device copies separately when desired.

@@ -498,7 +498,15 @@ function Kitchen({
         {app.error && (
           <div className="status-banner" role="alert">
             <CircleAlert size={18} />
-            <p>{t(app.error === 'blocked' ? 'blocked' : 'syncError')}</p>
+            <p>
+              {t(
+                app.error === 'blocked'
+                  ? 'blocked'
+                  : app.error === 'storage_unavailable'
+                    ? 'serverStorageError'
+                    : 'syncError',
+              )}
+            </p>
             <button
               className="text-button"
               onClick={() => {

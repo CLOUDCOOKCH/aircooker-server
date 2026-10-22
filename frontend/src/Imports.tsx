@@ -18,6 +18,7 @@ const errorKeys = {
   image_not_found: 'imageImportMissing',
   image_not_available_locally: 'imageImportMissing',
   media_storage_limit: 'imageStorageFull',
+  storage_unavailable: 'serverStorageError',
   ai_not_configured: 'imageAINotConfigured',
   ai_input_format_unsupported: 'importFormatUnsupported',
   ai_configuration_changed_review_consent: 'importProviderChanged',

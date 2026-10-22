@@ -40,6 +40,7 @@ be read-only; `/tmp` is a bounded tmpfs. Keep the single-worker process model.
 | Variable | Default | Behaviour |
 | --- | --- | --- |
 | DATA_DIR | /data | Local persistent state; never use a live SQLite database on NFS/SMB |
+| DATABASE_MAX_BYTES | 2147483648 | SQLite main-file growth cap (2 GiB); integer from 1 MiB to 64 GiB, applied on every connection |
 | BASE_URL | https://localhost | Exact allowed browser origin; no trailing application path |
 | LOG_LEVEL | info | Uvicorn level; keep third-party debug logging disabled |
 | LOG_SETUP_TOKEN | true | Print the one-time setup token at unconfigured startup; false disables it, with file access retained |

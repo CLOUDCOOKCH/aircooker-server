@@ -77,8 +77,8 @@ are not cleanup targets.
 
 This is logical application pruning, not a forensic erasure guarantee. SQLite can reuse
 freed pages without immediately shrinking its files; WAL/volume snapshots and backups may
-retain earlier data. Keep sensitive backups private. Full household deletion, safe media/
-sync-history compaction, broader quotas and volume recovery remain separate engineering work.
+retain earlier data. Keep sensitive backups private. Explicit offline household deletion is now available (BACKUP.md). Safe media/sync-history
+compaction, broader quotas and full volume recovery remain separate engineering work.
 
 ## Evidence
 
@@ -90,3 +90,24 @@ migration rollback and restart idempotency, confirmed-worker races and redacted 
 failure with an ordinary job still processed. Packaged CLI dry-run/apply are exercised in the
 non-root/read-only Docker smoke. Full ordinary PWA/console regressions still run. Exact
 counts, image IDs, source/CI and remaining limits are in the retention validation reports.
+
+## Database growth and unavailable storage
+
+`DATABASE_MAX_BYTES` defaults to 2 GiB (2147483648); configure 1 MiB–64 GiB as an integer.
+Every SQLite connection enforces the main-file page cap. It does not cap WAL, temporary
+transfers, container logs or separately retained backups: monitor free space on the whole
+volume and retain operational headroom. An existing larger database is never truncated;
+SQLite caps it at its current page count until the administrator raises the setting.
+
+Quota/disk/I/O failure returns a redacted 503 `storage_unavailable`. The entire failed
+mutation rolls back with no success receipt; the PWA keeps its exact mutation and photos
+pending across restart. Increase the configured cap or recover host storage, then retry.
+Do not delete sync history, the database or browser storage to work around the cap. A
+large tombstone update can itself need space; freeing/recovering operator-managed storage
+or raising the limit may be necessary before application deletions can complete.
+
+Transient storage failures while claiming or finishing a job no longer terminate the sole
+worker. It logs only `worker_retry`, backs off and retries; existing lease/fencing/replay
+rules still apply. Real SQLite-full tests verify rollback, history integrity and identical
+mutation retry, plus reconnect/restart cap enforcement and worker recovery. This does not
+claim disk-controller fault injection, long-running load or a complete retention/GC policy.

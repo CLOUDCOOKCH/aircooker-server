@@ -7,10 +7,14 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 
-def completed_digest(release, tag, image):
+def completed_digest(release, tag, image, *, prerelease=True):
     if release is None:
         return None
-    if release.get("tag_name") != tag or release.get("draft") or not release.get("prerelease"):
+    if (
+        release.get("tag_name") != tag
+        or release.get("draft") is not False
+        or release.get("prerelease") is not prerelease
+    ):
         raise ValueError(
             "Existing release is not the expected completed preview; inspect it manually"
         )

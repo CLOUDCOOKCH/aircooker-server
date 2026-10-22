@@ -4,6 +4,17 @@ This is an installable **development preview**, not the finished product or a st
 release. The browser app and self-hosted backend run together in one container on
 **linux/amd64** and **linux/arm64**. You do not need a Mac, Xcode or an App Store account.
 
+## Current preview candidate
+
+`poc-20261022.1` includes the merged configurable AI providers, image/PDF inputs,
+Gemini video requests, editable extraction previews, provider settings and operator guides.
+The local camera/OCR path remains available without AI. It also freezes the PWA v1 scope
+and introduces fail-closed candidate/stable release policy, SQLite storage limits, worker
+recovery, verified local backups and explicit offline household deletion. A preview is available only
+once its GitHub prerelease and GHCR manifest have actually been published successfully;
+source changes or a tag alone do not establish publication. Live providers/Bring/push,
+physical iPhone and full production acceptance remain open. See [v1 readiness](V1_READINESS.md).
+
 ## Install
 
 Download `compose.preview.yaml` from this prerelease into a new directory. Configure a
@@ -30,7 +41,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261021.9`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.1`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.
