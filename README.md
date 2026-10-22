@@ -89,6 +89,12 @@ python -m mypy src/mealf --ignore-missing-imports
 PYTHONPATH=src python scripts/export_contract.py --check
 ```
 
+The browser CI job uses the digest-pinned official Playwright Python image matching
+`requirements-browser.lock`. It includes Chromium, WebKit and their system libraries;
+the job checks that both engines exist before running the full smoke suite. Update the
+image version/digest and Python lock together. The image is test infrastructure only;
+the production container and its non-root runtime are unchanged.
+
 ## Docker
 
 For the first prebuilt PWA preview, see [POC installation and limits](docs/POC.md) and
