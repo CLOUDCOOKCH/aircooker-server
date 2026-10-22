@@ -53,7 +53,17 @@ The Settings action opens Settings; expand **AI recipe import** to change config
 Generation still requires a deliberate new request after failure; reloading retains the
 failed UUID instead of generating another billable batch.
 
-The `/admin/` AI connection test sends a synthetic recipe, not household content. Its
+The `/admin/` AI connection test sends a synthetic recipe, not household content. A known
+provider failure is a failed configuration validation: provider-side 5xx failures return
+HTTP 422 with an allowlisted error code rather than presenting this server as a broken
+gateway. Upstream quota failures retain HTTP 429. Successful validated probes alone return
+HTTP 200. No automatic retry occurs; credentials, response bodies and prompts are omitted
+from the `ai_connection_test_failed` log event. DNS/connect/TLS failures have the separate
+`ai_connection_failed` code; it does not distinguish those causes without container checks.
+This preserves diagnostic JSON through proxies that replace 5xx error pages and does not
+repair a disconnected tunnel or an unverified live provider configuration.
+
+The administration's
 `http_502`/`http_504` fallback means no readable API error code was received, so inspect
 container and reverse-proxy logs; it is not proof of an invalid model, key or timeout.
 A failed connection test does not isolate a Recipe ideas-specific failure. If the test
@@ -62,8 +72,13 @@ longer than the small probe, especially with thinking models; adjust the support
 only when a timeout is actually reported. Do not raise limits or silently resend to conceal
 an unexplained failure. See Google's [troubleshooting guide](https://ai.google.dev/gemini-api/docs/troubleshooting).
 
-The reported live deployment's immediate `http_502` has not been reproduced against its
-provider/proxy. Local tests use synthetic HTTP failures; they do not establish a live fix.
+The reported live deployment's immediate `http_502` returned Cloudflare HTML. Supplied
+tunnel logs show historical refused origin connections, but not at that probe's time;
+they do not establish its cause. A subsequent direct LAN health read succeeded. Local tests
+use synthetic HTTP failures and an explicit 5xx-replacing proxy double; they do not
+establish a live fix. Compare fresh tunnel and container logs at the exact test time.
+A direct LAN read of `/api/v1/system/health` tests current reachability only, not AI access
+or authenticated browser flows.
 
 Migration 015 persists requests/results in SQLite for the existing durable worker. The
 client saves its UUID before sending: identical replay returns the original job, while a

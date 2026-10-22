@@ -5,9 +5,15 @@ allowlisted English/German provider errors survive the durable worker and cached
 failure, with explicit recovery and no automatic paid retries. Gemini display names with
 whitespace are rejected before configuration is saved; API ID hints appear in the PWA and
 administration. Raw gateway errors are distinguished from structured provider errors.
+The connection test now reports known provider 5xx failures as 422 configuration-validation
+errors with allowlisted codes; it preserves 429 quotas, genuine server failures and explicit
+paid retries. Synthetic proxy replacement, transport failures, safe logs and browser EN/DE
+recovery are covered. The supplied Cloudflare HTML confirms a missing readable API response;
+historical refused connections and a current healthy direct origin do not establish the
+live AI failure's cause. No proxy or household configuration was changed.
 The household's immediate `http_502` remains unverified; no credentials or live data were
 accessed. See [configuration and troubleshooting](RECIPE_IDEAS.md).
-Local verification: 435 backend tests, 67 frontend tests, build/type/format, Ruff, mypy,
+Local verification: 445 backend tests, 67 frontend tests, build/type/format, Ruff, mypy,
 OpenAPI drift, Chromium proposal/error/recovery and administration regressions pass.
 See [bounded review and genuine capture provenance](validation/recipe-ideas-errors.md).
 

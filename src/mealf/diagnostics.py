@@ -9,6 +9,7 @@ from .models import AdministrationDiagnostics, ImportDiagnostic, JobCounts, JobI
 PUBLIC_ERRORS = frozenset(
     {
         "ai_authentication_failed",
+        "ai_connection_failed",
         "ai_model_or_endpoint_not_found",
         "ai_request_rejected",
         "ai_content_blocked",

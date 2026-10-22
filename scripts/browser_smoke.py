@@ -20,6 +20,7 @@ import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
 import mealf.app as application
+from mealf.errors import DomainError
 from mealf.jobs import enqueue
 from mealf.models import Ingredient, Recipe
 
@@ -44,8 +45,12 @@ class TestBring:
 
 
 class TestAI:
+    failure = None
+
     def extract_recipe(self, content):
         assert "Connection test soup" in content
+        if self.failure:
+            raise DomainError(self.failure, 502)
         return Recipe(
             title="Synthetic probe",
             ingredients=[Ingredient(id=uuid4(), name="Carrots")],
@@ -274,6 +279,36 @@ def main():
                 )
                 page.locator("#ai-test").click()
                 expect(page.locator("#status")).to_contain_text("ai_model_or_endpoint_not_found")
+                page.unroute(probe_url)
+
+                # Real API/AI-test failure through a synthetic 5xx-replacing proxy.
+                def proxy_response(route):
+                    response = route.fetch()
+                    if response.status >= 500:
+                        route.fulfill(
+                            status=502, content_type="text/html", body="<h1>Gateway error</h1>"
+                        )
+                    else:
+                        route.fulfill(response=response)
+
+                TestAI.failure = "ai_model_or_endpoint_not_found"
+                page.route(probe_url, proxy_response)
+                page.locator("#ai-test").click()
+                expect(page.locator("#status")).to_contain_text("Check the exact API model ID")
+                expect(page.locator("#status")).to_contain_text("ai_model_or_endpoint_not_found")
+                captures = Path("build/ai-proxy-browser")
+                captures.mkdir(parents=True, exist_ok=True)
+                page.screenshot(
+                    path=str(captures / "ai-probe-failed-desktop-en.png"), full_page=True
+                )
+                page.locator("#language").select_option("de")
+                expect(page.locator("#status")).to_contain_text("Prüfe die genaue API-Modell-ID")
+                page.set_viewport_size({"width": 390, "height": 844})
+                assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
+                page.screenshot(path=str(captures / "ai-probe-failed-phone-de.png"), full_page=True)
+                page.set_viewport_size({"width": 1200, "height": 900})
+                page.locator("#language").select_option("en")
+                TestAI.failure = None
                 page.unroute(probe_url)
                 page.locator('[data-page-link="bring"]').click()
                 bring = page.locator("#bring-form")

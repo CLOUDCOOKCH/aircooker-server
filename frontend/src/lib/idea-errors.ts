@@ -6,6 +6,7 @@ const messages: Record<string, keyof typeof en> = {
   ai_request_rejected: 'ideasRequestError',
   ai_content_blocked: 'ideasBlockedError',
   ai_timeout: 'ideasTimeoutError',
+  ai_connection_failed: 'ideasProviderConnectionError',
   ai_rate_limited: 'ideasRateError',
   ai_request_limit: 'ideasLocalLimitError',
   ai_output_incomplete: 'ideasIncompleteError',

@@ -205,6 +205,8 @@ class BaseProvider:
             return json.loads(data)
         except httpx.TimeoutException as exc:
             raise DomainError("ai_timeout", 504) from exc
+        except httpx.ConnectError as exc:
+            raise DomainError("ai_connection_failed", 502) from exc
         except (httpx.HTTPError, ValueError, RecursionError) as exc:
             raise DomainError("ai_invalid_response", 502) from exc
 

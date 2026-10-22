@@ -64,6 +64,8 @@ export const en = {
   ideasError:
     'Could not finish these ideas. Check your connection and AI settings, then try again. Your ingredient text stays here.',
   ideasErrorCode: 'Diagnostic code:',
+  ideasProviderConnectionError:
+    'Your server could not connect to the AI provider. Check container DNS, outbound access and certificate trust.',
   ideasOpenSettings: 'Open settings',
   ideasProviderError:
     'The AI provider could not complete the request. Check its service status before trying again.',
@@ -727,6 +729,8 @@ export const de: Record<Key, string> = {
   ideasError:
     'Diese Ideen konnten nicht erstellt werden. Prüfe Verbindung und KI-Einstellungen und versuche es erneut. Deine Zutatenliste bleibt hier.',
   ideasErrorCode: 'Diagnosecode:',
+  ideasProviderConnectionError:
+    'Dein Server konnte den KI-Anbieter nicht erreichen. Prüfe DNS, ausgehende Verbindungen und vertrauenswürdige Zertifikate im Container.',
   ideasOpenSettings: 'Einstellungen öffnen',
   ideasProviderError:
     'Der KI-Anbieter konnte die Anfrage nicht verarbeiten. Prüfe seinen Dienststatus vor einem neuen Versuch.',

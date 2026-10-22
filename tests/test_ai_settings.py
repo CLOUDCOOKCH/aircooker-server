@@ -1,6 +1,11 @@
+import logging
+
+import httpx
 import pytest
 
+from mealf.ai import provider_for
 from mealf.ai_settings import load_configuration
+from mealf.errors import DomainError
 
 
 def configuration(**changes):
@@ -150,3 +155,76 @@ def test_connection_probe_obeys_configured_hourly_budget(harness, monkeypatch):
     assert c.post("/api/v1/admin/ai/test").status_code == 200
     assert c.post("/api/v1/admin/ai/test").status_code == 429
     assert len(probes) == 1
+
+
+@pytest.mark.parametrize(
+    ("failure", "expected_status", "expected_code"),
+    [
+        (400, 422, "ai_request_rejected"),
+        (401, 422, "ai_authentication_failed"),
+        (403, 422, "ai_authentication_failed"),
+        (404, 422, "ai_model_or_endpoint_not_found"),
+        (429, 429, "ai_rate_limited"),
+        (503, 422, "ai_provider_failed"),
+        ("timeout", 422, "ai_timeout"),
+        ("connect", 422, "ai_connection_failed"),
+        ("invalid_json", 422, "ai_invalid_response"),
+    ],
+)
+def test_probe_failure_survives_a_proxy_replacing_5xx_bodies(
+    harness, monkeypatch, caplog, failure, expected_status, expected_code
+):
+    client, _, *_ = harness
+    assert client.put("/api/v1/admin/ai", json=configuration()).status_code == 200
+    calls = []
+
+    def provider_transport(request):
+        calls.append(request)
+        if failure == "timeout":
+            raise httpx.ReadTimeout("private-synthetic-detail", request=request)
+        if failure == "connect":
+            raise httpx.ConnectError("private-synthetic-detail", request=request)
+        if failure == "invalid_json":
+            return httpx.Response(200, content=b"private-synthetic-detail")
+        return httpx.Response(failure, json={"error": {"message": "private-synthetic-detail"}})
+
+    monkeypatch.setattr(
+        "mealf.app.provider_for",
+        lambda config: provider_for(config, httpx.MockTransport(provider_transport)),
+    )
+
+    def proxy_transport(request):
+        origin = client.post("/api/v1/admin/ai/test")
+        if origin.status_code >= 500:
+            return httpx.Response(502, text="<html>Gateway error</html>")
+        return httpx.Response(origin.status_code, content=origin.content)
+
+    caplog.set_level(logging.WARNING, logger="mealf.app")
+    with httpx.Client(transport=httpx.MockTransport(proxy_transport)) as edge:
+        response = edge.post("https://kitchen.example/api/v1/admin/ai/test")
+    assert response.status_code == expected_status
+    assert response.json() == {"error": {"code": expected_code}}
+    assert len(calls) == 1  # No automatic provider retry or alternate billing source.
+    assert "ai_connection_test_failed" in caplog.text and expected_code in caplog.text
+    assert "private-synthetic-detail" not in response.text + caplog.text
+
+
+def test_probe_unknown_provider_error_is_redacted_and_client_closed(harness, monkeypatch, caplog):
+    client, _, *_ = harness
+    assert client.put("/api/v1/admin/ai", json=configuration()).status_code == 200
+    closed = []
+
+    class Provider:
+        def extract_recipe(self, content):
+            raise DomainError("private-synthetic-detail", 502)
+
+        def close(self):
+            closed.append(True)
+
+    monkeypatch.setattr("mealf.app.provider_for", lambda config: Provider())
+    caplog.set_level(logging.WARNING, logger="mealf.app")
+    response = client.post("/api/v1/admin/ai/test")
+    assert response.status_code == 422
+    assert response.json() == {"error": {"code": "operation_failed"}}
+    assert closed == [True]
+    assert "private-synthetic-detail" not in response.text + caplog.text

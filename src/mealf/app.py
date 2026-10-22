@@ -59,7 +59,7 @@ from .bring_verification import verify as verify_bring
 from .chatgpt import ChatGPTConnections
 from .chatgpt_routes import register_routes as register_chatgpt
 from .db import Database
-from .diagnostics import diagnostics, recent_jobs
+from .diagnostics import diagnostics, public_error, recent_jobs
 from .errors import DomainError
 from .image_import import ocr_available, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
@@ -749,6 +749,15 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             provider.extract_recipe(
                 "Recipe: Connection test soup. Serves 2. Ingredient: 200 g carrots. Instruction: Simmer carrots in water until tender. No nutrition data available."
             )
+        except DomainError as exc:
+            # This endpoint validates a saved configuration. A provider failure is a
+            # failed validation, not evidence that this HTTP server is a bad gateway.
+            # Keeping it 4xx preserves its diagnostic body through 5xx error pages.
+            code = public_error(exc.code) or "operation_failed"
+            logging.getLogger(__name__).warning(
+                json.dumps({"event": "ai_connection_test_failed", "error_code": code})
+            )
+            raise DomainError(code, 422 if exc.status >= 500 else exc.status) from exc
         finally:
             provider.close()
         return {"state": "validated_probe_response", "household_content_sent": False}

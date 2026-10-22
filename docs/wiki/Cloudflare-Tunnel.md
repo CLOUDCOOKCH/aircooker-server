@@ -164,6 +164,16 @@ Check the service name, network, port and backend health. A tunnel unavailable/1
 points to connector availability or routing. A browser 403 after the page loads usually
 needs an exact `BASE_URL`, cookie/CSRF or edge-policy check. See [Troubleshooting](Troubleshooting).
 
+Match log timestamps to the failing request: a historical `connection refused` line does
+not explain a later request. A branded Cloudflare HTML response establishes that the
+client did not receive the normal API JSON; it does not by itself distinguish a failed
+origin connection from an origin 5xx response replaced by the proxy. A public or cached PWA
+page loading also does not establish current API reachability. Use a direct private-LAN
+health read and contemporaneous connector/container logs; never disable authentication or
+TLS verification to diagnose this. The administration AI connection test returns known
+provider failures as 422 validation errors with redacted codes, keeping genuine tunnel
+502s separate. See [AI troubleshooting](../RECIPE_IDEAS.md#troubleshooting-gemini-and-failed-requests).
+
 This is a documented deployment pattern; no live Cloudflare account/tunnel was exercised
 while preparing these guides.
 

@@ -60,3 +60,38 @@ provider cause remain unverified. The user was given the documented `gemini-3.8-
 ID and Gemini v1beta base URL to check. Local fixes improve validation and diagnosis;
 they do not establish that the user's deployment is repaired. No household credentials,
 logs, keys, saved content or production endpoints were accessed or changed.
+
+## Proxy-safe configuration validation follow-up
+
+2026-10-22: user-supplied HTML confirms a Cloudflare error page. Older tunnel logs show
+origin refusals outside that request's time; a current private health read succeeds.
+Neither establishes the live AI error. No user HTML, addresses, ray IDs or raw logs are
+committed here. The endpoint/UI fix is a tested diagnostic improvement, not live acceptance.
+
+The existing AI test now maps known provider 5xx exceptions to HTTP 422 configuration
+validation errors with allowlisted codes and a redacted `ai_connection_test_failed` log.
+429 quotas, authentication, CSRF, ordinary server failures and success semantics remain
+distinct; no test failure becomes a success. The worker/import/provider interfaces keep
+their existing status/error behavior. Network connect/TLS/DNS failure gets a specific
+`ai_connection_failed` code without claiming which cause occurred. Administration shows
+fixed EN/DE recovery messages; genuine HTML gateway failures retain their separate hint.
+
+445 backend tests and 67 frontend tests pass. Real API tests over actual provider adapters
+and a 5xx-replacing proxy double preserve model, key, rejection, quota, timeout, transport
+and malformed-response diagnostics, prove one provider call, close clients and redact
+unknown error text/logs. Real Chromium administration validates the failed state and
+EN/DE copy through a proxy double over the actual API, plus existing complete workflows.
+Build/types, frontend format, Ruff lint/format, mypy and OpenAPI drift pass. Canonical API
+schema is unchanged, so the existing native pin is deliberately retained. No migration,
+credential, dependency, Docker runtime configuration or household data change is needed.
+
+The implementation agent inspected these actual desktop/mobile captures together; no
+required layout or copy defect remained at the bounded probe scope. Existing tokens,
+form layout and navigation are preserved. A focused skip-link appears in the full-page
+images; its keyboard behavior is incumbent. Provider, household and proxy data are
+synthetic. No actual Cloudflare configuration, physical device or live provider was tested.
+
+| Capture | Size context | SHA-256 |
+| --- | --- | --- |
+| [ai-probe-failed-desktop-en.png](../screenshots/recipe-ideas-errors/ai-probe-failed-desktop-en.png) | 1200×900 viewport, full-page capture | `f4b619496bf59542f440c0f15cf08fe2dbf170b04f8bd575c8b91109bfa677c0` |
+| [ai-probe-failed-phone-de.png](../screenshots/recipe-ideas-errors/ai-probe-failed-phone-de.png) | 390×844 viewport, full-page capture | `7b9c63a88ea2e3d664bc88ec4a7f0695eb82d639f4f9daf3d4ddc2d7c7f5e6da` |
