@@ -70,6 +70,15 @@ rounded:
 
 # mealf web design reference
 
+2026-10-22 error-recovery refinement: Recipe ideas uses existing alert/action styles for
+specific localized provider failures, allowlisted diagnostic codes and a Settings route.
+PWA/admin model-ID help preserves the existing fields and visual system. See the bounded
+[manual source/capture review](docs/validation/recipe-ideas-errors.md); this is not live
+Gemini or physical-iPhone acceptance and does not regenerate this historical snapshot.
+The follow-up keeps known AI probe failures visible through 5xx-replacing proxies and
+adds literal EN/DE administration recovery copy in the existing status region; the same
+review records its genuine desktop/phone captures and synthetic-service limits.
+
 This is the implementation snapshot for the PWA `frontend/` and administration console, dated 2026-10-21. The direction contract is [PRODUCT.md](PRODUCT.md) and the existing [PWA surface brief](.impeccable/surfaces/pwa.md). The independent native iOS app is retained for later. This document records the approved effortless, food-led, cream/coral/peach and cocoa/peach, system-type, iOS-like glass direction; it does not reopen design selection or replace the master product requirements. Surface mode remains recorded only in the surface brief.
 
 ## Overview

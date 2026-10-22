@@ -33,6 +33,53 @@ text and provider responses are not application log fields.
 
 ## Reliability and offline use
 
+### Troubleshooting Gemini and failed requests
+
+Use an exact API model identifier, for example `gemini-3.8-flash`, rather than the display
+name `Gemini 3.8 Flash`. With the Google Gemini adapter, the default base URL is
+`https://generativelanguage.googleapis.com/v1beta`; do not append the model or
+`:generateContent` to it. Model availability and permissions still depend on your provider
+account. Gemini IDs containing whitespace are rejected before saving or contacting Google.
+Other providers' identifiers are not rewritten. See Google's
+[Gemini 3.8 model/API guide](https://ai.google.dev/gemini-api/docs/generate-content/whats-new-gemini-3.8).
+
+Failed proposals show a localized recovery explanation and, for recognized failures only,
+a fixed diagnostic code. `ai_model_or_endpoint_not_found` represents an upstream 404;
+`ai_request_rejected` represents 400/422 and can indicate unsupported model options or
+output schema. These classifications do not assert the exact provider-side cause.
+Authentication, quota, timeout, blocked content, incomplete output and invalid recipes
+remain separate. Unknown error text and provider response bodies are never echoed.
+The Settings action opens Settings; expand **AI recipe import** to change configuration.
+Generation still requires a deliberate new request after failure; reloading retains the
+failed UUID instead of generating another billable batch.
+
+The `/admin/` AI connection test sends a synthetic recipe, not household content. A known
+provider failure is a failed configuration validation: provider-side 5xx failures return
+HTTP 422 with an allowlisted error code rather than presenting this server as a broken
+gateway. Upstream quota failures retain HTTP 429. Successful validated probes alone return
+HTTP 200. No automatic retry occurs; credentials, response bodies and prompts are omitted
+from the `ai_connection_test_failed` log event. DNS/connect/TLS failures have the separate
+`ai_connection_failed` code; it does not distinguish those causes without container checks.
+This preserves diagnostic JSON through proxies that replace 5xx error pages and does not
+repair a disconnected tunnel or an unverified live provider configuration.
+
+The administration's
+`http_502`/`http_504` fallback means no readable API error code was received, so inspect
+container and reverse-proxy logs; it is not proof of an invalid model, key or timeout.
+A failed connection test does not isolate a Recipe ideas-specific failure. If the test
+succeeds but generation fails, use the proposal's diagnostic code. Three recipes may take
+longer than the small probe, especially with thinking models; adjust the supported timeout
+only when a timeout is actually reported. Do not raise limits or silently resend to conceal
+an unexplained failure. See Google's [troubleshooting guide](https://ai.google.dev/gemini-api/docs/troubleshooting).
+
+The reported live deployment's immediate `http_502` returned Cloudflare HTML. Supplied
+tunnel logs show historical refused origin connections, but not at that probe's time;
+they do not establish its cause. A subsequent direct LAN health read succeeded. Local tests
+use synthetic HTTP failures and an explicit 5xx-replacing proxy double; they do not
+establish a live fix. Compare fresh tunnel and container logs at the exact test time.
+A direct LAN read of `/api/v1/system/health` tests current reachability only, not AI access
+or authenticated browser flows.
+
 Migration 015 persists requests/results in SQLite for the existing durable worker. The
 client saves its UUID before sending: identical replay returns the original job, while a
 changed body under the same UUID returns 409. Strict validation requires exactly three

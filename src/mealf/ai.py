@@ -102,6 +102,8 @@ class AIConfiguration:
             raise DomainError("ai_https_required", 422)
         if not self.model or not 1 <= self.timeout <= 120 or not 100 <= self.max_content <= 100000:
             raise DomainError("invalid_ai_configuration", 422)
+        if self.provider == "gemini" and any(character.isspace() for character in self.model):
+            raise DomainError("invalid_gemini_model_id", 422)
 
     @property
     def formats(self):
@@ -189,6 +191,10 @@ class BaseProvider:
                     raise DomainError("ai_rate_limited", 429)
                 if response.status_code in (401, 403):
                     raise DomainError("ai_authentication_failed", 502)
+                if response.status_code == 404:
+                    raise DomainError("ai_model_or_endpoint_not_found", 502)
+                if response.status_code in (400, 422):
+                    raise DomainError("ai_request_rejected", 502)
                 if response.status_code != 200:
                     raise DomainError("ai_provider_failed", 502)
                 data = bytearray()
@@ -199,6 +205,8 @@ class BaseProvider:
             return json.loads(data)
         except httpx.TimeoutException as exc:
             raise DomainError("ai_timeout", 504) from exc
+        except httpx.ConnectError as exc:
+            raise DomainError("ai_connection_failed", 502) from exc
         except (httpx.HTTPError, ValueError, RecursionError) as exc:
             raise DomainError("ai_invalid_response", 502) from exc
 
@@ -393,7 +401,18 @@ class GeminiProvider(BaseProvider):
             },
             {"x-goog-api-key": self.config.api_key, "Content-Type": "application/json"},
         )
+        if response.get("promptFeedback", {}).get("blockReason"):
+            raise DomainError("ai_content_blocked", 422)
         candidate = response["candidates"][0]
+        if candidate.get("finishReason") in {
+            "SAFETY",
+            "RECITATION",
+            "BLOCKLIST",
+            "PROHIBITED_CONTENT",
+            "SPII",
+            "IMAGE_SAFETY",
+        }:
+            raise DomainError("ai_content_blocked", 422)
         if candidate.get("finishReason") != "STOP":
             raise DomainError("ai_output_incomplete", 422)
         return "".join(

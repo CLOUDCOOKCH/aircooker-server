@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Show actionable English/German Recipe ideas errors with allowlisted diagnostic codes;
+  distinguish provider rejection, missing model/endpoint, quota, timeout, blocked and
+  incomplete output. Preserve requests and avoid automatic paid retries. Explain raw
+  gateway errors in administration and require whitespace-free Gemini API model IDs.
+  Return known provider failures from the AI connection test as redacted 422 validation
+  errors so a proxy's 5xx page cannot hide their codes; preserve 429 limits and failed states.
+
 - Rework PWA task hierarchy across Home, Calendar, Recipes, Pantry, Shopping and Settings.
   Add labelled actions, compact date/view controls, recipe search/sort and section links,
   optional editor metadata, an always-available Save bar and grouped Settings disclosures.

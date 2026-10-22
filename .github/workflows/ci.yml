@@ -65,7 +65,10 @@ jobs:
             build/runtime-licenses.json
   browser:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # Include the separately bounded 10-minute WebKit/dependency installation in
+    # addition to both engines' full workflows; a slow mirror must not cancel
+    # otherwise passing application checks before that installation can finish.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
