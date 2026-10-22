@@ -16,7 +16,7 @@ off-host storage. The application does not automatically encrypt a CLI database 
 
 ## Download a portable household export
 
-1. Sign in to the administration console at `/`.
+1. Sign in to the administration console at `/admin/`.
 2. Open **Data** and download the ZIP household export.
 3. Store it privately and record the server version that created it.
 4. Test importing a copy into an isolated, compatible installation before relying on it.
@@ -45,13 +45,13 @@ Reconfigure integrations and reconnect browser notifications after a clean house
 Choose a new filename; the command refuses to overwrite an existing output:
 
 ```sh
-docker compose -f compose.preview.yaml exec mealf python -m aircooker.cli backup --output /data/backups/household.sqlite3
+docker compose -f compose.preview.yaml exec mealf python -m mealf.cli backup --output /data/backups/household.sqlite3
 ```
 
 For a source-build installation:
 
 ```sh
-docker compose exec aircooker python -m aircooker.cli backup --output /data/backups/household.sqlite3
+docker compose exec mealf python -m mealf.cli backup --output /data/backups/household.sqlite3
 ```
 
 This uses SQLite's online backup API, so the database snapshot is consistent while the
@@ -87,4 +87,4 @@ If the VAPID key changed, disconnect/reconnect notifications on each device. Tes
 restoration process regularly; the existence of a backup file is not proof of recovery.
 
 Source: [backup documentation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/BACKUP.md)
-and [local CLI implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/aircooker/cli.py).
+and [local CLI implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/mealf/cli.py).

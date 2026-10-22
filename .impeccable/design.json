@@ -1,6 +1,6 @@
 {
   "schema": {
-    "id": "aircooker.design-snapshot",
+    "id": "mealf.design-snapshot",
     "version": 1,
     "owner": "mealf project",
     "status": "project-owned documentation snapshot; not a plugin/vendor contract",
@@ -350,7 +350,7 @@
       "guide": "docs/PLANNING_PREFERENCES.md"
     },
     "admin": {
-      "source": "src/aircooker/web/console.css",
+      "source": "src/mealf/web/console.css",
       "aliases": {
         "--bg": "var(--canvas)",
         "--fg": "var(--ink)",
@@ -414,7 +414,7 @@
     "food": {
       "file": "frontend/public/art/lemon-chicken.png",
       "type": "original AI-generated illustration",
-      "origin": "aircooker-ios/App/Assets/DemoChicken.png",
+      "origin": "mealf-ios/App/Assets/DemoChicken.png",
       "generationID": "exec-b3e6fb11-5c8c-4b69-ae40-eb5dda3a6c00",
       "usage": "explicit isolated demo only; never silently seed a household"
     },
@@ -637,9 +637,9 @@
     "frontend/scripts/build-worker.mjs",
     "frontend/index.html",
     "frontend/public/manifest.webmanifest",
-    "src/aircooker/web/console.css",
-    "src/aircooker/web/index.html",
-    "src/aircooker/web/console.js",
+    "src/mealf/web/console.css",
+    "src/mealf/web/index.html",
+    "src/mealf/web/console.js",
     ".impeccable/surfaces/admin.md",
     "docs/validation/mealf-palette-review.md"
   ],
@@ -699,7 +699,7 @@
       "frontend/src/Brand.tsx",
       "frontend/public/peach.css",
       "frontend/public/peach.js",
-      "src/aircooker/web/index.html"
+      "src/mealf/web/index.html"
     ],
     "scope": "PWA and administration console; original art unchanged",
     "target": "native button; at least 44px square; Enter/Space; separate wordmark link",

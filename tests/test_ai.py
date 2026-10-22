@@ -4,8 +4,8 @@ from uuid import uuid4
 import httpx
 import pytest
 
-from aircooker.ai import AIConfiguration, provider_for
-from aircooker.errors import DomainError
+from mealf.ai import AIConfiguration, provider_for
+from mealf.errors import DomainError
 
 RECIPE = {
     "title": "Soup",

@@ -2,7 +2,7 @@
 
 Start with the exact image/source revision, backend health and the affected URL. Use
 the same Compose files and project name as your installation. Preview service name is
-`mealf`; source-build service name is `aircooker`.
+`mealf`; source-build service name is `mealf`.
 
 ## Basic checks
 
@@ -52,7 +52,7 @@ See [First-run setup](First-Run-Setup), [Configuration](Configuration) and
 | --- | --- |
 | Cloudflare 502 | Test the private backend; check tunnel service URL, Docker network and port |
 | Tunnel unavailable / 1033 | Check connector health, token, outbound firewall connectivity and hostname route |
-| Connector in Docker cannot reach `127.0.0.1:8080` | Use `http://mealf:8080` on the shared network, or `aircooker` for source Compose |
+| Connector in Docker cannot reach `127.0.0.1:8080` | Use `http://mealf:8080` on the shared network, or `mealf` for source Compose |
 | All clients share address-based limits | Confirm proxy peer/header trust; do not set universal trusted proxies |
 | HTML loads but API calls return a login/challenge page | Inspect Cloudflare Access/WAF policy and ensure legitimate app/API requests can complete |
 | Private or stale content appears through the edge | Bypass cache for the MealF hostname and remove conflicting Cache Everything/rewriting rules |

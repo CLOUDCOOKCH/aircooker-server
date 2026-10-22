@@ -1,7 +1,7 @@
 import pytest
 
-from aircooker.errors import DomainError
-from aircooker.secrets import SecretVault
+from mealf.errors import DomainError
+from mealf.secrets import SecretVault
 
 
 def test_integration_credentials_encrypted_and_recoverable(tmp_path):

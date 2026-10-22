@@ -39,8 +39,7 @@ meals.example.com {
 
 Replace the hostname, validate the Caddy configuration and reload using your host's
 service-management procedure. If the reverse proxy is another container, place both
-services on an appropriate private network and use `mealf:8080` (preview) or
-`aircooker:8080` (source build). Its own `127.0.0.1` will not reach the backend container.
+services on an appropriate private network and use `mealf:8080`. Its own `127.0.0.1` will not reach the backend container.
 
 The import-source route is available only in images containing the AI media-import
 feature. Keeping its ingress allowance does not enable a missing backend feature.
@@ -75,7 +74,7 @@ WebSocket or streaming ingress. An external CDN may impose a lower upload ceilin
 ## Verify browser access
 
 1. Visit `/api/v1/system/health` on the public HTTPS hostname.
-2. Visit `/` and `/app/` and sign in using that same hostname.
+2. Visit `/admin/` and `/app/` and sign in using that same hostname.
 3. Save a test recipe and check that it survives reload.
 4. If you will use them, test image upload and a private export/import in your environment.
 
@@ -86,3 +85,6 @@ split the API onto a second hostname, or disable these checks to fix login. See
 
 Source: [deployment](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/DEPLOYMENT.md)
 and [security model](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/SECURITY_MODEL.md).
+
+For a separately hosted root landing page, keep the backend prefixes intact and use
+[Mealf path routing](../MEALF_MIGRATION.md#landing-page-and-reverse-proxy).

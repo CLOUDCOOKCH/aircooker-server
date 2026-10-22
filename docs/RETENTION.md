@@ -39,8 +39,8 @@ Saved recipes and pending draft content are not deleted by this source-upload cl
 Inside the existing container:
 
 ```sh
-docker compose exec aircooker python -m aircooker.cli cleanup --dry-run
-docker compose exec aircooker python -m aircooker.cli cleanup
+docker compose exec mealf python -m mealf.cli cleanup --dry-run
+docker compose exec mealf python -m mealf.cli cleanup
 ```
 
 Both return JSON category counts. Dry run does not prune rows. Repeating apply is safe;

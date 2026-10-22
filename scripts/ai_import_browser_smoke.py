@@ -15,8 +15,8 @@ import uvicorn
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
 
-import aircooker.app as application
-from aircooker.ai import provider_for
+import mealf.app as application
+from mealf.ai import provider_for
 
 
 def main():
@@ -44,7 +44,7 @@ def main():
         )
 
     application.provider_for = lambda config: provider_for(config, httpx.MockTransport(respond))
-    captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/ai-import-browser"))
+    captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/ai-import-browser"))
     captures.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix="mealf-ai-browser-") as temporary:
         root = Path(temporary)
@@ -90,7 +90,7 @@ def main():
 
                 def rows():
                     return page.evaluate(
-                        "async()=> (await(await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                        "async()=> (await(await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                     )
 
                 def navigate(name):
@@ -116,7 +116,7 @@ def main():
                     ).to_be_visible()
                     expect(form.get_by_label("API key", exact=True)).to_have_value("")
                     assert key not in page.evaluate(
-                        "async()=> await(await fetch('/api/v1/admin/ai/providers',{headers:{'X-Aircooker-Client':'pwa'}})).text()"
+                        "async()=> await(await fetch('/api/v1/admin/ai/providers',{headers:{'X-Mealf-Client':'pwa'}})).text()"
                     )
                     audit()
 

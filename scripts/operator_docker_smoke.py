@@ -11,7 +11,7 @@ from docker_smoke import IMAGE, docker, mutation, request, setup_log_events
 PTY_RUNNER = """
 import errno,json,os,pty,select,subprocess,sys,time
 master,slave=pty.openpty()
-child=subprocess.Popen([sys.executable,'-m','aircooker.cli','delete-household']+json.loads(sys.argv[2]),stdin=slave,stdout=slave,stderr=slave,close_fds=True)
+child=subprocess.Popen([sys.executable,'-m','mealf.cli','delete-household']+json.loads(sys.argv[2]),stdin=slave,stdout=slave,stderr=slave,close_fds=True)
 os.close(slave)
 os.write(master,(sys.argv[1]+'\\n').encode())
 output=bytearray()
@@ -34,7 +34,7 @@ print(json.dumps({'code':child.wait(timeout=10),'output':output.decode()}))
 
 
 def main():
-    name = "aircooker-operator-test-" + str(uuid4())
+    name = "mealf-operator-test-" + str(uuid4())
     try:
         docker(
             "run",
@@ -124,7 +124,7 @@ def main():
             name,
             "python",
             "-m",
-            "aircooker.cli",
+            "mealf.cli",
             "backup",
             "--output",
             "/data/backups/operator.sqlite3",

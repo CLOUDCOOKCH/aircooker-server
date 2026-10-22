@@ -4,12 +4,12 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
-from aircooker.db import Database
-from aircooker.models import SuggestionApply
-from aircooker.planning_preferences import context
-from aircooker.recommendations import suggest_week
-from aircooker.suggestion_apply import apply_preview
+from mealf.app import create_app
+from mealf.db import Database
+from mealf.models import SuggestionApply
+from mealf.planning_preferences import context
+from mealf.recommendations import suggest_week
+from mealf.suggestion_apply import apply_preview
 
 PATH = "/api/v1/household/planning-preferences"
 
@@ -192,13 +192,13 @@ def test_json_export_restore_includes_nonsecret_preferences_and_learning_atomica
 
 
 def test_preferences_require_authentication_and_cookie_csrf(harness, monkeypatch):
-    from aircooker.pwa_auth import AUTH_PATH, CSRF_COOKIE
+    from mealf.pwa_auth import AUTH_PATH, CSRF_COOKIE
 
     monkeypatch.setenv("BASE_URL", "https://localhost")
     with TestClient(
         harness[1],
         base_url="https://localhost",
-        headers={"Origin": "https://localhost", "X-Aircooker-Client": "pwa"},
+        headers={"Origin": "https://localhost", "X-Mealf-Client": "pwa"},
     ) as browser:
         assert browser.get(PATH).status_code == 401
         assert (

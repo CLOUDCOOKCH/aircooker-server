@@ -139,7 +139,7 @@ See [history verification record](validation/sync-history.json) for the executed
 counts. The last Python dependency audit artifacts are from 2026-10-20; their locks have not
 changed in this increment. Chromium admin workflows were also exercised previously; no
 browser administration UI was changed or revalidated in this increment. An initial final
-build/test launch ran out of Docker storage; obsolete aircooker images/build cache were
+build/test launch ran out of Docker storage; obsolete mealf images/build cache were
 removed without deleting volumes, then affected image and Swift checks passed.
 
 The final 66-test Swift run used the compiler extracted from the same pinned Swift 6.2.1
@@ -275,3 +275,24 @@ Retention source 9fffb7b passed all six GitHub jobs in run 39604741072: 200 back
 tests per AMD64/ARM64 runner, unchanged 39 web tests, full browser/packaged CLI/Docker
 restart/restore checks and unsuppressed security gates. Exact images/jobs/artifacts and
 limits are in validation/github-retention.json.
+
+## Mealf identifiers and administration paths — 2026-10-22
+
+Current source/package/native target names use Mealf. Console `/admin/` and its assets no
+longer occupy `/`; the backend reserves the root for the operator's landing page. PWA/API
+paths remain stable. Existing database, session, archive and offline browser state have
+explicit compatibility handling. See [upgrade guide](MEALF_MIGRATION.md).
+
+Local validation: full 391-test backend suite plus the added admin compatibility check,
+59 browser-core tests, Ruff, mypy, generated OpenAPI drift, original brand assets,
+41-wheel licence inventory and real Chromium console flows pass. The full PWA offline/two-device/Axe browser check also passes, including current admin
+links and the absence of admin links in demo mode. The console browser check includes root/old-asset 404s, `/admin` redirect, setup, secure cookies, household,
+EN/DE phone layout, sessions and archive transfer. No physical iPhone or live external
+integration claim. Local Docker source build is blocked by this environment's Alpine
+registry HTTP 403; remote CI/runtime/image gates must pass before publication. The
+Impeccable launcher/detector are unavailable; no automated design-detector pass is claimed.
+Full v1 readiness remains open.
+
+The fresh finish reviewer records **ship within name, routing and visual-preservation
+scope** in [the review](validation/mealf-admin-routing-review.md); the documentation
+handoff preserves the incumbent visual tokens.

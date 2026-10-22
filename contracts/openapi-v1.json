@@ -1323,7 +1323,7 @@
             "type": "string"
           },
           "format": {
-            "default": "aircooker-household",
+            "default": "mealf-household",
             "title": "Format",
             "type": "string"
           },
@@ -1395,7 +1395,7 @@
             "type": "string"
           },
           "format": {
-            "default": "aircooker-household",
+            "default": "mealf-household",
             "title": "Format",
             "type": "string"
           },
@@ -5693,7 +5693,7 @@
           },
           {
             "in": "header",
-            "name": "x-aircooker-sync-cursor",
+            "name": "x-mealf-sync-cursor",
             "required": false,
             "schema": {
               "anyOf": [
@@ -5705,12 +5705,12 @@
                   "type": "null"
                 }
               ],
-              "title": "X-Aircooker-Sync-Cursor"
+              "title": "X-Mealf-Sync-Cursor"
             }
           },
           {
             "in": "header",
-            "name": "x-aircooker-sync-token",
+            "name": "x-mealf-sync-token",
             "required": false,
             "schema": {
               "anyOf": [
@@ -5722,7 +5722,7 @@
                   "type": "null"
                 }
               ],
-              "title": "X-Aircooker-Sync-Token"
+              "title": "X-Mealf-Sync-Token"
             }
           }
         ],

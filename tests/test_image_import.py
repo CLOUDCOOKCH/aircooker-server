@@ -11,15 +11,15 @@ import httpx
 import pytest
 from PIL import Image
 
-from aircooker.ai import provider_for
-from aircooker.ai_settings import AISettings, save_configuration
-from aircooker.db import Database
-from aircooker.errors import DomainError
-from aircooker.image_import import ocr_available, printed_recipe, recognise_text
-from aircooker.import_receipts import fingerprint
-from aircooker.jobs import claim, enqueue, finish
-from aircooker.media import put_media
-from aircooker.retention import DAY, cleanup_database
+from mealf.ai import provider_for
+from mealf.ai_settings import AISettings, save_configuration
+from mealf.db import Database
+from mealf.errors import DomainError
+from mealf.image_import import ocr_available, printed_recipe, recognise_text
+from mealf.import_receipts import fingerprint
+from mealf.jobs import claim, enqueue, finish
+from mealf.media import put_media
+from mealf.retention import DAY, cleanup_database
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -73,7 +73,7 @@ def test_ocr_process_is_bounded_and_does_not_receive_secrets(monkeypatch):
         assert "shell" not in kwargs
         raise subprocess.TimeoutExpired(args, 20)
 
-    monkeypatch.setattr("aircooker.image_import.subprocess.run", timeout)
+    monkeypatch.setattr("mealf.image_import.subprocess.run", timeout)
     with pytest.raises(DomainError, match="image_ocr_timeout"):
         recognise_text(b"validated-image-placeholder")
 
@@ -85,7 +85,7 @@ def test_oversized_ocr_output_rejected(monkeypatch):
         kwargs["stdout"].write(b"a" * 100001)
         return subprocess.CompletedProcess(args, 0)
 
-    monkeypatch.setattr("aircooker.image_import.subprocess.run", output)
+    monkeypatch.setattr("mealf.image_import.subprocess.run", output)
     with pytest.raises(DomainError, match="image_text_too_large"):
         recognise_text(b"validated-image-placeholder")
 
@@ -93,7 +93,7 @@ def test_oversized_ocr_output_rejected(monkeypatch):
 def test_missing_engine_is_explicit(monkeypatch):
     ocr_available.cache_clear()
     try:
-        monkeypatch.setattr("aircooker.image_import.shutil.which", lambda name: None)
+        monkeypatch.setattr("mealf.image_import.shutil.which", lambda name: None)
         with pytest.raises(DomainError, match="image_ocr_unavailable"):
             recognise_text(b"image")
     finally:
@@ -163,15 +163,15 @@ def test_image_import_survives_restart_and_requires_review(harness, mutation):
 
 
 def test_released_photo_database_upgrades_without_losing_queued_work(tmp_path, monkeypatch):
-    from aircooker.app import create_app
+    from mealf.app import create_app
 
     resources = tmp_path / "released-package"
     (resources / "migrations").mkdir(parents=True)
-    for source in files("aircooker").joinpath("migrations").iterdir():
+    for source in files("mealf").joinpath("migrations").iterdir():
         if source.name.endswith(".sql") and source.name < "011":
             (resources / "migrations" / source.name).write_text(source.read_text())
     with monkeypatch.context() as patch:
-        patch.setattr("aircooker.db.files", lambda package: resources)
+        patch.setattr("mealf.db.files", lambda package: resources)
         old = Database(tmp_path / "data")
     image_id, iid, instance = uuid4(), str(uuid4()), str(uuid4())
     put_media(old, image_id, (FIXTURES / "recipe-photo-en.png").read_bytes(), "image/png")
@@ -251,9 +251,7 @@ def test_invalid_image_reference_and_no_premature_confirmation(harness, mutation
 
 def test_failed_extraction_retains_recognized_text_for_correction(harness, monkeypatch):
     client, app, device, tokens = harness
-    monkeypatch.setattr(
-        "aircooker.app.recognise_text", lambda data: "Rice with tomatoes. No headings."
-    )
+    monkeypatch.setattr("mealf.app.recognise_text", lambda data: "Rice with tomatoes. No headings.")
     result = client.post("/api/v1/imports", json={"image_id": upload(client)})
     process(app)
     draft = client.get("/api/v1/imports/" + result.json()["id"]).json()
@@ -269,7 +267,7 @@ def test_corrected_text_skips_ocr_and_optional_ai_keeps_disclosure(harness, monk
     def never(data):
         raise AssertionError("Corrected text should not be overwritten by another OCR run")
 
-    monkeypatch.setattr("aircooker.app.recognise_text", never)
+    monkeypatch.setattr("mealf.app.recognise_text", never)
     image_id = upload(client)
     text = "Edited rice\nIngredients\n200 g rice\nInstructions\nCook the rice."
     result = client.post(
@@ -349,7 +347,7 @@ def test_image_ai_requires_consent_and_sends_only_recognized_text(harness, monke
         )
 
     monkeypatch.setattr(
-        "aircooker.app.provider_for",
+        "mealf.app.provider_for",
         lambda config: provider_for(config, httpx.MockTransport(handle)),
     )
     image_id = upload(client)

@@ -316,8 +316,8 @@ function Kitchen({
   }, [view.kind]);
   useEffect(() => {
     const listen = (event: Event) => setUpdate((event as CustomEvent<ServiceWorker>).detail);
-    window.addEventListener('aircooker:update', listen);
-    return () => window.removeEventListener('aircooker:update', listen);
+    window.addEventListener('mealf:update', listen);
+    return () => window.removeEventListener('mealf:update', listen);
   }, []);
   useEffect(() => {
     if (!app.notice) return;

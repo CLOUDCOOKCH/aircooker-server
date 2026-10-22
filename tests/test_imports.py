@@ -3,9 +3,9 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.errors import DomainError
-from aircooker.importing import extract, platform_for, public_addresses
-from aircooker.jobs import claim, finish
+from mealf.errors import DomainError
+from mealf.importing import extract, platform_for, public_addresses
+from mealf.jobs import claim, finish
 
 
 def test_structured_extraction_preserves_unparsed_ingredients():
@@ -75,7 +75,7 @@ def test_platform_matching_and_no_fabrication():
 
 
 def test_bounded_fetch_rejects_non_https_without_network():
-    from aircooker.importing import bounded_fetch_html
+    from mealf.importing import bounded_fetch_html
 
     with pytest.raises(DomainError, match="source_url_forbidden"):
         bounded_fetch_html("http://127.0.0.1:8000/private")
@@ -91,7 +91,7 @@ def test_import_request_id_replays_and_rejects_changed_content(harness):
 
 
 def test_multicast_and_ipv6_transition_addresses_are_not_public_sources():
-    from aircooker.importing import public_address
+    from mealf.importing import public_address
 
     for address in ["224.0.0.1", "ff02::1", "2002:7f00:1::", "::ffff:127.0.0.1", "240.0.0.1"]:
         assert not public_address(address)

@@ -1799,7 +1799,7 @@ export interface components {
             exported_at: string;
             /**
              * Format
-             * @default aircooker-household
+             * @default mealf-household
              */
             format: string;
             /** Household */
@@ -1827,7 +1827,7 @@ export interface components {
             exported_at: string;
             /**
              * Format
-             * @default aircooker-household
+             * @default mealf-household
              */
             format: string;
             /** Household */
@@ -3910,8 +3910,8 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                "x-aircooker-sync-cursor"?: number | null;
-                "x-aircooker-sync-token"?: string | null;
+                "x-mealf-sync-cursor"?: number | null;
+                "x-mealf-sync-token"?: string | null;
             };
             path: {
                 import_id: string;

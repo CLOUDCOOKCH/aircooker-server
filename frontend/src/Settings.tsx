@@ -126,7 +126,7 @@ export function Settings({
                 </select>
               </label>
               {!app.demo && (
-                <a className="settings-row" href="/" target="_blank" rel="noreferrer">
+                <a className="settings-row" href="/admin/" target="_blank" rel="noreferrer">
                   {t('openAdmin')}
                   <ArrowUpRight size={18} />
                 </a>
@@ -178,7 +178,7 @@ export function Settings({
                       <RefreshCw size={18} />
                     </button>
                   )}
-                  <a className="settings-row" href="/#bring" target="_blank" rel="noreferrer">
+                  <a className="settings-row" href="/admin/#bring" target="_blank" rel="noreferrer">
                     {t('openAdmin')}
                     <ArrowUpRight size={18} />
                   </a>

@@ -19,8 +19,8 @@ The connector's outbound tunnel connection is separate from the browser's HTTPS 
 | In a separate container | `http://mealf:8080` for preview Compose | Shared private Docker network; no public backend port |
 
 `127.0.0.1` inside a connector container refers to that connector, so it will not reach
-MealF. For a source-build deployment the backend service name is `aircooker`, making
-the container target `http://aircooker:8080`.
+MealF. For a source-build deployment the backend service name is `mealf`, making
+the container target `http://mealf:8080`.
 
 ## Create the tunnel and hostname
 
@@ -134,7 +134,7 @@ Keep both `-f` arguments for future operations on this installation. The origina
 loopback backend binding remains available for local health checks; the connector
 does not need a published port. Do not launch the base Compose file as a second project
 against the same data volume. Source-build users can adapt the overlay's `mealf` service
-key and tunnel service URL to `aircooker`, retaining their original source Compose volume.
+key and tunnel service URL to `mealf`, retaining their original source Compose volume.
 
 ## Cache, access and request settings
 

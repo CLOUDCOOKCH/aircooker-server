@@ -1,6 +1,6 @@
 # mealf identity and compatibility
 
-The product was renamed from aircooker to **mealf** on 2026-10-21. Both original PNGs were
+The confirmed product name is **Mealf** (2026-10-21). Both original PNGs were
 received in `mealf-flirty-peach-wortmarke.zip`. The PWA and administration console now use
 the supplied peach and lowercase image wordmark instead of the interim utensil/text mark.
 Keep the approved glass interface, system typography, system appearance and accessible flows. The user-approved palette refresh below supersedes the earlier green-control constraint.
@@ -36,26 +36,16 @@ longer than the page; real iPhone icon refresh remains unverified. Do not clear 
 remove an installed app with unsynchronised work merely to refresh its icon. Protect/sync
 local work first. The retained native repository's artwork is not changed by this PWA release.
 
-Internal compatibility names intentionally remain unchanged:
-
-- GitHub repository URLs and local package/module/build-target names.
-- SQLite filenames, IndexedDB and localStorage keys, BroadcastChannel/Web Locks names.
-- Cookies, CSRF/API headers, native bundle IDs, App Groups, Keychain services, deep links
-  and notification/widget identifiers.
-- Versioned household/browser recovery formats, import receipts and Bring! ownership IDs.
-- The service-worker cache namespace, whose existing cleanup must still recognise old caches.
-
-These identifiers are not the product's display name. Changing them without migration could
-lose access to offline work, duplicate owned external items or invalidate working sessions.
-Repository/build identifier renames can be handled separately with explicit migration and
-redirect validation. Historical validation records and pinned native OpenAPI files retain
-their exact tested source names. The current server's API documentation title uses mealf;
-that metadata change does not change its wire fields or compatibility version.
+Current source, package, native target and operator names use Mealf. The administration
+console lives at `/admin/`; the root path is reserved for the separate landing page.
+Read [the upgrade guide](MEALF_MIGRATION.md) for SQLite migration, browser/session/archive
+compatibility, the preserved `/app/` identity and valid existing repository URLs.
+Historical validation records and original asset provenance retain their tested hashes.
 
 ## Approved web palette and voice refresh — 2026-10-21
 
 The user explicitly requested the Mealf design throughout the PWA and administration console. Light appearance uses cream, coral and peach; dark appearance uses cocoa and peach. Raspberry danger roles remain distinct. The shared semantic `--accent*` tokens replace the former green-named roles. `frontend/src/tokens.css` is authoritative; the build exports its exact bytes as `/app/theme.css`, imported by the console. See [the exact two-theme design snapshot](../DESIGN.md) and [admin brief](../.impeccable/surfaces/admin.md).
 
-English/German food innuendo is approved for welcome/login, empty-state, sidebar and footer copy, including a playful login headliner. Setup instructions, help, consent/security, errors and recovery remain literal. Preserve solid forms, system headings, the glass navigation material, original artwork bytes and all compatibility identities listed above. Native changes are deferred.
+English/German food innuendo is approved for welcome/login, empty-state, sidebar and footer copy, including a playful login headliner. Setup instructions, help, consent/security, errors and recovery remain literal. Preserve solid forms, system headings, the glass navigation material, original artwork bytes and the compatibility rules in the upgrade guide. Native changes are deferred.
 
 Current genuine [PWA welcome](screenshots/mealf-palette-pwa-welcome-desktop.png), [dark phone welcome](screenshots/mealf-palette-pwa-welcome-phone-dark.png), [console login](screenshots/mealf-palette-admin-login-desktop.png) and [dark console](screenshots/mealf-palette-admin-desktop-dark.png) captures record the implemented web direction. Historical artwork/name/green-palette reviews and published preview evidence retain their original scope. Local automated/browser checks passed as recorded in [IMPLEMENTATION.md](IMPLEMENTATION.md); the [manual palette finish review](validation/mealf-palette-review.md) records **ship within the reviewed palette, administration and copy scope**, with zero required material findings. Publication is verified in `poc-20261021.5`; see the combined release evidence in `docs/validation/github-preview-retry.json`. No physical iPhone/live-service or unavailable detector/schema validation is claimed.

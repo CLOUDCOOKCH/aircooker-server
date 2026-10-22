@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.recommendations import suggest_week
+from mealf.recommendations import suggest_week
 
 
 def commit(c, m):
@@ -182,9 +182,9 @@ def test_approve_preview_is_atomic_idempotent_and_survives_app_restart(harness, 
     first = c.post("/api/v1/suggestions/apply", json=body)
     assert first.status_code == 200, first.text
     assert c.post("/api/v1/suggestions/apply", json=body).json() == first.json()
-    from aircooker.db import Database
-    from aircooker.models import SuggestionApply
-    from aircooker.suggestion_apply import apply_preview
+    from mealf.db import Database
+    from mealf.models import SuggestionApply
+    from mealf.suggestion_apply import apply_preview
 
     assert (
         apply_preview(
@@ -236,7 +236,7 @@ def test_canonical_offline_recommendation_fixture(tmp_path):
     from decimal import Decimal
     from pathlib import Path
 
-    from aircooker.db import Database
+    from mealf.db import Database
 
     fixture = json.loads(Path("contracts/fixtures/recommendations-v1.json").read_text())
     database = Database(tmp_path)
@@ -428,7 +428,7 @@ def test_existing_native_suggestion_receipt_fingerprints_remain_replayable(harne
     from datetime import date
     from uuid import UUID
 
-    from aircooker.models import Model, Mutation
+    from mealf.models import Model, Mutation
 
     class LegacyApproval(Model):
         request_id: UUID

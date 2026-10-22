@@ -1,10 +1,10 @@
 # Use mealf as a PWA
 
-mealf is the new product name, formerly aircooker. Existing installation and storage
-identities are preserved. See BRANDING.md for the installed original peach/wordmark and compatibility.
+Mealf uses the original peach and wordmark. Existing offline work and installation
+identity are protected during upgrades. See [branding](BRANDING.md) and [upgrade compatibility](MEALF_MIGRATION.md).
 
 The primary client is the browser application in this repository. The native SwiftUI code
-is retained in aircooker-ios for a future release. A Mac, Apple Developer membership,
+is retained in mealf-ios for a future release. A Mac, Apple Developer membership,
 TestFlight and App Store submission are not needed to build or install this web client.
 This remains a development release; the complete master acceptance checklist is not met.
 
@@ -13,7 +13,7 @@ This remains a development release; the complete master acceptance checklist is 
 Build/run the existing Docker Compose deployment and configure a valid HTTPS ingress.
 Set `BASE_URL=https://kitchen.example.org` to the **origin only**, without `/app/` or a
 trailing application path. Both the API and client must share that origin. Open
-`https://kitchen.example.org/app/`. The existing administration console remains at `/`.
+`https://kitchen.example.org/app/`. The existing administration console remains at `/admin/`.
 Cloudflare Tunnel and a correctly configured HTTPS reverse proxy are supported deployment
 patterns; see DEPLOYMENT.md. Do not disable certificate validation or expose browser login
 over untrusted plain HTTP. Chromium's loopback testing exception is not a deployment policy.
@@ -197,7 +197,7 @@ npm run format:check
 npm test
 npm run build
 cd ..
-python -m aircooker
+python -m mealf
 ```
 
 Open `/app/` through your HTTPS development ingress. Vite's optional dev server proxies
@@ -210,8 +210,8 @@ python scripts/pwa_browser_smoke.py
 
 Install `requirements-browser.lock` and Chromium/Chrome first. The script uses a temporary
 household, actual persistence/auth/API/job processing and explicit synthetic content, with
-no external-service credentials. `AIRCOOKER_CAPTURE=1` saves genuine screenshots to the
-directory in `AIRCOOKER_SCREENSHOT_DIR`. The browser test also runs axe WCAG A/AA checks on
+no external-service credentials. `MEALF_CAPTURE=1` saves genuine screenshots to the
+directory in `MEALF_SCREENSHOT_DIR`. The browser test also runs axe WCAG A/AA checks on
 its stated screens; this is not a comprehensive manual accessibility or Safari certification.
 
 The build emits dependency notices and a licence inventory, and rejects drift from

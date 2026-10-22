@@ -1,7 +1,7 @@
 import time
 
-from aircooker.db import Database
-from aircooker.jobs import claim, enqueue, finish
+from mealf.db import Database
+from mealf.jobs import claim, enqueue, finish
 
 
 def test_queue_survives_restart_and_deduplicates(tmp_path):

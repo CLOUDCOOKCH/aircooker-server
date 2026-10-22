@@ -21,15 +21,13 @@ from playwright.sync_api import expect, sync_playwright
 
 
 def main():
-    engine = os.environ.get("AIRCOOKER_LAYOUT_ENGINE", "chromium")
+    engine = os.environ.get("MEALF_LAYOUT_ENGINE", "chromium")
     real_outage = engine == "webkit" or os.environ.get("MEALF_IMAGE_NETWORK_OUTAGE") == "1"
 
     def phase(name):
         print(f"Image import {engine}: {name}", flush=True)
 
-    captures = (
-        Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/image-import-browser")) / engine
-    )
+    captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/image-import-browser")) / engine
     captures.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix="mealf-image-browser-") as temporary:
         root = Path(temporary)
@@ -47,7 +45,7 @@ def main():
                 sys.executable,
                 "-m",
                 "uvicorn",
-                "aircooker.app:create_app",
+                "mealf.app:create_app",
                 "--factory",
                 "--host",
                 "127.0.0.1",
@@ -168,7 +166,7 @@ def main():
 
                 def recipes():
                     return page.evaluate(
-                        "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                        "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                     )
 
                 page.goto(base + "/app/")

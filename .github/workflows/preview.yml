@@ -76,7 +76,7 @@ jobs:
           output: container-security.json
       - name: Exercise this exact image with isolated persistent data
         env:
-          AIRCOOKER_TEST_IMAGE: mealf-verified:${{ matrix.arch }}
+          MEALF_TEST_IMAGE: mealf-verified:${{ matrix.arch }}
         run: |
           python scripts/docker_smoke.py
           timeout 180s python scripts/operator_docker_smoke.py

@@ -30,7 +30,9 @@ def deletion_identity(root: Path):
         ):
             raise ValueError("Invalid deletion marker; recover the volume before starting")
         return str(UUID(data["instance_id"])), data["include_backups"]
-    if not (root / "database/aircooker.sqlite3").is_file():
+    from .legacy import DATABASE_NAME
+
+    if not any((root / "database" / name).is_file() for name in ("mealf.sqlite3", DATABASE_NAME)):
         raise ValueError("No configured household at DATA_DIR")
     with Database(root).connect() as db:
         household = db.execute("SELECT instance_id FROM household WHERE id=1").fetchone()

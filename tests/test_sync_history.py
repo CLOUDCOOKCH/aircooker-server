@@ -1,7 +1,7 @@
 import sqlite3
 from uuid import uuid4
 
-from aircooker.db import Database
+from mealf.db import Database
 
 
 def push(c, *items, checkpoint=None):
@@ -195,7 +195,7 @@ def test_canonical_history_fixture_matches_the_versioned_wire_models():
     import json
     from pathlib import Path
 
-    from aircooker.models import MutationResult, Pull, SyncSnapshot, SyncState
+    from mealf.models import MutationResult, Pull, SyncSnapshot, SyncState
 
     fixture = json.loads(Path("contracts/fixtures/sync-history-v1.json").read_text())
     assert fixture["format_version"] == 1

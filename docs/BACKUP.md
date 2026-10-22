@@ -6,12 +6,12 @@ recovery snapshot includes secrets and sessions. Both may contain private recipe
 ## Non-secret household export
 
 The administration console downloads GET `/api/v1/admin/export/archive`. Its ZIP contains
-`manifest.json` (`aircooker-household-archive`, version 1) and `media/<UUID>.jpg` files with
+`manifest.json` (`mealf-household-archive`, version 1) and `media/<UUID>.jpg` files with
 SHA-256 metadata. It includes household name/timezone/language, typed entity snapshots,
 retained deletion history, referenced photos, shared planning preferences and accepted-recipe counts. It excludes password hashes, active
 sessions, integration credentials, keys, prompts, job internals and diagnostics.
 
-GET `/api/v1/admin/export` provides JSON (`aircooker-household`, version 3) with base64 media
+GET `/api/v1/admin/export` provides JSON (`mealf-household`, version 3) with base64 media
 for small exports. Version 1/2 JSON remains importable without the new preference/learning
 fields. The ZIP envelope stays v1 and embeds the v3 household manifest; older server versions
 cannot import it. Do not relabel archives to bypass compatibility checks. If JSON exceeds 8 MiB, use the archive.
@@ -38,7 +38,7 @@ retention and destructive replacement with explicit confirmation remain incomple
 ## Transactionally consistent sensitive backup
 
 ```sh
-docker compose exec aircooker python -m aircooker.cli backup --output /data/backups/household.sqlite3
+docker compose exec mealf python -m mealf.cli backup --output /data/backups/household.sqlite3
 ```
 
 The output must not exist. SQLite's online backup API creates a consistent snapshot while
@@ -92,7 +92,7 @@ exports. SQLite pages/WAL/volume snapshots can retain older data; see RETENTION.
 
 ## Offline household deletion
 
-The installed local command `python -m aircooker.cli delete-household` erases the current
+The installed local command `python -m mealf.cli delete-household` erases the current
 household, sessions, recipes/media, sync history, jobs, setup state and saved integration
 keys/credentials. It requires an interactive terminal, the exact `DELETE <instance UUID>`
 confirmation and an exclusive volume lease. A running server or another deletion process
@@ -103,11 +103,11 @@ For the preview service, run from the host in the **existing Compose project**:
 
 ```sh
 docker compose stop mealf
-docker compose run --rm --no-deps --entrypoint python mealf -m aircooker.cli delete-household
+docker compose run --rm --no-deps --entrypoint python mealf -m mealf.cli delete-household
 docker compose up -d mealf
 ```
 
-Use your existing Compose filename/flags and service (`aircooker` in the source-build
+Use your existing Compose filename/flags and service (`mealf` in the source-build
 example). The one-off container must use the same existing `/data` volume; creating a new
 project/volume does not delete the original household. This command cannot run successfully
 inside the ordinary still-running server container. NAS operators can run an equivalent

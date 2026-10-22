@@ -58,7 +58,7 @@ def register_routes(app, session, service):
     @app.get(prefix + "/helper", response_class=Response)
     def helper():
         return Response(
-            files("aircooker").joinpath("chatgpt_helper.py").read_bytes(),
+            files("mealf").joinpath("chatgpt_helper.py").read_bytes(),
             media_type="text/x-python",
             headers={"Content-Disposition": 'attachment; filename="mealf-connect-chatgpt.py"'},
         )

@@ -2,7 +2,7 @@
 requires = ["setuptools==80.9.0"]
 build-backend = "setuptools.build_meta"
 [project]
-name = "aircooker-server"
+name = "mealf-server"
 version = "0.1.0"
 requires-python = ">=3.12"
 description = "mealf self-hosted household meal planning"
@@ -14,7 +14,7 @@ browser = ["playwright==1.62.0"]
 [tool.setuptools.packages.find]
 where = ["src"]
 [tool.setuptools.package-data]
-aircooker = ["migrations/*.sql", "attributions/*", "web/*", "web/pwa/*", "web/pwa/assets/*", "web/pwa/art/*", "web/pwa/brand/*"]
+mealf = ["migrations/*.sql", "attributions/*", "web/*", "web/pwa/*", "web/pwa/assets/*", "web/pwa/art/*", "web/pwa/brand/*"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]

@@ -42,8 +42,9 @@ function selectPage(key, focus=true){
   if(focus){$("page-title").focus({preventScroll:true});window.scrollTo(0,0);if($("status").dataset.i18n!=="busy")message("ready");}
 }
 document.querySelectorAll("[data-page-link]").forEach(link=>link.onclick=event=>{event.preventDefault();selectPage(link.dataset.pageLink);});
-const device=localStorage.getItem("aircooker.device")||crypto.randomUUID();
-localStorage.setItem("aircooker.device",device);
+// Read the previous device identity without replacing any session or household data.
+const device=localStorage.getItem("mealf.device")||localStorage.getItem("aircooker.device")||crypto.randomUUID();
+localStorage.setItem("mealf.device",device);
 function translate(){
   document.documentElement.lang=locale;
   document.querySelectorAll("[data-peach]").forEach(button=>button.setAttribute("aria-label",words[locale].peach_slap));
@@ -86,7 +87,7 @@ function signedOut(){
   document.body.classList.remove("authenticated");
   document.querySelectorAll('input[type="password"]').forEach(e=>e.value="");
 }
-function csrf(){return document.cookie.split("; ").find(c=>c.startsWith("aircooker_csrf="))?.split("=")[1]||"";}
+function csrf(){const values=document.cookie.split("; ");return (values.find(c=>c.startsWith("mealf_csrf="))||values.find(c=>c.startsWith("aircooker_csrf=")))?.split("=")[1]||"";}
 async function request(path,options={}){
   const response=await fetch(path,{...options,headers:{"Content-Type":"application/json","X-CSRF-Token":csrf(),...options.headers},credentials:"same-origin",redirect:"error"});
   if(!response.ok){

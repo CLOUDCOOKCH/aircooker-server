@@ -11,9 +11,9 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
-from aircooker.deletion import MARKER, deletion_identity, erase_household
-from aircooker.instance_lock import InstanceLock
+from mealf.app import create_app
+from mealf.deletion import MARKER, deletion_identity, erase_household
+from mealf.instance_lock import InstanceLock
 
 
 def test_running_server_or_maintenance_cannot_share_the_data_volume(tmp_path):
@@ -28,7 +28,7 @@ def test_running_server_or_maintenance_cannot_share_the_data_volume(tmp_path):
 
 
 def test_shutdown_retains_volume_lock_until_worker_thread_stops(tmp_path, monkeypatch):
-    import aircooker.app as application
+    import mealf.app as application
 
     entered, release = threading.Event(), threading.Event()
 
@@ -102,14 +102,14 @@ def test_wrong_identity_cannot_start_deletion(harness):
     with InstanceLock(root), pytest.raises(ValueError, match="identity changed"):
         erase_household(root, str(uuid4()))
     assert not (root / MARKER).exists()
-    assert (root / "database/aircooker.sqlite3").exists()
+    assert (root / "database/mealf.sqlite3").exists()
 
 
 def test_interrupted_erasure_blocks_server_and_can_resume_same_intent(harness, monkeypatch):
     client, app, _, _ = harness
     root = app.state.database.root
     instance = client.get("/api/v1/system/info").json()["instance_id"]
-    import aircooker.deletion as deletion
+    import mealf.deletion as deletion
 
     original = deletion.shutil.rmtree
     calls = []
@@ -152,7 +152,7 @@ def test_symlinked_data_is_never_followed_and_marker_is_private(harness, tmp_pat
 
 def test_noninteractive_cli_refuses_deletion_before_touching_data(tmp_path):
     result = subprocess.run(
-        [sys.executable, "-m", "aircooker.cli", "delete-household"],
+        [sys.executable, "-m", "mealf.cli", "delete-household"],
         input="DELETE synthetic\n",
         text=True,
         capture_output=True,
@@ -182,7 +182,7 @@ def test_actual_cli_requires_exact_terminal_confirmation(harness, monkeypatch):
         assert run.returncode == 0, run.stderr
         result = json.loads(run.stdout)
         assert (result["code"] == 0) is expected, result
-        assert (root / "database/aircooker.sqlite3").exists() is not expected
+        assert (root / "database/mealf.sqlite3").exists() is not expected
 
 
 def test_malformed_deletion_marker_cannot_silently_create_a_household(tmp_path):

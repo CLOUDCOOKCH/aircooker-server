@@ -19,11 +19,11 @@ const assets = ['/app/', ...files.map((name) => '/app/' + name)];
 await writeFile(
   'dist/sw.js',
   `importScripts('/app/push-handler.js');
-const CACHE='aircooker-shell-${version}';
+const CACHE='mealf-shell-${version}';
 const ASSETS=${JSON.stringify(assets)};
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(ASSETS);})()));
 self.addEventListener('message',event=>{if(event.data?.type==='ACTIVATE')self.skipWaiting();});
-self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('aircooker-shell-')&&key!==CACHE)await caches.delete(key);await self.clients.claim();})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if((key.startsWith('mealf-shell-')||key.startsWith('aircooker-shell-'))&&key!==CACHE)await caches.delete(key);await self.clients.claim();})()));
 self.addEventListener('fetch',event=>{const url=new URL(event.request.url);if(event.request.method!=='GET'||url.origin!==self.location.origin||!url.pathname.startsWith('/app/'))return;
 if(event.request.mode==='navigate'){event.respondWith((async()=>{try{return await fetch(event.request);}catch{return (await caches.open(CACHE)).match('/app/');}})());return;}
 if(!ASSETS.includes(url.pathname))return;event.respondWith((async()=>{const cache=await caches.open(CACHE);return (await cache.match(event.request))||fetch(event.request);})());});

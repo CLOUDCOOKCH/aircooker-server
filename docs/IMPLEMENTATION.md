@@ -366,3 +366,24 @@ body/assets stay unchanged. The previous pending/blocked observations above are 
 and superseded by validation/github-preview-retry.json. Native/physical-iPhone/live-service
 and complete-product acceptance remain open. Keep existing volumes/ports and reload/accept
 the PWA update after finishing edits; clearing browser data is not required.
+
+## Mealf identifiers and administration paths — 2026-10-22
+
+Current source/package/native target names use Mealf. Console `/admin/` and its assets no
+longer occupy `/`; the backend reserves the root for the operator's landing page. PWA/API
+paths remain stable. Existing database, session, archive and offline browser state have
+explicit compatibility handling. See [upgrade guide](MEALF_MIGRATION.md).
+
+Local validation: full 391-test backend suite plus the added admin compatibility check,
+59 browser-core tests, Ruff, mypy, generated OpenAPI drift, original brand assets,
+41-wheel licence inventory and real Chromium console flows pass. The full PWA offline/two-device/Axe browser check also passes, including current admin
+links and the absence of admin links in demo mode. The console browser check includes root/old-asset 404s, `/admin` redirect, setup, secure cookies, household,
+EN/DE phone layout, sessions and archive transfer. No physical iPhone or live external
+integration claim. Local Docker source build is blocked by this environment's Alpine
+registry HTTP 403; remote CI/runtime/image gates must pass before publication. The
+Impeccable launcher/detector are unavailable; no automated design-detector pass is claimed.
+Full v1 readiness remains open.
+
+The fresh finish reviewer records **ship within name, routing and visual-preservation
+scope** in [the review](validation/mealf-admin-routing-review.md); the documentation
+handoff preserves the incumbent visual tokens.

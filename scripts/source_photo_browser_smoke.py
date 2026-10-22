@@ -15,10 +15,10 @@ import httpx
 import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
-from aircooker.importing import FetchedPage
-from aircooker.recipe_extraction import ExtractionResult
-from aircooker.source_images import source_photo
+from mealf.app import create_app
+from mealf.importing import FetchedPage
+from mealf.recipe_extraction import ExtractionResult
+from mealf.source_images import source_photo
 
 
 def main():
@@ -41,17 +41,17 @@ def main():
         def close(self):
             pass
 
-    captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", "build/source-photo-browser"))
+    captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", "build/source-photo-browser"))
     captures.mkdir(parents=True, exist_ok=True)
     with (
         TemporaryDirectory(prefix="mealf-source-photo-") as directory,
-        patch("aircooker.app.bounded_fetch_page", lambda url: page_data),
-        patch("aircooker.app.bounded_source_photo", source_photo),
+        patch("mealf.app.bounded_fetch_page", lambda url: page_data),
+        patch("mealf.app.bounded_source_photo", source_photo),
         patch(
-            "aircooker.source_images.fetch_resource",
+            "mealf.source_images.fetch_resource",
             lambda url, *args: (artwork, "image/png", url),
         ),
-        patch("aircooker.app.provider_for", lambda config: Provider()),
+        patch("mealf.app.provider_for", lambda config: Provider()),
     ):
         root = Path(directory)
         with socket.socket() as probe:

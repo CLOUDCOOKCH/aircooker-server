@@ -13,7 +13,7 @@ export async function installWorker(): Promise<void> {
     });
     const announce = () => {
       if (registration.waiting)
-        window.dispatchEvent(new CustomEvent('aircooker:update', { detail: registration.waiting }));
+        window.dispatchEvent(new CustomEvent('mealf:update', { detail: registration.waiting }));
     };
     registration.addEventListener('updatefound', () => {
       registration.installing?.addEventListener('statechange', announce);

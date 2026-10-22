@@ -17,9 +17,9 @@ import uvicorn
 from cryptography.hazmat.primitives.asymmetric import rsa
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
-from aircooker.chatgpt_helper import connect
-from aircooker.chatgpt_protocol import AUTHORIZE, DISCOVERY, ISSUER, JWKS, RESOURCE, SCOPES, TOKEN
+from mealf.app import create_app
+from mealf.chatgpt_helper import connect
+from mealf.chatgpt_protocol import AUTHORIZE, DISCOVERY, ISSUER, JWKS, RESOURCE, SCOPES, TOKEN
 
 
 def main():
@@ -182,7 +182,7 @@ def main():
                     panel.screenshot(path=str(captures / "pairing-desktop.png"))
                     assert (
                         operator.get("/api/v1/integrations/chatgpt/helper").text
-                        == Path("src/aircooker/chatgpt_helper.py").read_text()
+                        == Path("src/mealf/chatgpt_helper.py").read_text()
                     )
                     nonce = {}
                     callback_threads = []
@@ -280,7 +280,7 @@ def main():
                         page.get_by_role("heading", name="Review your import", exact=True)
                     ).to_be_visible()
                     rows = page.evaluate(
-                        "async()=> (await(await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                        "async()=> (await(await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                     )
                     assert rows == []
                     page.get_by_label("Recipe name", exact=True).fill("Reviewed personal import")
@@ -320,7 +320,7 @@ def main():
                     context.set_offline(True)
                     page.get_by_role("button", name="Vorschau vorbereiten", exact=True).click()
                     page.wait_for_function(
-                        "async()=> { const names=await indexedDB.databases(); const name=names.find(v=>v.name?.startsWith('aircooker:'))?.name; if(!name)return false; const db=await new Promise((resolve,reject)=>{const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);r.onerror=reject;}); const rows=await new Promise((resolve,reject)=>{const r=db.transaction('imports').objectStore('imports').getAll();r.onsuccess=()=>resolve(r.result);r.onerror=reject;});db.close();return rows.some(v=>v.state==='queued'&&v.body.ai_account==='chatgpt');}"
+                        "async()=> { const names=await indexedDB.databases(); const name=names.find(v=>v.name?.startsWith('mealf:'))?.name; if(!name)return false; const db=await new Promise((resolve,reject)=>{const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);r.onerror=reject;}); const rows=await new Promise((resolve,reject)=>{const r=db.transaction('imports').objectStore('imports').getAll();r.onsuccess=()=>resolve(r.result);r.onerror=reject;});db.close();return rows.some(v=>v.state==='queued'&&v.body.ai_account==='chatgpt');}"
                     )
                     page.reload()
                     expect(
@@ -349,7 +349,7 @@ def main():
                         print(
                             "Synthetic device import diagnostics:",
                             page.evaluate(
-                                "async()=>{const names=await indexedDB.databases();const name=names.find(v=>v.name?.startsWith('aircooker:'))?.name;if(!name)return [];const db=await new Promise(resolve=>{const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);});const rows=await new Promise(resolve=>{const r=db.transaction('imports').objectStore('imports').getAll();r.onsuccess=()=>resolve(r.result);});db.close();return rows.map(v=>({state:v.state,error:v.error}));}"
+                                "async()=>{const names=await indexedDB.databases();const name=names.find(v=>v.name?.startsWith('mealf:'))?.name;if(!name)return [];const db=await new Promise(resolve=>{const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);});const rows=await new Promise(resolve=>{const r=db.transaction('imports').objectStore('imports').getAll();r.onsuccess=()=>resolve(r.result);});db.close();return rows.map(v=>({state:v.state,error:v.error}));}"
                             ),
                         )
                         raise

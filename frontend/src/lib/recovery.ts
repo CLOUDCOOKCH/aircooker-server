@@ -49,6 +49,6 @@ export async function rebuildFromServer(
   api: Pick<APIClient, 'request'>,
 ): Promise<void> {
   if (typeof navigator !== 'undefined' && navigator.locks)
-    return navigator.locks.request('aircooker-sync:' + store.instanceID, () => rebuild(store, api));
+    return navigator.locks.request(store.syncLock, () => rebuild(store, api));
   return rebuild(store, api);
 }

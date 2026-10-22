@@ -10,14 +10,14 @@ import pytest
 from PIL import Image
 from pydantic import ValidationError
 
-from aircooker.ai import AIConfiguration, AIInput, provider_for
-from aircooker.errors import DomainError
-from aircooker.import_sources import youtube_url
-from aircooker.importing import extract
-from aircooker.jobs import claim, finish
-from aircooker.models import Mutation
-from aircooker.recipe_extraction import ExtractionResult
-from aircooker.retention import DAY, cleanup_database
+from mealf.ai import AIConfiguration, AIInput, provider_for
+from mealf.errors import DomainError
+from mealf.import_sources import youtube_url
+from mealf.importing import extract
+from mealf.jobs import claim, finish
+from mealf.models import Mutation
+from mealf.recipe_extraction import ExtractionResult
+from mealf.retention import DAY, cleanup_database
 
 
 def extraction():
@@ -214,7 +214,7 @@ def test_private_upload_draft_edit_confirmation_and_metadata_roundtrip(
         def close(self):
             pass
 
-    monkeypatch.setattr("aircooker.app.provider_for", lambda config: Provider())
+    monkeypatch.setattr("mealf.app.provider_for", lambda config: Provider())
     source_id = str(uuid4())
     assert (
         client.put(
@@ -284,7 +284,7 @@ def test_provider_profiles_retain_keys_and_choose_default(harness):
 def test_structured_metadata_precedes_ai_even_when_requested(harness, monkeypatch):
     client, app, _, _ = harness
     monkeypatch.setattr(
-        "aircooker.app.provider_for", lambda config: pytest.fail("metadata must not invoke AI")
+        "mealf.app.provider_for", lambda config: pytest.fail("metadata must not invoke AI")
     )
     source = {
         "@type": "Recipe",
@@ -309,9 +309,7 @@ def test_structured_metadata_precedes_ai_even_when_requested(harness, monkeypatc
 def test_changed_provider_requires_new_consent_and_limits_are_enforced(harness, monkeypatch):
     client, app, _, _ = harness
     configure(client, requests_per_hour=1)
-    monkeypatch.setattr(
-        "aircooker.app.provider_for", lambda config: pytest.fail("no network expected")
-    )
+    monkeypatch.setattr("mealf.app.provider_for", lambda config: pytest.fail("no network expected"))
     first = client.post(
         "/api/v1/imports",
         json={"text": "unstructured source", "use_ai": True, "consent_external_ai": True},
@@ -323,7 +321,7 @@ def test_changed_provider_requires_new_consent_and_limits_are_enforced(harness, 
         == "ai_configuration_changed_review_consent"
     )
     with app.state.database.transaction() as db:
-        from aircooker.auth import rate_limit
+        from mealf.auth import rate_limit
 
         assert rate_limit(db, "ai.requests", maximum=1, seconds=3600)
     second = client.post(
@@ -443,7 +441,7 @@ def test_displayed_destination_is_checked_before_any_disclosure(harness, monkeyp
     client, app, _, _ = harness
     configure(client)
     monkeypatch.setattr(
-        "aircooker.app.provider_for",
+        "mealf.app.provider_for",
         lambda config: pytest.fail("stale disclosure must not call AI"),
     )
     response = client.post(

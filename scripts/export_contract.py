@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--check", action="store_true")

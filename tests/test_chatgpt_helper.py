@@ -8,7 +8,7 @@ from urllib.parse import parse_qs, urlencode, urlsplit
 
 import pytest
 
-from aircooker.chatgpt_helper import (
+from mealf.chatgpt_helper import (
     AUTH,
     PREFIX,
     RESOURCE,

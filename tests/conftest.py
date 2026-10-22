@@ -3,7 +3,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 @pytest.fixture

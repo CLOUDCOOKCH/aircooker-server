@@ -3,8 +3,8 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from aircooker.app import create_app
-from aircooker.pwa_auth import ACCESS_COOKIE, AUTH_PATH, CSRF_COOKIE, REFRESH_COOKIE
+from mealf.app import create_app
+from mealf.pwa_auth import ACCESS_COOKIE, AUTH_PATH, CSRF_COOKIE, REFRESH_COOKIE
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def browser(harness, monkeypatch):
     _, app, *_ = harness
     monkeypatch.setenv("BASE_URL", "https://localhost")
     with TestClient(app, base_url="https://localhost") as client:
-        client.headers.update({"Origin": "https://localhost", "X-Aircooker-Client": "pwa"})
+        client.headers.update({"Origin": "https://localhost", "X-Mealf-Client": "pwa"})
         yield client, app
 
 
@@ -41,8 +41,7 @@ def test_pwa_cookie_credentials_are_http_only_and_never_in_json(browser):
     assert "no-store" in response.headers["cache-control"]
     # The console has a separate cookie; logging into the PWA does not grant its session.
     assert (
-        client.get("/api/v1/admin/status", headers={"X-Aircooker-Client": "console"}).status_code
-        == 401
+        client.get("/api/v1/admin/status", headers={"X-Mealf-Client": "console"}).status_code == 401
     )
 
 
@@ -125,7 +124,7 @@ def test_pwa_setup_requires_local_token_and_cannot_reopen_bootstrap(tmp_path, mo
     with TestClient(
         app,
         base_url="https://localhost",
-        headers={"Origin": "https://localhost", "X-Aircooker-Client": "pwa"},
+        headers={"Origin": "https://localhost", "X-Mealf-Client": "pwa"},
     ) as client:
         assert client.post(AUTH_PATH + "/setup", json=body).status_code == 403
         result = client.post(AUTH_PATH + "/setup", json=body, headers={"X-Setup-Token": token})

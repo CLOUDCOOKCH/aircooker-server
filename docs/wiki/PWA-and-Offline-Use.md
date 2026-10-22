@@ -1,7 +1,7 @@
 # PWA and offline use
 
 MealF's primary client is the installable browser app at your public HTTPS origin's
-`/app/` path. The administration console remains at `/`. Use the same origin for the
+`/app/` path. The administration console remains at `/admin/`. Use the same origin for the
 client and API; see [Installation](Installation) and [HTTPS and reverse proxy](HTTPS-and-Reverse-Proxy).
 
 ## Install on a device

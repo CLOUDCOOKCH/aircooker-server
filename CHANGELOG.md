@@ -216,3 +216,10 @@ See the implementation checklist for feature status and verification limits.
   refine typography, dark appearance, focus/controls and narrow/enlarged-text layouts.
 - Preserve unsaved edits across section changes and retain existing secured workflows;
   update genuine Chromium captures and browser acceptance checks.
+
+## Mealf identifiers and admin routing — 2026-10-22
+
+- Current Python/Swift package, module, target and operator names now use Mealf.
+- Console and its private scripts/styles move to `/admin/`; `/` is reserved for the separate landing page. PWA `/app/` and API `/api/v1/` stay stable.
+- Preserve existing SQLite volumes, sessions, headers, household archives and browser offline work through explicit compatibility paths. See `docs/MEALF_MIGRATION.md`.
+- Native contract updated deliberately; optional imported recipe metadata survives native round trips. Native signing/provisioning uses the new identifiers; no cross-bundle migration is claimed.

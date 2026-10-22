@@ -9,7 +9,7 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image, PngImagePlugin
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 def png(colour="orange", size=(60, 40)):
@@ -103,10 +103,10 @@ def test_untrusted_upload_types_are_rejected(harness, data, content_type, status
 
 def test_image_and_storage_limits_leave_no_asset(harness, monkeypatch):
     client, app, _, _ = harness
-    monkeypatch.setattr("aircooker.media.MAX_PIXELS", 10)
+    monkeypatch.setattr("mealf.media.MAX_PIXELS", 10)
     assert upload(client).json()["error"]["code"] == "image_pixel_limit"
-    monkeypatch.setattr("aircooker.media.MAX_PIXELS", 16_000_000)
-    monkeypatch.setattr("aircooker.media.MAX_TOTAL_BYTES", 1)
+    monkeypatch.setattr("mealf.media.MAX_PIXELS", 16_000_000)
+    monkeypatch.setattr("mealf.media.MAX_TOTAL_BYTES", 1)
     assert upload(client).json()["error"]["code"] == "media_storage_limit"
     with app.state.database.connect() as db:
         assert db.execute("SELECT COUNT(*) FROM recipe_media").fetchone()[0] == 0
@@ -204,7 +204,7 @@ def test_archive_traversal_and_corruption_are_rejected(harness):
             "manifest.json",
             json.dumps(
                 {
-                    "format": "aircooker-household-archive",
+                    "format": "mealf-household-archive",
                     "version": 1,
                     "household": manifest,
                     "media": [],
@@ -280,7 +280,7 @@ def test_photo_and_archive_cookie_mutations_require_csrf(harness):
             == 403
         )
         browser.headers.update(
-            {"Origin": "https://localhost", "X-CSRF-Token": browser.cookies["aircooker_csrf"]}
+            {"Origin": "https://localhost", "X-CSRF-Token": browser.cookies["mealf_csrf"]}
         )
         assert upload(browser).status_code == 200
 
@@ -312,7 +312,7 @@ def test_corrupt_archive_image_rolls_back_everything(harness, mutation, tmp_path
 def test_streamed_archive_and_photo_size_limits(harness, monkeypatch):
     client, app, _, _ = harness
     # No Content-Length: exercise the streaming counter, not only the header check.
-    monkeypatch.setattr("aircooker.app.MAX_ARCHIVE", 16)
+    monkeypatch.setattr("mealf.app.MAX_ARCHIVE", 16)
     response = client.post(
         "/api/v1/admin/import/archive",
         content=iter([b"x" * 10, b"y" * 10]),

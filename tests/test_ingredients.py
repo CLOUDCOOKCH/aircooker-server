@@ -4,9 +4,9 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.ingredients import parse_ingredient
-from aircooker.models import Recipe
-from aircooker.planning import scaled
+from mealf.ingredients import parse_ingredient
+from mealf.models import Recipe
+from mealf.planning import scaled
 
 
 @pytest.mark.parametrize(
@@ -78,8 +78,8 @@ def test_non_numeric_ingredients_remain_sensible_when_scaling(source, name, note
 def test_import_reviewed_fraction_flows_into_scaled_shopping_projection(harness, mutation):
     from datetime import date
 
-    from aircooker.jobs import claim, finish
-    from aircooker.planning import shopping_projection
+    from mealf.jobs import claim, finish
+    from mealf.planning import shopping_projection
 
     client, app, device, _ = harness
     source = json.dumps(
@@ -134,7 +134,7 @@ def test_import_reviewed_fraction_flows_into_scaled_shopping_projection(harness,
 
 @pytest.mark.parametrize("raw", ["200 g flour", [None, "", "200 g flour"]])
 def test_unsupported_ingredient_entries_are_disclosed(raw):
-    from aircooker.importing import extract
+    from mealf.importing import extract
 
     recipe, warnings = extract(
         json.dumps(
@@ -150,7 +150,7 @@ def test_unsupported_ingredient_entries_are_disclosed(raw):
 
 
 def test_import_limits_disclose_truncated_source_text():
-    from aircooker.importing import extract
+    from mealf.importing import extract
 
     recipe, warnings = extract(
         json.dumps(

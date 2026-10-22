@@ -7,10 +7,10 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.db import Database
-from aircooker.models import Mutation
-from aircooker.planning import shopping_projection
-from aircooker.sync import apply_mutation
+from mealf.db import Database
+from mealf.models import Mutation
+from mealf.planning import shopping_projection
+from mealf.sync import apply_mutation
 
 
 class MondayClock(datetime):
@@ -25,7 +25,7 @@ def test_legacy_override_uses_household_week_and_replay_never_refreshes_it(
     harness, mutation, monkeypatch
 ):
     client, _, device, _ = harness
-    monkeypatch.setattr("aircooker.sync.datetime", MondayClock)
+    monkeypatch.setattr("mealf.sync.datetime", MondayClock)
     body = mutation(device, kind="pantry", payload={"name": "Salt", "include_this_week": True})
     first = client.post("/api/v1/sync/push", json={"mutations": [body]})
     assert first.status_code == 200, first.text
@@ -46,7 +46,7 @@ def test_legacy_override_uses_household_week_and_replay_never_refreshes_it(
             value = datetime(2026, 11, 2, 12, tzinfo=UTC)
             return value.astimezone(tz) if tz else value.replace(tzinfo=None)
 
-    monkeypatch.setattr("aircooker.sync.datetime", NextWeek)
+    monkeypatch.setattr("mealf.sync.datetime", NextWeek)
     replay = client.post("/api/v1/sync/push", json={"mutations": [body]})
     assert replay.json() == first.json()
     assert client.get("/api/v1/pantry/" + body["entity_id"]).json() == record
@@ -115,9 +115,9 @@ def test_undated_legacy_restore_does_not_reactivate_a_temporary_override(harness
 def legacy_database(root: Path):
     directory = root / "database"
     directory.mkdir()
-    connection = sqlite3.connect(directory / "aircooker.sqlite3")
+    connection = sqlite3.connect(directory / "mealf.sqlite3")
     connection.execute("CREATE TABLE schema_migration(version TEXT PRIMARY KEY)")
-    for script in sorted(Path("src/aircooker/migrations").glob("*.sql")):
+    for script in sorted(Path("src/mealf/migrations").glob("*.sql")):
         if script.name >= "006_pantry_period.sql":
             break
         connection.executescript(script.read_text())
@@ -163,7 +163,7 @@ def test_migration_publishes_new_revisions_without_rewriting_history_and_is_repe
 
 def test_failed_backfill_rolls_back_schema_new_commits_and_migration_marker(tmp_path, monkeypatch):
     legacy_database(tmp_path)
-    import aircooker.data_migrations as migrations
+    import mealf.data_migrations as migrations
 
     original = migrations.apply_mutation
 
@@ -175,7 +175,7 @@ def test_failed_backfill_rolls_back_schema_new_commits_and_migration_marker(tmp_
         patch.setattr(migrations, "apply_mutation", fail_after_write)
         with pytest.raises(RuntimeError, match="Injected"):
             Database(tmp_path)
-    connection = sqlite3.connect(tmp_path / "database/aircooker.sqlite3")
+    connection = sqlite3.connect(tmp_path / "database/mealf.sqlite3")
     assert connection.execute("SELECT COUNT(*) FROM change_log").fetchone()[0] == 1
     assert (
         connection.execute(

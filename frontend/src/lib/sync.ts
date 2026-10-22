@@ -26,7 +26,7 @@ export class SyncEngine {
     const work = async () => this.run();
     const pending = (async () => {
       if (typeof navigator !== 'undefined' && navigator.locks)
-        return await navigator.locks.request('aircooker-sync:' + this.store.instanceID, work);
+        return await navigator.locks.request(this.store.syncLock, work);
       return work();
     })();
     this.running = pending
@@ -206,8 +206,8 @@ export class SyncEngine {
         method: 'POST',
         body: JSON.stringify(entry.mutation),
         headers: {
-          'X-Aircooker-Sync-Cursor': String(checkpoint.cursor),
-          'X-Aircooker-Sync-Token': checkpoint.token,
+          'X-Mealf-Sync-Cursor': String(checkpoint.cursor),
+          'X-Mealf-Sync-Token': checkpoint.token,
         },
       });
     }

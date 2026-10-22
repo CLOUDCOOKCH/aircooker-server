@@ -1,6 +1,6 @@
 import pytest
 
-from aircooker.ai_settings import load_configuration
+from mealf.ai_settings import load_configuration
 
 
 def configuration(**changes):
@@ -68,7 +68,7 @@ def test_ai_admin_validation_authentication_and_probe(harness, monkeypatch):
         def close(self):
             pass
 
-    monkeypatch.setattr("aircooker.app.provider_for", lambda config: Provider())
+    monkeypatch.setattr("mealf.app.provider_for", lambda config: Provider())
     response = c.post("/api/v1/admin/ai/test")
     assert response.status_code == 200 and response.json()["household_content_sent"] is False
     assert len(probes) == 1 and "Connection test soup" in probes[0]
@@ -81,7 +81,7 @@ def test_ai_admin_validation_authentication_and_probe(harness, monkeypatch):
 
 
 @pytest.mark.parametrize(
-    "bad", [{"AI_TIMEOUT": "invalid"}, {"AI_API_KEY_FILE": "/nonexistent/aircooker-synthetic-key"}]
+    "bad", [{"AI_TIMEOUT": "invalid"}, {"AI_API_KEY_FILE": "/nonexistent/mealf-synthetic-key"}]
 )
 def test_invalid_environment_can_be_repaired_without_exposing_values(harness, monkeypatch, bad):
     c, _, _, _ = harness
@@ -132,7 +132,7 @@ def test_connection_probe_obeys_configured_hourly_budget(harness, monkeypatch):
         def close(self):
             pass
 
-    monkeypatch.setattr("aircooker.app.provider_for", lambda config: Provider())
+    monkeypatch.setattr("mealf.app.provider_for", lambda config: Provider())
     assert c.post("/api/v1/admin/ai/test").status_code == 200
     assert c.post("/api/v1/admin/ai/test").status_code == 429
     assert len(probes) == 1

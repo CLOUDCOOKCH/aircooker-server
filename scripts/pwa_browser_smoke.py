@@ -16,11 +16,11 @@ from tempfile import TemporaryDirectory
 import uvicorn
 from playwright.sync_api import expect, sync_playwright
 
-from aircooker.app import create_app
+from mealf.app import create_app
 
 
 def main():
-    with TemporaryDirectory(prefix="aircooker-pwa-") as temporary:
+    with TemporaryDirectory(prefix="mealf-pwa-") as temporary:
         root = Path(temporary)
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
@@ -39,7 +39,7 @@ def main():
             time.sleep(0.05)
         else:
             raise RuntimeError("PWA server did not start")
-        captures = Path(os.environ.get("AIRCOOKER_SCREENSHOT_DIR", ".impeccable/review/round-1"))
+        captures = Path(os.environ.get("MEALF_SCREENSHOT_DIR", ".impeccable/review/round-1"))
         captures.mkdir(parents=True, exist_ok=True)
         try:
             with sync_playwright() as playwright:
@@ -70,7 +70,7 @@ def main():
                     rows = []
                     while time.monotonic() < deadline:
                         rows = screen.evaluate(
-                            "async path => (await (await fetch(path, {headers:{'X-Aircooker-Client':'pwa'}})).json()).items",
+                            "async path => (await (await fetch(path, {headers:{'X-Mealf-Client':'pwa'}})).json()).items",
                             path,
                         )
                         if ready(rows):
@@ -79,7 +79,7 @@ def main():
                     raise AssertionError((path, rows))
 
                 def capture(name):
-                    if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                    if os.environ.get("MEALF_CAPTURE") == "1":
                         page.evaluate(
                             "async()=>{for(const image of document.images){if(image.complete)await image.decode().catch(()=>{});}}"
                         )
@@ -105,7 +105,7 @@ def main():
                 assert peach.locator("img").evaluate(
                     "image => image.getAnimations().some(a => a.effect.getKeyframes().length > 4)"
                 )
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     # A genuine rendered contact frame; animation behavior is asserted above.
                     peach.evaluate(
                         "button => { for (const e of button.querySelectorAll('img,.peach-hand')) for (const a of e.getAnimations()) {a.pause();a.currentTime=168;} }"
@@ -258,6 +258,8 @@ def main():
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
                 page.get_by_label("Language", exact=True).select_option("de")
                 expect(page.get_by_role("heading", name="Einstellungen")).to_be_visible()
+                expect(page.locator('a[href="/admin/"]')).to_have_count(0)
+                expect(page.locator('a[href="/admin/#bring"]')).to_have_count(0)
                 audit("settings phone German dark")
                 capture("pwa-settings-phone-de-dark.png")
                 page.get_by_role("navigation").get_by_role("button", name="Kalender").click()
@@ -312,7 +314,7 @@ def main():
                 page.get_by_role("button", name="Sync now", exact=True).click()
                 expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
                 assert page.evaluate(
-                    "async()=>{const r=await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}});const data=await r.json();return JSON.stringify(data).includes('Offline test soup');}"
+                    "async()=>{const r=await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}});const data=await r.json();return JSON.stringify(data).includes('Offline test soup');}"
                 )
                 # Second physical browser context = independent device session.
                 second_context = browser.new_context(viewport={"width": 1100, "height": 900})
@@ -325,7 +327,7 @@ def main():
                 ).to_be_visible()
                 expect(second.locator(".welcome-household")).to_contain_text("Browser kitchen")
                 audit("configured PWA login", second)
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     second.screenshot(path=str(captures / "pwa-login-desktop.png"), full_page=True)
                 second.get_by_label("Username", exact=True).fill("cook")
                 second.get_by_label("Password", exact=True).fill("synthetic pwa kitchen password")
@@ -399,7 +401,7 @@ def main():
                     )
                 ).to_be_visible()
                 server_rows = second.evaluate(
-                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                 )
                 assert (
                     len(server_rows) == 1
@@ -461,7 +463,7 @@ def main():
                     and rows[0]["payload"]["include_week_start"] is None,
                 )
                 server_meals = second.evaluate(
-                    "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                    "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                 )
                 assert (
                     len(server_meals) == 1
@@ -501,7 +503,7 @@ def main():
                 expect(second.get_by_role("heading", name="Review your import")).to_be_visible()
                 assert (
                     second.evaluate(
-                        "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                        "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items.length"
                     )
                     == 1
                 )
@@ -512,7 +514,7 @@ def main():
                     "Up to date", timeout=15000
                 )
                 final_rows = second.evaluate(
-                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items"
+                    "async()=> (await (await fetch('/api/v1/recipes',{headers:{'X-Mealf-Client':'pwa'}})).json()).items"
                 )
                 assert len(final_rows) == 2 and any(
                     row["payload"]["title"] == "Explicitly reviewed beans" for row in final_rows
@@ -551,7 +553,7 @@ def main():
                 second.set_viewport_size({"width": 390, "height": 844})
                 audit("template editor phone", second)
                 assert template_editor.evaluate("el=>el.scrollWidth <= el.clientWidth")
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     second.screenshot(
                         path=str(captures / "pwa-template-editor.png"),
                         animations="disabled",
@@ -600,7 +602,7 @@ def main():
                 )
                 assert (
                     second.evaluate(
-                        "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                        "async()=> (await (await fetch('/api/v1/calendar/meals',{headers:{'X-Mealf-Client':'pwa'}})).json()).items.length"
                     )
                     == 1
                 )
@@ -623,6 +625,8 @@ def main():
                 second.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                expect(second.locator('a[href="/admin/"]')).to_be_visible()
+                expect(second.locator('a[href="/admin/#bring"]')).to_be_visible()
                 planning = second.locator(".settings-group").filter(
                     has=second.get_by_role("heading", name="Meal suggestions", exact=True)
                 )
@@ -642,7 +646,7 @@ def main():
                 ).to_be_visible()
                 second.set_viewport_size({"width": 1440, "height": 1000})
                 audit("shared planning settings desktop", second)
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     second.screenshot(
                         path=str(captures / "pwa-planning-settings-desktop.png"),
                         full_page=True,
@@ -661,7 +665,7 @@ def main():
                 second.set_viewport_size({"width": 390, "height": 844})
                 second.emulate_media(color_scheme="dark")
                 audit("shared planning settings phone German dark", second)
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     second.screenshot(
                         path=str(captures / "pwa-planning-settings-phone-de-dark.png"),
                         full_page=True,
@@ -686,7 +690,7 @@ def main():
                 expect(preview.locator(".suggestion-row")).to_have_count(21)
                 expect(preview.get_by_text("3.5 servings", exact=True)).to_have_count(21)
                 audit("offline shared preference suggestion preview phone", second)
-                if os.environ.get("AIRCOOKER_CAPTURE") == "1":
+                if os.environ.get("MEALF_CAPTURE") == "1":
                     second.screenshot(
                         path=str(captures / "pwa-planning-preview-phone.png"),
                         full_page=True,
@@ -698,7 +702,7 @@ def main():
                 )
                 expect(preview).not_to_be_visible()
                 queued = second.evaluate("""async()=>{
-                  const name=(await indexedDB.databases()).find(item=>item.name.startsWith('aircooker:')).name;
+                  const name=(await indexedDB.databases()).find(item=>item.name.startsWith('mealf:')).name;
                   return new Promise((resolve,reject)=>{const opening=indexedDB.open(name);opening.onerror=()=>reject(opening.error);
                     opening.onsuccess=()=>{const db=opening.result,tx=db.transaction('outbox'),query=tx.objectStore('outbox').getAll();
                       query.onsuccess=()=>resolve(query.result.map(row=>row.approval?.request_id));
@@ -708,7 +712,7 @@ def main():
                 # Only the two prior meals exist remotely until this device reconnects.
                 assert (
                     page.evaluate(
-                        "async()=> (await(await fetch('/api/v1/calendar/meals',{headers:{'X-Aircooker-Client':'pwa'}})).json()).items.length"
+                        "async()=> (await(await fetch('/api/v1/calendar/meals',{headers:{'X-Mealf-Client':'pwa'}})).json()).items.length"
                     )
                     == 2
                 )
@@ -722,7 +726,7 @@ def main():
                     row["payload"]["servings"] == "3.5" for row in approved
                 )
                 learning = second.evaluate(
-                    "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Aircooker-Client':'pwa'}})).json())"
+                    "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Mealf-Client':'pwa'}})).json())"
                 )
                 assert learning["accepted_counts"] and all(
                     count == 1 for count in learning["accepted_counts"].values()
@@ -739,7 +743,7 @@ def main():
                 ).to_be_visible()
                 assert (
                     second.evaluate(
-                        "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Aircooker-Client':'pwa'}})).json()).preferences.servings"
+                        "async()=> (await(await fetch('/api/v1/household/planning-preferences',{headers:{'X-Mealf-Client':'pwa'}})).json()).preferences.servings"
                     )
                     == "4.5"
                 )

@@ -52,7 +52,7 @@ or legal-compliance claim is made by the wheel check.
 
 POC `.2` deliberately adds the unmodified Alpine `bash=5.3.9-r1` package for container
 terminal compatibility. It is GPL-3.0-or-later, separate from the Apache-2.0 application;
-its GPLv3 text is packaged in `aircooker/attributions/bash-GPL-3.LICENSE`, and Bash's own
+its GPLv3 text is packaged in `mealf/attributions/bash-GPL-3.LICENSE`, and Bash's own
 version output retains the Free Software Foundation copyright/licence notice. The Alpine
 packaging recipe at `alpinelinux/aports` commit `1522c3193610902d8493f9790a2755c11f21f26d`
 (`main/bash/APKBUILD`, 3.24-stable) records the GNU Bash 5.3 source, vendor patches 001–009,
@@ -89,7 +89,7 @@ are exercised in each architecture’s Docker gate. Tesseract is a fixed local s
 not a new service or Python package; no OCR cloud account is required.
 
 The exact upstream Apache-2.0 licence texts from the official tagged Tesseract 5.5.2 and
-tessdata_fast 4.1.0 repositories are shipped in `aircooker/attributions/` as
+tessdata_fast 4.1.0 repositories are shipped in `mealf/attributions/` as
 `tesseract-5.5.2.LICENSE` and `tessdata-4.1.0.LICENSE`.
 Source: https://github.com/tesseract-ocr/tesseract/tree/5.5.2 and
 https://github.com/tesseract-ocr/tessdata_fast/tree/4.1.0.

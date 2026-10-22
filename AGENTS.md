@@ -1,4 +1,4 @@
-# aircooker-server development guidance
+# mealf-server development guidance
 
 Read README.md and docs/IMPLEMENTATION.md before work. Preserve the user's master product
 requirements and maintain explicit tested/partial/unverified/blocked status.

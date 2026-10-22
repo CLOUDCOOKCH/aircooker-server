@@ -9,11 +9,11 @@ from uuid import uuid4
 
 import pytest
 
-from aircooker.db import Database
-from aircooker.errors import DomainError
-from aircooker.import_receipts import fingerprint
-from aircooker.jobs import claim, enqueue, finish
-from aircooker.retention import BATCH, DAY, cleanup_database, cleanup_startup_transfers
+from mealf.db import Database
+from mealf.errors import DomainError
+from mealf.import_receipts import fingerprint
+from mealf.jobs import claim, enqueue, finish
+from mealf.retention import BATCH, DAY, cleanup_database, cleanup_startup_transfers
 
 
 def preview_import(harness):
@@ -299,11 +299,11 @@ def test_startup_prunes_only_stale_regular_transfer_files(tmp_path):
 def legacy_database(root, monkeypatch):
     resources = root / "old-package"
     (resources / "migrations").mkdir(parents=True)
-    for source in files("aircooker").joinpath("migrations").iterdir():
+    for source in files("mealf").joinpath("migrations").iterdir():
         if source.name.endswith(".sql") and source.name < "009":
             (resources / "migrations" / source.name).write_text(source.read_text())
     with monkeypatch.context() as patch:
-        patch.setattr("aircooker.db.files", lambda package: resources)
+        patch.setattr("mealf.db.files", lambda package: resources)
         database = Database(root / "data")
     payload = {
         "id": str(uuid4()),
@@ -347,7 +347,7 @@ def test_failed_data_backfill_rolls_back_schema_and_migration_marker(tmp_path, m
         raise RuntimeError("synthetic migration interruption")
 
     with monkeypatch.context() as patch:
-        patch.setattr("aircooker.import_receipts.backfill", broken)
+        patch.setattr("mealf.import_receipts.backfill", broken)
         with pytest.raises(RuntimeError, match="synthetic migration interruption"):
             Database(old.root)
     with old.connect() as db:
@@ -365,7 +365,7 @@ def test_failed_data_backfill_rolls_back_schema_and_migration_marker(tmp_path, m
 def test_import_worker_cannot_downgrade_an_explicitly_confirmed_preview(
     harness, mutation, monkeypatch, outcome
 ):
-    from aircooker.importing import extract
+    from mealf.importing import extract
 
     client, app, _, _ = harness
     body, job, draft = preview_import(harness)
@@ -377,14 +377,14 @@ def test_import_worker_cannot_downgrade_an_explicitly_confirmed_preview(
             raise DomainError("synthetic_extraction_failure", 422)
         return result
 
-    monkeypatch.setattr("aircooker.app.extract", finish_during_extraction)
+    monkeypatch.setattr("mealf.app.extract", finish_during_extraction)
     app.state.process_job(job)
     assert client.get("/api/v1/imports/" + body["request_id"]).json()["state"] == "confirmed"
 
     def forbidden(*args):
         raise AssertionError("A confirmed import was extracted again")
 
-    monkeypatch.setattr("aircooker.app.extract", forbidden)
+    monkeypatch.setattr("mealf.app.extract", forbidden)
     app.state.process_job(job)
     assert len(client.get("/api/v1/recipes").json()["items"]) == 1
 
@@ -397,7 +397,7 @@ def test_packaged_cli_cleanup_dry_run_and_apply_keep_output_redacted(harness):
             ("synthetic-private-audit-body", time.time() - 91 * DAY),
         )
     environment = {**os.environ, "DATA_DIR": str(app.state.database.root), "PYTHONPATH": "src"}
-    command = [sys.executable, "-m", "aircooker.cli", "cleanup"]
+    command = [sys.executable, "-m", "mealf.cli", "cleanup"]
     preview = subprocess.run(
         command + ["--dry-run"], env=environment, capture_output=True, text=True, check=True
     )
@@ -419,7 +419,7 @@ def test_packaged_cli_cleanup_dry_run_and_apply_keep_output_redacted(harness):
         [
             sys.executable,
             "-m",
-            "aircooker.cli",
+            "mealf.cli",
             "backup",
             "--dry-run",
             "--output",
@@ -475,12 +475,12 @@ def test_cleanup_failure_is_redacted_and_does_not_stop_the_durable_worker(
 ):
     from fastapi.testclient import TestClient
 
-    from aircooker.app import create_app
+    from mealf.app import create_app
 
     def failed_cleanup(*args, **kwargs):
         raise RuntimeError("private synthetic cleanup detail")
 
-    monkeypatch.setattr("aircooker.app.cleanup_database", failed_cleanup)
+    monkeypatch.setattr("mealf.app.cleanup_database", failed_cleanup)
     app = create_app(tmp_path, run_worker=True)
     with TestClient(app) as client:
         deadline = time.monotonic() + 3

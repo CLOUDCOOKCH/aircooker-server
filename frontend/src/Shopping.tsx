@@ -201,7 +201,7 @@ export function Shopping({ back }: { back: () => void }) {
               )}
             </div>
             {data.connection_state !== 'ready' && (
-              <a className="text-button" href="/#bring" target="_blank" rel="noreferrer">
+              <a className="text-button" href="/admin/#bring" target="_blank" rel="noreferrer">
                 {t('shoppingConfigure')} <ArrowUpRight size={16} />
               </a>
             )}

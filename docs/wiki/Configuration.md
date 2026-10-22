@@ -28,7 +28,7 @@ environment values. Preserve the volume and keep only one backend process.
 
 ## Household and account
 
-At the administration console (`/`):
+At the administration console (`/admin/`):
 
 - **Household** saves the name, IANA time zone and default language.
 - **Account** lists device sessions and lets you revoke sessions or change the password.
@@ -79,7 +79,7 @@ the browser.
 
 | Path under `/data` | Purpose |
 | --- | --- |
-| `database/aircooker.sqlite3` and WAL/SHM | Household records, sync history and durable jobs |
+| `database/mealf.sqlite3` and WAL/SHM | Household records, sync history and durable jobs |
 | `media/` | Recipe photos |
 | `jobs/` | Protected temporary export/restore files |
 | `backups/` | Operator-created local snapshots |
@@ -96,4 +96,4 @@ Never delete encryption keys as a configuration-reset technique.
 
 Source: [deployment](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/DEPLOYMENT.md),
 [administration](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/docs/ADMINISTRATION.md)
-and [AI configuration implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/aircooker/ai_settings.py).
+and [AI configuration implementation](https://github.com/CLOUDCOOKCH/aircooker-server/blob/main/src/mealf/ai_settings.py).

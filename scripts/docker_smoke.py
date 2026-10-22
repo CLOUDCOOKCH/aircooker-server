@@ -17,7 +17,7 @@ from uuid import uuid4
 
 from PIL import Image
 
-IMAGE = os.environ.get("AIRCOOKER_TEST_IMAGE", "aircooker-server:development")
+IMAGE = os.environ.get("MEALF_TEST_IMAGE", "mealf-server:development")
 DOCKER = ["docker", "--host=unix:///var/run/docker.sock"]
 
 
@@ -92,7 +92,7 @@ def main():
     containers = []
 
     def start():
-        name = "aircooker-test-" + str(uuid4())
+        name = "mealf-test-" + str(uuid4())
         docker(
             "run",
             "-d",
@@ -126,12 +126,12 @@ def main():
             )
         assert docker("inspect", "--format", "{{.Config.User}}", name) == "10001:10001"
         helper = request(base, "/api/v1/integrations/chatgpt/helper")
-        assert helper == Path("src/aircooker/chatgpt_helper.py").read_bytes()
+        assert helper == Path("src/mealf/chatgpt_helper.py").read_bytes()
         shell = request(base, "/app/")
         assert b"manifest.webmanifest" in shell and b"/app/assets/" in shell
         assert json.loads(request(base, "/app/manifest.webmanifest"))["start_url"] == "/app/"
         worker = request(base, "/app/sw.js")
-        assert b"aircooker-shell-" in worker and b"/api/v1/" not in worker
+        assert b"mealf-shell-" in worker and b"/api/v1/" not in worker
         assert request(base, "/app/icon-192.png").startswith(b"\x89PNG")
         identity = json.loads(request(base, "/app/manifest.webmanifest"))
         assert identity["id"] == identity["scope"] == "/app/"
@@ -141,19 +141,19 @@ def main():
         for path, expected in brand["outputs"].items():
             content = request(base, "/app/" + path)
             assert hashlib.sha256(content).hexdigest() == expected["sha256"]
-        assert b"/app/brand/wordmark-v1.png" in request(base, "/")
+        assert b"/app/brand/wordmark-v1.png" in request(base, "/admin/")
         # The installed wheel must ship the console's palette, not only the Vite bundle.
         assert request(base, "/app/theme.css") == Path("frontend/src/tokens.css").read_bytes()
-        assert b"/app/theme.css" in request(base, "/console.css")
+        assert b"/app/theme.css" in request(base, "/admin/console.css")
         assert (
             request(base, "/app/appearance.js")
             == Path("frontend/public/appearance.js").read_bytes()
         )
         assert b"/app/appearance.js" in request(base, "/app/")
-        assert b"/app/appearance.js" in request(base, "/")
+        assert b"/app/appearance.js" in request(base, "/admin/")
         # Shared peach interaction must ship in the wheel and the installed PWA shell.
         assert b"/app/peach.js" in shell and b"/app/peach.css" in shell
-        assert b"/app/peach.js" in request(base, "/")
+        assert b"/app/peach.js" in request(base, "/admin/")
         assert b"peach.animate" in request(base, "/app/peach.js")
         assert b"prefers-reduced-motion" in request(base, "/app/peach.css")
         # NAS/container consoles may require Bash. The same non-root account must
@@ -166,7 +166,7 @@ def main():
                 name,
                 "python",
                 "-c",
-                "from aircooker.source_images import bounded_source_photo; "
+                "from mealf.source_images import bounded_source_photo; "
                 "assert bounded_source_photo('http://127.0.0.1/private', None) is None; "
                 "print('source-photo-isolation-ok')",
             )
@@ -205,11 +205,11 @@ def main():
     try:
         name, base, device, headers = start()
         maintenance_preview = json.loads(
-            docker("exec", name, "python", "-m", "aircooker.cli", "cleanup", "--dry-run")
+            docker("exec", name, "python", "-m", "mealf.cli", "cleanup", "--dry-run")
         )
         assert maintenance_preview["dry_run"] is True
         assert (
-            json.loads(docker("exec", name, "python", "-m", "aircooker.cli", "cleanup"))["dry_run"]
+            json.loads(docker("exec", name, "python", "-m", "mealf.cli", "cleanup"))["dry_run"]
             is False
         )
         push_before = request(base, "/api/v1/notifications/push", headers=headers)
@@ -219,7 +219,7 @@ def main():
             name,
             "python",
             "-c",
-            "from importlib.resources import files; print(files('aircooker').joinpath('attributions/http-ece-1.2.1.LICENSE').read_text())",
+            "from importlib.resources import files; print(files('mealf').joinpath('attributions/http-ece-1.2.1.LICENSE').read_text())",
         )
         assert "Martin Thomson" in notice and "MIT" in notice
         bash_license = docker(
@@ -227,7 +227,7 @@ def main():
             name,
             "python",
             "-c",
-            "from importlib.resources import files; print(files('aircooker').joinpath('attributions/bash-GPL-3.LICENSE').read_text())",
+            "from importlib.resources import files; print(files('mealf').joinpath('attributions/bash-GPL-3.LICENSE').read_text())",
         )
         assert "GNU GENERAL PUBLIC LICENSE" in bash_license and "Version 3" in bash_license
         logout_session = request(
@@ -260,7 +260,7 @@ def main():
         image_id = str(uuid4())
         photo = io.BytesIO()
         Image.new("RGB", (12, 12), "orange").save(photo, format="PNG")
-        boundary = "aircooker-smoke-boundary"
+        boundary = "mealf-smoke-boundary"
         upload = (
             (
                 f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="photo.png"\r\n'

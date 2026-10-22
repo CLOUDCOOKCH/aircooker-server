@@ -3,7 +3,7 @@ from contextlib import contextmanager
 
 import pytest
 
-from aircooker.local_backup import create_backup
+from mealf.local_backup import create_backup
 
 
 def test_verified_snapshot_has_private_permissions_and_preserves_wal_data(harness):
@@ -44,7 +44,7 @@ def test_failed_copy_never_publishes_a_partial_backup(harness, monkeypatch):
 
 
 def test_destination_race_never_overwrites_another_operators_backup(harness, monkeypatch):
-    import aircooker.local_backup as backup
+    import mealf.local_backup as backup
 
     _, app, _, _ = harness
     target = app.state.database.root / "backups/raced.sqlite3"
