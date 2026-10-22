@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Fix false “Up to date” status after failed/unchecked sync and reject stale/incomplete
+  pull responses. Resist URL-keyed proxy caching of sync reads, deliver household records
+  before imports so an unreachable import cannot starve them, and add redacted connection
+  diagnostics in Settings. Preserve outbox/history protections and distinguish reproduced
+  client defects from an unconfirmed live-deployment cause.
+
 - Add Recipe ideas on Home/Recipes: three generated recipes from entered ingredients or
   a surprise request, configured household AI with explicit consent, durable idempotent
   jobs, strict validation, cached offline proposals and reviewed Save. Generation never

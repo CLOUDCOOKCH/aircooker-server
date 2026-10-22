@@ -1,5 +1,14 @@
 # Mealf preview
 
+## Sync reliability candidate
+
+`poc-20261022.8` is prepared, with publication pending. It fixes false synced status,
+rejects stale/incomplete pull responses, moves record exchange before imports and adds
+Settings → Check sync connection. No server data migration or native contract change.
+See [troubleshooting and confirmed/unconfirmed scope](SYNC_TROUBLESHOOTING.md).
+The last verified published preview remains `.7` below until exact-source CI, fresh native
+image gates and public/runtime checks pass. Retain existing volumes and `5152:5152` settings.
+
 ## Published preview: Recipe ideas
 
 `poc-20261022.7` is published and verified for **AMD64 and ARM64**. Open **Recipe ideas**

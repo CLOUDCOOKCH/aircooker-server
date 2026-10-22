@@ -8,6 +8,7 @@ import {
   CloudOff,
   Home as HomeIcon,
   Leaf,
+  RefreshCw,
   Settings2,
   ShoppingBag,
   X,
@@ -39,6 +40,7 @@ import { Settings } from './Settings';
 import { Imports } from './Imports';
 import { Shopping } from './Shopping';
 import { RecipeIdeas } from './RecipeIdeas';
+import { syncStatus } from './lib/sync-status';
 import { activateUpdate, installWorker } from './worker-client';
 import { reminderTarget } from './lib/notifications';
 import type { ReminderTarget } from './lib/notifications';
@@ -497,22 +499,27 @@ function Kitchen({
             </>
           ) : (
             <>
-              <span className={'connection-status ' + (!app.online ? 'is-offline' : '')}>
+              <span
+                role="status"
+                className={'connection-status ' + (!app.online ? 'is-offline' : '')}
+              >
                 {!app.online ? (
                   <CloudOff size={15} />
                 ) : app.error ? (
                   <CircleAlert size={15} />
+                ) : app.syncing || app.pending.length || !app.syncChecked ? (
+                  <RefreshCw size={15} />
                 ) : (
                   <Check size={15} />
                 )}{' '}
                 {t(
-                  !app.online
-                    ? 'offline'
-                    : app.syncing
-                      ? 'syncing'
-                      : app.pending.length
-                        ? 'pending'
-                        : 'synced',
+                  syncStatus({
+                    online: app.online,
+                    syncing: app.syncing,
+                    error: app.error,
+                    pending: app.pending.length,
+                    checked: app.syncChecked,
+                  }),
                 )}
                 {app.pending.length > 0 && <span> · {app.pending.length}</span>}
               </span>
@@ -533,9 +540,11 @@ function Kitchen({
               {t(
                 app.error === 'blocked'
                   ? 'blocked'
-                  : app.error === 'storage_unavailable'
-                    ? 'serverStorageError'
-                    : 'syncError',
+                  : app.error === 'sync_incomplete'
+                    ? 'syncIncomplete'
+                    : app.error === 'storage_unavailable'
+                      ? 'serverStorageError'
+                      : 'syncError',
               )}
             </p>
             <button

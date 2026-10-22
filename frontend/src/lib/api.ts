@@ -29,6 +29,17 @@ export class APIClient {
     if (!path.startsWith('/api/v1/') || path.includes('://'))
       throw new APIError('invalid_api_path', 0);
     const headers = new Headers(init.headers);
+    // Some reverse proxies cache GETs despite no-store response headers. Every sync
+    // proof/page must be a fresh read, including repeated polls at the same cursor.
+    const syncRead =
+      (init.method ?? 'GET') === 'GET' &&
+      ['/api/v1/sync/state?', '/api/v1/sync/pull?', '/api/v1/sync/snapshot?'].some((prefix) =>
+        path.startsWith(prefix),
+      );
+    if (syncRead) {
+      path += '&_mealf_sync=' + crypto.randomUUID();
+      headers.set('Cache-Control', 'no-cache, no-store');
+    }
     headers.set('X-Mealf-Client', 'pwa');
     if (!['GET', 'HEAD'].includes(init.method ?? 'GET')) headers.set('X-CSRF-Token', csrfToken());
     if (typeof init.body === 'string') headers.set('Content-Type', 'application/json');

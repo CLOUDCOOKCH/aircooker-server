@@ -43,6 +43,28 @@ export function Settings({
   const [recovery, setRecovery] = useState(false),
     [recovering, setRecovering] = useState(false);
   const [archives, setArchives] = useState<Awaited<ReturnType<LocalStore['archives']>>>([]);
+  const [syncReport, setSyncReport] = useState('');
+  const [checkingSync, setCheckingSync] = useState(false);
+  const [copiedSync, setCopiedSync] = useState(false);
+  const diagnoseSync = async () => {
+    if (!app.api) return;
+    setCheckingSync(true);
+    setCopiedSync(false);
+    try {
+      const { syncDiagnostics } = await import('./lib/sync-diagnostics');
+      const report = await syncDiagnostics(app.store, app.api, {
+        syncing: app.syncing,
+        error: app.error,
+        phase: app.syncPhase(),
+        checked: app.syncChecked,
+      });
+      setSyncReport(JSON.stringify(report, null, 2));
+    } catch {
+      setError(true);
+    } finally {
+      setCheckingSync(false);
+    }
+  };
   useEffect(() => {
     void app.store.archives().then(setArchives);
   }, [app.store, app.pending]);
@@ -133,6 +155,79 @@ export function Settings({
               )}
             </div>
           </section>
+          <section className="settings-group">
+            <h2>{t('device')}</h2>
+            <div className="settings-surface">
+              <button
+                className="settings-row"
+                onClick={() => void app.sync()}
+                disabled={app.demo || app.syncing}
+              >
+                <span>
+                  {t('sync')} · {app.pending.length} {t('pending')}
+                </span>
+                <RefreshCw size={17} />
+              </button>
+              {!app.demo && (
+                <>
+                  <button
+                    className="settings-row"
+                    onClick={() => void diagnoseSync()}
+                    disabled={checkingSync}
+                  >
+                    {t(checkingSync ? 'loading' : 'syncDiagnostics')}
+                    <ShieldCheck size={18} />
+                  </button>
+                  {syncReport && (
+                    <div className="settings-copy">
+                      <p>{t('syncDiagnosticsHint')}</p>
+                      <label htmlFor="sync-report">{t('syncReport')}</label>
+                      <textarea
+                        id="sync-report"
+                        className="sync-report"
+                        rows={10}
+                        readOnly
+                        value={syncReport}
+                      />
+                      <div className="form-actions">
+                        <button
+                          className="text-button"
+                          onClick={() => {
+                            void navigator.clipboard
+                              .writeText(syncReport)
+                              .then(() => setCopiedSync(true))
+                              .catch(() => setError(true));
+                          }}
+                        >
+                          {t(copiedSync ? 'syncReportCopied' : 'syncReportCopy')}
+                        </button>
+                        <button
+                          className="text-button"
+                          onClick={() =>
+                            download(JSON.parse(syncReport), 'mealf-sync-diagnostics.json')
+                          }
+                        >
+                          {t('export')}
+                          <Download size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <button className="settings-row" onClick={reauthenticate}>
+                    {t('signInAgain')}
+                    <ArrowUpRight size={18} />
+                  </button>
+                </>
+              )}
+              <button
+                className="settings-row danger"
+                onClick={() => (app.demo ? void logout() : setConfirm(true))}
+              >
+                {t(app.demo ? 'exitDemo' : 'logout')}
+                <LogOut size={18} />
+              </button>
+            </div>
+          </section>
           <ThemeLibrary />
           <PlanningSettings />
           <ReminderSettings />
@@ -185,34 +280,6 @@ export function Settings({
                 </>
               )}
               {app.demo && <p className="settings-description">{t('demoUnavailable')}</p>}
-            </div>
-          </section>
-          <section className="settings-group">
-            <h2>{t('device')}</h2>
-            <div className="settings-surface">
-              <button
-                className="settings-row"
-                onClick={() => void app.sync()}
-                disabled={app.demo || app.syncing}
-              >
-                <span>
-                  {t('sync')} · {app.pending.length} {t('pending')}
-                </span>
-                <RefreshCw size={17} />
-              </button>
-              {!app.demo && (
-                <button className="settings-row" onClick={reauthenticate}>
-                  {t('signInAgain')}
-                  <ArrowUpRight size={18} />
-                </button>
-              )}
-              <button
-                className="settings-row danger"
-                onClick={() => (app.demo ? void logout() : setConfirm(true))}
-              >
-                {t(app.demo ? 'exitDemo' : 'logout')}
-                <LogOut size={18} />
-              </button>
             </div>
           </section>
         </div>

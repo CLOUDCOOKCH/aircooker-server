@@ -2,6 +2,32 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { APIClient, APIError, csrfToken } from './api.ts';
 
+test('repeated sync reads bypass URL-keyed proxy caches at the same cursor', async () => {
+  const previousFetch = globalThis.fetch;
+  const previousDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+  Object.defineProperty(globalThis, 'document', { configurable: true, value: { cookie: '' } });
+  const cache = new Map<string, number>();
+  let head = 0;
+  globalThis.fetch = async (input, init) => {
+    const url = new URL(String(input), 'https://test.invalid');
+    assert.match(url.searchParams.get('_mealf_sync') ?? '', /^[a-f\d-]{36}$/i);
+    assert.equal(new Headers(init?.headers).get('Cache-Control'), 'no-cache, no-store');
+    if (!cache.has(String(input))) cache.set(String(input), head);
+    return Response.json({ cursor: cache.get(String(input)) });
+  };
+  try {
+    const api = new APIClient();
+    assert.deepEqual(await api.request('/api/v1/sync/state?cursor=0'), { cursor: 0 });
+    head = 1;
+    assert.deepEqual(await api.request('/api/v1/sync/state?cursor=0'), { cursor: 1 });
+    assert.equal(cache.size, 2);
+  } finally {
+    globalThis.fetch = previousFetch;
+    if (previousDocument) Object.defineProperty(globalThis, 'document', previousDocument);
+    else Reflect.deleteProperty(globalThis, 'document');
+  }
+});
+
 test('previous cookies remain readable until rotation; an explicit current cookie takes precedence', () => {
   const priorDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
   const document = { cookie: 'aircooker_pwa_csrf=existing' };

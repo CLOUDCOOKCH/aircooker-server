@@ -309,3 +309,50 @@ publication are outside this evidence. DESIGN.md/design.json and their historica
 five-destination/layout/system-only-appearance drift remain preserved, without repair.
 The reviewed code is unpublished at this handoff; the verdict is not whole-product,
 production or security acceptance.
+
+Sync-status hardening, 2026-10-22: the user reports missing PWA/server updates despite
+a synced indicator. The actual deployment cause is unknown; no deployed installation
+was accessed or repaired. This is an ordinary Operate refinement of the existing
+six-destination shell. Preserve the original peach/wordmark, Flo/After Dark/Sunday
+roles, system typography, solid forms and glass navigation. No new visual world,
+approved comp, API/schema, migration or native change is introduced.
+
+An empty outbox alone must not imply success. The header prioritises offline, active
+sync and failure/blocked states, then pending edits, and starts as “Not checked yet”.
+“Up to date” requires a completed check; catch-up must reach the advertised server
+head and accepted-write revisions. Bounded incomplete pulls retain committed progress
+and show literal retry guidance. Fresh sync GET nonces/cache directives resist ordinary
+URL-keyed caches; a proxy that ignores query strings still requires API cache exclusion.
+Exchange durable records before optional queued imports so a failed import cannot
+starve household changes. Coalesce the complete sync/settings-refresh operation.
+
+Settings places “This device” immediately below the household/account section for
+findability. “Check sync connection” produces a selectable, labelled report with
+counts, cursors, phases, match booleans and allowlisted errors, plus Copy/Export.
+Exclude household content, URLs, identifiers, history proofs and credentials. Keep
+this report distinct from the private content-bearing “Export unsynchronised work”
+recovery archive; collection must not clear pending work. Copy/Export have scoped
+44px minimum heights. Recovery/error language remains literal in English/German.
+See the [troubleshooting guide](../../docs/SYNC_TROUBLESHOOTING.md).
+
+The [bounded sync-status review](../../docs/validation/sync-status-ui-review.md) records
+the fresh reviewer's **ship within the reviewed sync-status hardening scope** after
+one material Copy/Export target-size finding was corrected: 1 resolved, 0 partial,
+0 unresolved, with no additional scoped finding. This verdict scores that fix and
+does not establish a live deployment diagnosis or whole-product acceptance. This
+documentation handoff inspected final sources and supplied logs and opened all six
+genuine Chromium captures: full Settings and paired report viewports at desktop,
+German After Dark 390px and 320px. The 320px full-document textarea is unpainted;
+its paired viewport renders the report and the reviewer accepted the combined evidence.
+Fixed phone navigation retains its original viewport position in full-document images.
+
+Supplied local evidence covers real server/SQLite/two-cookie-context recipe/calendar/
+pantry exchange, offline Save/reload/replay, expired-session refresh, explicit stale-page
+and 503 faults, redacted copyable reports, desktop/390px Axe and 320px layout. Frontend
+tests pass 66 and the final backend run passes 425, including four CI-helper nonce-pattern
+regressions. The documentation
+reran no tests/browser checks. Context launcher/detector are absent; no automated
+design/schema or shipped specialist pass is claimed. Physical iPhone/Safari, live
+provider/deployment behavior, exact-source CI and publication remain outside this record.
+DESIGN.md/design.json and their historical five-destination/layout/system-only-appearance
+drift remain preserved without repair.
