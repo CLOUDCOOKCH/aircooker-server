@@ -8,6 +8,11 @@
   gateway errors in administration and require whitespace-free Gemini API model IDs.
   Return known provider failures from the AI connection test as redacted 422 validation
   errors so a proxy's 5xx page cannot hide their codes; preserve 429 limits and failed states.
+  Published as `poc-20261022.10` with exact-source Chromium/WebKit CI, fresh native image
+  scans, public checksums/provenance and a verified .9-to-.10 persistent-volume upgrade.
+  Replace slow per-run WebKit dependency downloads with the matching pinned official
+  Playwright test image; keep all browser assertions and production security gates.
+  Live ideas generation remains unverified; old failed requests require an explicit new batch.
 
 - Rework PWA task hierarchy across Home, Calendar, Recipes, Pantry, Shopping and Settings.
   Add labelled actions, compact date/view controls, recipe search/sort and section links,

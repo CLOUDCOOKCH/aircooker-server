@@ -1,6 +1,6 @@
 # Implementation checklist and evidence
 
-**Recipe ideas diagnostics, 2026-10-22 — implemented locally, deployment pending:**
+**Recipe ideas diagnostics, 2026-10-22 — published and verified in `poc-20261022.10`:**
 allowlisted English/German provider errors survive the durable worker and cached PWA
 failure, with explicit recovery and no automatic paid retries. Gemini display names with
 whitespace are rejected before configuration is saved; API ID hints appear in the PWA and
@@ -11,11 +11,22 @@ paid retries. Synthetic proxy replacement, transport failures, safe logs and bro
 recovery are covered. The supplied Cloudflare HTML confirms a missing readable API response;
 historical refused connections and a current healthy direct origin do not establish the
 live AI failure's cause. No proxy or household configuration was changed.
-The household's immediate `http_502` remains unverified; no credentials or live data were
-accessed. See [configuration and troubleshooting](RECIPE_IDEAS.md).
+The user reports that the small connection probe succeeds with structured output disabled;
+the same stored ideas request remains failed with the old coarse provider code. A fresh,
+explicitly approved batch is needed to diagnose generation. No credentials or live data
+were accessed. See [configuration and troubleshooting](RECIPE_IDEAS.md).
 Local verification: 445 backend tests, 67 frontend tests, build/type/format, Ruff, mypy,
 OpenAPI drift, Chromium proposal/error/recovery and administration regressions pass.
 See [bounded review and genuine capture provenance](validation/recipe-ideas-errors.md).
+All six exact-main-source CI jobs pass at `0f1b88e7`, including 445 backend tests per
+architecture, 67 frontend tests and full Chromium/WebKit checks. A matching digest-pinned
+official Playwright test image replaces repeated slow WebKit dependency downloads;
+application assertions and production/security gates are retained. Both fresh native image
+scan/runtime executions, six public asset checksums, image identities/SBOMs, provenance and
+anonymous pull pass. A published .9-to-.10 same-volume 5152 upgrade preserves identity,
+active session, sync history, recipe and shopping quantities. The packaged API preserves a
+redacted provider failure without saving a recipe. Physical iPhone and live generation
+remain unverified. See [exact publication evidence](validation/github-ai-diagnostics-preview.json).
 
 **Whole-PWA UX rework, 2026-10-22 — published and verified in `poc-20261022.9`:**
 Home leads with meals and explicit actions; Calendar has compact date/view controls and

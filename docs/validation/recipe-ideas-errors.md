@@ -54,12 +54,14 @@ They are product renders over synthetic provider HTTP, not fabricated UI mockups
 
 ## Deployment limit
 
-The user reported an immediate `http_502` from the current administration connection test
-and identified the model as “Gemini 3.8 Flash”. The exact saved ID, gateway response and live
-provider cause remain unverified. The user was given the documented `gemini-3.8-flash` API
-ID and Gemini v1beta base URL to check. Local fixes improve validation and diagnosis;
-they do not establish that the user's deployment is repaired. No household credentials,
-logs, keys, saved content or production endpoints were accessed or changed.
+The initial report was an immediate `http_502` from the administration connection test
+and a model display name. The user subsequently confirmed `gemini-3.8-flash` and the
+Gemini v1beta endpoint, supplied a Cloudflare error page, and reported that the small
+probe succeeds with structured output disabled. The same stored ideas request remains
+failed with the old coarse `ai_provider_failed` code. Its exact upstream cause and fresh
+ideas generation remain unverified. Fixes improve validation and diagnosis; they do not
+establish that the user's deployment is repaired. No household credentials, keys, saved
+content or production endpoints were accessed or changed by the implementation agent.
 
 ## Proxy-safe configuration validation follow-up
 
@@ -95,3 +97,25 @@ synthetic. No actual Cloudflare configuration, physical device or live provider 
 | --- | --- | --- |
 | [ai-probe-failed-desktop-en.png](../screenshots/recipe-ideas-errors/ai-probe-failed-desktop-en.png) | 1200×900 viewport, full-page capture | `f4b619496bf59542f440c0f15cf08fe2dbf170b04f8bd575c8b91109bfa677c0` |
 | [ai-probe-failed-phone-de.png](../screenshots/recipe-ideas-errors/ai-probe-failed-phone-de.png) | 390×844 viewport, full-page capture | `7b9c63a88ea2e3d664bc88ec4a7f0695eb82d639f4f9daf3d4ddc2d7c7f5e6da` |
+
+## Published image verification
+
+`poc-20261022.10` is published at source `0f1b88e7a5bee3489426b80018ed224b9754394e`.
+All six exact-main CI jobs and the infrastructure follow-up PR's six jobs pass, including
+445 backend tests per architecture, 67 frontend tests and the complete real Chromium/
+Linux WebKit suite. Earlier browser runs stopped at the external dependency-download
+limits, not application assertions. The official Playwright Python 1.62.0 image, pinned
+by digest and matched to the unchanged browser lock, supplies both engines and system
+libraries. All OCR, TLS, offline, accessibility and layout assertions remain enabled.
+
+Both fresh native publication builds have passing scan/runtime execution logs; public
+Trivy 0.70.0 reports contain zero unsuppressed HIGH/CRITICAL vulnerabilities. Six release
+asset checksums, exact Compose/OpenAPI bytes, native config identities against build logs,
+scan ImageIDs and SBOMs, provenance and anonymous pull are verified independently.
+A published .9-to-.10 same-volume 5152 upgrade retains instance/session/history/recipe/
+400 g shopping projection, EN/DE navigation and narrow-phone cached offline shopping.
+The actual packaged API/adapter maps synthetic upstream 404 to redacted failed 422,
+makes one provider call and saves no recipe. These are synthetic tests, not external
+Gemini, Cloudflare, Bring or physical-iPhone acceptance. The canonical API is unchanged;
+the independent native repository and pinned contract are deliberately retained.
+See [exact source, image and execution evidence](github-ai-diagnostics-preview.json).

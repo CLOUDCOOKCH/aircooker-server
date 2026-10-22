@@ -80,6 +80,15 @@ establish a live fix. Compare fresh tunnel and container logs at the exact test 
 A direct LAN read of `/api/v1/system/health` tests current reachability only, not AI access
 or authenticated browser flows.
 
+The user subsequently confirmed the saved API model ID and reported that the small
+connection probe succeeds with structured output disabled. The same stored ideas job
+still reports the old coarse `ai_provider_failed` code; its original upstream status
+cannot be reconstructed from that code. Keep structured output disabled for this
+investigation, reopen Recipe ideas, check the provider-consent box and explicitly choose
+**Give me three ideas** / **Gib mir drei Ideen**. Reloading alone preserves the previous
+request and does not call the provider again. New failures in `poc-20261022.10` retain the
+more specific codes above. No live-generation success or exact schema defect is claimed.
+
 Migration 015 persists requests/results in SQLite for the existing durable worker. The
 client saves its UUID before sending: identical replay returns the original job, while a
 changed body under the same UUID returns 409. Strict validation requires exactly three

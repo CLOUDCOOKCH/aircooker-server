@@ -1,9 +1,9 @@
 # Mealf preview
 
-## Candidate: readable AI diagnostics
+## Published preview: readable AI diagnostics
 
-`poc-20261022.10` is prepared for publication; exact-source CI, native image gates and
-published-runtime checks are pending. The connection test reports known provider failures
+`poc-20261022.10` is published and verified for **AMD64 and ARM64**.
+The connection test reports known provider failures
 as failed 422 configuration validation, preserving redacted JSON through proxies that
 replace 5xx pages. Quotas remain 429; genuine gateway/server errors remain distinct.
 Administration and Recipe ideas show specific English/German recovery and safe codes;
@@ -15,8 +15,19 @@ Local 445 backend/67 frontend tests, build/types, Ruff, mypy, formatting, OpenAP
 and actual Chromium PWA/admin regressions pass with synthetic provider/proxy doubles.
 No migration, API-schema, native, credential or sync-identity change is required. Keep
 the existing volume, `5152:5152` command/healthcheck and open drafts when updating.
-The user's live AI failure remains unverified; diagnostics are not a claim of successful
-Gemini access or a repaired Cloudflare tunnel.
+All six exact-source CI jobs pass at `0f1b88e7`, including the full Chromium/WebKit suite.
+Both fresh native image scan/runtime executions, six public asset checksums, matching
+image identities/SBOMs, provenance, anonymous pull and a published .9-to-.10 same-volume
+5152 upgrade pass. Identity, session, sync history, recipes and shopping quantities remain
+intact. See [exact evidence](validation/github-ai-diagnostics-preview.json).
+
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.10`. Keep the existing volume and
+custom `5152:5152` command/healthcheck. Save editors and accept the PWA update.
+The user reports a successful small probe with structured output disabled; complete ideas
+generation remains unverified. Leave that setting off for now, reopen Recipe ideas,
+approve sending to the configured provider and explicitly request a new batch. Reloading
+retains the old failed request; it does not generate again. These diagnostics are not a
+claim of a repaired Cloudflare tunnel or live-generation acceptance.
 
 ## Published preview: PWA UX rework
 

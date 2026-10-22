@@ -1,0 +1,245 @@
+{
+  "source_commit": "0f1b88e7a5bee3489426b80018ed224b9754394e",
+  "pull_requests": [
+    "https://github.com/CLOUDCOOKCH/aircooker-server/pull/12",
+    "https://github.com/CLOUDCOOKCH/aircooker-server/pull/13"
+  ],
+  "ci": {
+    "id": 39793377481,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39793377481",
+    "head_sha": "0f1b88e7a5bee3489426b80018ed224b9754394e",
+    "conclusion": "success",
+    "run_attempt": 1
+  },
+  "jobs": [
+    {
+      "id": 119874667748,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119874668043,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119874668205,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119874668248,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success"
+    },
+    {
+      "id": 119874668288,
+      "name": "pwa-core",
+      "conclusion": "success"
+    },
+    {
+      "id": 119874668629,
+      "name": "browser",
+      "conclusion": "success"
+    }
+  ],
+  "infrastructure_pr_ci": {
+    "id": 39793360698,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39793360698",
+    "head_sha": "9ffa557a3b727f8ae305d9f4f4f9af53bc07645d",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "jobs": [
+      {
+        "id": 119874618308,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119874618939,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 119874618957,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119874619012,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119874619078,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119874619182,
+        "name": "browser",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publication": {
+    "id": 39795588510,
+    "html_url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39795588510",
+    "head_sha": "0f1b88e7a5bee3489426b80018ed224b9754394e",
+    "run_attempt": 1,
+    "observed_status": "queued",
+    "observed_conclusion": null,
+    "jobs": [
+      {
+        "id": 119882005620,
+        "name": "gate",
+        "observed_status": "queued",
+        "observed_conclusion": null
+      },
+      {
+        "id": 119882081016,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "observed_status": "queued",
+        "observed_conclusion": null
+      },
+      {
+        "id": 119882081056,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "observed_status": "completed",
+        "observed_conclusion": "success"
+      },
+      {
+        "id": 119882927683,
+        "name": "publish",
+        "observed_status": "queued",
+        "observed_conclusion": null
+      }
+    ],
+    "attestation": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58674733",
+    "execution_log_checks": [
+      {
+        "name": "gate",
+        "job_id": 119882005620,
+        "errors": 0,
+        "last_timestamp": "2026-10-22T14:25:55.2622011",
+        "checks": [
+          "2026-10-22T14:25:55.0330933Z All six exact-source CI jobs passed"
+        ]
+      },
+      {
+        "name": "amd64",
+        "job_id": 119882081016,
+        "errors": 0,
+        "last_timestamp": "2026-10-22T14:27:51.3044458",
+        "checks": [
+          "2026-10-22T14:26:52.3329268Z Cache restored successfully",
+          "2026-10-22T14:26:54.9163642Z Cache restored successfully",
+          "2026-10-22T14:27:23.7211627Z PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore.",
+          "2026-10-22T14:27:36.0267073Z PASS: packaged verified backup, running-server deletion refusal, real terminal confirmation, stopped-volume erasure, retained/explicitly erased backups, fresh identity and old-session rejection",
+          "2026-10-22T14:27:50.5665363Z Artifact verified-preview-amd64.zip successfully finalized. Artifact ID 12433332424",
+          "2026-10-22T14:27:50.5666805Z Artifact verified-preview-amd64 has been successfully uploaded! Final size is 104565755 bytes. Artifact ID is 12433332424"
+        ]
+      },
+      {
+        "name": "arm64",
+        "job_id": 119882081056,
+        "errors": 0,
+        "last_timestamp": "2026-10-22T14:27:45.4805764",
+        "checks": [
+          "2026-10-22T14:26:55.0157656Z Cache restored successfully",
+          "2026-10-22T14:26:56.9619143Z Cache restored successfully",
+          "2026-10-22T14:27:24.0114483Z PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore.",
+          "2026-10-22T14:27:33.6533893Z PASS: packaged verified backup, running-server deletion refusal, real terminal confirmation, stopped-volume erasure, retained/explicitly erased backups, fresh identity and old-session rejection",
+          "2026-10-22T14:27:44.9758113Z Artifact verified-preview-arm64.zip successfully finalized. Artifact ID 12433651357",
+          "2026-10-22T14:27:44.9758852Z Artifact verified-preview-arm64 has been successfully uploaded! Final size is 102747631 bytes. Artifact ID is 12433651357"
+        ]
+      }
+    ],
+    "verification_note": "The connector snapshot can lag completed execution. Public release, attestation, all six asset digests, fresh native scan reports/config identities, completed gate/runtime logs, anonymous image pull and published runtime were verified independently; pending snapshot states are not relabelled as successful job conclusions."
+  },
+  "release_id": 420824642,
+  "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.10",
+  "public": {
+    "source_revision": "0f1b88e7a5bee3489426b80018ed224b9754394e",
+    "release_id": 420824642,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.10",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.10",
+    "index_digest": "sha256:a89fb3f4a3b8d41dd15a70b617355f77b3521b94cfdae22cb61205590634e527",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "5166bbbf2c1044d307326b870f6c3c11e04f91f6c92b29698b07c417b3470e97",
+        "size": 630
+      },
+      "container-security-amd64.json": {
+        "sha256": "a4223260d4b112acf67741a20533c35b6d9a538b3579e48b6cdb19124d0bb55d",
+        "size": 186533
+      },
+      "container-security-arm64.json": {
+        "sha256": "277edb77619e637972e8d17fc87a0a6656ff6d9547c257712e7b18f04564d5ed",
+        "size": 186613
+      },
+      "openapi-v1.json": {
+        "sha256": "dc237dc99bfa290f1a6b5c24830105369e6b3681ce072adb77bf1036f401eb6d",
+        "size": 208582
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "95a2c5ac193a68b56229f639ad18ec1f1e2291dd98cc86e50d3fb18512cbe920",
+        "size": 167970
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "da491a3519566f0d97423d4d2c48a392fc70423ed0797f4dedb0d13ad83ba693",
+        "size": 168410
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:2db43c4abf31dc210c6c3587557a8a6d5eb9ae3310ff5cf6ca6a9b5598900540",
+        "config": "sha256:f6bd99fd0ca130387a08bb2f65dadc1866c4a0d0b43fc700b47a468a20f87e45",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:fa8230f84d2708aa711ecb00b8460108accd6a56359a5df0153ca9aa9907a7cc",
+        "config": "sha256:22b14979d95d7d251b893952ff25e7263de567c7d56e961df3fa3ea02992d41b",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "runtime": {
+    "packaged_ai_probe": "actual packaged API/adapter over synthetic HTTP404 returns redacted422 with one provider call and zero saved recipes",
+    "ux": "published disclosure groups and scoped task-layout CSS loaded; Settings/report and language controls reachable through actual disclosures; correct local/server counts and history/device matches",
+    "runtime_kind": "published immutable image",
+    "recipe_ideas": "migration015/table/authenticated API present; unconfigured generation rejected without external requests",
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:7bc31b803b7aebf43e175af70ab9d60c114104a3ef3d63d45f7ba68960debb9b",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:a89fb3f4a3b8d41dd15a70b617355f77b3521b94cfdae22cb61205590634e527",
+    "same_volume_5152_upgrade": "passed; instance identity, active session, sync history proof and planned recipe/400 g projection preserved",
+    "published_pwa": "six primary destinations; EN/DE Shopping selection, six >=44px nonoverlapping 320px targets, real cached offline reload and disabled Bring action passed in Chromium",
+    "routes": "/admin/ and assets200, root404, PWA /app/",
+    "scope": "Disposable synthetic volume/containers only; no user deployment accessed, live Bring calls or physical iPhone evidence"
+  },
+  "local_validation": {
+    "backend_tests": 445,
+    "frontend_tests": 67,
+    "static": "Frontend build/type/format, Ruff check/format, mypy50 files, canonical OpenAPI drift and git whitespace pass",
+    "review": "Manual implementation-agent bounded source/capture review; original brand and themes retained; no independent specialist review claimed"
+  },
+  "earlier_ci_infrastructure_failures": {
+    "runs": [
+      39787169954,
+      39789712475,
+      39790360743
+    ],
+    "reason": "Slow Ubuntu mirror exceeded original job budget or bounded600s WebKit system-dependency installation; no application assertion failure. Full Chromium/WebKit suite retained in matching official pinned Playwright Python1.62.0 test image."
+  },
+  "native_contract": "Canonical OpenAPI unchanged; independent native repository and pinned schema deliberately retained",
+  "live_report": "User reports small probe passes with structured_output disabled; same stored ideas job remains failed with old ai_provider_failed. Exact upstream failure and fresh live generation unverified; require explicit new user-approved batch.",
+  "limits": [
+    "Synthetic HTTP/provider/proxy and disposable household tests; no actual Gemini/Bring/Cloudflare calls or deployment edits",
+    "No physical iPhone/Home Screen/keyboard acceptance",
+    "Preview release; full v1 product acceptance remains open"
+  ]
+}
