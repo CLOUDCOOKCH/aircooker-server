@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Check,
   ChevronRight,
+  ChevronLeft,
   Copy,
   Ellipsis,
   Leaf,
@@ -195,25 +196,33 @@ export function Home({
   const upcoming = occurrences(meals, addDays(day, 1), addDays(day, 14)).slice(0, 3);
   return (
     <>
-      <PageHeader title={t('kitchen')} subtitle={t('homeJoke')}>
-        <IconButton label={t('importRecipe')} onClick={importRecipe}>
-          <Upload size={20} />
-          <span className="sr-only">{t('importRecipe')}</span>
-        </IconButton>
-        <button className="primary compact" aria-label={t('addRecipe')} onClick={create}>
+      <PageHeader title={t('kitchen')} subtitle={t('homeIntro')}>
+        <button
+          className="primary compact"
+          onClick={() => (recipes.length ? plan({ day, category: 'dinner' }) : create())}
+        >
           <Plus size={18} />
-          <span>{t('addRecipe')}</span>
+          <span>{t(recipes.length ? 'homePlanAction' : 'addRecipe')}</span>
         </button>
       </PageHeader>
-      <button className="ideas-shortcut" onClick={ideas}>
-        <Sparkles size={20} />
-        <span>
-          <strong>{t('recipeIdeas')}</strong>
-          <small>{t('ideasShortcut')}</small>
-        </span>
-        <ArrowRight size={18} />
-      </button>
-      <WeekStrip day={day} onChange={setDay} />
+      <div className="home-date-control" role="group" aria-label={t('date')}>
+        <IconButton label={t('previousDay')} onClick={() => setDay(addDays(day, -1))}>
+          <ChevronLeft size={20} />
+        </IconButton>
+        <strong>
+          {displayDate(day, app.language, { weekday: 'long', day: 'numeric', month: 'short' })}
+        </strong>
+        <button
+          className="text-button"
+          onClick={() => setDay(today(app.household.timezone))}
+          disabled={day === today(app.household.timezone)}
+        >
+          {t('goToday')}
+        </button>
+        <IconButton label={t('nextDay')} onClick={() => setDay(addDays(day, 1))}>
+          <ChevronRight size={20} />
+        </IconButton>
+      </div>
       <div className="home-columns">
         <section className="today-section">
           <div className="section-heading">
@@ -258,9 +267,9 @@ export function Home({
               const items = daily.filter(
                 (item) =>
                   item.entity.payload.category === category &&
-                  !(category === 'dinner' && featured?.payload.image_id),
+                  !(featured?.payload.image_id && dinner?.key === item.key),
               );
-              if (category === 'dinner' && featured?.payload.image_id) return null;
+              if (category === 'dinner' && featured?.payload.image_id && !items.length) return null;
               return (
                 <div className="meal-slot" key={category}>
                   <div className="slot-heading">
@@ -277,7 +286,7 @@ export function Home({
                   ))}
                   {!items.length && (
                     <button className="empty-slot" onClick={() => plan({ day, category })}>
-                      {t('emptyMeals')}
+                      {t('plannedDayEmpty')}
                       <ChevronRight size={16} />
                     </button>
                   )}
@@ -285,6 +294,22 @@ export function Home({
               );
             })}
           </div>
+          <section className="home-quick-actions" aria-label={t('homeQuickActions')}>
+            <button className="secondary" aria-label={t('importRecipe')} onClick={importRecipe}>
+              <Upload size={18} />
+              {t('quickImport')}
+            </button>
+            {recipes.length > 0 && (
+              <button className="secondary" aria-label={t('addRecipe')} onClick={create}>
+                <Plus size={18} />
+                {t('quickCreate')}
+              </button>
+            )}
+            <button className="secondary" aria-label={t('recipeIdeas')} onClick={ideas}>
+              <Sparkles size={18} />
+              {t('quickIdeas')}
+            </button>
+          </section>
         </section>
         <aside className="home-aside">
           <section className="week-summary">
@@ -316,10 +341,12 @@ export function Home({
             <BringStatus open={shopping} />
           </section>
           <section className="suggestion-panel">
-            <Sparkles size={23} strokeWidth={1.5} />
-            <h2>{t('suggestions')}</h2>
-            <p>{t('suggestionsBody')}</p>
+            <div>
+              <h2>{t('suggestions')}</h2>
+              <p>{t('suggestionsBody')}</p>
+            </div>
             <button className="secondary" onClick={suggest}>
+              <Sparkles size={18} />
               {t('suggest')}
             </button>
           </section>
@@ -488,42 +515,40 @@ export function Calendar({
   return (
     <>
       <PageHeader title={t('calendar')}>
-        <IconButton label={t('weekTools')} onClick={() => setTools(true)}>
-          <Ellipsis size={22} />
-        </IconButton>
-        <button className="primary compact" aria-label={t('suggest')} onClick={suggest}>
-          <Sparkles size={17} />
-          <span>{t('suggest')}</span>
+        <button className="primary compact" onClick={() => plan({ day, category: 'dinner' })}>
+          <Plus size={18} />
+          {t('homePlanAction')}
         </button>
       </PageHeader>
-      <button className="bring-status shopping-launch" onClick={shopping}>
-        <ShoppingBag size={17} />
-        {t('shoppingTitle')}
-        <ChevronRight size={16} />
-      </button>
       <WeekStrip day={day} onChange={setDay} />
-      <div className="calendar-view-switch" role="group" aria-label={t('calendarView')}>
-        {(['day', 'three', 'week'] as const).map((value) => (
-          <button
-            type="button"
-            key={value}
-            aria-pressed={view === value}
-            onClick={() => chooseView(value)}
-          >
-            {t(
-              value === 'day'
-                ? 'calendarDay'
-                : value === 'three'
-                  ? 'calendarThreeDays'
-                  : 'calendarWeek',
-            )}
-          </button>
-        ))}
+      <div className="calendar-toolbar">
+        <div className="calendar-view-switch" role="group" aria-label={t('calendarView')}>
+          {(['day', 'three', 'week'] as const).map((value) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={view === value}
+              onClick={() => chooseView(value)}
+            >
+              {t(
+                value === 'day'
+                  ? 'calendarDay'
+                  : value === 'three'
+                    ? 'calendarThreeDays'
+                    : 'calendarWeek',
+              )}
+            </button>
+          ))}
+        </div>
+        <button
+          className="secondary compact calendar-tools"
+          aria-label={t('weekTools')}
+          onClick={() => setTools(true)}
+        >
+          <Ellipsis size={18} />
+          {t('calendarToolsShort')}
+        </button>
       </div>
-      <p className="calendar-drag-hint">
-        {t('calendarDragHint')}
-        {view !== 'day' && <> {t('calendarScrollHint')}</>}
-      </p>
       {error && (
         <p role="alert" className="error-note">
           {error}
@@ -599,6 +624,27 @@ export function Calendar({
           {drag.drag.source.title}
         </div>
       )}
+      <div className="calendar-bottom-actions">
+        <button className="secondary" aria-label={t('suggest')} onClick={suggest}>
+          <Sparkles size={17} />
+          {t('suggest')}
+        </button>
+        <details className="calendar-help">
+          <summary>
+            {t('calendarDragHelp')}
+            <ChevronRight size={16} />
+          </summary>
+          <p className="calendar-drag-hint">
+            {t('calendarDragHint')}
+            {view !== 'day' && <> {t('calendarScrollHint')}</>}
+          </p>
+        </details>
+      </div>
+      <button className="text-button calendar-shopping" onClick={shopping}>
+        <ShoppingBag size={17} />
+        {t('shoppingTitle')}
+        <ChevronRight size={16} />
+      </button>
       <Leftovers plan={plan} />
       {tools && <WeekTools day={day} onClose={() => setTools(false)} />}
     </>

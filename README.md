@@ -10,6 +10,9 @@ reviewed imports and two-device synchronisation have real Chromium acceptance co
 The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
 and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md). Choose Flo, After Dark or
 Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
+The PWA task-flow rework keeps the same branding and six destinations, with a focused
+Home, compact calendar controls, labelled recipe actions and expandable Settings groups.
+See [screen guide and validation scope](docs/PWA_UX.md).
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).

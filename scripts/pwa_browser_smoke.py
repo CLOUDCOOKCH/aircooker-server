@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
 from mealf.app import create_app
@@ -256,6 +257,7 @@ def main():
                 expect(page.locator("#peach-reaction")).not_to_be_empty()
                 context.set_offline(False)
                 page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 expect(page.get_by_role("heading", name="Einstellungen")).to_be_visible()
                 expect(page.locator('a[href="/admin/"]')).to_have_count(0)
@@ -481,6 +483,7 @@ def main():
                     "recipeIngredient": ["200 g beans"],
                     "recipeInstructions": ["Simmer until tender."],
                 }
+                second.locator(".import-alternative > summary").click()
                 second.get_by_role("textbox", name="Recipe text", exact=True).fill(
                     '<script type="application/ld+json">' + json.dumps(source) + "</script>"
                 )
@@ -625,8 +628,11 @@ def main():
                 second.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(second, "Your household")
                 expect(second.locator('a[href="/admin/"]')).to_be_visible()
+                settings_section(second, "Bring!")
                 expect(second.locator('a[href="/admin/#bring"]')).to_be_visible()
+                settings_section(second, "Meal suggestions")
                 planning = second.locator(".settings-group").filter(
                     has=second.get_by_role("heading", name="Meal suggestions", exact=True)
                 )
@@ -656,11 +662,13 @@ def main():
                     "button", name="Settings", exact=True
                 ).click()
                 page.get_by_role("button", name="Sync now", exact=True).click()
+                settings_section(page, "Meal suggestions")
                 first_planning = page.locator(".settings-group").filter(
                     has=page.get_by_role("heading", name="Meal suggestions", exact=True)
                 )
                 expect(first_planning.get_by_label("Servings", exact=True)).to_have_value("3.5")
                 expect(first_planning.get_by_label("Breakfast", exact=True)).to_be_checked()
+                settings_section(second, "Your household")
                 second.get_by_label("Language", exact=True).select_option("de")
                 second.set_viewport_size({"width": 390, "height": 844})
                 second.emulate_media(color_scheme="dark")
@@ -671,6 +679,7 @@ def main():
                         full_page=True,
                         animations="disabled",
                     )
+                settings_section(second, "Dein Haushalt")
                 second.get_by_label("Sprache", exact=True).select_option("en")
                 second_context.set_offline(True)
                 planning.get_by_label("Servings", exact=True).fill("4.5")
@@ -678,6 +687,7 @@ def main():
                 second.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(second, "Meal suggestions")
                 expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
                 # An unsaved draft does not change cached or server-wide suggestion defaults.
                 second.get_by_role("navigation").get_by_role(
@@ -734,6 +744,7 @@ def main():
                 second.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(second, "Meal suggestions")
                 expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
                 planning.get_by_role("button", name="Save suggestion settings", exact=True).click()
                 expect(

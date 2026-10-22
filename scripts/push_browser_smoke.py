@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_settings import settings_section
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from playwright.sync_api import expect, sync_playwright
@@ -126,6 +127,7 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(page, "Meal reminders")
                 expect(
                     page.get_by_role("button", name="Connect notifications", exact=True)
                 ).to_be_enabled()
@@ -175,6 +177,7 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(page, "Meal reminders")
                 expect(page.locator('input[type="time"]').nth(2)).to_have_value("19:10")
                 # navigator.onLine is only a hint (Chromium may report true after a SW reload).
                 # A failed save must still retain the draft and leave server settings unchanged.
@@ -205,9 +208,11 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(page, "Meal reminders")
                 expect(
                     page.get_by_text("Last accepted by delivery service:", exact=False)
                 ).to_be_visible()
+                settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
                 page.emulate_media(color_scheme="dark")
@@ -228,6 +233,7 @@ def main():
                     path=str(captures / "mealf-reminders-controls-phone-de-dark.png"),
                     animations="disabled",
                 )
+                settings_section(page, "Dein Haushalt")
                 page.get_by_label("Sprache", exact=True).select_option("en")
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Home", exact=True
@@ -274,6 +280,7 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(page, "Meal reminders")
                 page.get_by_role("button", name="Disconnect notifications", exact=True).click()
                 expect(
                     page.get_by_role("button", name="Connect notifications", exact=True)
@@ -296,6 +303,7 @@ def main():
                 page.get_by_role("navigation").get_by_role(
                     "button", name="Settings", exact=True
                 ).click()
+                settings_section(page, "Meal reminders")
                 expect(page.get_by_text("Notifications are blocked.", exact=False)).to_be_visible()
                 expect(
                     page.get_by_role("button", name="Connect notifications", exact=True)

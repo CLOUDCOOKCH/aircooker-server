@@ -488,6 +488,9 @@ function Kitchen({
       </nav>
       <div className="main-shell">
         <div className="connection-bar">
+          <div className="mobile-wordmark">
+            <Brand compact language={app.language} />
+          </div>
           {app.demo ? (
             <>
               <span className="demo-label">{t('demo')}</span>
@@ -526,9 +529,14 @@ function Kitchen({
               <button
                 className="text-button"
                 disabled={app.syncing}
+                aria-label={t('sync')}
                 onClick={() => void app.sync()}
               >
-                {t('sync')}
+                <RefreshCw size={14} />
+                <span className="sync-label">{t('sync')}</span>
+                <span className="sync-label-short" aria-hidden="true">
+                  {t('syncShort')}
+                </span>
               </button>
             </>
           )}

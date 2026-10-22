@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
 from mealf.app import create_app
@@ -144,6 +145,7 @@ def main():
                     nav = page.locator(".nav-links")
                     if language == "de":
                         nav.get_by_role("button", name="Settings").click()
+                        settings_section(page, "Your household")
                         page.get_by_label("Language", exact=True).select_option("de")
                         nav.get_by_role("button", name="Start", exact=True).click()
                     if mobile:

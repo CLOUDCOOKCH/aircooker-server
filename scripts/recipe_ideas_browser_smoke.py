@@ -13,6 +13,7 @@ from uuid import uuid4
 
 import httpx
 import uvicorn
+from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
 from mealf.ai import provider_for
@@ -192,6 +193,7 @@ def main():
                         page.get_by_role("navigation").get_by_role(
                             "button", name="Settings", exact=True
                         ).click()
+                        settings_section(page, "Your household")
                         page.get_by_label("Language", exact=True).select_option("de")
                         page.evaluate("window.mealfAppearance.set('after-dark')")
                         page.set_viewport_size({"width": 390, "height": 844})

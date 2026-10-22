@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, Download, LogOut, RefreshCw, ShieldCheck, Smartphone } from 'lucide-react';
+import type { ReactNode } from 'react';
+import {
+  ArrowUpRight,
+  ChevronRight,
+  Download,
+  LogOut,
+  RefreshCw,
+  ShieldCheck,
+  Smartphone,
+} from 'lucide-react';
 import { useApp } from './model';
 import type { Tab } from './model';
 import { PageHeader, Sheet } from './components';
@@ -23,6 +32,30 @@ function download(value: unknown, name: string) {
   link.download = name;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function SettingsDisclosure({
+  title,
+  description,
+  children,
+  attention = false,
+}: {
+  title: string;
+  description?: string;
+  children: ReactNode;
+  attention?: boolean;
+}) {
+  return (
+    <details className="settings-disclosure" open={attention || undefined}>
+      <summary>
+        <span>
+          <strong>{title}</strong>
+          {description && <small>{description}</small>}
+        </span>
+        <ChevronRight size={20} aria-hidden="true" />
+      </summary>
+      <div className="settings-disclosure-body">{children}</div>
+    </details>
+  );
 }
 export function Settings({
   logout,
@@ -107,11 +140,13 @@ export function Settings({
   };
   return (
     <>
-      <PageHeader title={t('settings')} />
-      <div className="settings-columns">
+      <PageHeader title={t('settings')} subtitle={t('settingsIntro')} />
+      <div className="settings-hub">
         <div>
-          <section className="settings-group">
-            <h2>{t('account')}</h2>
+          <SettingsDisclosure
+            title={t('account')}
+            description={app.household.name + ' · ' + app.household.timezone}
+          >
             <div className="settings-surface">
               <div className="settings-row">
                 <div>
@@ -154,9 +189,12 @@ export function Settings({
                 </a>
               )}
             </div>
-          </section>
-          <section className="settings-group">
-            <h2>{t('device')}</h2>
+          </SettingsDisclosure>
+          <SettingsDisclosure
+            title={t('device')}
+            description={t('deviceSummary')}
+            attention={!!app.error}
+          >
             <div className="settings-surface">
               <button
                 className="settings-row"
@@ -227,14 +265,23 @@ export function Settings({
                 <LogOut size={18} />
               </button>
             </div>
-          </section>
-          <ThemeLibrary />
-          <PlanningSettings />
-          <ReminderSettings />
-          <AISettings />
-          <ChatGPTSettings />
-          <section className="settings-group">
-            <h2>{t('bring')}</h2>
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('themes')} description={t('appearanceSummary')}>
+            <ThemeLibrary />
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('planningPreferences')} description={t('planningSummary')}>
+            <PlanningSettings />
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('pushReminders')} description={t('reminderSummary')}>
+            <ReminderSettings />
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('aiSettingsTitle')} description={t('aiSummary')}>
+            <AISettings />
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('chatgptTitle')} description={t('chatgptSummary')}>
+            <ChatGPTSettings />
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('bring')} description={t('bringBody')}>
             <div className="settings-surface">
               <button className="settings-row" onClick={shopping}>
                 {t('shoppingTitle')}
@@ -281,19 +328,17 @@ export function Settings({
               )}
               {app.demo && <p className="settings-description">{t('demoUnavailable')}</p>}
             </div>
-          </section>
+          </SettingsDisclosure>
         </div>
         <div>
-          <section className="settings-group">
-            <h2>{t('installation')}</h2>
+          <SettingsDisclosure title={t('installation')} description={t('installationSummary')}>
             <div className="settings-surface settings-copy">
               <Smartphone size={28} strokeWidth={1.4} />
               <p>{t('installHint')}</p>
               <p className="muted">{t('reminderLimits')}</p>
             </div>
-          </section>
-          <section className="settings-group">
-            <h2>{t('storage')}</h2>
+          </SettingsDisclosure>
+          <SettingsDisclosure title={t('storage')} description={t('storageSummary')}>
             <div className="settings-surface">
               <div className="settings-copy">
                 <strong>{t(persisted ? 'persisted' : 'persistenceUnknown')}</strong>
@@ -308,10 +353,9 @@ export function Settings({
                 <Download size={18} />
               </button>
             </div>
-          </section>
+          </SettingsDisclosure>
           {!app.demo && (
-            <section className="settings-group">
-              <h2>{t('recover')}</h2>
+            <SettingsDisclosure title={t('recover')} description={t('recoverySummary')}>
               <p className="muted">{t('recoverHint')}</p>
               <button
                 className="text-button"
@@ -320,11 +364,10 @@ export function Settings({
               >
                 {t('recover')}
               </button>
-            </section>
+            </SettingsDisclosure>
           )}
           {archives.length > 0 && (
-            <section className="settings-group">
-              <h2>{t('archives')}</h2>
+            <SettingsDisclosure title={t('archives')} description={t('archiveHint')}>
               <p className="muted">{t('archiveHint')}</p>
               {archives.map((archive) => (
                 <details key={archive.id}>
@@ -354,11 +397,10 @@ export function Settings({
                     ))}
                 </details>
               ))}
-            </section>
+            </SettingsDisclosure>
           )}
           {app.pending.some((row) => row.blocked) && (
-            <section className="settings-group">
-              <h2>{t('blocked')}</h2>
+            <SettingsDisclosure title={t('blocked')} description={t('recoveryHint')} attention>
               <p>{t('recoveryHint')}</p>
               {app.pending.some((row) => row.blocked === 'photo_upload_rejected') && (
                 <div className="recovery-item">
@@ -442,7 +484,7 @@ export function Settings({
                     </button>
                   </div>
                 ))}
-            </section>
+            </SettingsDisclosure>
           )}
         </div>
       </div>

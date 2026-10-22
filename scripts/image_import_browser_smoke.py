@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from browser_settings import settings_section
 from browser_test_errors import unexpected_browser_errors
 from playwright.sync_api import expect, sync_playwright
 
@@ -283,6 +284,7 @@ def main():
                 phase("Settings clicked")
                 expect(page.get_by_role("heading", name="Settings", exact=True)).to_be_visible()
                 phase("Settings ready")
+                settings_section(page, "Theme library")
                 radio = page.get_by_role("radio", name="After Dark", exact=True)
                 radio.evaluate("e=>e.scrollIntoView({block:'center',behavior:'instant'})")
                 phase("theme radio in view")
@@ -300,6 +302,7 @@ def main():
                 expect(radio).to_be_checked()
                 expect(page.locator("html")).to_have_attribute("data-theme", "after-dark")
                 phase("native keyboard theme selected")
+                settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
                 page.get_by_role("navigation").get_by_role(

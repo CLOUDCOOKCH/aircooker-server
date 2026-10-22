@@ -1,5 +1,15 @@
 # Mealf preview
 
+## PWA UX rework candidate
+
+`poc-20261022.9` is prepared; publication is pending exact-source CI and fresh native
+AMD64/ARM64 image gates. The rework keeps Mealf's original branding, glass, all themes
+and six destinations while simplifying Home, calendar controls, recipe navigation,
+imports and Settings. Shopping prioritizes required Bring setup before progress.
+See [the screen guide](PWA_UX.md) and [scoped UI review](validation/pwa-ux-review.md).
+Keep existing volumes and the custom `5152:5152` command/healthcheck when updating.
+The last verified published preview remains `.8` below until publication completes.
+
 ## Published preview: sync reliability
 
 `poc-20261022.8` is published and verified for **AMD64 and ARM64**. It fixes false synced

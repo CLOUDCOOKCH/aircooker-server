@@ -1,0 +1,13 @@
+{
+  "kind": "Genuine Chromium full-document captures, 390x844 viewport",
+  "captured": "2026-10-22",
+  "generator": "scripts/pwa_ux_browser_smoke.py",
+  "content": "Disposable synthetic household; existing original AI-generated demo chicken illustration, not actual cooking photography",
+  "appearance": "German After Dark; original Mealf brand assets and semantic theme",
+  "limits": "Fixed bottom navigation retains its original viewport position in full-document captures; not physical iPhone or movement evidence",
+  "files": {
+    "calendar-phone.png": "dacdd23412f4cace6e5db162817142459a2f0bcb088b5929e553ee14cd7b1b76",
+    "home-phone.png": "644074bbdb7af56d3b386ba4e2708cebc74a5cda35605b0f12e20c9fd92dd32f",
+    "settings-phone.png": "7f9729eff2b004cfd246060795695c668964c49d42b5621a85d7f6901c07c7fb"
+  }
+}

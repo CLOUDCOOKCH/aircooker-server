@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { ErrorBoundary } from './ErrorBoundary';
 import './styles.css';
+import './task-layout.css';
 
 // Safari emits gesture events even where touch-action alone is insufficient.
 // Do not cancel single-finger touch events: scrolling and text handles need them.
