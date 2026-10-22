@@ -181,3 +181,29 @@ subscription eligibility, actual Windows execution, physical iPhone and exact-so
 CI/device evidence remain unverified here. Historical design-document drift remains
 preserved. This is an established task-flow extension without a new approved comp,
 seed or design card, and does not declare production acceptance or a security audit.
+
+Shopping extension, 2026-10-22: Home, Calendar and Settings open one Shopping task page
+within the existing five-destination shell. Preserve original artwork, system type,
+Flo/After Dark/Sunday theme roles, solid reading surfaces and glass navigation. Lead
+with the current household Monday–Sunday requirements and a prominent manual Bring!
+action; stack it full width on phones. Keep literal connection/queued/error/last-success
+feedback, per-item states, pantry exclusions and ownership guidance. Matching manual
+Bring! items stay unchanged; purchased/manually removed requirements remain suppressed
+for the week. Compatibility verification requires explicit dedicated-test-list consent
+and explains temporary-item changes, expiry and failure cleanup. Loading lists alone
+does not enable writes. Cached offline snapshots disclose calculation time and that
+recent local edits may be missing; disable the Bring! action offline or while stale.
+
+The [bounded Shopping finish review](../../docs/validation/shopping-ui-review.md) records
+**ship within the reviewed Shopping UI scope**, supplied independent persistence pass,
+TYPE/MATERIAL/GROUND and thesis/story/form match, quality ceiling reached and no material
+UI fixes. This documentation handoff directly inspected sources and opened all four
+genuine Chromium captures: English unverified/synced desktop and German After Dark
+synced/offline phone. Phone wrapping is acceptable; fixed navigation over a document
+band is full-page capture behavior. Supplied browser evidence passes real PWA/server/
+worker projection, explicit verification, failed then successful manual sync, manual-item
+preservation, desktop/phone Axe and offline cached reload. Bring transport is synthetic;
+no live Bring!, physical iPhone/Safari, exact-source CI or publication pass is claimed.
+Launcher/detector were attempted but absent, with no passes claimed. This ordinary
+extension preserves DESIGN.md/design.json and acknowledges historical layout/system-only
+appearance drift without repairing it. It is not whole-product or security acceptance.

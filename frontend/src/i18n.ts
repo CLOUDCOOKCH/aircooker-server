@@ -1,4 +1,55 @@
 export const en = {
+  shoppingTitle: 'Shopping list',
+  shoppingWeek: 'Current household week',
+  shoppingIntro:
+    'Ingredients for this Monday–Sunday meal plan, with servings combined and pantry staples excluded. Your shopping stays in Bring!.',
+  shoppingNotSent: 'Not sent',
+  shoppingPending: 'Update pending',
+  shoppingSynced: 'Synced to Bring!',
+  shoppingPurchased: 'Purchased this week',
+  shoppingRemoved: 'Removed in Bring!',
+  shoppingManual: 'Already in Bring! · left unchanged',
+  shoppingSync: 'Sync to Bring!',
+  shoppingSyncing: 'Syncing…',
+  shoppingQueued: 'Queued on your server. You can close the app; the result will appear here.',
+  shoppingLastSuccess: 'Last successful reconciliation:',
+  shoppingCached: 'Saved server calculation; recent local edits may be missing. Calculated:',
+  shoppingNoCache: 'Connect once to load your shopping requirements.',
+  shoppingLoadError:
+    'Could not refresh the shopping list. Check the server connection and try again.',
+  shoppingActionError: 'Could not queue this action. Check the server connection and try again.',
+  shoppingLocalPending:
+    'You have unsynced changes. Sync to Bring! first sends them to your server. Blocked edits must be resolved before continuing.',
+  shoppingReady:
+    'Connected. Sync sends the current server plan and preserves unrelated Bring! items.',
+  shoppingVerificationNeeded:
+    'Sending is blocked until safe item identification is verified. Loading lists alone does not enable writes.',
+  shoppingConnectFirst: 'Connect Bring! and select an existing list to send these ingredients.',
+  shoppingConfigure: 'Configure Bring!',
+  shoppingVerifyTitle: 'Verify Bring! compatibility',
+  shoppingVerifyHint:
+    'Select a dedicated test list in Bring! settings first. Verification adds, updates, completes and removes one temporary mealf test item. Other items are never restored or changed. Verification is specific to that list and expires after 30 days.',
+  shoppingVerifyConsent:
+    'The selected list is a dedicated test list. Allow the temporary item check.',
+  shoppingVerify: 'Verify selected test list',
+  shoppingVerifying: 'Verification queued…',
+  shoppingTestLeftover:
+    'A failed check may leave a mealf-test item. Remove that test item manually in Bring! if needed.',
+  shoppingUUIDError:
+    'Bring! did not confirm the expected item identity or state. Sending is blocked to protect your list.',
+  shoppingConfigurationChanged:
+    'Bring! settings changed. Review the selected list and verify it again.',
+  shoppingSyncError:
+    'Bring! could not finish this operation. Check credentials, list access and the connection, then retry. No successful sync is claimed.',
+  shoppingEmpty: 'Nothing to send this week',
+  shoppingEmptyHint:
+    'Add recipes to the current week in Calendar. Existing leftovers and available pantry staples do not add ingredients.',
+  shoppingExcluded: 'Pantry exclusions',
+  shoppingExcludedHint:
+    'These available staples are excluded when they occur in planned recipes. Manage exceptions in Pantry.',
+  shoppingOwnership:
+    'Status reflects the last server reconciliation. Purchased or manually removed requirements stay suppressed for this week. mealf does not take ownership of matching items you added yourself.',
+
   chatgptTitle: 'Your ChatGPT plan',
   chatgptHint:
     'Connect your personal ChatGPT account for recipe-text imports. Your household login stays the same. This connection belongs only to this signed-in browser session.',
@@ -497,6 +548,60 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  shoppingTitle: 'Einkaufsliste',
+  shoppingWeek: 'Aktuelle Haushaltswoche',
+  shoppingIntro:
+    'Zutaten für deinen Speiseplan von Montag bis Sonntag, mit angepassten Portionen und ohne Vorratszutaten. Eingekauft wird weiterhin mit Bring!.',
+  shoppingNotSent: 'Nicht gesendet',
+  shoppingPending: 'Änderung ausstehend',
+  shoppingSynced: 'Mit Bring! abgeglichen',
+  shoppingPurchased: 'Diese Woche gekauft',
+  shoppingRemoved: 'In Bring! entfernt',
+  shoppingManual: 'Bereits in Bring! · unverändert',
+  shoppingSync: 'Mit Bring! synchronisieren',
+  shoppingSyncing: 'Wird abgeglichen…',
+  shoppingQueued:
+    'Auf deinem Server eingereiht. Du kannst die App schließen; das Ergebnis erscheint hier.',
+  shoppingLastSuccess: 'Letzter erfolgreicher Abgleich:',
+  shoppingCached: 'Gespeicherte Serverberechnung; neue lokale Änderungen können fehlen. Berechnet:',
+  shoppingNoCache: 'Verbinde dich einmal, um deine Einkaufsliste zu laden.',
+  shoppingLoadError:
+    'Die Einkaufsliste konnte nicht aktualisiert werden. Prüfe die Serververbindung und versuche es erneut.',
+  shoppingActionError:
+    'Die Aktion konnte nicht eingereiht werden. Prüfe die Serververbindung und versuche es erneut.',
+  shoppingLocalPending:
+    'Du hast nicht synchronisierte Änderungen. Der Bring!-Abgleich sendet sie zuerst an deinen Server. Blockierte Änderungen müssen vorher geklärt werden.',
+  shoppingReady:
+    'Verbunden. Der Abgleich sendet den aktuellen Serverplan und erhält fremde Bring!-Einträge.',
+  shoppingVerificationNeeded:
+    'Das Senden bleibt gesperrt, bis sichere Artikelkennungen geprüft sind. Das Laden der Listen allein erlaubt noch keine Änderungen.',
+  shoppingConnectFirst:
+    'Verbinde Bring! und wähle eine bestehende Liste, um diese Zutaten zu senden.',
+  shoppingConfigure: 'Bring! einrichten',
+  shoppingVerifyTitle: 'Bring!-Kompatibilität prüfen',
+  shoppingVerifyHint:
+    'Wähle zuerst in den Bring!-Einstellungen eine eigene Testliste aus. Die Prüfung fügt einen temporären mealf-Testartikel hinzu, ändert, erledigt und entfernt ihn. Andere Einträge werden weder wiederhergestellt noch geändert. Die Prüfung gilt nur für diese Liste und läuft nach 30 Tagen ab.',
+  shoppingVerifyConsent:
+    'Die gewählte Liste ist eine eigene Testliste. Temporäre Artikelprüfung erlauben.',
+  shoppingVerify: 'Gewählte Testliste prüfen',
+  shoppingVerifying: 'Prüfung eingereiht…',
+  shoppingTestLeftover:
+    'Eine fehlgeschlagene Prüfung kann einen mealf-test-Artikel hinterlassen. Entferne bei Bedarf diesen Testartikel manuell in Bring!.',
+  shoppingUUIDError:
+    'Bring! hat die erwartete Artikelkennung oder den Zustand nicht bestätigt. Zum Schutz deiner Liste bleibt das Senden gesperrt.',
+  shoppingConfigurationChanged:
+    'Die Bring!-Einstellungen wurden geändert. Prüfe die gewählte Liste erneut.',
+  shoppingSyncError:
+    'Bring! konnte die Aktion nicht abschließen. Prüfe Zugangsdaten, Listenzugriff und Verbindung und versuche es erneut. Der Abgleich ist nicht bestätigt.',
+  shoppingEmpty: 'Diese Woche ist nichts zu senden',
+  shoppingEmptyHint:
+    'Plane Rezepte in der aktuellen Kalenderwoche. Bereits vorhandene Reste und verfügbare Vorratszutaten erzeugen keinen Einkauf.',
+  shoppingExcluded: 'Aus dem Vorrat ausgeschlossen',
+  shoppingExcludedHint:
+    'Diese verfügbaren Vorratszutaten werden ausgeschlossen, wenn sie in geplanten Rezepten vorkommen. Ausnahmen verwaltest du im Vorrat.',
+  shoppingOwnership:
+    'Der Status zeigt den letzten Serverabgleich. Gekaufte oder manuell entfernte Anforderungen bleiben diese Woche unterdrückt. mealf übernimmt keine gleichnamigen Artikel, die du selbst hinzugefügt hast.',
+
   chatgptTitle: 'Dein ChatGPT-Abo',
   chatgptHint:
     'Verbinde dein persönliches ChatGPT-Konto für Rezepttexte. Deine Haushaltsanmeldung bleibt gleich. Die Verbindung gehört nur zu dieser angemeldeten Browsersitzung.',

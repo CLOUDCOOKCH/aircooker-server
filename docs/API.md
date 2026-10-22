@@ -1,5 +1,11 @@
 # API and offline sync protocol v1
 
+`GET /api/v1/planning/shopping` returns a typed current-household-week shopping/status snapshot
+without a remote request. `POST /api/v1/integrations/bring/verify` explicitly confirms a
+selected dedicated test list and queues a resumable UUID experiment. Manual reconciliation
+continues at `/api/v1/integrations/bring/reconcile`; accepted/queued is not remote success.
+See [shopping contract and invariants](SHOPPING.md#api-and-persistence).
+
 ## Personal ChatGPT connection
 
 `/api/v1/integrations/chatgpt` is scoped to the authenticated session, including when two

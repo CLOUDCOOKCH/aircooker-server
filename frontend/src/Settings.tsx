@@ -27,9 +27,11 @@ function download(value: unknown, name: string) {
 export function Settings({
   logout,
   reauthenticate,
+  shopping,
 }: {
   logout: () => Promise<void>;
   reauthenticate: () => void;
+  shopping: () => void;
 }) {
   const app = useApp(),
     { t } = app;
@@ -139,6 +141,10 @@ export function Settings({
           <section className="settings-group">
             <h2>{t('bring')}</h2>
             <div className="settings-surface">
+              <button className="settings-row" onClick={shopping}>
+                {t('shoppingTitle')}
+                <RefreshCw size={18} />
+              </button>
               <div className="settings-row">
                 <div>
                   <strong>{t('bringBody')}</strong>

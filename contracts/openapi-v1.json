@@ -402,6 +402,27 @@
         "title": "BringCredentials",
         "type": "object"
       },
+      "BringVerification": {
+        "additionalProperties": false,
+        "properties": {
+          "dedicated_test_list_confirmed": {
+            "const": true,
+            "title": "Dedicated Test List Confirmed",
+            "type": "boolean"
+          },
+          "list_id": {
+            "format": "uuid",
+            "title": "List Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "list_id",
+          "dedicated_test_list_confirmed"
+        ],
+        "title": "BringVerification",
+        "type": "object"
+      },
       "BrowserSession": {
         "additionalProperties": false,
         "properties": {
@@ -1904,6 +1925,7 @@
             "enum": [
               "recipe.import",
               "shopping.reconcile",
+              "bring.verify",
               "unknown"
             ],
             "title": "Kind",
@@ -3693,6 +3715,184 @@
           "name"
         ],
         "title": "Setup",
+        "type": "object"
+      },
+      "ShoppingItem": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sources": {
+            "title": "Sources",
+            "type": "integer"
+          },
+          "spec": {
+            "title": "Spec",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "not_sent",
+              "pending",
+              "synced",
+              "purchased",
+              "removed_by_user",
+              "manual"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "spec",
+          "sources",
+          "state"
+        ],
+        "title": "ShoppingItem",
+        "type": "object"
+      },
+      "ShoppingSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "calculated_at": {
+            "title": "Calculated At",
+            "type": "number"
+          },
+          "connection_state": {
+            "enum": [
+              "not_configured",
+              "list_not_selected",
+              "compatibility_unverified",
+              "ready"
+            ],
+            "title": "Connection State",
+            "type": "string"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "excluded_staples": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Excluded Staples",
+            "type": "array"
+          },
+          "job_state": {
+            "enum": [
+              "idle",
+              "queued",
+              "running",
+              "done",
+              "failed"
+            ],
+            "title": "Job State",
+            "type": "string"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "list_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Id"
+          },
+          "list_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Name"
+          },
+          "period": {
+            "format": "date",
+            "title": "Period",
+            "type": "string"
+          },
+          "planned_meals": {
+            "title": "Planned Meals",
+            "type": "integer"
+          },
+          "requirements": {
+            "items": {
+              "$ref": "#/components/schemas/ShoppingItem"
+            },
+            "title": "Requirements",
+            "type": "array"
+          },
+          "verification_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Error"
+          },
+          "verification_state": {
+            "enum": [
+              "idle",
+              "queued",
+              "running",
+              "done",
+              "failed"
+            ],
+            "title": "Verification State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "period",
+          "calculated_at",
+          "planned_meals",
+          "excluded_staples",
+          "requirements",
+          "last_success_at",
+          "job_state",
+          "error_code",
+          "verification_state",
+          "verification_error",
+          "list_id",
+          "list_name",
+          "connection_state"
+        ],
+        "title": "ShoppingSnapshot",
         "type": "object"
       },
       "StepDetails": {
@@ -5696,6 +5896,47 @@
         "summary": "Bring Status"
       }
     },
+    "/api/v1/integrations/bring/verify": {
+      "post": {
+        "operationId": "bring_verify_api_v1_integrations_bring_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BringVerification"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Bring Verify"
+      }
+    },
     "/api/v1/integrations/chatgpt": {
       "delete": {
         "operationId": "disconnect_api_v1_integrations_chatgpt_delete",
@@ -6769,6 +7010,29 @@
           }
         ],
         "summary": "Update Entity"
+      }
+    },
+    "/api/v1/planning/shopping": {
+      "get": {
+        "operationId": "shopping_api_v1_planning_shopping_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Shopping"
       }
     },
     "/api/v1/planning/shopping-projection": {

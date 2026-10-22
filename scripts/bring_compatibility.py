@@ -63,10 +63,26 @@ async def main():
         )
         report = os.environ.get("BRING_COMPATIBILITY_REPORT")
         if report:
+            from aircooker.secrets import SecretVault
+            from aircooker.shopping import configuration_hash
+
             path = Path(report)
+            saved_configuration = SecretVault(path.parent).load("bring")
+            if not saved_configuration:
+                raise RuntimeError("Configure Bring in mealf before writing capability evidence")
+            saved = json.loads(saved_configuration)
+            if (
+                saved.get("email") != email
+                or saved.get("password") != password
+                or saved.get("list_id") != list_id
+            ):
+                raise RuntimeError(
+                    "The test configuration must match the selected mealf connection"
+                )
             with path.open("w") as out:
                 json.dump(
                     {
+                        "configuration_hash": configuration_hash(saved_configuration),
                         "sdk_version": "1.1.2",
                         "list_id": list_id,
                         "verified_at": time.time(),

@@ -366,7 +366,7 @@ class AdministrationStatus(Model):
 
 class JobInfo(Model):
     id: UUID
-    kind: Literal["recipe.import", "shopping.reconcile", "unknown"]
+    kind: Literal["recipe.import", "shopping.reconcile", "bring.verify", "unknown"]
     state: Literal["queued", "running", "done", "failed"]
     attempts: int = Field(ge=0)
     error_code: str | None

@@ -1,3 +1,4 @@
+import json
 import time
 from dataclasses import dataclass
 from typing import Protocol
@@ -117,4 +118,9 @@ def reconcile(database, connector: BringConnector, list_id: str, period: str, de
                 "UPDATE bring_owned_item SET state='synced',applied_spec=?,reconciled_at=? WHERE item_id=?",
                 (item.spec, time.time(), item.id),
             )
+    with database.transaction() as db:
+        db.execute(
+            "INSERT OR REPLACE INTO shopping_sync VALUES (1,?,?,?,?)",
+            (period, list_id, time.time(), json.dumps(sorted(manual_names))),
+        )
     return {"state": "synced", "period": period}

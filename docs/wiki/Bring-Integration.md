@@ -28,29 +28,17 @@ supports safe UUID-based changes. MealF requires a current compatibility report 
 the selected list UUID and the supported SDK. The current gate expects SDK `1.1.2` and a
 report no older than 30 days. The console cannot override a failed or missing report.
 
-The source checkout includes `scripts/bring_compatibility.py`. It is an explicit live
-experiment, not a runtime container command. It creates a unique test item, checks
-UUID-based replay/update/completion/removal and verifies existing items remain intact.
-It must run only against a dedicated disposable test list, with your deliberate consent
-to those external mutations.
+Use **Calendar → Shopping list → Verify Bring! compatibility** to run the packaged check
+inside the Docker container. First select a dedicated disposable test list, then explicitly
+confirm it. The worker tests one persisted temporary UUID for add/replay/update/completion/
+removal and verifies baseline items remain unchanged. A failed identity check keeps writes
+blocked and may leave a `mealf-test-…` item for manual cleanup. No terminal is required.
 
-From an environment with the project's pinned Python dependencies, prepare private
-credential files and set:
-
-```sh
-export BRING_EMAIL_FILE=/secure/bring-email
-export BRING_PASSWORD_FILE=/secure/bring-password
-export BRING_TEST_LIST_ID=REPLACE_WITH_DEDICATED_LIST_UUID
-export BRING_DEDICATED_TEST_LIST=YES
-export BRING_COMPATIBILITY_REPORT=/secure/bring-compatibility.json
-python scripts/bring_compatibility.py
-```
-
-Replace the paths/UUID, restrict the credential files and keep passwords out of shell
-history. Do not run this on a normal household list. Install a genuinely successful
-generated report at `/data/config/bring-compatibility.json` in the backend volume,
-readable by UID 10001 with restricted permissions. Do not fabricate or edit a passed
-report. A report for one list does not authorise a different list.
+The result is specific to the exact saved credentials/list and SDK and expires after 30 days.
+Changing lists/accounts requires new verification. Do not test on a normal household list or
+fabricate a passing report. Source-only developer tooling remains in
+`scripts/bring_compatibility.py`; the [shopping guide](../SHOPPING.md) documents the supported
+operator workflow, per-item states, offline snapshot and manual **Sync to Bring!** button.
 
 ## Shopping behaviour
 

@@ -36,6 +36,7 @@ import { RecipeDetail, RecipeEditor, Recipes } from './Recipes';
 import { Pantry } from './Pantry';
 import { Settings } from './Settings';
 import { Imports } from './Imports';
+import { Shopping } from './Shopping';
 import { activateUpdate, installWorker } from './worker-client';
 import { reminderTarget } from './lib/notifications';
 import type { ReminderTarget } from './lib/notifications';
@@ -44,7 +45,8 @@ type View =
   | { kind: 'main' }
   | { kind: 'recipe'; id: string }
   | { kind: 'editor'; id?: string; task?: ImportTask; initial?: Recipe; draftID?: string }
-  | { kind: 'imports' };
+  | { kind: 'imports' }
+  | { kind: 'shopping' };
 export default function App() {
   const [runtime, setRuntime] = useState<Runtime | null>(null),
     [loading, setLoading] = useState(true),
@@ -389,6 +391,7 @@ function Kitchen({
         }
       />
     );
+  else if (view.kind === 'shopping') content = <Shopping back={back} />;
   else if (app.tab === 'home')
     content = (
       <Home
@@ -399,6 +402,7 @@ function Kitchen({
         manage={setManaged}
         create={create}
         importRecipe={importRecipe}
+        shopping={() => setView({ kind: 'shopping' })}
         suggest={() => setSuggestions(true)}
       />
     );
@@ -410,13 +414,21 @@ function Kitchen({
         open={open}
         plan={setTarget}
         manage={setManaged}
+        shopping={() => setView({ kind: 'shopping' })}
         suggest={() => setSuggestions(true)}
       />
     );
   else if (app.tab === 'recipes')
     content = <Recipes open={open} create={create} importRecipe={importRecipe} />;
   else if (app.tab === 'pantry') content = <Pantry />;
-  else content = <Settings logout={onLeave} reauthenticate={reauthenticate} />;
+  else
+    content = (
+      <Settings
+        shopping={() => setView({ kind: 'shopping' })}
+        logout={onLeave}
+        reauthenticate={reauthenticate}
+      />
+    );
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">

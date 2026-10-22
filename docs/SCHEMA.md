@@ -1,5 +1,10 @@
 # Database schema and invariants
 
+Migration 013 adds `shopping_sync` for successful period/list reconciliation state and
+`bring_probe` for durable selected-test-list UUID/stage, private configuration binding and
+baseline fingerprints. These are integration records, not new canonical sync entities.
+No released migration/history or ownership ledger is rewritten. See SHOPPING.md.
+
 Migration 012 adds `chatgpt_host` (stable non-secret self-hosted runtime identity),
 `chatgpt_connection` (one per session, encrypted credentials and verified registration),
 `chatgpt_pairing` (hashed expiring one-use capability), and `chatgpt_import` (minimal

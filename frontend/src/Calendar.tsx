@@ -129,7 +129,7 @@ export function MealRow({
     </div>
   );
 }
-function BringStatus() {
+function BringStatus({ open }: { open: () => void }) {
   const app = useApp(),
     { t } = app;
   const [state, setState] = useState<string | null>(null);
@@ -152,9 +152,11 @@ function BringStatus() {
             ? t('loading')
             : t('notConnected');
   return (
-    <button className="bring-status" onClick={() => app.setTab('settings')}>
+    <button className="bring-status" onClick={open}>
       <ShoppingBag size={16} />
-      <span>Bring! · {text}</span>
+      <span>
+        {t('shoppingTitle')} · {text}
+      </span>
       <ChevronRight size={14} />
     </button>
   );
@@ -168,6 +170,7 @@ export function Home({
   create,
   importRecipe,
   suggest,
+  shopping,
 }: {
   day: string;
   setDay: (day: string) => void;
@@ -177,6 +180,7 @@ export function Home({
   create: () => void;
   importRecipe: () => void;
   suggest: () => void;
+  shopping: () => void;
 }) {
   const app = useApp(),
     { t } = app;
@@ -299,7 +303,7 @@ export function Home({
               {t('calendar')}
               <ArrowRight size={16} />
             </button>
-            <BringStatus />
+            <BringStatus open={shopping} />
           </section>
           <section className="suggestion-panel">
             <Sparkles size={23} strokeWidth={1.5} />
@@ -368,6 +372,7 @@ export function Calendar({
   plan,
   manage,
   suggest,
+  shopping,
 }: {
   day: string;
   setDay: (day: string) => void;
@@ -375,6 +380,7 @@ export function Calendar({
   plan: (target: PlanningTarget) => void;
   manage: (item: Occurrence) => void;
   suggest: () => void;
+  shopping: () => void;
 }) {
   const app = useApp(),
     { t } = app;
@@ -480,6 +486,11 @@ export function Calendar({
           <span>{t('suggest')}</span>
         </button>
       </PageHeader>
+      <button className="bring-status shopping-launch" onClick={shopping}>
+        <ShoppingBag size={17} />
+        {t('shoppingTitle')}
+        <ChevronRight size={16} />
+      </button>
       <WeekStrip day={day} onChange={setDay} />
       <div className="calendar-view-switch" role="group" aria-label={t('calendarView')}>
         {(['day', 'three', 'week'] as const).map((value) => (
