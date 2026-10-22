@@ -1,6 +1,6 @@
 """Read-only weekly requirements and observable durable Bring reconciliation."""
 
-import hashlib
+import hmac
 import json
 import time
 from datetime import date, datetime
@@ -52,9 +52,9 @@ class BringVerification(Model):
     dedicated_test_list_confirmed: Literal[True]
 
 
-def configuration_hash(raw):
+def configuration_hash(raw, root):
     # Bind capability evidence to this exact credential/list configuration; never expose it.
-    return hashlib.sha256(raw.encode()).hexdigest()
+    return hmac.digest((root / "integrations.key").read_bytes(), raw.encode(), "sha256").hex()
 
 
 def settings(database):
@@ -182,7 +182,7 @@ def request_verification(database, body):
             (
                 iid,
                 str(body.list_id),
-                configuration_hash(raw),
+                configuration_hash(raw, database.root / "config"),
                 item,
                 "mealf-test-" + item,
                 time.time(),

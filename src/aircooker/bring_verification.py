@@ -43,7 +43,7 @@ def _verify(database, connector_factory, iid):
     if row["completed_at"] is not None:
         return
     raw = settings(database)
-    if not raw or configuration_hash(raw) != row["configuration_hash"]:
+    if not raw or configuration_hash(raw, root) != row["configuration_hash"]:
         raise DomainError("bring_configuration_changed", 409)
     list_id, own_id, name = row["list_id"], row["item_id"], row["name"]
     with connector_factory(root) as connector:
@@ -103,7 +103,7 @@ def _verify(database, connector_factory, iid):
         "list_id": list_id,
         "verified_at": time.time(),
         "passed": True,
-        "configuration_hash": configuration_hash(raw),
+        "configuration_hash": configuration_hash(raw, root),
     }
     temporary = root / ("bring-compatibility-" + str(uuid4()) + ".tmp")
     fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

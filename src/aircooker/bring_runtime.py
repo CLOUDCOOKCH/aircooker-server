@@ -33,7 +33,7 @@ class UnofficialBringConnector:
             if (
                 isinstance(data, dict)
                 and data.get("sdk_version") == "1.1.2"
-                and data.get("configuration_hash") == configuration_hash(raw)
+                and data.get("configuration_hash") == configuration_hash(raw, root)
                 and data.get("list_id") == self.settings.get("list_id")
                 and isinstance(data.get("verified_at"), (int, float))
                 and 0 <= time.time() - data["verified_at"] < 30 * 86400

@@ -82,7 +82,7 @@ async def main():
             with path.open("w") as out:
                 json.dump(
                     {
-                        "configuration_hash": configuration_hash(saved_configuration),
+                        "configuration_hash": configuration_hash(saved_configuration, path.parent),
                         "sdk_version": "1.1.2",
                         "list_id": list_id,
                         "verified_at": time.time(),

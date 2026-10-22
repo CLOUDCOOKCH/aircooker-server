@@ -314,7 +314,7 @@ def test_corrupt_or_expired_report_fails_closed(tmp_path):
                 "sdk_version": "1.1.2",
                 "list_id": lid,
                 "passed": True,
-                "configuration_hash": configuration_hash(raw),
+                "configuration_hash": configuration_hash(raw, tmp_path / "config"),
                 "verified_at": "bad",
             }
         ),
@@ -323,7 +323,7 @@ def test_corrupt_or_expired_report_fails_closed(tmp_path):
                 "sdk_version": "1.1.2",
                 "list_id": lid,
                 "passed": True,
-                "configuration_hash": configuration_hash(raw),
+                "configuration_hash": configuration_hash(raw, tmp_path / "config"),
                 "verified_at": time.time() - 31 * 86400,
             }
         ),
@@ -367,3 +367,23 @@ def test_verification_rejects_unselected_list_and_limits_explicit_retries(tmp_pa
             sql.execute("UPDATE background_job SET state='failed' WHERE dedupe_key='bring.verify'")
     with pytest.raises(DomainError, match="bring_verification_rate_limited"):
         prepare(db, lid)
+
+
+def test_copied_capability_evidence_cannot_authorize_another_installation(tmp_path):
+    first = Database(tmp_path / "first")
+    second = Database(tmp_path / "second")
+    lid = configure(first)
+    raw = SecretVault(first.root / "config").load("bring")
+    SecretVault(second.root / "config").save("bring", raw)
+    report = {
+        "sdk_version": "1.1.2",
+        "list_id": lid,
+        "passed": True,
+        "verified_at": time.time(),
+        "configuration_hash": configuration_hash(raw, first.root / "config"),
+    }
+    for database in [first, second]:
+        (database.root / "config/bring-compatibility.json").write_text(json.dumps(report))
+        connector = UnofficialBringConnector(database.root / "config")
+        assert connector.capabilities.uuid_create is (database is first)
+        connector.runner.close()
