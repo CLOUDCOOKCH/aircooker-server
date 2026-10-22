@@ -54,5 +54,16 @@
     "Fresh native Docker builds/scans are exercised by GitHub CI",
     "Independent native contract pin unchanged",
     "No container release published by this source merge"
+  ],
+  "github_attempts": [
+    {
+      "run_id": 39719240298,
+      "source": "9d3b7fc77be721c165bf230e97ae2018dce6a7b7",
+      "conclusion": "failure",
+      "passed": "Backend/Docker runtime checks and security scans on AMD64/ARM64, plus PWA core",
+      "failed": "Console browser assertion during asynchronous AI profile loading",
+      "correction": "Disable provider fields and submit while profiles load; delayed real-request regression confirms edits/save begin only after loading finishes",
+      "local_console_regression": "passed"
+    }
   ]
 }

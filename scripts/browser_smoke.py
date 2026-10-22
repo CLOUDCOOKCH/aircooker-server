@@ -219,7 +219,20 @@ def main():
                 page.locator('[data-page-link="ai"]').click()
                 ai = page.locator("#ai-form")
                 ai.locator('[name="enabled"]').check()
+                # Hold a real profile request to prove that a late response cannot
+                # overwrite edits or race form submission during provider changes.
+                profile_requests = []
+                profile_url = "**/api/v1/admin/ai/providers"
+                page.route(profile_url, lambda route: profile_requests.append(route))
                 ai.locator('[name="provider"]').select_option("openai-compatible")
+                expect(ai).to_have_attribute("aria-busy", "true")
+                expect(ai.locator('[name="model"]')).to_be_disabled()
+                expect(ai.locator('[name="base_url"]')).to_be_disabled()
+                expect(ai.locator('button[type="submit"]')).to_be_disabled()
+                assert len(profile_requests) == 1
+                profile_requests[0].continue_()
+                page.unroute(profile_url)
+                expect(ai).not_to_have_attribute("aria-busy", "true")
                 ai.locator('[name="base_url"]').fill("https://ai.example/v1")
                 ai.locator('[name="model"]').fill("synthetic-model")
                 ai.locator('[name="api_key"]').fill("synthetic browser AI credential")

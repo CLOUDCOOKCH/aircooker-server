@@ -201,8 +201,12 @@ $("password-form").onsubmit=event=>{event.preventDefault();action(event.target,a
   finally{event.target.reset();}
 });};
 field($("ai-form"),"enabled").onchange=aiEnabled;
-field($("ai-form"),"provider").onchange=()=>action($("ai-form"),async()=>{
+field($("ai-form"),"provider").onchange=async()=>{
   const form=$("ai-form"), selected=field(form,"provider").value;
+  if(form.dataset.profileLoading)return;
+  form.dataset.profileLoading="true";form.setAttribute("aria-busy","true");
+  form.querySelectorAll("input,select").forEach(input=>input.disabled=true);
+  try{await action(form,async()=>{
   field(form,"api_key").value="";field(form,"clear_key").checked=false;
   const catalog=await request("/api/v1/admin/ai/providers");
   const profile=catalog.profiles.find(p=>p.provider===selected);
@@ -211,9 +215,13 @@ field($("ai-form"),"provider").onchange=()=>action($("ai-form"),async()=>{
   for(const name of ["structured_output","allow_local_http"])field(form,name).checked=profile[name];
   aiFormats(profile);$("ai-key-status").dataset.i18n=profile.key_configured?"key_saved":"no_key";
   $("ai-key-status").textContent=words[locale][profile.key_configured?"key_saved":"no_key"];
-  aiEnabled();
-});
+  });}finally{
+    delete form.dataset.profileLoading;form.removeAttribute("aria-busy");
+    field(form,"enabled").disabled=false;aiEnabled();
+  }
+};
 $("ai-form").onsubmit=event=>{event.preventDefault();const form=event.target;
+  if(form.dataset.profileLoading)return;
   action(form,async()=>{
     const data={enabled:field(form,"enabled").checked};
     if(data.enabled){
