@@ -1,5 +1,23 @@
 # Mealf preview
 
+## Candidate: readable AI diagnostics
+
+`poc-20261022.10` is prepared for publication; exact-source CI, native image gates and
+published-runtime checks are pending. The connection test reports known provider failures
+as failed 422 configuration validation, preserving redacted JSON through proxies that
+replace 5xx pages. Quotas remain 429; genuine gateway/server errors remain distinct.
+Administration and Recipe ideas show specific English/German recovery and safe codes;
+Gemini model fields explain and validate exact API identifiers. See
+[troubleshooting](RECIPE_IDEAS.md#troubleshooting-gemini-and-failed-requests) and
+[local verification/review](validation/recipe-ideas-errors.md).
+
+Local 445 backend/67 frontend tests, build/types, Ruff, mypy, formatting, OpenAPI drift
+and actual Chromium PWA/admin regressions pass with synthetic provider/proxy doubles.
+No migration, API-schema, native, credential or sync-identity change is required. Keep
+the existing volume, `5152:5152` command/healthcheck and open drafts when updating.
+The user's live AI failure remains unverified; diagnostics are not a claim of successful
+Gemini access or a repaired Cloudflare tunnel.
+
 ## Published preview: PWA UX rework
 
 `poc-20261022.9` is published and verified for **AMD64 and ARM64**.
