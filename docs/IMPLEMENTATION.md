@@ -1,12 +1,18 @@
 # Implementation checklist and evidence
 
-**Shopping navigation, 2026-10-22 — implemented locally:** Shopping list is the sixth
+**Shopping navigation, 2026-10-22 — published and verified in `poc-20261022.6`:** Shopping list is the sixth
 primary PWA destination on desktop/mobile. Existing shortcuts select the same tab.
 English/German labels, keyboard activation, one current destination, 320px target/label
 bounds, manual sync/manual-item preservation and cached offline reopening pass real
 Chromium checks with a synthetic Bring transport. Local validation passes 392 backend
 and 59 frontend tests, build/type/format, Ruff/mypy/OpenAPI and mobile layout checks.
-Exact-source CI, preview publication and physical iPhone checks remain pending.
+All six exact-main-source CI jobs pass at c403651, including Chromium/WebKit and both
+native security gates. Both fresh native preview image gates, public assets/config checks,
+anonymous pull and a published .5-to-.6 same-volume 5152/session/history/PWA/offline
+upgrade check pass. See [exact evidence](validation/github-shopping-navigation-preview.json).
+Physical iPhone/live-service acceptance remains open. An isolated CI-only follow-up for
+native WebKit outage diagnostics is under validation; it does not change this release's
+app/API/storage behavior or suppress the published source's test assertions.
 
 **Recipe photos — published and verified in `poc-20261022.4`:** the original peach fills
 missing/unreadable recipe pictures across the PWA. Public URL imports try source metadata

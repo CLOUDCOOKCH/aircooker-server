@@ -1,13 +1,23 @@
 # Mealf preview
 
-## Shopping navigation candidate
+## Published preview: primary Shopping navigation
 
-`poc-20261022.6` is prepared in source; publication and exact-source CI are pending.
+`poc-20261022.6` is published and verified for **AMD64 and ARM64**.
 Shopping list is a primary sidebar destination and appears as **Shop** / **Einkauf**
 in mobile navigation. Existing Home/Calendar/Settings shortcuts select the same page.
 The manual Bring! action and cached offline requirements are preserved. Local browser
 checks cover keyboard navigation, current-tab state and six non-overlapping 44px targets
 with unbroken German labels at 320px. No API, storage or native changes are required.
+
+All six exact-main-source CI jobs passed at c403651: 392 backend tests per architecture,
+59 frontend tests and Chromium/WebKit flows. Both fresh native image scans/runtime gates,
+six public checksums/config identities and anonymous pull passed. A published .5-to-.6
+same-volume upgrade on internal port 5152 preserved identity/session/history/recipes and
+shopping quantities; real EN/DE phone navigation and cached offline shopping passed.
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261022.6`, retaining the existing volume and
+`5152:5152` command/healthcheck. See [exact evidence](validation/github-shopping-navigation-preview.json)
+and [UI review](validation/shopping-navigation-ui-review.md). Physical iPhone/live Bring!
+acceptance remains open. This is a preview, not production v1.
 
 ## Published preview: Mealf identifiers and administration paths
 

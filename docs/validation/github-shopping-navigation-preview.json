@@ -1,0 +1,207 @@
+{
+  "source_commit": "c40365149e25dd6dae8e7449ee4319c643aeee70",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/7",
+  "ci": {
+    "run_id": 39748521587,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39748521587",
+    "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70",
+    "run_attempt": 4,
+    "conclusion": "success"
+  },
+  "jobs": [
+    {
+      "id": 119733907941,
+      "name": "browser",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    },
+    {
+      "id": 119733909592,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    },
+    {
+      "id": 119733910422,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    },
+    {
+      "id": 119733910485,
+      "name": "pwa-core",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    },
+    {
+      "id": 119733948892,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    },
+    {
+      "id": 119733978958,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success",
+      "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+    }
+  ],
+  "pr_ci": {
+    "run_id": 39746596113,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39746596113",
+    "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a",
+    "run_attempt": 2,
+    "conclusion": "success"
+  },
+  "pr_jobs": [
+    {
+      "id": 119720937670,
+      "name": "browser",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    },
+    {
+      "id": 119720939774,
+      "name": "pwa-core",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    },
+    {
+      "id": 119720940473,
+      "name": "security (ubuntu-24.04-arm)",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    },
+    {
+      "id": 119720978805,
+      "name": "checks (ubuntu-24.04)",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    },
+    {
+      "id": 119720998212,
+      "name": "security (ubuntu-24.04)",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    },
+    {
+      "id": 119721007889,
+      "name": "checks (ubuntu-24.04-arm)",
+      "conclusion": "success",
+      "head_sha": "b7e7c3519782e53ac512b110c8f63ef8095c9e7a"
+    }
+  ],
+  "retry_notes": [
+    "Initial browser attempt timed out with exit124 during timeout300s playwright install --with-deps webkit; Azure Ubuntu package downloads still in progress. Existing Chromium shopping and other flows passed before installer timeout. Retried only failed job without source/assertion changes.",
+    "Initial main browser attempt timed out with exit124 downloading WebKit Ubuntu dependencies from Azure mirror; no WebKit behavior executed in failed attempt. Other five jobs and preceding Chromium flows passed. Retried only failed job on unchanged source/assertions.",
+    "Second main browser attempt passed real WebKit layout/themes, then WebKitGTK emitted same-origin /api/v1/sync/state access-control pageerror during intentional backend outage in existing image-import smoke. Same known prior-release harness flake. Retried only failed job on unchanged source/assertions; no errors suppressed.",
+    "After isolated trusted-HTTPS WebKit offline diagnostic run passed with no window error/unhandled rejection and unchanged functional assertions, retried failed main browser job concurrently with minimal-timing diagnostic capture. No client/test assertions changed on main."
+  ],
+  "recorded_at": "2026-10-22",
+  "status": "Published and verified PWA preview; physical iPhone/live services unverified",
+  "scope": "Shopping list promoted to sixth PWA destination; existing shortcuts select the same current tab, responsive English/German labels, manual Bring sync and cached offline behavior preserved",
+  "backend_tests_per_architecture": 392,
+  "frontend_tests": 59,
+  "publication": {
+    "run_id": 39752506394,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39752506394",
+    "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70",
+    "run_attempt": 1,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 119736281728,
+        "name": "gate",
+        "conclusion": "success",
+        "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+      },
+      {
+        "id": 119736363714,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success",
+        "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+      },
+      {
+        "id": 119736363727,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success",
+        "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+      },
+      {
+        "id": 119737246951,
+        "name": "publish",
+        "conclusion": "success",
+        "head_sha": "c40365149e25dd6dae8e7449ee4319c643aeee70"
+      }
+    ],
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58566569"
+  },
+  "public_release": {
+    "release_id": 420508398,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.6",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.6",
+    "index_digest": "sha256:7a225ca29951c501bf140a6e981363a6b9056147a55c8e149f6fd3297c5d6a75",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "bfc7e10419f6eb25ec1568fce8e7005ba41f2200931e28a4a7b7b1a42856264b",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "4e532d9ac303ec835e32ee241b62fef2f26a479cb980aeaa2b42d3f7139833b0",
+        "size": 186529
+      },
+      "container-security-arm64.json": {
+        "sha256": "df262206f7789fb697b4c07fb885841addf6798428ae32a43baa04e26e9f39c4",
+        "size": 186611
+      },
+      "openapi-v1.json": {
+        "sha256": "87feb2b709afa981c2354bb9f5fa3b6164dfbe88560c1c3884ffb82614f71bbd",
+        "size": 203751
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "cc597c8ddeccb0c8c96a0e3d37a8dd3bbbdf4441f705a8604b9d0b54704ee5ff",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "5568c83e3e1066bc952c1a41fa495d64e825a01bc40833004dcb0c9b7d833aa8",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:43d29d0be0f85dd3b0cae9831d790ca9c57d15a8c73a6a1834af088eeba6aca2",
+        "config": "sha256:260fbe54305b5b972180828c22afe5c631fb0958dd5faea3ae218b90c7c9f4d9",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:4a003392c2f2b683be838ac5a7510373347a39ad4c1f87c9abc281533e33718a",
+        "config": "sha256:fcf6f0bace4adaa61e0fc50e72d5f50e683e0a95a402ab1b508863f318257850",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "published_upgrade_and_pwa": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:7266612ba453d4c9e83c0d59325e1fdc6880bf60ffc41c5947af7493638a5b09",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:7a225ca29951c501bf140a6e981363a6b9056147a55c8e149f6fd3297c5d6a75",
+    "same_volume_5152_upgrade": "passed; instance identity, active session, sync history proof and planned recipe/400 g projection preserved",
+    "published_pwa": "six primary destinations; EN/DE Shopping selection, six >=44px nonoverlapping 320px targets, real cached offline reload and disabled Bring action passed in Chromium",
+    "routes": "/admin/ and assets200, root404, PWA /app/",
+    "scope": "Disposable synthetic volume/containers only; no user deployment accessed, live Bring calls or physical iPhone evidence"
+  },
+  "ui_review": "validation/shopping-navigation-ui-review.md",
+  "integration_limits": [
+    "Synthetic Bring transport in shopping acceptance; no live Bring verification",
+    "Published PWA checks use Chromium and CI WebKit; no physical iPhone acceptance",
+    "No API, database or retained native code changes"
+  ],
+  "ci_followup": {
+    "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/8",
+    "status": "Under validation; not part of this immutable published image",
+    "scope": "Bounded classification of verified native WebKit offline diagnostics; genuine JS errors/rejections remain fatal; 13 unit tests and local 405-test suite pass"
+  }
+}
