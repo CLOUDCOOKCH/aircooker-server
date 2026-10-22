@@ -122,28 +122,26 @@ def main():
                     context.add_init_script("Reflect.deleteProperty(window, 'PushManager')")
                 page = context.new_page()
                 errors = []
+                outage_active = False
+                failed_requests = []
+                page.on(
+                    "requestfailed",
+                    lambda request: failed_requests.append(
+                        {"url": request.url, "outage": outage_active, "failure": request.failure}
+                    ),
+                )
                 page.on(
                     "pageerror",
                     lambda error: print(
                         "Runtime diagnostic:",
-                        json.dumps({"message": error.message, "stack": error.stack}),
-                        flush=True,
-                    ),
-                )
-                page.on(
-                    "console",
-                    lambda message: print(
-                        "Console diagnostic:", message.type, message.text[:600], flush=True
-                    )
-                    if message.type == "error"
-                    else None,
-                )
-                page.on(
-                    "requestfailed",
-                    lambda request: print(
-                        "Transport diagnostic:",
-                        request.url.split("/api/v1/", 1)[-1][:200],
-                        request.failure,
+                        json.dumps(
+                            {
+                                "name": error.name,
+                                "message": error.message,
+                                "stack": error.stack,
+                                "outage": outage_active,
+                            }
+                        ),
                         flush=True,
                     ),
                 )
@@ -175,7 +173,9 @@ def main():
                     assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
 
                 def outage(offline):
-                    nonlocal server
+                    nonlocal server, outage_active
+                    if offline:
+                        outage_active = True
                     if not real_outage:
                         context.set_offline(offline)
                     elif offline:
@@ -183,6 +183,8 @@ def main():
                         assert server.poll() is not None
                     else:
                         server = start_backend()
+                    if not offline:
+                        outage_active = False
 
                 def import_page():
                     page.get_by_role("button", name="Import recipe", exact=True).click()
@@ -324,6 +326,8 @@ def main():
                 page.screenshot(path=str(captures / "image-review-phone-de-dark.png"))
                 # Two extraction jobs were delivered, only one explicitly saved recipe exists.
                 assert len(recipes()) == 1
+                if errors:
+                    print("Failed transport observations:", json.dumps(failed_requests), flush=True)
                 assert errors == [], errors
                 phase("German OCR/phone/axe passed; closing context")
                 context.close()
