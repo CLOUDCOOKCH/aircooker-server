@@ -1,20 +1,22 @@
 # mealf PWA proof of concept
 
-## Next preview candidate
+## Current published preview
 
 `poc-20261022.2` adds optional personal ChatGPT **text** imports through the official
 open-source sign-in flow, a downloadable Windows-friendly loopback helper, encrypted
 session-owned credentials, model selection and explicit review before saving. Follow
-[the connection guide](CHATGPT.md). Publication and exact-image checks must pass before
-this candidate is described as available. Live subscription eligibility/extraction remains
-unverified; automated external responses are synthetic. Existing `5152:5152` installations
+[the connection guide](CHATGPT.md). The [prerelease](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.2)
+is published for AMD64/ARM64. Exact-source CI, Windows helper tests, fresh native scans,
+public assets/pull and the published .1-to-.2 same-volume 5152 upgrade/OCR/restore pass.
+See [publication evidence](validation/github-chatgpt-preview.json). Live subscription
+eligibility/extraction remains unverified; automated external responses are synthetic. Existing `5152:5152` installations
 should update only the image and retain their current volume, command and healthcheck.
 
 This is an installable **development preview**, not the finished product or a stable
 release. The browser app and self-hosted backend run together in one container on
 **linux/amd64** and **linux/arm64**. You do not need a Mac, Xcode or an App Store account.
 
-## Current published preview
+## Previous preview baseline
 
 `poc-20261022.1` includes the merged configurable AI providers, image/PDF inputs,
 Gemini video requests, editable extraction previews, provider settings and operator guides.
@@ -53,7 +55,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.1`. The moving `:preview`
+The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.2`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.

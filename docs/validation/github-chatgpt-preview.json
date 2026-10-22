@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-22",
+  "status": "published and verified preview; live OpenAI acceptance incomplete",
+  "source": "d34d65f742fc4dc69123aef307d1834cc763b23b",
+  "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/3",
+  "scope": "Personal-session-owned ChatGPT text recipe imports through supported OSS OAuth/PKCE loopback helper; encrypted server tokens, account model discovery, explicit consent, durable pinned offline requests, editable preview and Save",
+  "ci": {
+    "run_id": 39729110042,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39729110042",
+    "backend_tests_per_architecture": 349,
+    "frontend_tests": 52,
+    "jobs": [
+      {
+        "id": 119659802085,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      },
+      {
+        "id": 119659802329,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      },
+      {
+        "id": 119659802334,
+        "name": "pwa-core",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      },
+      {
+        "id": 119659802394,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      },
+      {
+        "id": 119659802408,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      },
+      {
+        "id": 119659802409,
+        "name": "browser",
+        "conclusion": "success",
+        "head_sha": "d34d65f742fc4dc69123aef307d1834cc763b23b"
+      }
+    ],
+    "browser": "Real Chromium PWA/helper loopback/signed-token verification/account model/reviewed save/offline reload/Axe; existing Chromium/WebKit layout/theme/photo OCR and administration regressions pass. OpenAI identity/inference and helper HTTPS-origin routing are explicit doubles."
+  },
+  "windows": {
+    "run_id": 39729110078,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39729110078",
+    "source": "d34d65f742fc4dc69123aef307d1834cc763b23b",
+    "jobs": [
+      {
+        "id": 119659801814,
+        "name": "standalone-windows (3.10)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119659801958,
+        "name": "standalone-windows (3.12)",
+        "conclusion": "success"
+      }
+    ],
+    "tests_per_python": 2,
+    "scope": "Standalone standard-library file on Windows Server 2025, Python 3.10.11/3.12.10; real local HTTP callback, PKCE binding, secure origin rejection, transfer fixture and no persisted tokens. Browser launch/OAuth/HTTPS transfer responses are doubles; not a real user sign-in."
+  },
+  "publication": {
+    "run_id": 39729489665,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39729489665",
+    "jobs": [
+      {
+        "id": 119661014608,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 119661057586,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119661058413,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 119661616008,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ],
+    "release_id": 420348719,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261022.2",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261022.2",
+    "index_digest": "sha256:ba4f44eb9cb617ccb4960792ce505daf3a407ad26a0179b8244809f75113f429",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "ce7fd1f24e8506001ceae3caec57dcb98cfdffd3fe731e622b4fe29906bf0352",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "3867717c7a1c331d357371cef33df96af03797748eb111ec2502fa97af95b07a",
+        "size": 186568
+      },
+      "container-security-arm64.json": {
+        "sha256": "764e7d9840546da2e4cf4422a16397763d542c5455dd27b44ca236e115c56f06",
+        "size": 186648
+      },
+      "openapi-v1.json": {
+        "sha256": "65897211782c939a3556ede1f8ca5d0fb73af03f34474f333ee682048f469da5",
+        "size": 196570
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "58b6ed0f9e108825549d340c2d2d064cda79ebc9d8b18ddd3d6062b1dd97897e",
+        "size": 167993
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "37510690ee8e0716348da6f9a2987364d9c11286dc00fe7715b2ca4cb00453d8",
+        "size": 168433
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:931fa61de6b451532bb308666e397a3142d0dc549b93643739fcfcd21f6fd7d1",
+        "config": "sha256:86d23f32523cb5309433753d21850a2223c160cb6a4e495bd5e2ebebf043c570",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:dc9d3a678fb1b7a6f577e0f6e99c13f84e6985a556237b97e3841385959e706a",
+        "config": "sha256:f316983eea9e48396c99b461a456e54c3f23c581a49cb918d599290da67b753e",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed: isolated empty per-command Docker credential configuration; global configuration unchanged",
+    "scanner": "Trivy 0.70.0 unsuppressed HIGH/CRITICAL gate; ImageIDs equal native build logs and public manifests",
+    "attestation_url": "https://github.com/CLOUDCOOKCH/aircooker-server/attestations/58509358"
+  },
+  "post_publication": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:39962f0575cfc7625a82c9c1d24caa7df13c1fb8b0ed666d8ff1985a5ba8cbd5",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:ba4f44eb9cb617ccb4960792ce505daf3a407ad26a0179b8244809f75113f429",
+    "same_volume_5152_upgrade": "passed",
+    "identity_session_sync_proof": "preserved",
+    "offline_mutation_replay": "passed",
+    "ai_configuration_catalog": "present; keys redacted; no live provider invoked",
+    "real_local_ocr": [
+      "en",
+      "de"
+    ],
+    "explicit_preview_no_auto_save": "passed",
+    "old_archive_to_clean_new_install": "passed",
+    "packaged_chatgpt_helper_sha256": "matches source",
+    "personal_chatgpt_status": "disconnected; no bundled credentials",
+    "photo_hash": "preserved",
+    "isolation": "Disposable uniquely named synthetic containers and volumes only; no user deployment accessed"
+  },
+  "ui_review": "docs/validation/chatgpt-ui-review.md",
+  "native": "Retained native repository and pinned API snapshot deliberately unchanged; additive API-v1 paths preserve existing sync protocol. No native connection UI/parity claim.",
+  "limits": [
+    "Live OpenAI registration, plan eligibility, allowance, model discovery and recipe extraction require the user's own sign-in; unverified here.",
+    "Managed environment blocks auth.openai.com/api.openai.com and has no user provider credentials; no bypass attempted.",
+    "Personal adapter accepts supplied recipe text only; photo/PDF/video and fetched URL inputs retain existing household-provider/OCR paths.",
+    "Physical iPhone/Safari/Home Screen/push and dedicated live Bring/pilot acceptance remain open.",
+    "Repository security review and the broader v1 acceptance register remain independent partial/blocked work; container/dependency/secret CI is separate evidence."
+  ],
+  "production_v1_accepted": false
+}

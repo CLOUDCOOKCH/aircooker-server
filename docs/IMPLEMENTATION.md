@@ -1,6 +1,6 @@
 # Implementation checklist and evidence
 
-**Personal ChatGPT imports — implemented; preview validation in progress:** the supported
+**Personal ChatGPT imports — published and verified in `poc-20261022.2`:** the supported
 open-source OAuth/PKCE loopback helper pairs a personal account with one authenticated
 mealf session. Encrypted server credentials, verified signed tokens, account model discovery,
 serialized refresh, explicit per-import background consent and a pinned durable text-only
@@ -8,6 +8,12 @@ request lead to the existing editable preview and Save. No household pooling, br
 storage, unofficial consumer endpoints or paid API fallback is used. Existing household
 providers and local photo OCR remain available. See [setup and limits](CHATGPT.md),
 [architecture](adr/015-personal-chatgpt.md) and [bounded UI review](validation/chatgpt-ui-review.md).
+All six exact-main CI jobs pass at d34d65f: 349 backend tests per architecture, 52 PWA
+tests and real Chromium/WebKit regressions. The standalone helper passes on Windows
+Python 3.10/3.12. Both fresh image gates, six public asset checksums/config identities,
+anonymous pull and the published .1-to-.2 same-volume 5152 upgrade pass. Identity/session/
+recipe/photo/history, offline replay, real EN/DE OCR previews and clean archive/photo restore
+are preserved. See [exact release evidence](validation/github-chatgpt-preview.json).
 Live OpenAI registration/allowance/inference and physical-iPhone checks remain unverified.
 The retained native repository is deliberately unchanged: additive API-v1 routes do not
 alter its existing sync contract; this connection interface is PWA-only for now.

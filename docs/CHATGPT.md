@@ -8,7 +8,7 @@ An eligible plan, available allowance and working outbound HTTPS are still requi
 
 ## Connect from Windows
 
-1. Update your existing mealf container to a preview containing this feature, preserving
+1. Update to `ghcr.io/cloudcookch/mealf-server:poc-20261022.2`, preserving
    its `/data` volume and existing port/command/healthcheck configuration, including
    `5152:5152`. Open the PWA using its valid **HTTPS** address and sign in to your household.
 2. Open **Settings → Your ChatGPT plan**. Confirm that this is your personal account and
@@ -121,9 +121,10 @@ uses the real PWA/server/queue/helper callback, English desktop/German dark phon
 offline queued import replay. OpenAI HTTP responses and the helper HTTPS-origin routing in
 that fixture are explicitly synthetic; no disabled TLS verification is used.
 
-The Windows workflow runs the standalone file without server packages on Python 3.10/3.12.
-Its result must be checked on the exact source before claiming Windows validation. Linux
-unit/browser execution alone is not proof of Windows or physical-iPhone behavior. Live
+The standalone file passes without server packages on Windows Server 2025 with Python
+3.10.11 and 3.12.10. All six source CI jobs and both fresh native image gates pass; the public
+image and .1-to-.2 same-volume 5152 upgrade are verified. See [exact evidence](validation/github-chatgpt-preview.json).
+Windows callback/PKCE fixtures do not verify a real OpenAI browser sign-in. Live
 OpenAI registration, allowance eligibility and extraction require the user's real sign-in
 and are **unverified until recorded separately**. This feature is not production-v1 approval.
 

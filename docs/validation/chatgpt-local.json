@@ -2,7 +2,7 @@
   "schema_version": 1,
   "captured_on": "2026-10-22",
   "feature": "personal ChatGPT text recipe imports",
-  "status": "implemented and locally tested; external/platform publication checks pending",
+  "status": "implemented and locally tested; subsequent exact-source/platform/publication evidence is in github-chatgpt-preview.json",
   "baseline_commit": "c4f9971",
   "local": {
     "backend_tests": 349,
@@ -42,5 +42,6 @@
     "auth.openai.com and api.openai.com restricted by managed environment policy; no external credentials",
     "local source Docker APK download blocked by managed destination policy; native CI image checks required"
   ],
-  "production_v1_accepted": false
+  "production_v1_accepted": false,
+  "subsequent_evidence": "docs/validation/github-chatgpt-preview.json"
 }
