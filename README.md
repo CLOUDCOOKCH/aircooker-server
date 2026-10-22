@@ -12,6 +12,9 @@ Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).
+Optionally connect your personal ChatGPT plan for reviewed recipe-text imports using the
+[Windows-friendly setup helper](docs/CHATGPT.md). Connections belong to an individual
+browser session, not the household. Live subscription eligibility remains unverified.
 
 Self-hosted household meal planning with a primary PWA and a retained native companion.
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.

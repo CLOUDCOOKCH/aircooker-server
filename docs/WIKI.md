@@ -16,6 +16,7 @@ repository does not publish the separate Wiki or a container release.
 | [Backup and recovery](wiki/Backup-and-Recovery.md) | Portable exports, SQLite snapshots and complete volume recovery |
 | [Upgrades and maintenance](wiki/Upgrades-and-Maintenance.md) | Image updates, rollback, health checks and retention |
 | [AI recipe import](wiki/AI-Recipe-Import.md) | Providers, credentials, supported formats and reviewed imports |
+| [Personal ChatGPT connection](CHATGPT.md) | Windows helper, personal plan usage and reviewed text imports |
 | [Bring! integration](wiki/Bring-Integration.md) | Connection, list selection, compatibility probe and shopping behaviour |
 | [Meal reminders](wiki/Meal-Reminders.md) | Optional Web Push, device setup, privacy and delivery limits |
 | [Troubleshooting](wiki/Troubleshooting.md) | Installation, login, tunnel, import and sync problems |

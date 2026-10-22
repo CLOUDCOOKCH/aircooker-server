@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "captured_on": "2026-10-22",
+  "feature": "personal ChatGPT text recipe imports",
+  "status": "implemented and locally tested; external/platform publication checks pending",
+  "baseline_commit": "c4f9971",
+  "local": {
+    "backend_tests": 349,
+    "backend_seconds": 51.32,
+    "frontend_tests": 52,
+    "standalone_helper_tests": 2,
+    "checks": [
+      "Ruff check/format (100 files)",
+      "mypy (45 source files, repository CI ignore-missing-imports setting)",
+      "OpenAPI drift",
+      "PWA TypeScript/Prettier/production build",
+      "original/derived brand bytes",
+      "41 locked runtime wheel licence inventory",
+      "real Chromium PWA/helper callback/model choice/reviewed save/offline queue replay/EN desktop/DE dark phone/Axe"
+    ],
+    "logs": [
+      "build/chatgpt-tests.log",
+      "build/chatgpt-tests.xml",
+      "build/chatgpt-web-tests.log",
+      "build/chatgpt-web-build.log",
+      "build/chatgpt-browser.log"
+    ]
+  },
+  "ui_review": "docs/validation/chatgpt-ui-review.md",
+  "helper_sha256": "bb54f9ad5bdac34395a36d7148738b27e343ce0a5e4f57a5bf035bb0666f11bb",
+  "synthetic": [
+    "OpenAI OAuth identity/token/refresh/revocation/models/inference HTTP responses",
+    "helper HTTPS-origin routing to disposable local backend in browser fixture"
+  ],
+  "unverified": [
+    "live OpenAI registration, subscription eligibility, allowance and inference",
+    "physical iPhone/Safari",
+    "Windows execution until exact-source workflow passes",
+    "native iOS UI/contract pin intentionally unchanged"
+  ],
+  "blocked_locally": [
+    "auth.openai.com and api.openai.com restricted by managed environment policy; no external credentials",
+    "local source Docker APK download blocked by managed destination policy; native CI image checks required"
+  ],
+  "production_v1_accepted": false
+}

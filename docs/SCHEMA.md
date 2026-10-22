@@ -1,5 +1,13 @@
 # Database schema and invariants
 
+Migration 012 adds `chatgpt_host` (stable non-secret self-hosted runtime identity),
+`chatgpt_connection` (one per session, encrypted credentials and verified registration),
+`chatgpt_pairing` (hashed expiring one-use capability), and `chatgpt_import` (minimal
+session/connection ownership receipt). Credential rotation is serialized and atomically
+compared/replaced; late network responses cannot undo disconnection. The receipt deliberately
+outlives session cleanup to prevent cross-session import replay. No released migration or
+existing sync history is rewritten. See [ADR 015](adr/015-personal-chatgpt.md).
+
 Schema is executable in `src/aircooker/migrations`. Migrations run once in a locked startup
 transaction, tracked by filename. Released migrations must never be edited in place.
 

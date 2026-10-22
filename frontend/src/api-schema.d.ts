@@ -589,6 +589,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/integrations/chatgpt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Status */
+        get: operations["status_api_v1_integrations_chatgpt_get"];
+        /** Select */
+        put: operations["select_api_v1_integrations_chatgpt_put"];
+        post?: never;
+        /** Disconnect */
+        delete: operations["disconnect_api_v1_integrations_chatgpt_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/integrations/chatgpt/helper": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Helper */
+        get: operations["helper_api_v1_integrations_chatgpt_helper_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/integrations/chatgpt/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Models */
+        get: operations["models_api_v1_integrations_chatgpt_models_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/integrations/chatgpt/pairing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Prepare */
+        post: operations["prepare_api_v1_integrations_chatgpt_pairing_post"];
+        /** Cancel */
+        delete: operations["cancel_api_v1_integrations_chatgpt_pairing_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/integrations/chatgpt/pairing/claim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Claim */
+        post: operations["claim_api_v1_integrations_chatgpt_pairing_claim_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/integrations/chatgpt/pairing/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete */
+        post: operations["complete_api_v1_integrations_chatgpt_pairing_complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/leftovers": {
         parameters: {
             query?: never;
@@ -1373,6 +1478,135 @@ export interface components {
             /** Updated At */
             updated_at: string;
         };
+        /** ChatGPTBootstrap */
+        ChatGPTBootstrap: {
+            /** Client Id */
+            client_id: string;
+            /** Host Id */
+            host_id: string;
+            /** Id Token Hint */
+            id_token_hint?: string | null;
+            /** Nonce */
+            nonce: string;
+        };
+        /** ChatGPTClaim */
+        ChatGPTClaim: {
+            /**
+             * Code
+             * Format: password
+             */
+            code: string;
+        };
+        /** ChatGPTComplete */
+        ChatGPTComplete: {
+            /** Client Id */
+            client_id: string;
+            /**
+             * Code
+             * Format: password
+             */
+            code: string;
+            tokens: components["schemas"]["ChatGPTTokenSet"];
+        };
+        /** ChatGPTDisconnect */
+        ChatGPTDisconnect: {
+            /** Remote Revocation Confirmed */
+            remote_revocation_confirmed: boolean;
+        };
+        /** ChatGPTModel */
+        ChatGPTModel: {
+            /** Display Name */
+            display_name: string;
+            /** Slug */
+            slug: string;
+        };
+        /** ChatGPTModelCatalog */
+        ChatGPTModelCatalog: {
+            /** Models */
+            models: components["schemas"]["ChatGPTModel"][];
+        };
+        /** ChatGPTPairRequest */
+        ChatGPTPairRequest: {
+            /**
+             * Personal Use Confirmed
+             * @constant
+             */
+            personal_use_confirmed: true;
+        };
+        /** ChatGPTPairing */
+        ChatGPTPairing: {
+            /** Code */
+            code: string;
+            /** Expires At */
+            expires_at: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
+        /** ChatGPTSelection */
+        ChatGPTSelection: {
+            /**
+             * Connection Id
+             * Format: uuid
+             */
+            connection_id: string;
+            /** Model */
+            model: string;
+        };
+        /** ChatGPTStatus */
+        ChatGPTStatus: {
+            /** Account Label */
+            account_label?: string | null;
+            /** Connection Id */
+            connection_id?: string | null;
+            /** Error Code */
+            error_code?: string | null;
+            /**
+             * Input Formats
+             * @default [
+             *       "text"
+             *     ]
+             */
+            input_formats: "text"[];
+            /** Model */
+            model?: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "disconnected" | "connected" | "reconnect_required";
+        };
+        /** ChatGPTTokenSet */
+        ChatGPTTokenSet: {
+            /**
+             * Access Token
+             * Format: password
+             */
+            access_token: string;
+            /**
+             * Earliest Refresh At
+             * @default 0
+             */
+            earliest_refresh_at: number;
+            /** Expires In */
+            expires_in: number;
+            /**
+             * Id Token
+             * Format: password
+             */
+            id_token: string;
+            /**
+             * Refresh Token
+             * Format: password
+             */
+            refresh_token: string;
+            /** Scope */
+            scope: string;
+            /** Token Type */
+            token_type: string;
+        };
         /** Credentials */
         Credentials: {
             /**
@@ -1593,12 +1827,25 @@ export interface components {
         };
         /** ImportRequest */
         ImportRequest: {
+            /**
+             * Ai Account
+             * @default household
+             * @enum {string}
+             */
+            ai_account: "household" | "chatgpt";
             /** Ai Destination */
             ai_destination?: [
                 string,
                 string,
                 string
             ] | null;
+            /** Chatgpt Connection Id */
+            chatgpt_connection_id?: string | null;
+            /**
+             * Consent Chatgpt Background
+             * @default false
+             */
+            consent_chatgpt_background: boolean;
             /**
              * Consent External Ai
              * @default false
@@ -3722,6 +3969,234 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    status_api_v1_integrations_chatgpt_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTStatus"];
+                };
+            };
+        };
+    };
+    select_api_v1_integrations_chatgpt_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatGPTSelection"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    disconnect_api_v1_integrations_chatgpt_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTDisconnect"];
+                };
+            };
+        };
+    };
+    helper_api_v1_integrations_chatgpt_helper_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    models_api_v1_integrations_chatgpt_models_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTModelCatalog"];
+                };
+            };
+        };
+    };
+    prepare_api_v1_integrations_chatgpt_pairing_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatGPTPairRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTPairing"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_api_v1_integrations_chatgpt_pairing_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    claim_api_v1_integrations_chatgpt_pairing_claim_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatGPTClaim"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTBootstrap"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_api_v1_integrations_chatgpt_pairing_complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatGPTComplete"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatGPTStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

@@ -22,7 +22,11 @@ export type Queued = {
 export type Photo = { id: string; blob: Blob; pending: boolean; error?: string };
 export type ImportTask = {
   id: string;
-  body: components['schemas']['ImportRequest'];
+  // Old durable jobs predate personal AI fields; omitted values keep household defaults.
+  body: Omit<components['schemas']['ImportRequest'], 'ai_account' | 'consent_chatgpt_background'> &
+    Partial<
+      Pick<components['schemas']['ImportRequest'], 'ai_account' | 'consent_chatgpt_background'>
+    >;
   state:
     | 'queued'
     | 'processing'

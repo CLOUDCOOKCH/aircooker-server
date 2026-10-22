@@ -1,4 +1,50 @@
 export const en = {
+  chatgptTitle: 'Your ChatGPT plan',
+  chatgptHint:
+    'Connect your personal ChatGPT account for recipe-text imports. Your household login stays the same. This connection belongs only to this signed-in browser session.',
+  chatgptConnected: 'Connected to your ChatGPT plan',
+  chatgptReconnect: 'Reconnect your ChatGPT account',
+  chatgptConnect: 'Connect ChatGPT',
+  chatgptReconnectAction: 'Reconnect ChatGPT',
+  chatgptDisconnect: 'Disconnect ChatGPT',
+  chatgptPersonalConsent:
+    'This is my own account and browser session. Other household members must connect their own account.',
+  chatgptModel: 'ChatGPT model',
+  chatgptChooseModel: 'Choose a model before importing recipe text.',
+  chatgptLoadModels: 'Choose an available model',
+  chatgptNoModels:
+    'No models are available for this account. Check access in ChatGPT or use another AI provider.',
+  chatgptDownload: 'Download the mealf connector.',
+  chatgptPython:
+    'Use a computer with Python 3.10 or newer; Windows works. Run it on your computer, not in the NAS terminal.',
+  chatgptRunHelper: 'Open a terminal in the download folder and run:',
+  chatgptPasteCode:
+    'Paste the code below when asked, sign in at OpenAI, then return here to choose a model.',
+  chatgptPairCode: 'One-use pairing code',
+  chatgptPairPrivacy:
+    'Expires after 10 minutes. Keep it private; it authorizes connecting an account to this session.',
+  chatgptCopy: 'Copy code',
+  chatgptCopied: 'Code copied. Paste it only into your local mealf connector.',
+  chatgptPairExpired: 'The code expired. Prepare a new connection to try again.',
+  chatgptWaiting: 'Waiting for your computer to finish sign-in…',
+  chatgptLimits:
+    'An eligible ChatGPT plan and remaining allowance are required. This preview accepts recipe text only and never switches to paid API billing automatically.',
+  chatgptUsage: 'Manage usage in ChatGPT',
+  chatgptRevocationUnknown:
+    'Disconnected in mealf. Remote revocation was not confirmed; also disconnect mealf in ChatGPT Settings.',
+  chatgptError:
+    'Could not finish this action. Check the connection and account access, then retry or reconnect. Your recipe text is kept.',
+  chatgptImportAccount: 'AI account for this import',
+  chatgptHousehold: 'Household AI provider',
+  chatgptPersonal: 'My personal ChatGPT plan',
+  chatgptTextOnly:
+    'Paste recipe text for your personal ChatGPT plan. Photo, file and video inputs are not included in this first version.',
+  chatgptImportConsent:
+    'Send this recipe text to my ChatGPT account and allow my server to finish this import after I close the app. Use my own plan allowance only.',
+  chatgptConnectionError:
+    'Your personal ChatGPT connection or model changed. Reconnect in Settings if needed, then review this source and approve a new import.',
+  chatgptAllowanceError:
+    'Your ChatGPT allowance is unavailable or exhausted. Check ChatGPT usage, wait if needed, then review and retry. No other provider was charged.',
   importMethod: 'Import from',
   photoOrScreenshot: 'Photo or screenshot',
   linkOrText: 'Link or text',
@@ -451,6 +497,52 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  chatgptTitle: 'Dein ChatGPT-Abo',
+  chatgptHint:
+    'Verbinde dein persönliches ChatGPT-Konto für Rezepttexte. Deine Haushaltsanmeldung bleibt gleich. Die Verbindung gehört nur zu dieser angemeldeten Browsersitzung.',
+  chatgptConnected: 'Mit deinem ChatGPT-Abo verbunden',
+  chatgptReconnect: 'ChatGPT-Konto erneut verbinden',
+  chatgptConnect: 'ChatGPT verbinden',
+  chatgptReconnectAction: 'ChatGPT erneut verbinden',
+  chatgptDisconnect: 'ChatGPT trennen',
+  chatgptPersonalConsent:
+    'Das ist mein eigenes Konto und meine Browsersitzung. Andere Haushaltsmitglieder müssen ihr eigenes Konto verbinden.',
+  chatgptModel: 'ChatGPT-Modell',
+  chatgptChooseModel: 'Wähle vor dem Rezeptimport ein Modell.',
+  chatgptLoadModels: 'Verfügbares Modell wählen',
+  chatgptNoModels:
+    'Für dieses Konto sind keine Modelle verfügbar. Prüfe den Zugriff in ChatGPT oder nutze einen anderen KI-Anbieter.',
+  chatgptDownload: 'mealf-Verbindungshelfer herunterladen.',
+  chatgptPython:
+    'Nutze einen Computer mit Python ab 3.10; Windows funktioniert. Starte ihn auf deinem Computer, nicht im NAS-Terminal.',
+  chatgptRunHelper: 'Öffne ein Terminal im Downloadordner und starte:',
+  chatgptPasteCode:
+    'Füge auf Nachfrage den folgenden Code ein, melde dich bei OpenAI an und wähle anschließend hier ein Modell.',
+  chatgptPairCode: 'Einmaliger Kopplungscode',
+  chatgptPairPrivacy:
+    'Gilt 10 Minuten. Halte ihn geheim; er erlaubt die Kontoverbindung mit dieser Sitzung.',
+  chatgptCopy: 'Code kopieren',
+  chatgptCopied: 'Code kopiert. Füge ihn nur in deinen lokalen mealf-Verbindungshelfer ein.',
+  chatgptPairExpired: 'Der Code ist abgelaufen. Bereite eine neue Verbindung vor.',
+  chatgptWaiting: 'Warte auf die Anmeldung auf deinem Computer…',
+  chatgptLimits:
+    'Ein berechtigtes ChatGPT-Abo und verfügbares Kontingent sind nötig. Diese Vorschau unterstützt nur Rezepttexte und wechselt niemals automatisch zur kostenpflichtigen API.',
+  chatgptUsage: 'Nutzung in ChatGPT verwalten',
+  chatgptRevocationUnknown:
+    'In mealf getrennt. Der Widerruf bei OpenAI ist nicht bestätigt; trenne mealf auch in den ChatGPT-Einstellungen.',
+  chatgptError:
+    'Die Aktion konnte nicht abgeschlossen werden. Prüfe Verbindung und Kontozugriff und versuche es erneut. Dein Rezepttext bleibt erhalten.',
+  chatgptImportAccount: 'KI-Konto für diesen Import',
+  chatgptHousehold: 'KI-Anbieter des Haushalts',
+  chatgptPersonal: 'Mein persönliches ChatGPT-Abo',
+  chatgptTextOnly:
+    'Füge Rezepttext für dein persönliches ChatGPT-Abo ein. Fotos, Dateien und Videos sind in dieser ersten Version nicht enthalten.',
+  chatgptImportConsent:
+    'Sende diesen Rezepttext an mein ChatGPT-Konto. Mein Server darf diesen Import nach dem Schließen der App abschließen. Nutze nur mein eigenes Abo-Kontingent.',
+  chatgptConnectionError:
+    'Deine persönliche ChatGPT-Verbindung oder das Modell hat sich geändert. Verbinde das Konto bei Bedarf in den Einstellungen erneut und prüfe und bestätige einen neuen Import.',
+  chatgptAllowanceError:
+    'Dein ChatGPT-Kontingent ist nicht verfügbar oder aufgebraucht. Prüfe die Nutzung in ChatGPT, warte bei Bedarf und prüfe und starte den Import erneut. Kein anderer Anbieter wurde belastet.',
   importMethod: 'Importquelle',
   photoOrScreenshot: 'Foto oder Screenshot',
   linkOrText: 'Link oder Text',

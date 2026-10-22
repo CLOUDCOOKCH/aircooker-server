@@ -1,5 +1,15 @@
 # mealf PWA proof of concept
 
+## Next preview candidate
+
+`poc-20261022.2` adds optional personal ChatGPT **text** imports through the official
+open-source sign-in flow, a downloadable Windows-friendly loopback helper, encrypted
+session-owned credentials, model selection and explicit review before saving. Follow
+[the connection guide](CHATGPT.md). Publication and exact-image checks must pass before
+this candidate is described as available. Live subscription eligibility/extraction remains
+unverified; automated external responses are synthetic. Existing `5152:5152` installations
+should update only the image and retain their current volume, command and healthcheck.
+
 This is an installable **development preview**, not the finished product or a stable
 release. The browser app and self-hosted backend run together in one container on
 **linux/amd64** and **linux/arm64**. You do not need a Mac, Xcode or an App Store account.

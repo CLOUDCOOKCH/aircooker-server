@@ -123,6 +123,10 @@
     "license_expression": "MIT",
     "version": "2.46.4"
   },
+  "pyjwt": {
+    "license_expression": "MIT",
+    "version": "2.15.1"
+  },
   "python-multipart": {
     "license_expression": "Apache-2.0",
     "version": "0.0.32"

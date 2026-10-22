@@ -1507,6 +1507,35 @@ a.settings-row:hover {
   border-radius: 12px;
   margin-top: 16px;
 }
+
+.chatgpt-connection-state {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow-wrap: anywhere;
+}
+.chatgpt-settings button,
+.chatgpt-model label,
+.chatgpt-pairing label {
+  margin-block: 0.65rem;
+}
+.chatgpt-settings .danger {
+  display: block;
+}
+.chatgpt-pairing ol {
+  padding-inline-start: 1.4rem;
+}
+.chatgpt-pairing li {
+  margin-block: 0.75rem;
+}
+.chatgpt-command {
+  display: block;
+  margin-block: 0.5rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  user-select: text;
+  -webkit-user-select: text;
+}
 .recovery-item > strong {
   font-size: 0.875rem;
 }
