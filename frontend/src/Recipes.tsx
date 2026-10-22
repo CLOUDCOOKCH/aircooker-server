@@ -151,6 +151,18 @@ export function RecipeDetail({
           {t('addMeal')}
         </button>
       </div>
+      {recipe.times && (
+        <div className="recipe-times">
+          {(['prepMinutes', 'cookMinutes', 'totalMinutes'] as const).map(
+            (name) =>
+              recipe.times?.[name] != null && (
+                <p key={name}>
+                  <strong>{t(name)}</strong>: {recipe.times[name]}
+                </p>
+              ),
+          )}
+        </div>
+      )}
       {recipe.rating && (
         <p className="rating">
           <Star size={16} fill="currentColor" /> {recipe.rating} / 5
@@ -428,6 +440,8 @@ export function RecipeEditor({
           value.nutritionRows.length
       )
         throw new Error('invalid_nutrition');
+      if (task && (!recipe.ingredients.length || !recipe.steps.length))
+        throw new Error('incomplete_recipe');
       const normal = payload('recipe', {
         ...recipe,
         nutrition:
@@ -461,7 +475,9 @@ export function RecipeEditor({
   const reorder = (from: number, to: number) => {
     const steps = [...recipe.steps];
     [steps[from], steps[to]] = [steps[to], steps[from]];
-    patch({ steps });
+    const details = recipe.instruction_details ? [...recipe.instruction_details] : [];
+    if (details.length) [details[from], details[to]] = [details[to], details[from]];
+    patch({ steps, instruction_details: details });
   };
   return (
     <>
@@ -472,6 +488,11 @@ export function RecipeEditor({
       {task && (
         <div className="info-note">
           <p>{t('reviewHint')}</p>
+          {task.extraction?.issues.map((issue, index) => (
+            <p key={index} className={issue.severity === 'error' ? 'error-note' : 'muted'}>
+              {issue.message}
+            </p>
+          ))}
           {task.warnings?.map((warning) => (
             <p key={warning} className="muted">
               {t(
@@ -484,6 +505,7 @@ export function RecipeEditor({
                     image_import_not_yet_available: 'warningImage',
                     ingredient_entries_omitted: 'warningOmitted',
                     ingredient_text_truncated: 'warningTruncated',
+                    video_first_ten_minutes: 'warningVideoLimit',
                   } as const
                 )[warning as 'review_servings'] ?? 'warningUnknown',
               )}
@@ -504,6 +526,7 @@ export function RecipeEditor({
             <input
               required
               maxLength={200}
+              aria-invalid={task?.extraction?.recipe.title === null || undefined}
               value={recipe.title}
               onChange={(e) => patch({ title: e.target.value })}
             />
@@ -527,6 +550,7 @@ export function RecipeEditor({
                 min="0.01"
                 max="1000000"
                 step="any"
+                aria-invalid={task?.extraction?.recipe.servings === null || undefined}
                 value={recipe.servings}
                 onChange={(e) => patch({ servings: e.target.value })}
               />
@@ -544,6 +568,46 @@ export function RecipeEditor({
                   </option>
                 ))}
               </select>
+            </label>
+          </div>
+          <div className="form-row">
+            {(['prepMinutes', 'cookMinutes', 'totalMinutes'] as const).map((name) => (
+              <label key={name}>
+                {t(name)}
+                <input
+                  type="number"
+                  min={0}
+                  max={525600}
+                  step={1}
+                  value={recipe.times?.[name] ?? ''}
+                  onChange={(event) =>
+                    patch({
+                      times: {
+                        ...recipe.times,
+                        [name]: event.target.value === '' ? null : Number(event.target.value),
+                      },
+                    })
+                  }
+                />
+              </label>
+            ))}
+          </div>
+          <div className="form-row">
+            <label>
+              {t('recipeCategory')}
+              <input
+                maxLength={5000}
+                value={recipe.category ?? ''}
+                onChange={(event) => patch({ category: event.target.value || null })}
+              />
+            </label>
+            <label>
+              {t('recipeCuisine')}
+              <input
+                maxLength={5000}
+                value={recipe.cuisine ?? ''}
+                onChange={(event) => patch({ cuisine: event.target.value || null })}
+              />
             </label>
           </div>
           <label>
@@ -696,14 +760,30 @@ export function RecipeEditor({
                   </IconButton>
                   <IconButton
                     label={`${t('remove')} ${t('step')} ${i + 1}`}
-                    onClick={() => patch({ steps: recipe.steps.filter((_, index) => i !== index) })}
+                    onClick={() =>
+                      patch({
+                        steps: recipe.steps.filter((_, index) => i !== index),
+                        instruction_details: recipe.instruction_details?.filter(
+                          (_, index) => i !== index,
+                        ),
+                      })
+                    }
                   >
                     <X size={17} />
                   </IconButton>
                 </div>
               </div>
             ))}
-            <AddButton onClick={() => patch({ steps: [...recipe.steps, ''] })}>
+            <AddButton
+              onClick={() =>
+                patch({
+                  steps: [...recipe.steps, ''],
+                  instruction_details: recipe.instruction_details?.length
+                    ? [...recipe.instruction_details, {}]
+                    : [],
+                })
+              }
+            >
               {t('addStep')}
             </AddButton>
           </section>

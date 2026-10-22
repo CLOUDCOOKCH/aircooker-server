@@ -1,6 +1,33 @@
 {
   "components": {
     "schemas": {
+      "AIProviderCatalog": {
+        "additionalProperties": false,
+        "properties": {
+          "default_provider": {
+            "title": "Default Provider",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "profiles": {
+            "items": {
+              "$ref": "#/components/schemas/AISettingsStatus"
+            },
+            "title": "Profiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "enabled",
+          "default_provider",
+          "profiles"
+        ],
+        "title": "AIProviderCatalog",
+        "type": "object"
+      },
       "AISettings": {
         "additionalProperties": false,
         "properties": {
@@ -23,9 +50,8 @@
             "writeOnly": true
           },
           "base_url": {
-            "default": "https://api.openai.com/v1",
+            "default": "",
             "maxLength": 2048,
-            "minLength": 1,
             "title": "Base Url",
             "type": "string"
           },
@@ -33,6 +59,24 @@
             "default": true,
             "title": "Enabled",
             "type": "boolean"
+          },
+          "input_formats": {
+            "default": [
+              "text"
+            ],
+            "items": {
+              "enum": [
+                "text",
+                "image",
+                "pdf",
+                "video",
+                "youtube"
+              ],
+              "type": "string"
+            },
+            "maxItems": 5,
+            "title": "Input Formats",
+            "type": "array"
           },
           "max_content": {
             "default": 50000,
@@ -48,9 +92,11 @@
             "type": "string"
           },
           "provider": {
-            "default": "openai",
+            "default": "gemini",
             "enum": [
+              "gemini",
               "openai",
+              "openrouter",
               "openai-compatible",
               "anthropic",
               "ollama",
@@ -90,6 +136,13 @@
             "title": "Allow Local Http",
             "type": "boolean"
           },
+          "available_formats": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Available Formats",
+            "type": "array"
+          },
           "base_url": {
             "anyOf": [
               {
@@ -120,6 +173,13 @@
             "default": false,
             "title": "Image Extraction",
             "type": "boolean"
+          },
+          "input_formats": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Input Formats",
+            "type": "array"
           },
           "key_configured": {
             "default": false,
@@ -156,6 +216,11 @@
             "title": "Origin",
             "type": "string"
           },
+          "pdf_extraction": {
+            "default": false,
+            "title": "Pdf Extraction",
+            "type": "boolean"
+          },
           "provider": {
             "anyOf": [
               {
@@ -186,6 +251,11 @@
             "default": 30,
             "title": "Timeout",
             "type": "integer"
+          },
+          "video_extraction": {
+            "default": false,
+            "title": "Video Extraction",
+            "type": "boolean"
           }
         },
         "required": [
@@ -264,6 +334,20 @@
           "recipes"
         ],
         "title": "AdministrationStatus",
+        "type": "object"
+      },
+      "Body_upload_import_source_api_v1_import_sources__source_id__put": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_import_source_api_v1_import_sources__source_id__put",
         "type": "object"
       },
       "Body_upload_photo_api_v1_media__image_id__put": {
@@ -523,6 +607,325 @@
         "title": "ExportMedia",
         "type": "object"
       },
+      "ExtractedIngredient": {
+        "additionalProperties": false,
+        "properties": {
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "optional": {
+            "title": "Optional",
+            "type": "boolean"
+          },
+          "originalText": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Originaltext"
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preparation"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/ExtractedQuantity"
+          }
+        },
+        "required": [
+          "name",
+          "quantity",
+          "preparation",
+          "notes",
+          "optional",
+          "group",
+          "originalText"
+        ],
+        "title": "ExtractedIngredient",
+        "type": "object"
+      },
+      "ExtractedInstruction": {
+        "additionalProperties": false,
+        "properties": {
+          "durationMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Durationminutes"
+          },
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Temperature"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "group",
+          "durationMinutes",
+          "temperature"
+        ],
+        "title": "ExtractedInstruction",
+        "type": "object"
+      },
+      "ExtractedQuantity": {
+        "additionalProperties": false,
+        "properties": {
+          "maxValue": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 1000000.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxvalue"
+          },
+          "rawText": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rawtext"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 30,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 1000000.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value",
+          "maxValue",
+          "unit",
+          "rawText"
+        ],
+        "title": "ExtractedQuantity",
+        "type": "object"
+      },
+      "ExtractedTimes": {
+        "additionalProperties": false,
+        "properties": {
+          "cookMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cookminutes"
+          },
+          "prepMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prepminutes"
+          },
+          "totalMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totalminutes"
+          }
+        },
+        "required": [
+          "prepMinutes",
+          "cookMinutes",
+          "totalMinutes"
+        ],
+        "title": "ExtractedTimes",
+        "type": "object"
+      },
+      "ExtractionIssue": {
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Message",
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 500,
+            "pattern": "^(?:/(?:[^~]|~[01])*)?$",
+            "title": "Path",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "warning",
+              "error"
+            ],
+            "title": "Severity",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "message",
+          "severity"
+        ],
+        "title": "ExtractionIssue",
+        "type": "object"
+      },
+      "ExtractionResult": {
+        "additionalProperties": false,
+        "properties": {
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractionIssue"
+            },
+            "maxItems": 100,
+            "title": "Issues",
+            "type": "array"
+          },
+          "recipe": {
+            "$ref": "#/components/schemas/RecipeContent"
+          },
+          "schemaVersion": {
+            "const": "1.0.0",
+            "title": "Schemaversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "recipe",
+          "issues"
+        ],
+        "title": "ExtractionResult",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -758,6 +1161,36 @@
       "ImportRequest": {
         "additionalProperties": false,
         "properties": {
+          "ai_destination": {
+            "anyOf": [
+              {
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "maxLength": 2048,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  {
+                    "maxLength": 2048,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  {
+                    "maxLength": 2048,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ai Destination"
+          },
           "consent_external_ai": {
             "default": false,
             "title": "Consent External Ai",
@@ -779,6 +1212,18 @@
             "format": "uuid",
             "title": "Request Id",
             "type": "string"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
           },
           "source_url": {
             "anyOf": [
@@ -813,9 +1258,48 @@
         "title": "ImportRequest",
         "type": "object"
       },
+      "ImportSourceInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "byte_count": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 8388608.0,
+            "title": "Byte Count",
+            "type": "integer"
+          },
+          "content_type": {
+            "title": "Content Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "content_type",
+          "byte_count"
+        ],
+        "title": "ImportSourceInfo",
+        "type": "object"
+      },
       "Ingredient-Input": {
         "additionalProperties": false,
         "properties": {
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -826,6 +1310,17 @@
             "minLength": 1,
             "title": "Name",
             "type": "string"
+          },
+          "notes": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Notes",
+            "type": "string"
+          },
+          "optional": {
+            "default": false,
+            "title": "Optional",
+            "type": "boolean"
           },
           "original_text": {
             "default": "",
@@ -872,6 +1367,12 @@
               }
             ],
             "title": "Quantity Max"
+          },
+          "quantity_text": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Quantity Text",
+            "type": "string"
           },
           "unit": {
             "default": "",
@@ -890,6 +1391,18 @@
       "Ingredient-Output": {
         "additionalProperties": false,
         "properties": {
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -900,6 +1413,17 @@
             "minLength": 1,
             "title": "Name",
             "type": "string"
+          },
+          "notes": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Notes",
+            "type": "string"
+          },
+          "optional": {
+            "default": false,
+            "title": "Optional",
+            "type": "boolean"
           },
           "original_text": {
             "default": "",
@@ -936,6 +1460,12 @@
               }
             ],
             "title": "Quantity Max"
+          },
+          "quantity_text": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Quantity Text",
+            "type": "string"
           },
           "unit": {
             "default": "",
@@ -1842,6 +2372,30 @@
       "Recipe-Input": {
         "additionalProperties": false,
         "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "cuisine": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine"
+          },
           "description": {
             "default": "",
             "maxLength": 5000,
@@ -1867,6 +2421,26 @@
             "maxItems": 300,
             "title": "Ingredients",
             "type": "array"
+          },
+          "instruction_details": {
+            "items": {
+              "$ref": "#/components/schemas/StepDetails"
+            },
+            "maxItems": 200,
+            "title": "Instruction Details",
+            "type": "array"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
           },
           "notes": {
             "default": "",
@@ -1920,6 +2494,12 @@
               }
             ],
             "title": "Rating"
+          },
+          "schema_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Schema Version",
+            "type": "string"
           },
           "servings": {
             "anyOf": [
@@ -1964,11 +2544,34 @@
             "title": "Steps",
             "type": "array"
           },
+          "tags": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Tags",
+            "type": "array"
+          },
+          "times": {
+            "$ref": "#/components/schemas/RecipeTimes"
+          },
           "title": {
             "maxLength": 200,
             "minLength": 1,
             "title": "Title",
             "type": "string"
+          },
+          "yield_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecipeYield"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -1980,6 +2583,30 @@
       "Recipe-Output": {
         "additionalProperties": false,
         "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "cuisine": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine"
+          },
           "description": {
             "default": "",
             "maxLength": 5000,
@@ -2005,6 +2632,26 @@
             "maxItems": 300,
             "title": "Ingredients",
             "type": "array"
+          },
+          "instruction_details": {
+            "items": {
+              "$ref": "#/components/schemas/StepDetails"
+            },
+            "maxItems": 200,
+            "title": "Instruction Details",
+            "type": "array"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
           },
           "notes": {
             "default": "",
@@ -2059,6 +2706,12 @@
             ],
             "title": "Rating"
           },
+          "schema_version": {
+            "const": "1.0.0",
+            "default": "1.0.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
           "servings": {
             "default": "2",
             "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
@@ -2093,17 +2746,191 @@
             "title": "Steps",
             "type": "array"
           },
+          "tags": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Tags",
+            "type": "array"
+          },
+          "times": {
+            "$ref": "#/components/schemas/RecipeTimes"
+          },
           "title": {
             "maxLength": 200,
             "minLength": 1,
             "title": "Title",
             "type": "string"
+          },
+          "yield_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecipeYield"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
           "title"
         ],
         "title": "Recipe",
+        "type": "object"
+      },
+      "RecipeContent": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "cuisine": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "ingredients": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedIngredient"
+            },
+            "maxItems": 300,
+            "title": "Ingredients",
+            "type": "array"
+          },
+          "instructions": {
+            "items": {
+              "$ref": "#/components/schemas/ExtractedInstruction"
+            },
+            "maxItems": 200,
+            "title": "Instructions",
+            "type": "array"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "servings": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Servings"
+          },
+          "tags": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Tags",
+            "type": "array"
+          },
+          "times": {
+            "$ref": "#/components/schemas/ExtractedTimes"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "yield": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecipeYield"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "language",
+          "servings",
+          "yield",
+          "times",
+          "ingredients",
+          "instructions",
+          "category",
+          "cuisine",
+          "tags",
+          "notes"
+        ],
+        "title": "RecipeContent",
         "type": "object"
       },
       "RecipeImportStatus": {
@@ -2135,6 +2962,16 @@
               }
             ],
             "title": "Error Code"
+          },
+          "extraction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "id": {
             "format": "uuid",
@@ -2209,6 +3046,103 @@
           "created_at"
         ],
         "title": "RecipeImportStatus",
+        "type": "object"
+      },
+      "RecipeTimes": {
+        "additionalProperties": false,
+        "properties": {
+          "cookMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cookminutes"
+          },
+          "prepMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prepminutes"
+          },
+          "totalMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totalminutes"
+          }
+        },
+        "title": "RecipeTimes",
+        "type": "object"
+      },
+      "RecipeYield": {
+        "additionalProperties": false,
+        "properties": {
+          "quantity": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 1000000.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "rawText": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rawtext"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 100,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "quantity",
+          "unit",
+          "rawText"
+        ],
+        "title": "RecipeYield",
         "type": "object"
       },
       "Recurrence": {
@@ -2399,6 +3333,49 @@
           "name"
         ],
         "title": "Setup",
+        "type": "object"
+      },
+      "StepDetails": {
+        "additionalProperties": false,
+        "properties": {
+          "durationMinutes": {
+            "anyOf": [
+              {
+                "maximum": 525600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Durationminutes"
+          },
+          "group": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Temperature"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "StepDetails",
         "type": "object"
       },
       "SuggestionApply": {
@@ -2592,6 +3569,31 @@
           "requested_token"
         ],
         "title": "SyncState",
+        "type": "object"
+      },
+      "Temperature": {
+        "additionalProperties": false,
+        "properties": {
+          "unit": {
+            "enum": [
+              "C",
+              "F"
+            ],
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "maximum": 2000.0,
+            "minimum": -273.15,
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ],
+        "title": "Temperature",
         "type": "object"
       },
       "Template": {
@@ -2898,6 +3900,29 @@
           }
         ],
         "summary": "Configure Ai"
+      }
+    },
+    "/api/v1/admin/ai/providers": {
+      "get": {
+        "operationId": "ai_profiles_api_v1_admin_ai_providers_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIProviderCatalog"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Ai Profiles"
       }
     },
     "/api/v1/admin/ai/test": {
@@ -3882,6 +4907,61 @@
           }
         ],
         "summary": "Put Preferences"
+      }
+    },
+    "/api/v1/import-sources/{source_id}": {
+      "put": {
+        "operationId": "upload_import_source_api_v1_import_sources__source_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "source_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Source Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_import_source_api_v1_import_sources__source_id__put"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportSourceInfo"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Upload Import Source"
       }
     },
     "/api/v1/imports": {

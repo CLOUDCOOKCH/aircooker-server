@@ -3,6 +3,7 @@ import { APIError } from './api.ts';
 import type { APIClient } from './api.ts';
 import { assertUUID, entityKey, payload } from './domain.ts';
 import { LocalStore } from './store.ts';
+import { extractionPreview } from './imports.ts';
 import type { ImportTask, Queued } from './store.ts';
 
 type Wire = components['schemas'];
@@ -237,6 +238,14 @@ export class SyncEngine {
           continue;
         }
         if (task.state === 'queued') {
+          if (task.source && task.body.source_id) {
+            const data = new FormData();
+            data.set('file', task.source.blob, task.source.name);
+            await this.api.request('/api/v1/import-sources/' + assertUUID(task.body.source_id), {
+              method: 'PUT',
+              body: data,
+            });
+          }
           if (task.body.image_id) {
             const photo = await this.store.photo(assertUUID(task.body.image_id));
             if (!photo) throw new APIError('image_not_available_locally', 422);
@@ -244,15 +253,20 @@ export class SyncEngine {
               await this.api.upload(photo.id, photo.blob);
               await this.store.acknowledgePhoto(photo.id);
             }
-            const current = (await this.store.imports()).find((item) => item.id === task.id);
-            if (current?.state === 'cancel_pending' || current?.state === 'cancelled') continue;
           }
+          const current = (await this.store.imports()).find((item) => item.id === task.id);
+          if (current?.state === 'cancel_pending' || current?.state === 'cancelled') continue;
           const result = await this.api.request<{ id: string }>('/api/v1/imports', {
             method: 'POST',
             body: JSON.stringify({ ...task.body, request_id: task.id }),
           });
           if (result.id !== task.id) throw new APIError('invalid_server_response', 0);
-          await this.store.saveImport({ ...task, state: 'processing', error: undefined });
+          await this.store.saveImport({
+            ...task,
+            state: 'processing',
+            source: undefined,
+            error: undefined,
+          });
         }
         const result = await this.api.request<{
           id: string;
@@ -260,6 +274,7 @@ export class SyncEngine {
           recipe?: unknown;
           warnings?: unknown;
           error_code?: string;
+          extraction?: Wire['ExtractionResult'];
           recognized_text?: string | null;
         }>('/api/v1/imports/' + assertUUID(task.id));
         if (
@@ -273,7 +288,13 @@ export class SyncEngine {
         await this.store.saveImport({
           ...task,
           state: result.state === 'queued' ? 'processing' : (result.state as ImportTask['state']),
-          recipe: result.recipe ? payload('recipe', result.recipe) : undefined,
+          recipe: result.recipe
+            ? payload('recipe', result.recipe)
+            : result.extraction
+              ? extractionPreview(result.extraction, task.body.source_url)
+              : undefined,
+          extraction: result.extraction,
+          source: undefined,
           warnings,
           recognizedText:
             typeof result.recognized_text === 'string'

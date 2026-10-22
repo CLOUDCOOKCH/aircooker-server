@@ -22,6 +22,11 @@ text, paths, credentials or household content. The next hourly pass retries main
 Startup file pruning follows the supported single application process; do not run multiple
 servers against one data volume. Runtime cleanup does not unlink active transfer files.
 
+Raw AI import uploads are separately eligible after 7 days unless an import draft still
+references them in queued state (including while its worker runs). AI attempt audit records
+are eligible after 90 days. Both use the same bounded hourly maintenance and dry-run CLI.
+Saved recipes and pending draft content are not deleted by this source-upload cleanup.
+
 ## Local administrator inspection
 
 Inside the existing container:

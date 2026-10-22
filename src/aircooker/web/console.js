@@ -108,6 +108,16 @@ async function action(element,work){
 function put(path,body){return request(path,{method:"PUT",body:JSON.stringify(body)});}
 function post(path,body={}){return request(path,{method:"POST",body:JSON.stringify(body)});}
 function field(form,name){return form.elements.namedItem(name);}
+Object.assign(words.en, {ai_formats:"Model input formats", ai_formats_hint:"Enable only formats supported by the selected model. Text is always enabled.", ai_images:"Images and screenshots", ai_default_hint:"Saving selects this provider and model as the default. Other provider configurations remain encrypted on the server."});
+Object.assign(words.de, {ai_formats:"Eingabeformate des Modells", ai_formats_hint:"Aktiviere nur Formate, die das gewählte Modell unterstützt. Text bleibt aktiv.", ai_images:"Bilder und Screenshots", ai_default_hint:"Speichern wählt Anbieter und Modell als Standard. Andere Anbieterkonfigurationen bleiben verschlüsselt auf dem Server."});
+function aiFormats(profile) {
+  const form=$("ai-form");
+  for(const format of ["image","pdf","video","youtube"]) {
+    const input=field(form,"input_"+format);
+    input.checked=(profile.input_formats||[]).includes(format);
+    input.parentElement.hidden=!(profile.available_formats||[]).includes(format);
+  }
+}
 function aiEnabled(){
   const form=$("ai-form"); const enabled=field(form,"enabled").checked;
   form.querySelectorAll("[data-ai-option]").forEach(input=>input.disabled=!enabled);
@@ -156,7 +166,7 @@ async function refresh(){
   if(!diagnostics.recent_imports.length){$("recent-imports").dataset.i18n="empty_imports";$("recent-imports").textContent=words[locale].empty_imports;}
   translateJobs();
   const h=$("household-form");for(const key of ["name","timezone","language"])field(h,key).value=household[key];
-  const form=$("ai-form");field(form,"enabled").checked=ai.enabled;
+  const form=$("ai-form");field(form,"enabled").checked=ai.enabled;aiFormats(ai);
   for(const key of ["provider","base_url","model","timeout","max_content","requests_per_hour"]){
     if(ai[key]!==null&&ai[key]!==undefined)field(form,key).value=ai[key];
   }
@@ -191,13 +201,34 @@ $("password-form").onsubmit=event=>{event.preventDefault();action(event.target,a
   finally{event.target.reset();}
 });};
 field($("ai-form"),"enabled").onchange=aiEnabled;
+field($("ai-form"),"provider").onchange=async()=>{
+  const form=$("ai-form"), selected=field(form,"provider").value;
+  if(form.dataset.profileLoading)return;
+  form.dataset.profileLoading="true";form.setAttribute("aria-busy","true");
+  form.querySelectorAll("input,select").forEach(input=>input.disabled=true);
+  try{await action(form,async()=>{
+  field(form,"api_key").value="";field(form,"clear_key").checked=false;
+  const catalog=await request("/api/v1/admin/ai/providers");
+  const profile=catalog.profiles.find(p=>p.provider===selected);
+  if(!profile)return;
+  for(const name of ["base_url","model","timeout","max_content","requests_per_hour"])field(form,name).value=profile[name]??"";
+  for(const name of ["structured_output","allow_local_http"])field(form,name).checked=profile[name];
+  aiFormats(profile);$("ai-key-status").dataset.i18n=profile.key_configured?"key_saved":"no_key";
+  $("ai-key-status").textContent=words[locale][profile.key_configured?"key_saved":"no_key"];
+  });}finally{
+    delete form.dataset.profileLoading;form.removeAttribute("aria-busy");
+    field(form,"enabled").disabled=false;aiEnabled();
+  }
+};
 $("ai-form").onsubmit=event=>{event.preventDefault();const form=event.target;
+  if(form.dataset.profileLoading)return;
   action(form,async()=>{
     const data={enabled:field(form,"enabled").checked};
     if(data.enabled){
       for(const key of ["provider","base_url","model"])data[key]=field(form,key).value;
       for(const key of ["timeout","max_content","requests_per_hour"])data[key]=Number(field(form,key).value);
       for(const key of ["structured_output","allow_local_http"])data[key]=field(form,key).checked;
+      data.input_formats=["text", ...["image","pdf","video","youtube"].filter(format=>!field(form,"input_"+format).parentElement.hidden&&field(form,"input_"+format).checked)];
       const key=field(form,"api_key").value.trim();if(key)data.api_key=key;
       if(field(form,"clear_key").checked)data.api_key="";
     }

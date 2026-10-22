@@ -17,6 +17,10 @@ Self-hosted household meal planning with a primary PWA and a retained native com
 Apache-2.0. One process, one Docker container, SQLite and a persistent `/data` volume.
 No mandatory hosted service, analytics or tracking.
 
+For step-by-step operator guides, start with the [Wiki guide index](docs/WIKI.md):
+installation, first-run setup, Cloudflare Tunnel, HTTPS, configuration, backups and recovery.
+These maintained Wiki sources are prepared for publication in the separate GitHub Wiki.
+
 **Development version. The complete product acceptance criteria are not yet met.**
 The executable backend includes secure first-run setup, per-device sessions and durable sign-out support, versioned sync with restore-aware commit proofs,
 recipe/calendar/pantry/leftover/template storage, bounded recurrence expansion, shopping
@@ -99,7 +103,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 | Website recipe import | JSON-LD previews and conservative metric/EN/DE fractions/ranges parsing; images and broader HTML extraction remain partial |
 | Photo/screenshot recipe import | Camera/chooser, local EN/DE OCR, durable offline image queue and editable explicit-save previews; real Chromium tested, physical camera/iPhone unverified ([guide](docs/IMAGE_IMPORT.md)) |
 | Social source imports | Source identification and public structured extraction; user text fallback; no authenticated fetching/transcripts |
-| AI | Encrypted admin configuration, bounded text adapters and synthetic probe tests; no live verification |
+| AI recipe import | Configurable Gemini (default), OpenAI, OpenRouter and compatible APIs; cloud vision for images/PDFs and supported Gemini videos, metadata-first websites, editable drafts and encrypted profiles ([guide](docs/wiki/AI-Recipe-Import.md)); live model compatibility unverified |
 | Bring! | SDK adapter, encrypted credentials, UUID ledger/reconciler and live probe; no live verification |
 | Admin UI | English/German setup, household, sessions/password, AI/Bring controls and JSON/ZIP transfer; Chromium tested; deletion/extended diagnostics remain partial |
 | Export/import | Media-aware JSON/streamed ZIP and transactional merge tested; destructive replacement remains incomplete |

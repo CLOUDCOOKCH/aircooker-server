@@ -22,6 +22,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/ai/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ai Profiles */
+        get: operations["ai_profiles_api_v1_admin_ai_providers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/ai/test": {
         parameters: {
             query?: never;
@@ -394,6 +411,23 @@ export interface paths {
         get: operations["get_preferences_api_v1_household_planning_preferences_get"];
         /** Put Preferences */
         put: operations["put_preferences_api_v1_household_planning_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/import-sources/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Upload Import Source */
+        put: operations["upload_import_source_api_v1_import_sources__source_id__put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1100,6 +1134,15 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AIProviderCatalog */
+        AIProviderCatalog: {
+            /** Default Provider */
+            default_provider: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Profiles */
+            profiles: components["schemas"]["AISettingsStatus"][];
+        };
         /** AISettings */
         AISettings: {
             /**
@@ -1111,7 +1154,7 @@ export interface components {
             api_key?: string | null;
             /**
              * Base Url
-             * @default https://api.openai.com/v1
+             * @default
              */
             base_url: string;
             /**
@@ -1119,6 +1162,13 @@ export interface components {
              * @default true
              */
             enabled: boolean;
+            /**
+             * Input Formats
+             * @default [
+             *       "text"
+             *     ]
+             */
+            input_formats: ("text" | "image" | "pdf" | "video" | "youtube")[];
             /**
              * Max Content
              * @default 50000
@@ -1131,10 +1181,10 @@ export interface components {
             model: string;
             /**
              * Provider
-             * @default openai
+             * @default gemini
              * @enum {string}
              */
-            provider: "openai" | "openai-compatible" | "anthropic" | "ollama" | "openwebui";
+            provider: "gemini" | "openai" | "openrouter" | "openai-compatible" | "anthropic" | "ollama" | "openwebui";
             /**
              * Requests Per Hour
              * @default 20
@@ -1158,6 +1208,8 @@ export interface components {
              * @default false
              */
             allow_local_http: boolean;
+            /** Available Formats */
+            available_formats?: string[];
             /** Base Url */
             base_url?: string | null;
             /** Configuration Error */
@@ -1169,6 +1221,8 @@ export interface components {
              * @default false
              */
             image_extraction: boolean;
+            /** Input Formats */
+            input_formats?: string[];
             /**
              * Key Configured
              * @default false
@@ -1191,6 +1245,11 @@ export interface components {
              * @enum {string}
              */
             origin: "saved" | "environment" | "disabled";
+            /**
+             * Pdf Extraction
+             * @default false
+             */
+            pdf_extraction: boolean;
             /** Provider */
             provider?: string | null;
             /**
@@ -1213,6 +1272,11 @@ export interface components {
              * @default 30
              */
             timeout: number;
+            /**
+             * Video Extraction
+             * @default false
+             */
+            video_extraction: boolean;
         };
         /** AdministrationDiagnostics */
         AdministrationDiagnostics: {
@@ -1239,6 +1303,11 @@ export interface components {
             pending_jobs: number;
             /** Recipes */
             recipes: number;
+        };
+        /** Body_upload_import_source_api_v1_import_sources__source_id__put */
+        Body_upload_import_source_api_v1_import_sources__source_id__put: {
+            /** File */
+            file: string;
         };
         /** Body_upload_photo_api_v1_media__image_id__put */
         Body_upload_photo_api_v1_media__image_id__put: {
@@ -1363,6 +1432,75 @@ export interface components {
             /** Width */
             width: number;
         };
+        /** ExtractedIngredient */
+        ExtractedIngredient: {
+            /** Group */
+            group: string | null;
+            /** Name */
+            name: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Optional */
+            optional: boolean;
+            /** Originaltext */
+            originalText: string | null;
+            /** Preparation */
+            preparation: string | null;
+            quantity: components["schemas"]["ExtractedQuantity"];
+        };
+        /** ExtractedInstruction */
+        ExtractedInstruction: {
+            /** Durationminutes */
+            durationMinutes: number | null;
+            /** Group */
+            group: string | null;
+            temperature: components["schemas"]["Temperature"] | null;
+            /** Text */
+            text: string;
+        };
+        /** ExtractedQuantity */
+        ExtractedQuantity: {
+            /** Maxvalue */
+            maxValue: number | null;
+            /** Rawtext */
+            rawText: string | null;
+            /** Unit */
+            unit: string | null;
+            /** Value */
+            value: number | null;
+        };
+        /** ExtractedTimes */
+        ExtractedTimes: {
+            /** Cookminutes */
+            cookMinutes: number | null;
+            /** Prepminutes */
+            prepMinutes: number | null;
+            /** Totalminutes */
+            totalMinutes: number | null;
+        };
+        /** ExtractionIssue */
+        ExtractionIssue: {
+            /** Message */
+            message: string;
+            /** Path */
+            path: string;
+            /**
+             * Severity
+             * @enum {string}
+             */
+            severity: "warning" | "error";
+        };
+        /** ExtractionResult */
+        ExtractionResult: {
+            /** Issues */
+            issues: components["schemas"]["ExtractionIssue"][];
+            recipe: components["schemas"]["RecipeContent"];
+            /**
+             * Schemaversion
+             * @constant
+             */
+            schemaVersion: "1.0.0";
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -1455,6 +1593,12 @@ export interface components {
         };
         /** ImportRequest */
         ImportRequest: {
+            /** Ai Destination */
+            ai_destination?: [
+                string,
+                string,
+                string
+            ] | null;
             /**
              * Consent External Ai
              * @default false
@@ -1467,6 +1611,8 @@ export interface components {
              * Format: uuid
              */
             request_id?: string;
+            /** Source Id */
+            source_id?: string | null;
             /** Source Url */
             source_url?: string | null;
             /** Text */
@@ -1477,8 +1623,22 @@ export interface components {
              */
             use_ai: boolean;
         };
+        /** ImportSourceInfo */
+        ImportSourceInfo: {
+            /** Byte Count */
+            byte_count: number;
+            /** Content Type */
+            content_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
         /** Ingredient */
         "Ingredient-Input": {
+            /** Group */
+            group?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1486,6 +1646,16 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /**
+             * Optional
+             * @default false
+             */
+            optional: boolean;
             /**
              * Original Text
              * @default
@@ -1501,6 +1671,11 @@ export interface components {
             /** Quantity Max */
             quantity_max?: number | string | null;
             /**
+             * Quantity Text
+             * @default
+             */
+            quantity_text: string;
+            /**
              * Unit
              * @default
              */
@@ -1508,6 +1683,8 @@ export interface components {
         };
         /** Ingredient */
         "Ingredient-Output": {
+            /** Group */
+            group?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1515,6 +1692,16 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /**
+             * Optional
+             * @default false
+             */
+            optional: boolean;
             /**
              * Original Text
              * @default
@@ -1529,6 +1716,11 @@ export interface components {
             quantity?: string | null;
             /** Quantity Max */
             quantity_max?: string | null;
+            /**
+             * Quantity Text
+             * @default
+             */
+            quantity_text: string;
             /**
              * Unit
              * @default
@@ -1916,6 +2108,10 @@ export interface components {
         };
         /** Recipe */
         "Recipe-Input": {
+            /** Category */
+            category?: string | null;
+            /** Cuisine */
+            cuisine?: string | null;
             /**
              * Description
              * @default
@@ -1925,6 +2121,10 @@ export interface components {
             image_id?: string | null;
             /** Ingredients */
             ingredients?: components["schemas"]["Ingredient-Input"][];
+            /** Instruction Details */
+            instruction_details?: components["schemas"]["StepDetails"][];
+            /** Language */
+            language?: string | null;
             /**
              * Notes
              * @default
@@ -1942,6 +2142,12 @@ export interface components {
             };
             /** Rating */
             rating?: number | null;
+            /**
+             * Schema Version
+             * @default 1.0.0
+             * @constant
+             */
+            schema_version: "1.0.0";
             /**
              * Servings
              * @default 2
@@ -1956,11 +2162,19 @@ export interface components {
             source_url?: string | null;
             /** Steps */
             steps?: string[];
+            /** Tags */
+            tags?: string[];
+            times?: components["schemas"]["RecipeTimes"];
             /** Title */
             title: string;
+            yield_info?: components["schemas"]["RecipeYield"] | null;
         };
         /** Recipe */
         "Recipe-Output": {
+            /** Category */
+            category?: string | null;
+            /** Cuisine */
+            cuisine?: string | null;
             /**
              * Description
              * @default
@@ -1970,6 +2184,10 @@ export interface components {
             image_id?: string | null;
             /** Ingredients */
             ingredients?: components["schemas"]["Ingredient-Output"][];
+            /** Instruction Details */
+            instruction_details?: components["schemas"]["StepDetails"][];
+            /** Language */
+            language?: string | null;
             /**
              * Notes
              * @default
@@ -1988,6 +2206,12 @@ export interface components {
             /** Rating */
             rating?: number | null;
             /**
+             * Schema Version
+             * @default 1.0.0
+             * @constant
+             */
+            schema_version: "1.0.0";
+            /**
              * Servings
              * @default 2
              */
@@ -2001,8 +2225,37 @@ export interface components {
             source_url?: string | null;
             /** Steps */
             steps?: string[];
+            /** Tags */
+            tags?: string[];
+            times?: components["schemas"]["RecipeTimes"];
             /** Title */
             title: string;
+            yield_info?: components["schemas"]["RecipeYield"] | null;
+        };
+        /** RecipeContent */
+        RecipeContent: {
+            /** Category */
+            category: string | null;
+            /** Cuisine */
+            cuisine: string | null;
+            /** Description */
+            description: string | null;
+            /** Ingredients */
+            ingredients: components["schemas"]["ExtractedIngredient"][];
+            /** Instructions */
+            instructions: components["schemas"]["ExtractedInstruction"][];
+            /** Language */
+            language: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Servings */
+            servings: number | null;
+            /** Tags */
+            tags: string[];
+            times: components["schemas"]["ExtractedTimes"];
+            /** Title */
+            title: string | null;
+            yield: components["schemas"]["RecipeYield"] | null;
         };
         /** RecipeImportStatus */
         RecipeImportStatus: {
@@ -2012,6 +2265,7 @@ export interface components {
             created_at: number;
             /** Error Code */
             error_code: string | null;
+            extraction?: components["schemas"]["ExtractionResult"] | null;
             /**
              * Id
              * Format: uuid
@@ -2031,6 +2285,24 @@ export interface components {
             state: "queued" | "preview" | "needs_input" | "confirmed" | "cancelled";
             /** Warnings */
             warnings: string[];
+        };
+        /** RecipeTimes */
+        RecipeTimes: {
+            /** Cookminutes */
+            cookMinutes?: number | null;
+            /** Prepminutes */
+            prepMinutes?: number | null;
+            /** Totalminutes */
+            totalMinutes?: number | null;
+        };
+        /** RecipeYield */
+        RecipeYield: {
+            /** Quantity */
+            quantity: number | null;
+            /** Rawtext */
+            rawText: string | null;
+            /** Unit */
+            unit: string | null;
         };
         /** Recurrence */
         Recurrence: {
@@ -2124,6 +2396,14 @@ export interface components {
             /** Username */
             username: string;
         };
+        /** StepDetails */
+        StepDetails: {
+            /** Durationminutes */
+            durationMinutes?: number | null;
+            /** Group */
+            group?: string | null;
+            temperature?: components["schemas"]["Temperature"] | null;
+        };
         /** SuggestionApply */
         SuggestionApply: {
             /** Basis */
@@ -2195,6 +2475,16 @@ export interface components {
             requested_token: string | null;
             /** Token */
             token: string;
+        };
+        /** Temperature */
+        Temperature: {
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "C" | "F";
+            /** Value */
+            value: number;
         };
         /** Template */
         Template: {
@@ -2352,6 +2642,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ai_profiles_api_v1_admin_ai_providers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIProviderCatalog"];
                 };
             };
         };
@@ -3093,6 +3403,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PreferenceReceipt"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_import_source_api_v1_import_sources__source_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_import_source_api_v1_import_sources__source_id__put"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportSourceInfo"];
                 };
             };
             /** @description Validation Error */

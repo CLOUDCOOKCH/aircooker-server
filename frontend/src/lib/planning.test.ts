@@ -88,6 +88,9 @@ test('fractions and ranges scale exactly and non numeric quantities remain unqua
       unit: '',
       preparation: 'to taste',
       original_text: 'Salt to taste',
+      quantity_text: '',
+      notes: '',
+      optional: false,
     },
     {
       id: uuid(),
@@ -97,6 +100,9 @@ test('fractions and ranges scale exactly and non numeric quantities remain unqua
       unit: 'kg',
       preparation: '',
       original_text: '',
+      quantity_text: '',
+      notes: '',
+      optional: false,
     },
   ];
   assert.equal(scale(r, '3')[0].quantity, null);

@@ -42,9 +42,10 @@ docker compose exec aircooker python -m aircooker.cli backup --output /data/back
 ```
 
 The output must not exist. SQLite's online backup API creates a consistent snapshot while
-WAL writes continue. Permissions are 0600. It includes photos, password hashes, sessions,
-import data and ownership history. Encrypt it before copying it off-host; this CLI does
-not encrypt automatically and is explicitly a local administrator operation.
+WAL writes continue. Permissions are 0600. It includes database records, password hashes,
+sessions, import data and ownership history. Photo files and configuration/encryption keys
+are separate and must also be backed up. Encrypt it before copying it off-host; this CLI
+does not encrypt automatically and is explicitly a local administrator operation.
 
 For complete recovery, stop the container and securely back up the entire local volume,
 including configuration and integration encryption keys. Retain the matching image

@@ -85,6 +85,8 @@ jobs:
           AIRCOOKER_SCREENSHOT_DIR: build/pwa-browser
           AIRCOOKER_CAPTURE: '1'
         run: python scripts/pwa_browser_smoke.py
+      - name: Exercise image/PDF imports and provider settings with synthetic cloud responses
+        run: python scripts/ai_import_browser_smoke.py
       - name: Exercise push settings/offline/receiver with explicit delivery doubles
         env:
           AIRCOOKER_SCREENSHOT_DIR: build/push-browser
@@ -114,6 +116,7 @@ jobs:
             build/pwa-browser
             build/push-browser
             build/pwa-layout
+            build/ai-import-browser
             build/theme-browser
             build/image-import-browser
   security:

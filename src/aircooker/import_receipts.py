@@ -8,12 +8,16 @@ FIELDS = ("text", "source_url", "use_ai", "consent_external_ai")
 
 
 def fingerprint(values):
-    identity = {key: values[key] for key in FIELDS}
-    # Preserve every pre-image receipt byte-for-byte for offline replay.
+    fields = {key: values[key] for key in FIELDS}
+    # Preserve historical receipts exactly for text/URL imports.
     if values.get("image_id") is not None:
-        identity["image_id"] = str(values["image_id"])
+        fields["image_id"] = str(values["image_id"])
+    if values.get("source_id") is not None:
+        fields["source_id"] = str(values["source_id"])
+    if values.get("ai_destination") is not None:
+        fields["ai_destination"] = list(values["ai_destination"])
     return hashlib.sha256(
-        json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()
+        json.dumps(fields, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
 
 

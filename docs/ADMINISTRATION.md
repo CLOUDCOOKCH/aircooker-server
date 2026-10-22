@@ -26,10 +26,12 @@ is documented in DEPLOYMENT.md and also invalidates existing sessions.
 
 ## Optional AI
 
-Select a provider, API base URL and model that your installation actually supports. The
-server implements text adapters for OpenAI, OpenAI-compatible services, Anthropic, Ollama
-and compatible OpenWebUI APIs. Model capabilities are not assumed: enable structured-output
-mode only after checking that provider/model. Image extraction is not implemented.
+Select a provider, API base URL and model that your installation actually supports. Gemini
+is the initial provider option; OpenAI, OpenRouter and custom OpenAI-compatible APIs also
+support explicitly enabled model capabilities. Images/PDFs use compatible cloud models;
+supported Gemini models additionally accept bounded video inputs. Legacy Anthropic, Ollama
+and OpenWebUI adapters remain text-only. Enable formats and structured-output mode only
+after checking that provider/model. See [AI Recipe Import](wiki/AI-Recipe-Import.md).
 
 Settings saved in the console override environment settings. They are encrypted in
 `/data/config/ai-provider.enc` using the restricted installation key. A saved disabled
@@ -38,8 +40,10 @@ does not replace saved console settings. The API reports `origin` and any redact
 configuration error; it never returns a saved API key. Invalid environment settings can be
 repaired from the console.
 
-A blank key field retains an existing key only when the provider and base URL are unchanged
-(ignoring a final slash). Changing the destination clears it unless a new key is supplied.
+A saved profile is retained independently for each provider. Saving selects the default
+provider/model; disabling AI retains profiles. A blank key field retains an existing key
+only when the provider and base URL are unchanged (ignoring a final slash). Changing the
+destination clears it unless a new key is supplied.
 The remove-key checkbox explicitly clears it. Password/key inputs are cleared after their
 operation. Do not place credentials in a base URL. HTTP requires explicit opt-in for a
 trusted self-hosted AI service; public providers should use HTTPS.

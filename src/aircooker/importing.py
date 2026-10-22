@@ -1,6 +1,7 @@
 import http.client
 import ipaddress
 import json
+import re
 import socket
 import ssl
 from decimal import Decimal
@@ -10,6 +11,7 @@ from urllib.parse import urljoin, urlsplit
 from .errors import DomainError
 from .ingredients import parse_ingredient
 from .models import Recipe
+from .recipe_extraction import RecipeTimes, RecipeYield, StepDetails
 
 MAX_BYTES = 1_000_000
 
@@ -54,7 +56,11 @@ class PinnedHTTPS(http.client.HTTPSConnection):
 
 def fetch_html(url: str):
     for _ in range(4):
-        parsed = urlsplit(url)
+        try:
+            parsed = urlsplit(url)
+            parsed.port
+        except ValueError as exc:
+            raise DomainError("source_url_forbidden", 422) from exc
         if (
             parsed.scheme != "https"
             or not parsed.hostname
@@ -139,6 +145,23 @@ def find_recipe(value, depth=0):
     return None
 
 
+def metadata_text(value):
+    if isinstance(value, list):
+        value = ", ".join(v for v in value if isinstance(v, str))
+    return value[:5000] if isinstance(value, str) and value else None
+
+
+def duration_minutes(value):
+    if not isinstance(value, str):
+        return None
+    match = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?", value)
+    if not match or not any(match.groups()):
+        return None
+    days, hours, minutes, seconds = (int(v or 0) for v in match.groups())
+    total = days * 1440 + hours * 60 + minutes
+    return total if seconds == 0 and total <= 525600 else None
+
+
 def extract(content: str, source_url=None, platform="website"):
     if len(content.encode()) > MAX_BYTES:
         raise DomainError("source_too_large", 422)
@@ -162,30 +185,47 @@ def extract(content: str, source_url=None, platform="website"):
         if isinstance(text, str) and text.strip()
     ]
     steps: list[str] = []
+    details: list[StepDetails] = []
 
-    def walk(value, depth=0):
+    def walk(value, depth=0, group=None):
         if depth > 10 or len(steps) >= 200:
             return
         if isinstance(value, str) and value.strip():
             steps.append(value[:5000])
+            details.append(StepDetails(group=group))
         elif isinstance(value, dict):
             if "text" in value:
-                walk(value["text"], depth + 1)
+                walk(value["text"], depth + 1, group)
             elif "itemListElement" in value:
-                walk(value["itemListElement"], depth + 1)
+                walk(
+                    value["itemListElement"], depth + 1, str(value.get("name", ""))[:5000] or group
+                )
         elif isinstance(value, list):
             for child in value:
-                walk(child, depth + 1)
+                walk(child, depth + 1, group)
 
     walk(found.get("recipeInstructions", []))
     servings = Decimal(2)
     raw = found.get("recipeYield")
     if isinstance(raw, list):
         raw = raw[0] if raw else None
+    stated_servings = False
+    yield_info = None
+    if isinstance(raw, str):
+        serving_match = re.fullmatch(r"\s*(\d+)\s*(?:servings?|portions?|personen)?\s*", raw, re.I)
+        yield_match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s+(.{1,100})", raw)
+        if serving_match:
+            raw = serving_match[1]
+        elif yield_match:
+            yield_info = RecipeYield(
+                quantity=float(yield_match[1]), unit=yield_match[2], raw_text=raw[:5000]
+            )
     try:
         servings = Decimal(str(raw))
         if not 0 < servings <= 1000000:
             servings = Decimal(2)
+        else:
+            stated_servings = True
     except Exception:
         pass
     recipe = Recipe(
@@ -195,12 +235,22 @@ def extract(content: str, source_url=None, platform="website"):
         source_platform=platform,
         ingredients=ingredients,
         steps=steps,
+        instruction_details=details,
         servings=servings,
+        yield_info=yield_info,
+        times=RecipeTimes(
+            prep_minutes=duration_minutes(found.get("prepTime")),
+            cook_minutes=duration_minutes(found.get("cookTime")),
+            total_minutes=duration_minutes(found.get("totalTime")),
+        ),
+        language=found.get("inLanguage") if isinstance(found.get("inLanguage"), str) else None,
+        category=metadata_text(found.get("recipeCategory")),
+        cuisine=metadata_text(found.get("recipeCuisine")),
         provenance={
             "extractor": "schema.org-jsonld",
             "quantities": "deterministic_requires_review",
             "ingredient_parser": "metric-en-de-v1",
-            "servings": "source" if str(servings) == str(raw) else "default_requires_review",
+            "servings": "source" if stated_servings else "default_requires_review",
         },
     )
     warnings = [
@@ -221,7 +271,10 @@ def extract(content: str, source_url=None, platform="website"):
 
 
 def platform_for(url):
-    host = (urlsplit(url).hostname or "").lower()
+    try:
+        host = (urlsplit(url).hostname or "").lower()
+    except ValueError as exc:
+        raise DomainError("source_url_forbidden", 422) from exc
     for domain, name in [
         ("instagram.com", "instagram"),
         ("tiktok.com", "tiktok"),

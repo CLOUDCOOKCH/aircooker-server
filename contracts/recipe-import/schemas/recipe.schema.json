@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mealf:schema:recipe:v1",
+  "title": "MealF Recipe Record v1",
+  "description": "Canonical stored recipe. IDs, audit metadata and source assets are assigned by the backend, never by the AI model.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "state",
+    "recipe",
+    "source",
+    "media",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "state": {
+      "enum": [
+        "draft",
+        "ready"
+      ]
+    },
+    "recipe": {
+      "$ref": "urn:mealf:schema:recipe-content:v1"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "url",
+        "title",
+        "author",
+        "importedAt"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "manual",
+            "image",
+            "pdf",
+            "url",
+            "video"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "author": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "importedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assetId",
+          "kind",
+          "role"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "image",
+              "pdf",
+              "video"
+            ]
+          },
+          "role": {
+            "enum": [
+              "source",
+              "cover"
+            ]
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "ready"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recipe": {
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ingredients": {
+                "minItems": 1,
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "instructions": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

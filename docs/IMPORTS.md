@@ -1,5 +1,7 @@
 # Deterministic recipe import and review
 
+For cloud vision, image/PDF/video uploads, provider settings, limits and review workflows, see [AI Recipe Import](wiki/AI-Recipe-Import.md). The historical notes below describe the original text/website importer.
+
 Website imports first use Schema.org/JSON-LD. Supported social host names identify the
 source but do not grant access to private captions, videos or transcripts. Public retrieval
 retains HTTPS, DNS/address pinning, redirect bounds, timeouts and size limits. User-supplied

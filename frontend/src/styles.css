@@ -1564,6 +1564,9 @@ a.settings-row:hover {
   margin-bottom: 24px;
   font-size: 0.875rem;
 }
+.info-note .muted {
+  color: inherit;
+}
 .error-note {
   background: var(--danger-soft);
   color: var(--danger-ink);
@@ -2440,6 +2443,18 @@ a.settings-row:hover {
   }
 }
 
+.ai-settings-form {
+  padding: 20px;
+}
+.ai-settings-form fieldset {
+  min-width: 0;
+}
+.recipe-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 16px;
+}
 /* Native radio choices retain keyboard navigation and a non-colour selection cue. */
 .theme-library {
   border: 0;

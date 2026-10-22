@@ -6,6 +6,7 @@ import { PageHeader, Sheet } from './components';
 import { ReminderSettings } from './ReminderSettings';
 import { ThemeLibrary } from './ThemeLibrary';
 import { PlanningSettings } from './PlanningSettings';
+import { AISettings } from './AISettings';
 import type { Language } from './i18n';
 import { rebuildFromServer } from './lib/recovery';
 import { cloneRecipe } from './lib/planning';
@@ -132,6 +133,7 @@ export function Settings({
           <ThemeLibrary />
           <PlanningSettings />
           <ReminderSettings />
+          <AISettings />
           <section className="settings-group">
             <h2>{t('bring')}</h2>
             <div className="settings-surface">

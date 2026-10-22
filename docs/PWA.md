@@ -71,6 +71,12 @@ Imports accept URLs, supplied content or a photo/screenshot of a written recipe.
 editable preview. An image request can queue offline; extraction starts after reconnection.
 The source image becomes the editable recipe cover. See [photo import](IMAGE_IMPORT.md)
 for supported formats, correction, privacy and recovery limits.
+The Link or text form also accepts **Image, PDF or cooking video** attachments for
+optional configured AI extraction. These are a separate, explicitly consented path;
+the Photo or screenshot path retains local OCR, with only recognized text sent if AI
+is selected. Settings exposes encrypted provider profiles and explicit per-model
+capabilities. See [AI recipe import](wiki/AI-Recipe-Import.md) for supported adapters,
+limits and provider disclosure. Live cloud models remain unverified.
 Structured extraction precedes optional configured
 AI. AI requires an explicit content-disclosure checkbox. Social adapters cannot bypass
 private content or platform restrictions. Editable previews are never silently saved;

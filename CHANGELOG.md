@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+
+- Add provider-independent AI recipe imports from images, PDFs, websites, text and supported Gemini videos, with encrypted provider profiles, configurable models, schema-validated editable drafts, bounded usage and Wiki documentation.
 - Add native camera/image choosing for recipe screenshots and photos of written recipes.
   Local EN/DE OCR produces a durable editable preview; saving requires explicit review.
   Persist source images and queued imports atomically offline, strip image metadata,

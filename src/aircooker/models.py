@@ -6,6 +6,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from .recipe_extraction import ExtractionResult, RecipeTimes, RecipeYield, StepDetails
+
 Positive = Annotated[Decimal, Field(gt=0, le=1000000)]
 
 
@@ -21,6 +23,10 @@ class Ingredient(Model):
     unit: str = Field(default="", max_length=30)
     preparation: str = Field(default="", max_length=300)
     original_text: str = Field(default="", max_length=500)
+    quantity_text: str = Field(default="", max_length=500)
+    notes: str = Field(default="", max_length=5000)
+    optional: bool = False
+    group: str | None = Field(default=None, max_length=5000)
 
     @model_validator(mode="after")
     def valid_range(self):
@@ -32,6 +38,7 @@ class Ingredient(Model):
 
 
 class Recipe(Model):
+    schema_version: Literal["1.0.0"] = "1.0.0"
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(default="", max_length=5000)
     source_url: str | None = Field(default=None, max_length=2048)
@@ -47,6 +54,15 @@ class Recipe(Model):
     nutrition: dict[str, str] | None = None
     nutrition_source: str | None = Field(default=None, max_length=2048)
     provenance: dict[str, str] = Field(default_factory=dict, max_length=50)
+    times: RecipeTimes = Field(default_factory=RecipeTimes)
+    language: str | None = Field(default=None, max_length=50)
+    yield_info: RecipeYield | None = None
+    category: str | None = Field(default=None, max_length=5000)
+    cuisine: str | None = Field(default=None, max_length=5000)
+    tags: list[Annotated[str, Field(min_length=1, max_length=100)]] = Field(
+        default_factory=list, max_length=50
+    )
+    instruction_details: list[StepDetails] = Field(default_factory=list, max_length=200)
 
     @model_validator(mode="after")
     def unique_ingredient_ids(self):
@@ -225,11 +241,24 @@ class ImportRequest(Model):
     consent_external_ai: bool = False
     source_url: str | None = Field(default=None, max_length=2048)
     text: str | None = Field(default=None, max_length=100000)
+    source_id: UUID | None = None
+    ai_destination: (
+        tuple[
+            Annotated[str, Field(min_length=1, max_length=2048)],
+            Annotated[str, Field(min_length=1, max_length=2048)],
+            Annotated[str, Field(min_length=1, max_length=2048)],
+        ]
+        | None
+    ) = None
 
     @model_validator(mode="after")
     def has_content(self):
-        if not self.source_url and not self.text and not self.image_id:
-            raise ValueError("Provide a URL, source text or uploaded image")
+        if not self.source_url and not self.text and not self.source_id and not self.image_id:
+            raise ValueError("Provide a URL or source text")
+        if self.source_id and self.image_id:
+            raise ValueError("Choose one media source")
+        if self.source_id and (not self.use_ai or not self.consent_external_ai):
+            raise ValueError("Media extraction requires explicit AI consent")
         return self
 
 
@@ -239,11 +268,12 @@ class RecipeImportStatus(Model):
     source_platform: str
     state: Literal["queued", "preview", "needs_input", "confirmed", "cancelled"]
     recipe: Recipe | None
+    extraction: ExtractionResult | None = None
+    recognized_text: str | None = Field(default=None, max_length=100000)
     warnings: list[str]
     error_code: str | None
     confirmed_recipe_id: UUID | None
     created_at: float
-    recognized_text: str | None = Field(default=None, max_length=100000)
 
 
 class BringCredentials(Model):

@@ -1,0 +1,69 @@
+{
+  "observed_at": "2026-10-22T03:52:25.124115+00:00",
+  "source": {
+    "feature_head": "f2c3441e1263b1279830c22b0b41459f1520acf4",
+    "main_head": "cbfb68bd9fd4e0db10cc0b304aa077aeebce4f6a",
+    "scope": "Combined merge candidate, including conflict resolutions and upgrade/cancellation regressions"
+  },
+  "backend": {
+    "passed": 279,
+    "failed": 0,
+    "junit": "build/merge-tests.xml",
+    "warning": "Upstream Starlette/httpx TestClient deprecation"
+  },
+  "frontend": {
+    "passed": 50,
+    "failed": 0
+  },
+  "checks": {
+    "ruff_lint": "passed",
+    "ruff_format": "passed",
+    "mypy": "passed (37 source files)",
+    "typescript": "passed",
+    "prettier": "passed",
+    "production_build": "passed",
+    "openapi_drift": "passed",
+    "generated_pwa_contract": "passed",
+    "license_inventory": "passed",
+    "brand_assets": "passed",
+    "git_diff_whitespace": "passed"
+  },
+  "chromium": {
+    "ai_image_pdf_review": "passed; explicit synthetic provider HTTP responses",
+    "local_english_german_ocr_offline_review_save": "passed; real OCR",
+    "pwa_offline_sync": "passed",
+    "mobile_layout_drag_and_cancel": "passed; real CDP touch events, hit-tested settled grip after native inertial swipe",
+    "themes": "passed",
+    "push": "passed; explicit subscription/vendor doubles, real worker receiver",
+    "administration": "passed; explicit AI/Bring doubles",
+    "logs": "build/merge-*-browser.log"
+  },
+  "compatibility": {
+    "released_010_image_import_migration": "unchanged",
+    "new_migration": "011_recipe_import.sql",
+    "released_photo_database_queued_work_and_identity": "passed; synthetic retained database upgrade",
+    "legacy_photo_ai_disclosure": "passed; only recognized text sent, never image bytes",
+    "source_upload_cancellation": "passed; no import submission after cancellation",
+    "legacy_request_and_recipe_replay": "passed"
+  },
+  "github_ci": "Required before merge; exact head/run results recorded in the pull request",
+  "limits": [
+    "No live cloud provider/model verification",
+    "No physical iPhone/camera verification",
+    "Local WebKit download unavailable under workspace policy; WebKit is exercised by GitHub CI",
+    "Fresh native Docker builds/scans are exercised by GitHub CI",
+    "Independent native contract pin unchanged",
+    "No container release published by this source merge"
+  ],
+  "github_attempts": [
+    {
+      "run_id": 39719240298,
+      "source": "9d3b7fc77be721c165bf230e97ae2018dce6a7b7",
+      "conclusion": "failure",
+      "passed": "Backend/Docker runtime checks and security scans on AMD64/ARM64, plus PWA core",
+      "failed": "Console browser assertion during asynchronous AI profile loading",
+      "correction": "Disable provider fields and submit while profiles load; delayed real-request regression confirms edits/save begin only after loading finishes",
+      "local_console_regression": "passed"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ def cleanup_database(database, *, now=None, dry_run=False):
         imports = db.execute(
             """SELECT id FROM import_draft WHERE state IN ('confirmed','cancelled')
             AND finished_at<? AND request_fingerprint IS NOT NULL
-            AND (recipe IS NOT NULL OR warnings!='[]' OR error_code IS NOT NULL OR recognized_text IS NOT NULL)
+            AND (recipe IS NOT NULL OR recognized_text IS NOT NULL OR extraction IS NOT NULL OR warnings!='[]' OR error_code IS NOT NULL)
             LIMIT ?""",
             (now - 30 * DAY, BATCH),
         ).fetchall()
@@ -25,7 +25,7 @@ def cleanup_database(database, *, now=None, dry_run=False):
         for row in imports:
             if not dry_run:
                 db.execute(
-                    "UPDATE import_draft SET recipe=NULL,warnings='[]',error_code=NULL,recognized_text=NULL WHERE id=?",
+                    "UPDATE import_draft SET recipe=NULL,recognized_text=NULL,extraction=NULL,warnings='[]',error_code=NULL WHERE id=?",
                     (row["id"],),
                 )
         jobs = db.execute(
@@ -45,6 +45,23 @@ def cleanup_database(database, *, now=None, dry_run=False):
         for row in jobs:
             if not dry_run:
                 db.execute("DELETE FROM background_job WHERE id=?", (row["id"],))
+        # Uploaded sources are transient; never prune a queued worker's input.
+        sources = db.execute(
+            """SELECT s.id FROM import_source s WHERE s.created_at<?
+            AND NOT EXISTS (SELECT 1 FROM import_draft i WHERE i.source_id=s.id AND i.state='queued') LIMIT ?""",
+            (now - 7 * DAY, BATCH),
+        ).fetchall()
+        counts["import_sources"] = len(sources)
+        if not dry_run:
+            db.executemany("DELETE FROM import_source WHERE id=?", [(row[0],) for row in sources])
+        attempts = db.execute(
+            "SELECT id FROM import_ai_attempt WHERE created_at<? LIMIT ?", (now - 90 * DAY, BATCH)
+        ).fetchall()
+        counts["import_ai_attempts"] = len(attempts)
+        if not dry_run:
+            db.executemany(
+                "DELETE FROM import_ai_attempt WHERE id=?", [(row[0],) for row in attempts]
+            )
         sessions = db.execute(
             """SELECT s.id FROM session s WHERE s.refresh_expires<?
             AND NOT EXISTS (SELECT 1 FROM push_subscription p WHERE p.session_id=s.id) LIMIT ?""",

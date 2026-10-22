@@ -3,6 +3,7 @@
 import io
 import json
 import subprocess
+from importlib.resources import files
 from pathlib import Path
 from uuid import uuid4
 
@@ -16,7 +17,8 @@ from aircooker.db import Database
 from aircooker.errors import DomainError
 from aircooker.image_import import ocr_available, printed_recipe, recognise_text
 from aircooker.import_receipts import fingerprint
-from aircooker.jobs import claim, finish
+from aircooker.jobs import claim, enqueue, finish
+from aircooker.media import put_media
 from aircooker.retention import DAY, cleanup_database
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -158,6 +160,58 @@ def test_image_import_survives_restart_and_requires_review(harness, mutation):
     cleanup_database(app.state.database, now=finished + 31 * DAY)
     assert client.get("/api/v1/imports/" + draft["id"]).json()["recognized_text"] is None
     assert client.post("/api/v1/imports", json=body).json()["state"] == "confirmed"
+
+
+def test_released_photo_database_upgrades_without_losing_queued_work(tmp_path, monkeypatch):
+    from aircooker.app import create_app
+
+    resources = tmp_path / "released-package"
+    (resources / "migrations").mkdir(parents=True)
+    for source in files("aircooker").joinpath("migrations").iterdir():
+        if source.name.endswith(".sql") and source.name < "011":
+            (resources / "migrations" / source.name).write_text(source.read_text())
+    with monkeypatch.context() as patch:
+        patch.setattr("aircooker.db.files", lambda package: resources)
+        old = Database(tmp_path / "data")
+    image_id, iid, instance = uuid4(), str(uuid4()), str(uuid4())
+    put_media(old, image_id, (FIXTURES / "recipe-photo-en.png").read_bytes(), "image/png")
+    body = {
+        "image_id": str(image_id),
+        "text": None,
+        "source_url": None,
+        "use_ai": False,
+        "consent_external_ai": False,
+    }
+    receipt = fingerprint(body)
+    with old.transaction() as db:
+        db.execute(
+            "INSERT INTO household VALUES (1,?,?,?,?,?,?)",
+            (
+                "Synthetic retained household",
+                "UTC",
+                "en",
+                "cook",
+                "synthetic-unused-hash",
+                instance,
+            ),
+        )
+        db.execute(
+            "INSERT INTO import_draft(id,source_platform,state,warnings,created_at,request_fingerprint,recognized_text) VALUES (?,'image','queued','[]',0,?,?)",
+            (iid, receipt, "Retained recognized text"),
+        )
+        enqueue(db, "recipe.import", "import:" + iid, {"id": iid, **body})
+    app = create_app(old.root, run_worker=False)
+    process(app)
+    upgraded = Database(old.root)
+    with upgraded.connect() as db:
+        assert db.execute("SELECT instance_id FROM household").fetchone()[0] == instance
+        versions = {r[0] for r in db.execute("SELECT version FROM schema_migration")}
+        assert {"010_image_import.sql", "011_recipe_import.sql"} <= versions
+        draft = db.execute("SELECT * FROM import_draft WHERE id=?", (iid,)).fetchone()
+        assert draft["state"] == "preview" and draft["request_fingerprint"] == receipt
+        assert "Lemon rice" in draft["recognized_text"]
+        assert json.loads(draft["recipe"])["image_id"] == str(image_id)
+        assert db.execute("SELECT COUNT(*) FROM entity WHERE kind='recipe'").fetchone()[0] == 0
 
 
 def test_image_receipt_deduplicates_retries_and_detects_changed_image(harness):

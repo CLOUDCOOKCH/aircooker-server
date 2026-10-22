@@ -17,6 +17,7 @@ transaction, tracked by filename. Released migrations must never be edited in pl
 | suggestion_application | Device-scoped request fingerprint/result receipts for atomic live preview approval and replay |
 | background_job | Deduplicated jobs, leases, fencing token, generation, retries, redacted error code |
 | import_draft | Pending/preview/needs-input/confirmed/cancelled state, warnings and provenance |
+| import_source / import_ai_attempt | Bounded private immutable attachments and redacted provider-attempt history; source UUIDs never grant public access |
 | bring_owned_item | Period/requirement/list ownership ledger, external UUID, applied state and purchase history |
 | push_subscription | Per-device/session notification credentials encrypted with the vault; endpoint hash unique, bounded preferences and safe health fields |
 | push_delivery | Accepted receipt unique by subscription/civil date/category; subscription deletion cascades |
@@ -71,3 +72,12 @@ Migration 010 adds bounded `recognized_text` to import previews. Existing rows r
 NULL; uploaded image UUIDs use the existing immutable media store and job payload. No
 entity revisions, sync identities, old change logs or request fingerprints are rewritten.
 Terminal OCR text follows preview retention; pending work and media remain retained.
+
+Migration 011 adds private AI import sources, nullable source references and validated
+extraction previews, plus a separate attempt ledger. Released migration 010 is unchanged.
+The migration preserves queued photo imports, recognized text, household identity and
+existing replay fingerprints. The new image/source/destination receipt fields are included
+only when supplied; older request receipts remain byte-for-byte compatible. Recipe
+metadata is additive, with legacy mutation defaults omitted from replay fingerprints.
+Transient AI sources expire after seven days unless queued work still references them;
+attempt history expires after 90 days. Existing photo media retention is unchanged.

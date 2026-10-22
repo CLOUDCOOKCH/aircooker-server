@@ -20,9 +20,9 @@ have household-wide permission; this is not a multi-tenant role system.
 | Clock skew/duplicate sync | Transactional server sequence, fingerprinted replay, tombstones | Broader interrupted two-device end-to-end tests |
 | Import SSRF/rebinding | Public HTTPS only, all DNS answers validated, pinned socket + hostname TLS, redirects rechecked | Exhaustive URL/IPv6/proxy tests |
 | Oversized/parser inputs | HTTP cap, content cap, bounded structure traversal and job timeouts | Decompression/parser CPU and slow-read tests |
-| Prompt injection | AI gets text only, no tools/execution/browsing, strict schema and mandatory preview | Provider-specific live refusal/truncation tests |
+| Prompt injection | AI receives explicitly consented text/media as untrusted input, no tools/execution/browsing, strict schema and mandatory preview | Provider-specific live refusal/truncation tests |
 | Destructive Bring edits | UUID-only operations, no manual-item adoption, durable ledger and fail-closed capability gate | Dedicated-list live proof and concurrent-change testing |
-| Credential leakage | Hashed sessions; encrypted Bring file separate from DB; AI key file; access logs disabled; redacted error codes | Complete dependency/log review |
+| Credential leakage | Hashed sessions; encrypted Bring/AI profiles separate from DB; optional restricted AI key file; access logs disabled; redacted error codes | Complete dependency/log review |
 | Backup disclosure | Non-secret export; local restricted sensitive-backup command | Encrypted automated backup/recovery workflow |
 
 Network sources never use configured AI endpoints as fetch targets. Local AI HTTP is an

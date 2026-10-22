@@ -1,5 +1,20 @@
 # Implementation checklist and evidence
 
+**AI recipe import — feature branch integrated with the published photo/theme/calendar work:**
+Encrypted provider profiles and explicit per-model input capabilities support bounded AI
+image/PDF imports and Gemini video requests. Website metadata precedes AI; consent binds
+the displayed provider destination. Every result remains an editable preview until saved.
+The existing camera/chooser retains local EN/DE OCR and its text-only optional-AI privacy
+contract. Migration 011 adds the AI tables without changing released migration 010 or
+legacy replay receipts. Regression tests preserve queued photos through upgrade and prevent
+cancelled attachment uploads from creating imports. Local combined validation passes 279
+backend and 50 frontend tests, Python/TypeScript checks, production build and contract/brand/
+licence checks. See [AI import configuration and limits](wiki/AI-Recipe-Import.md) and
+[merge validation](validation/ai-recipe-import-merge.json). Original branch-only evidence is
+retained separately in validation/ai-recipe-import.json. Cloud responses in tests are
+synthetic; live providers/models, physical Apple devices and the updated native contract
+remain unverified. Merging source does not publish a new container release.
+
 **Photo recipe import, 2026-10-21 — published and verified in `poc-20261021.10`:**
 PWA Import recipe offers Take photo and Choose image. Atomic image/job persistence,
 metadata-stripped upload and bounded local EN/DE OCR produce editable previews; only

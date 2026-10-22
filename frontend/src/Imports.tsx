@@ -5,6 +5,8 @@ import { PageHeader, Photo } from './components';
 import { uuid } from './lib/domain';
 import type { ImportTask, Photo as StoredPhoto } from './lib/store';
 import { prepareImportImage } from './lib/image-import';
+import { sourceKind } from './lib/imports';
+import type { components } from './api-schema';
 
 const errorKeys = {
   image_ocr_unavailable: 'imageOCRUnavailable',
@@ -17,6 +19,9 @@ const errorKeys = {
   image_not_available_locally: 'imageImportMissing',
   media_storage_limit: 'imageStorageFull',
   ai_not_configured: 'imageAINotConfigured',
+  ai_input_format_unsupported: 'importFormatUnsupported',
+  ai_configuration_changed_review_consent: 'importProviderChanged',
+  import_source_expired: 'importExtractionError',
 } as const;
 function BlobPreview({ blob, alt }: { blob: Blob; alt: string }) {
   const [url, setURL] = useState<string>();
@@ -40,6 +45,24 @@ export function Imports({
   const app = useApp(),
     { t } = app;
   const [mode, setMode] = useState<'link' | 'image'>('link');
+  const [file, setFile] = useState<File | null>(null);
+  const [sourceID, setSourceID] = useState<string | null>(null);
+  const [status, setStatus] = useState<components['schemas']['AISettingsStatus'] | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const submitting = useRef(false);
+  useEffect(() => {
+    let alive = true;
+    if (app.api && !app.demo)
+      void app.api
+        .request<components['schemas']['AISettingsStatus']>('/api/v1/admin/ai')
+        .then((value) => {
+          if (alive) setStatus(value);
+        })
+        .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [app.api, app.demo]);
   const [url, setURL] = useState(''),
     [text, setText] = useState(''),
     [imageText, setImageText] = useState(''),
@@ -47,7 +70,9 @@ export function Imports({
     [selected, setSelected] = useState<StoredPhoto>(),
     [ai, setAI] = useState(false),
     [consent, setConsent] = useState(false),
-    [error, setError] = useState<'invalid' | 'saveError' | 'imageInputError' | null>(null),
+    [error, setError] = useState<
+      'invalid' | 'saveError' | 'imageInputError' | 'importFileError' | null
+    >(null),
     [saving, setSaving] = useState(false),
     [choosing, setChoosing] = useState(false);
   const [queuedFocus, setQueuedFocus] = useState<string>();
@@ -89,12 +114,25 @@ export function Imports({
   };
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setSaving(true);
     try {
-      if (mode === 'image' ? !selected : !url && !text.trim()) {
+      if (mode === 'image' ? !selected : !url && !text.trim() && !file && !sourceID) {
         setError('invalid');
         return;
       }
+      if (
+        mode === 'link' &&
+        file &&
+        (file.size > 8 * 1024 * 1024 ||
+          !sourceKind(file.type) ||
+          (status && (!status.enabled || !status.input_formats?.includes(sourceKind(file.type)!))))
+      ) {
+        setError('importFileError');
+        return;
+      }
+      const attachment = mode === 'link' ? (file ? uuid() : sourceID) : null;
       const importID = uuid();
       await app.store.saveImport(
         {
@@ -105,7 +143,18 @@ export function Imports({
             image_id: mode === 'image' ? selected!.id : null,
             use_ai: ai,
             consent_external_ai: ai && consent,
+            ...(ai && status?.enabled && status.provider && status.base_url && status.model
+              ? {
+                  ai_destination: [status.provider, status.base_url, status.model] as [
+                    string,
+                    string,
+                    string,
+                  ],
+                }
+              : {}),
+            ...(attachment ? { source_id: attachment } : {}),
           },
+          ...(mode === 'link' && file ? { source: { blob: file, name: file.name } } : {}),
           state: 'queued',
         },
         mode === 'image' ? selected : undefined,
@@ -115,12 +164,17 @@ export function Imports({
       setImageText('');
       setImageTextOpen(false);
       setSelected(undefined);
+      setFile(null);
+      setSourceID(null);
+      setConsent(false);
+      if (fileInput.current) fileInput.current.value = '';
       setError(null);
       setQueuedFocus(importID);
       await app.changed();
     } catch {
       setError('saveError');
     } finally {
+      submitting.current = false;
       setSaving(false);
     }
   };
@@ -137,6 +191,8 @@ export function Imports({
       setMode(task.body.image_id ? 'image' : 'link');
       setURL(task.body.source_url ?? '');
       setText(task.body.text ?? '');
+      setFile(null);
+      setSourceID(task.body.source_id ?? null);
       setImageText(task.recognizedText ?? task.body.text ?? '');
       setImageTextOpen(Boolean(task.body.image_id));
       setSelected(task.body.image_id ? await app.store.photo(task.body.image_id) : undefined);
@@ -275,6 +331,28 @@ export function Imports({
                 ) : (
                   <>
                     <p className="intro-copy">{t('importHint')}</p>
+                    <p className="muted">{t('importMetadataFirst')}</p>
+                    <label>
+                      {t('importFile')}
+                      <input
+                        ref={fileInput}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,video/webm"
+                        onChange={(event) => {
+                          const next = event.target.files?.[0] ?? null;
+                          setFile(next);
+                          setSourceID(null);
+                          if (next) {
+                            setAI(true);
+                            setConsent(false);
+                          }
+                        }}
+                      />
+                      <small>{t('importFileHint')}</small>
+                    </label>
+                    {(file || sourceID) && (
+                      <p className="info-note">{file?.name ?? t('importRetainedSource')}</p>
+                    )}
                     <label>
                       {t('importURL')}
                       <span className="input-icon">
@@ -303,6 +381,7 @@ export function Imports({
                   <input
                     type="checkbox"
                     checked={ai}
+                    disabled={mode === 'link' && (!!file || !!sourceID)}
                     onChange={(e) => {
                       setAI(e.target.checked);
                       setConsent(false);
@@ -310,6 +389,13 @@ export function Imports({
                   />
                   {t('useAI')}
                 </label>
+                {ai && (
+                  <p className="muted">
+                    {status?.enabled
+                      ? `${t('aiDefault')}: ${status.provider} · ${status.model} · ${status.base_url}`
+                      : t('importAIUnavailable')}
+                  </p>
+                )}
                 {ai && (
                   <label className="check-row">
                     <input
@@ -331,7 +417,7 @@ export function Imports({
                   disabled={
                     saving ||
                     choosing ||
-                    (mode === 'image' ? !selected : !url && !text.trim()) ||
+                    (mode === 'image' ? !selected : !url && !text.trim() && !file && !sourceID) ||
                     (ai && !consent)
                   }
                 >
