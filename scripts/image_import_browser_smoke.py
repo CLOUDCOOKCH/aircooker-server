@@ -122,6 +122,39 @@ def main():
                     context.add_init_script("Reflect.deleteProperty(window, 'PushManager')")
                 page = context.new_page()
                 errors = []
+                page.on(
+                    "pageerror",
+                    lambda error: print(
+                        "Runtime diagnostic:",
+                        json.dumps({"message": error.message, "stack": error.stack}),
+                        flush=True,
+                    ),
+                )
+                page.on(
+                    "console",
+                    lambda message: print(
+                        "Console diagnostic:", message.type, message.text[:600], flush=True
+                    )
+                    if message.type == "error"
+                    else None,
+                )
+                page.on(
+                    "requestfailed",
+                    lambda request: print(
+                        "Transport diagnostic:",
+                        request.url.split("/api/v1/", 1)[-1][:200],
+                        request.failure,
+                        flush=True,
+                    ),
+                )
+                page.expose_function(
+                    "reportTestRuntime",
+                    lambda detail: print("Window diagnostic:", json.dumps(detail), flush=True),
+                )
+                context.add_init_script("""for (const kind of ['error', 'unhandledrejection']) window.addEventListener(kind, event => {
+                  const error = event.error ?? event.reason;
+                  void window.reportTestRuntime({kind, name: error?.name, message: error?.message ?? event.message, stack: error?.stack});
+                });""")
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 page.on(
                     "response",
