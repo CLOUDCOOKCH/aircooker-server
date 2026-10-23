@@ -232,12 +232,16 @@ def main():
                     page.get_by_label("Quantity", exact=True).nth(1).fill("1")
                     page.get_by_role("button", name="Save", exact=True).click()
                     expect(page.locator(".recipe-editor")).not_to_be_visible()
+                    if engine == "webkit":
+                        page.wait_for_load_state("networkidle")
+                        expect(page.locator(".connection-status")).to_have_text("Up to date")
                     page.reload()
                     navigate(page, "Recipes")
                     page.get_by_role("button", name="Synthetic imported soup", exact=False).click()
                     expect(page.locator(".ingredients-list")).to_contain_text("Zwiebeln")
                     expect(page.locator(".ingredients-list")).to_contain_text("Dragon fruit")
-                    context.set_offline(False)
+                    if engine == "chromium":
+                        context.set_offline(False)
                     page.get_by_role("button", name="Sync now", exact=True).click()
                     expect(page.locator(".connection-status")).to_have_text(
                         "Up to date", timeout=20000

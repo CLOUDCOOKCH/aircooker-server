@@ -172,16 +172,23 @@ def main():
                         capture("pantry-desktop.png")
                         page.set_viewport_size({"width": 390, "height": 844})
                         capture("pantry-mobile.png")
-                        context.set_offline(engine == "chromium")
+                        if engine == "chromium":
+                            context.set_offline(True)
                         page.get_by_role("button", name="Save my pantry", exact=True).click()
                         expect(
                             page.get_by_role("heading", name="Pantry", exact=True)
                         ).to_be_visible()
+                        if engine == "webkit":
+                            # This branch is online. Drain sync before deliberately replacing
+                            # the document; WebKit reports aborted fetches as native pageerrors.
+                            page.wait_for_load_state("networkidle")
+                            expect(page.locator(".connection-status")).to_have_text("Up to date")
                         page.reload()
                         expect(
                             page.get_by_role("heading", name="Your kitchen", exact=True)
                         ).to_be_visible()
-                        context.set_offline(False)
+                        if engine == "chromium":
+                            context.set_offline(False)
                         page.get_by_role("button", name="Sync now", exact=True).click()
                         for _ in range(100):
                             if operator.get("/api/v1/household/food-profile").json()["profile"][
@@ -231,6 +238,11 @@ def main():
                         expect(
                             page.get_by_role("heading", name="Vegetables", exact=True)
                         ).to_be_visible()
+                        if engine == "webkit":
+                            # This branch is online. Drain sync before deliberately replacing
+                            # the document; WebKit reports aborted fetches as native pageerrors.
+                            page.wait_for_load_state("networkidle")
+                            expect(page.locator(".connection-status")).to_have_text("Up to date")
                         page.reload()
                         page.get_by_role("button", name="Recipe ideas", exact=False).click()
                         expect(
@@ -266,13 +278,15 @@ def main():
                         ).to_be_visible()
                         page.set_viewport_size({"width": 1440, "height": 1000})
                         capture("taste-summary-desktop.png")
-                        context.set_offline(engine == "chromium")
+                        if engine == "chromium":
+                            context.set_offline(True)
                         page.get_by_role("button", name="Save my taste", exact=True).click()
                         expect(
                             page.get_by_label("What do you have at home?", exact=True)
                         ).to_be_visible()
                         assert calls == []
-                        context.set_offline(False)
+                        if engine == "chromium":
+                            context.set_offline(False)
                         page.get_by_label("What do you have at home?", exact=True).fill(
                             "Pasta and tomatoes"
                         )
