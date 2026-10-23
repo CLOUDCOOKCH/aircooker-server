@@ -506,7 +506,7 @@ synthetic-data attribution are in [food-setup provenance](../../docs/screenshots
 See [the five-section review](../../docs/validation/food-setup-review.md),
 [behavior/operations](../../docs/FOOD_SETUP.md) and [ADR 017](../../docs/adr/017-food-onboarding.md).
 
-Implementation-agent local evidence passes 472 backend/75 frontend tests, lint/format/
+Implementation-agent local evidence passes 472 backend/76 frontend tests, lint/format/
 types/build/OpenAPI/artwork/licences and Chromium food/PWA/AI-import/source-photo/ideas/
 UX/sync-status suites, including trusted touch swipe plus buttons, draft resume, offline
 Save/reload/sync, preferences through actual adapters over synthetic HTTP and no autosave.
@@ -514,7 +514,8 @@ The documenter ran no browser/tests. Both GitHub architecture image vulnerabilit
 pass; complete current-source build/runtime/browser CI and candidate publication remain
 pending. `.3` is selected but unpublished; `.2` remains the last published preview.
 Local Docker is blocked by workspace Alpine HTTP 403; local WebKit is unavailable.
-Native contract/core/Xcode build pass; simulator tests remain running. No live AI/Bring!,
+Native PR #4 CI `39970064341` passes core/Xcode/simulator and is merged; its exact-main
+rerun remains pending. No live AI/Bring!,
 physical iPhone, production-v1, detector (missing launcher, exit 127), design-hook,
 plugin-schema or shipped specialist pass is claimed. DESIGN.md/design.json retain their
 byte-identical historical snapshots and already recorded navigation/layout/type/theme drift.

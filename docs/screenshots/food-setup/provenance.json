@@ -124,5 +124,10 @@
   },
   "capture_script_source": "server commit 58c5930; captures use its script plus the current runtime CSS fix",
   "current_regression_script_sha256": "7e22f0b674d9c6cc0fa251e914409c06d65ab0937b452287f625a5cf0b4bef23",
-  "script_change_after_capture": "Trusted Chromium CDP touch and WebKit online regression support were added after the UI captures; screenshot bytes and reviewed UI runtime sources are unchanged."
+  "script_change_after_capture": "Trusted Chromium CDP touch and WebKit online regression support were added after the UI captures; screenshot bytes and reviewed UI runtime sources are unchanged.",
+  "post_capture_nonvisual_correction": "After captures and the independent UI review, food-sync.ts adds revision preflight before PUT and store.ts archives raw food state atomically during explicit server-history recovery, clearing active snapshot/queue while retaining setup drafts. Implementation-agent regression tests verify no PUT on backwards history and no automatic replay after recovery (472 backend / 76 frontend). No UI/CSS/assets/capture bytes changed; reviewed_source_sha256 retains the originally reviewed hashes and does not claim reviewer coverage of this follow-up.",
+  "post_capture_nonvisual_source_sha256": {
+    "frontend/src/lib/food-sync.ts": "8bba19f82f57f5b5a523da7fcb6fbdeaef8c77d0046d3133deb15710955423c8",
+    "frontend/src/lib/store.ts": "cbd50357d7a209d37c6a3fd017ca5e0efc47eaa3f7175119a40da647596b3c35"
+  }
 }

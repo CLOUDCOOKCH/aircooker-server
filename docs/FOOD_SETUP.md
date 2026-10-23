@@ -60,6 +60,12 @@ current values; likes/dislikes lists replace their respective fields. Concurrent
 that leave one food in both lists are rejected and retained for recovery. A stable request
 UUID/body replays once; another device or changed body cannot reuse its receipt. A slow
 older profile response cannot overwrite a newer accepted browser snapshot.
+Before sending queued profile writes, sync checks the server revision. A backwards revision
+returns `sync_history_changed` without a PUT or false synced status. Use the existing
+explicit server-history recovery: it archives the raw food state alongside entities/outbox
+in the same IndexedDB transaction, then clears the active profile snapshot/queue. Unfinished
+setup drafts remain. Only after recovery can the lower restored profile load; archived
+choices remain in the private pending-work export and are not replayed automatically.
 
 An explicitly requested new idea batch freezes the effective saved preferences in its
 request alongside the consented provider/base URL/model. Editing taste later does not

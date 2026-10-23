@@ -24,6 +24,13 @@ Reviewed sources include `frontend/src/PantrySetup.tsx`, `FoodSwiper.tsx`, `Reci
 `lib/food.ts`, `lib/food-sync.ts`, `lib/store.ts`, `src/mealf/food_profile.py`,
 `food_catalog.json`, `recipe_ideas.py`, `ai.py`, `planning.py`, `backup.py` and migration 016.
 The reviewed implementation is `58c5930` plus the narrow CSS correction described below.
+After that review/capture, a nonvisual `food-sync.ts` / `store.ts` restore correction added
+revision preflight and atomic archival during explicit history recovery. The reviewer did
+not inspect that newer correction; the implementation agent reports a regression test
+proving no PUT on backwards revision and archival without automatic replay. Current totals
+are 472 backend / 76 frontend; the subsequent frontend tests/type/build and real Chromium
+food suite pass. UI/CSS/assets/capture bytes are unchanged, so the prior UI
+verdict remains limited to its original reviewed scope.
 
 Pantry selection initializes from a durable draft or available actual stock; it never
 invents household stock. Save commits identified pantry edits plus completion locally;
@@ -92,7 +99,7 @@ No new identity, imagery, ornamental animation or whole-product redesign is need
 Static captures do not establish motion, touch quality, screen-reader delivery or durable
 sync on their own. Implementation-agent checks supply separate corroborating evidence:
 
-- **472 backend / 75 frontend tests pass**, Ruff lint/format, mypy, Prettier, TypeScript/build,
+- **472 backend / 76 frontend tests pass**, Ruff lint/format, mypy, Prettier, TypeScript/build,
   OpenAPI drift, original-artwork integrity and licence checks.
 - Real Chromium food setup, core PWA, AI import, source-photo, Recipe ideas, PWA UX and
   sync-status workflows pass. Coverage includes trusted CDP touch swipe plus buttons/Skip,
@@ -109,8 +116,9 @@ sync on their own. Implementation-agent checks supply separate corroborating evi
   GitHub AMD64/ARM64 image HIGH/CRITICAL scans pass; remaining architecture runtime/build
   and browser gates are pending at this handoff. The candidate is not published.
 - The independent native companion contract is pinned at `58c5930` (PR #4). Local contract
-  and 296 locale checks, GitHub core and Xcode build pass; simulator execution is still
-  running. No native food-onboarding UI is claimed.
+  and 296 locale checks pass; native PR #4 CI `39970064341` succeeds, including Xcode
+  and simulator tests, and is merged at `1b2f3d380ee68117b06188c52f0fe5cd959a2c22`.
+  Its exact-main rerun remains pending. No native food-onboarding UI is claimed.
 
 The documenter checked docs links, PNG dimensions/byte hashes and preserved design hashes,
 not application behavior. One detector attempt failed with missing launcher, exit 127.

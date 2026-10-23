@@ -111,7 +111,9 @@ test('mismatched receipts and stale snapshots cannot acknowledge or regress pref
   await store.saveFood({ pantry_setup_done: true });
   await assert.rejects(
     syncFood(store, {
-      async request<T>() {
+      async request<T>(_path: string, init?: RequestInit) {
+        if (!init?.method)
+          return { revision: 5, profile: { ...DEFAULT_FOOD, likes: ['rice'] } } as T;
         return { request_id: uuid(), revision: 6, conflict: false } as T;
       },
     }),
@@ -142,5 +144,38 @@ test('invalid or untrusted food choices remain stored and cannot silently replac
   assert.equal(pantryKey('Olivenöl'), pantryKey('Olive oil'));
   assert.notEqual(pantryKey('rice'), pantryKey('basmati rice'));
   assert.equal(queueFood(EMPTY_FOOD, { taste_setup_done: true }, true).queue.length, 0);
+  store.close();
+});
+
+test('restored preference history blocks writes and explicit recovery archives rather than replays choices', async () => {
+  const store = await LocalStore.open(uuid());
+  await store.acceptFood({ revision: 9, profile: { ...DEFAULT_FOOD, likes: ['rice'] } });
+  await store.saveFood({ likes: ['pasta'], taste_setup_done: true });
+  const original = await store.foodState();
+  const restored = { revision: 2, profile: { ...DEFAULT_FOOD, likes: ['fish'] } };
+  let writes = 0;
+  const transport = {
+    async request<T>(_path: string, init?: RequestInit) {
+      if (init?.method) {
+        writes++;
+        throw Error('must not replay');
+      }
+      return restored as T;
+    },
+  };
+  await assert.rejects(
+    syncFood(store, transport),
+    (error: unknown) => error instanceof APIError && error.code === 'sync_history_changed',
+  );
+  assert.equal(writes, 0);
+  assert.deepEqual(await store.foodState(), original);
+  await store.replaceSnapshot([], { cursor: 0, token: 'root' });
+  assert.deepEqual((await store.archives())[0].food, original);
+  assert.deepEqual(await store.foodState(), EMPTY_FOOD);
+  await syncFood(store, transport);
+  assert.equal(writes, 0);
+  assert.deepEqual(foodProfile(await store.foodState()).likes, ['fish']);
+  const exported = (await store.localExport()) as { archives: { food: unknown }[] };
+  assert.deepEqual(exported.archives[0].food, original);
   store.close();
 });

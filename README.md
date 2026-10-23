@@ -135,7 +135,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional preview; `.2` navigation published; pantry/taste `.3` candidate has 75 frontend tests and Chromium coverage; candidate CI/publication, physical Safari and remaining acceptance open |
+| PWA | Functional preview; `.2` navigation published; pantry/taste `.3` candidate has 76 frontend tests and Chromium coverage; candidate CI/publication, physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |

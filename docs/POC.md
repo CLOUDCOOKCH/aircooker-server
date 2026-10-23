@@ -10,7 +10,7 @@ below. `.2` remains the last published preview; its completed gates do not certi
 
 Candidate source `58c5930` plus the narrow German pantry CSS correction adds actual-stock
 pantry onboarding, resumable shared tastes and shorter import preparation. Local 472
-backend / 75 frontend tests and real Chromium workflows pass with synthetic integrations;
+backend / 76 frontend tests and real Chromium workflows pass with synthetic integrations;
 the manual scoped review resolves its one P2 finding. Both current-source architecture
 build/runtime/security and Chromium/WebKit CI, release images, anonymous pull and the
 candidate persistent-volume upgrade remain pending. A local Docker build was blocked by

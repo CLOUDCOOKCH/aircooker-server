@@ -7,6 +7,15 @@ import type { components } from '../api-schema';
 /** Entity sync and history/session validation run first; this durable queue cannot starve recipes. */
 export async function syncFood(store: LocalStore, api: Pick<APIClient, 'request'>): Promise<void> {
   const work = async () => {
+    const pull = async () => {
+      const context = parseFoodContext(await api.request(FOOD_PATH));
+      const prior = await store.foodState();
+      if (prior.context && context.revision < prior.context.revision)
+        throw new APIError('sync_history_changed', 409);
+      await store.acceptFood(context);
+    };
+    // A restored settings revision must not silently replay old queued choices.
+    await pull();
     for (let count = 0; count < 50; count++) {
       const state = await store.foodState();
       const next = state.queue[0];
@@ -26,7 +35,7 @@ export async function syncFood(store: LocalStore, api: Pick<APIClient, 'request'
       if (context.revision < receipt.revision) throw new APIError('invalid_server_response', 0);
       await store.acceptFood(context, next.request_id);
     }
-    await store.acceptFood(parseFoodContext(await api.request(FOOD_PATH)));
+    await pull();
   };
   if (typeof navigator !== 'undefined' && navigator.locks)
     await navigator.locks.request(store.syncLock, work);

@@ -58,7 +58,13 @@ interface Schema extends DBSchema {
   imports: { key: string; value: ImportTask };
   archives: {
     key: string;
-    value: { created_at: string; reason: string; entities: Entity[]; outbox: Queued[] };
+    value: {
+      created_at: string;
+      reason: string;
+      entities: Entity[];
+      outbox: Queued[];
+      food?: unknown;
+    };
   };
 }
 
@@ -338,6 +344,7 @@ export class LocalStore {
           reason: 'server_history_recovery',
           entities,
           outbox,
+          food: await tx.objectStore('meta').get(FOOD_STATE),
         },
         uuid(),
       );
@@ -359,6 +366,7 @@ export class LocalStore {
           await tx
             .objectStore('imports')
             .put({ ...task, state: 'needs_input', error: 'archived_after_server_restore' });
+      await tx.objectStore('meta').put(EMPTY_FOOD, FOOD_STATE);
       await tx.objectStore('meta').put(anchor, 'anchor');
       await tx.done;
     } catch (error) {

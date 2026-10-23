@@ -11,6 +11,9 @@
   non-secret profile; old exports and archive envelope v1 remain compatible. Resolve
   German pantry word breaks at ≤360px with one column. Candidate `poc-20261023.3` is
   locally tested and manually reviewed; CI/publication gates remain pending.
+  Reject backwards food-profile revisions before PUT, and archive pending food state in
+  explicit server-history recovery without automatic replay; retain unfinished setup drafts.
+  Local totals are 472 backend / 76 frontend tests; this nonvisual follow-up changes no captures.
 
 - Simplify PWA navigation to Today, Plan, Recipes and Shopping. Open Settings from a
   persistent account button with Back, and Pantry inside Shopping with Shopping selected.

@@ -23,6 +23,11 @@ UUID replay, accepts stale bases with conflict information and applies changed f
 server commit order. This avoids tying household settings to entity tombstones/history or
 trusting device clocks. Lists replace a field rather than merge silently; overlapping
 likes/dislikes fail validation.
+A nonvisual follow-up preflights profile revision before queued PUTs and rejects backwards
+history with `sync_history_changed`. Explicit server-history recovery archives raw food
+state atomically with entities/outbox before clearing the active profile/queue; unfinished
+setup drafts remain and old queued tastes do not replay automatically. Private local export
+retains the archive.
 
 Only an explicit Recipe ideas request sends a frozen preference snapshot to configured AI.
 Old queued jobs keep their original body/fingerprint; later taste edits do not regenerate
