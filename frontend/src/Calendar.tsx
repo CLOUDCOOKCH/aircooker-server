@@ -165,6 +165,7 @@ function BringStatus({ open }: { open: () => void }) {
   );
 }
 export function Home({
+  pantrySetup,
   day,
   setDay,
   open,
@@ -176,6 +177,7 @@ export function Home({
   suggest,
   shopping,
 }: {
+  pantrySetup: () => void;
   day: string;
   setDay: (day: string) => void;
   open: (id: string) => void;
@@ -207,6 +209,28 @@ export function Home({
           <span>{t(recipes.length ? 'homePlanAction' : 'addRecipe')}</span>
         </button>
       </PageHeader>
+      {!app.demo && app.foodLoaded && !app.food.pantry_setup_done && (
+        <section className="pantry-welcome" aria-label={t('pantryWelcomeTitle')}>
+          <div>
+            <h2>{t('pantryWelcomeTitle')}</h2>
+            <p>{t('pantryWelcomeHint')}</p>
+          </div>
+          <button className="secondary" onClick={pantrySetup}>
+            {t('pantryChooseBasics')}
+            <ChevronRight size={18} />
+          </button>
+          <button
+            className="text-button"
+            onClick={() =>
+              void app
+                .saveFood({ pantry_setup_done: true })
+                .catch(() => app.setError('storage_error'))
+            }
+          >
+            {t('setupNotNow')}
+          </button>
+        </section>
+      )}
       <div className="home-date-control" role="group" aria-label={t('date')}>
         <IconButton label={t('previousDay')} onClick={() => setDay(addDays(day, -1))}>
           <ChevronLeft size={20} />

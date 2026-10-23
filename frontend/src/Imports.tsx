@@ -66,8 +66,19 @@ export function Imports({
     if (app.api && !app.demo)
       void app.api
         .request<components['schemas']['AISettingsStatus']>('/api/v1/admin/ai')
-        .then((value) => {
-          if (alive) setStatus(value);
+        .then(async (value) => {
+          if (
+            alive &&
+            value &&
+            typeof value.enabled === 'boolean' &&
+            typeof value.provider === 'string' &&
+            typeof value.base_url === 'string' &&
+            typeof value.model === 'string' &&
+            Array.isArray(value.input_formats) &&
+            value.input_formats.every((format) => typeof format === 'string')
+          )
+            setStatus(value);
+          await app.store.setSetting('imports:ai-profile', value);
         })
         .catch(() => undefined);
     if (app.api && !app.demo)
@@ -77,22 +88,47 @@ export function Imports({
           if (alive) setChatGPT(value);
         })
         .catch(() => undefined);
+    if (!app.online && !app.demo)
+      void app.store
+        .setting<components['schemas']['AISettingsStatus'] | null>('imports:ai-profile', null)
+        .then((value) => {
+          if (
+            alive &&
+            value &&
+            typeof value.enabled === 'boolean' &&
+            typeof value.provider === 'string' &&
+            typeof value.base_url === 'string' &&
+            typeof value.model === 'string' &&
+            Array.isArray(value.input_formats) &&
+            value.input_formats.every((format) => typeof format === 'string')
+          )
+            setStatus(value);
+        })
+        .catch(() => undefined);
     return () => {
       alive = false;
     };
-  }, [app.api, app.demo]);
+  }, [app.api, app.demo, app.online]);
   const [url, setURL] = useState(''),
     [text, setText] = useState(''),
     [imageText, setImageText] = useState(''),
     [imageTextOpen, setImageTextOpen] = useState(false),
     [selected, setSelected] = useState<StoredPhoto>(),
-    [ai, setAI] = useState(false),
     [consent, setConsent] = useState(false),
     [error, setError] = useState<
       'invalid' | 'saveError' | 'imageInputError' | 'importFileError' | null
     >(null),
     [saving, setSaving] = useState(false),
     [choosing, setChoosing] = useState(false);
+  const ai =
+    account === 'household' &&
+    Boolean(
+      status?.enabled &&
+      status.provider &&
+      status.base_url &&
+      status.model &&
+      status.input_formats?.includes('text'),
+    );
   const [queuedFocus, setQueuedFocus] = useState<string>();
   useEffect(() => {
     if (!queuedFocus) return;
@@ -186,7 +222,7 @@ export function Imports({
             text: (mode === 'image' ? imageText : text) || null,
             image_id: mode === 'image' ? selected!.id : null,
             use_ai: ai,
-            consent_external_ai: ai && consent,
+            consent_external_ai: ai,
             ...(ai && status?.enabled && status.provider && status.base_url && status.model
               ? {
                   ai_destination: [status.provider, status.base_url, status.model] as [
@@ -240,7 +276,6 @@ export function Imports({
       setImageText(task.recognizedText ?? task.body.text ?? '');
       setImageTextOpen(Boolean(task.body.image_id));
       setSelected(task.body.image_id ? await app.store.photo(task.body.image_id) : undefined);
-      setAI(Boolean(task.body.use_ai));
       setAccount(task.body.ai_account === 'chatgpt' ? 'chatgpt' : 'household');
       setConsent(false);
       setError(null);
@@ -452,7 +487,6 @@ export function Imports({
                             setFile(next);
                             setSourceID(null);
                             if (next) {
-                              setAI(true);
                               setConsent(false);
                             }
                           }}
@@ -465,28 +499,12 @@ export function Imports({
                     </details>
                   </>
                 )}
-                {account === 'household' && (
-                  <label className="check-row">
-                    <input
-                      type="checkbox"
-                      checked={ai}
-                      disabled={mode === 'link' && (!!file || !!sourceID)}
-                      onChange={(e) => {
-                        setAI(e.target.checked);
-                        setConsent(false);
-                      }}
-                    />
-                    {t('useAI')}
-                  </label>
-                )}
                 {ai && account === 'household' && (
-                  <p className="muted">
-                    {status?.enabled
-                      ? `${t('aiDefault')}: ${status.provider} · ${status.model} · ${status.base_url}`
-                      : t('importAIUnavailable')}
+                  <p className="muted import-ai-notice" id="import-ai-notice">
+                    {t('importAIAutomatic')}
                   </p>
                 )}
-                {(ai || account === 'chatgpt') && (
+                {account === 'chatgpt' && (
                   <label className="check-row">
                     <input
                       type="checkbox"
@@ -510,18 +528,18 @@ export function Imports({
                 )}
                 <button
                   className="primary full"
+                  aria-describedby={ai ? 'import-ai-notice' : undefined}
                   disabled={
                     saving ||
                     choosing ||
                     (account === 'chatgpt'
                       ? !text.trim() || !consent || !chatgpt?.model || chatgpt.state !== 'connected'
-                      : (mode === 'image'
-                          ? !selected
-                          : !url && !text.trim() && !file && !sourceID) ||
-                        (ai && !consent))
+                      : mode === 'image'
+                        ? !selected
+                        : !url && !text.trim() && !file && !sourceID)
                   }
                 >
-                  {t('queueImport')}
+                  {t(ai ? 'queueImportAI' : 'queueImport')}
                   <ArrowRight size={18} />
                 </button>
               </form>

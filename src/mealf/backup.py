@@ -13,6 +13,8 @@ from uuid import UUID, uuid4
 from pydantic import Field
 
 from .errors import DomainError
+from .food_profile import FoodProfile
+from .food_profile import context as food_context
 from .legacy import ARCHIVE_FORMAT as LEGACY_ARCHIVE_FORMAT
 from .media import MAX_IMAGE_BYTES, MediaInfo, info_for, insert_media, validate_archived_image
 from .models import ENTITY_MODELS, EntityKind, HouseholdSettings, Model, Mutation
@@ -37,12 +39,13 @@ class ExportMedia(MediaInfo):
 
 class HouseholdExport(Model):
     format: str = "mealf-household"
-    version: int = 3
+    version: int = 4
     exported_at: str
     household: dict[str, str]
     entities: list[ExportEntity] = Field(max_length=10000)
     media: list[ExportMedia] = Field(default_factory=list, max_length=5000)
     planning_preferences: PlanningPreferences | None = None
+    food_profile: FoodProfile | None = None
     accepted_suggestions: dict[UUID, Annotated[int, Field(ge=1, le=1000000)]] = Field(
         default_factory=dict, max_length=10000
     )
@@ -79,6 +82,7 @@ def snapshot(db):
         household=dict(h),
         entities=entities,
         planning_preferences=planning.preferences,
+        food_profile=food_context(db).profile,
         accepted_suggestions=planning.accepted_counts,
     )
 
@@ -117,9 +121,11 @@ def export_household(database):
 def apply_restore(db, body: HouseholdExport, device_id: str):
     from .legacy import EXPORT_FORMAT
 
-    if body.format not in ("mealf-household", EXPORT_FORMAT) or body.version not in (1, 2, 3):
+    if body.format not in ("mealf-household", EXPORT_FORMAT) or body.version not in (1, 2, 3, 4):
         raise DomainError("unsupported_export_format", 422)
     if body.version < 3 and (body.planning_preferences is not None or body.accepted_suggestions):
+        raise DomainError("unsupported_export_fields", 422)
+    if body.version < 4 and body.food_profile is not None:
         raise DomainError("unsupported_export_fields", 422)
     settings = HouseholdSettings.model_validate(body.household)
     seen = set()
@@ -185,6 +191,11 @@ def apply_restore(db, body: HouseholdExport, device_id: str):
         db.execute(
             "UPDATE planning_preferences SET revision=revision+1,payload=? WHERE id=1",
             (body.planning_preferences.model_dump_json(),),
+        )
+    if body.food_profile is not None:
+        db.execute(
+            "UPDATE food_profile SET revision=revision+1,payload=? WHERE id=1",
+            (body.food_profile.model_dump_json(),),
         )
     imported_recipes = {
         entity.id for entity in body.entities if entity.kind == "recipe" and entity.payload

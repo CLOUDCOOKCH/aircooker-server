@@ -60,6 +60,7 @@ from .chatgpt_routes import register_routes as register_chatgpt
 from .db import Database
 from .diagnostics import diagnostics, public_error, recent_jobs
 from .errors import DomainError
+from .food_profile import register_routes as register_food_profile
 from .image_import import ocr_available, recognise_text
 from .import_receipts import fingerprint as import_fingerprint
 from .import_sources import ImportSourceInfo, put_source
@@ -406,6 +407,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
     app.state.chatgpt = chatgpt
     app.state.reminders = reminders
     register_planning_preferences(app, session, database)
+    register_food_profile(app, session, database)
 
     @app.get("/api/v1/system/info")
     def info():

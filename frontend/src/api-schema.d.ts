@@ -400,6 +400,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/household/food-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Profile */
+        get: operations["get_profile_api_v1_household_food_profile_get"];
+        /** Put Profile */
+        put: operations["put_profile_api_v1_household_food_profile_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/household/planning-preferences": {
         parameters: {
             query?: never;
@@ -1816,6 +1834,70 @@ export interface components {
              */
             schemaVersion: "1.0.0";
         };
+        /** FoodProfile */
+        FoodProfile: {
+            /** Dislikes */
+            dislikes?: string[];
+            /** Likes */
+            likes?: string[];
+            /**
+             * Pantry Setup Done
+             * @default false
+             */
+            pantry_setup_done: boolean;
+            /**
+             * Taste Setup Done
+             * @default false
+             */
+            taste_setup_done: boolean;
+        };
+        /** FoodProfileContext */
+        FoodProfileContext: {
+            profile: components["schemas"]["FoodProfile"];
+            /** Revision */
+            revision: number;
+        };
+        /** FoodProfilePatch */
+        FoodProfilePatch: {
+            /** Dislikes */
+            dislikes?: string[] | null;
+            /** Likes */
+            likes?: string[] | null;
+            /** Pantry Setup Done */
+            pantry_setup_done?: boolean | null;
+            /** Taste Setup Done */
+            taste_setup_done?: boolean | null;
+        };
+        /** FoodProfileReceipt */
+        FoodProfileReceipt: {
+            /** Conflict */
+            conflict: boolean;
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+            /** Revision */
+            revision: number;
+        };
+        /** FoodProfileWrite */
+        FoodProfileWrite: {
+            /** Base Revision */
+            base_revision: number;
+            patch: components["schemas"]["FoodProfilePatch"];
+            /**
+             * Request Id
+             * Format: uuid
+             */
+            request_id: string;
+        };
+        /** FoodTaste */
+        FoodTaste: {
+            /** Dislikes */
+            dislikes?: string[];
+            /** Likes */
+            likes?: string[];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -1831,6 +1913,7 @@ export interface components {
             entities: components["schemas"]["ExportEntity"][];
             /** Exported At */
             exported_at: string;
+            food_profile?: components["schemas"]["FoodProfile"] | null;
             /**
              * Format
              * @default mealf-household
@@ -1845,7 +1928,7 @@ export interface components {
             planning_preferences?: components["schemas"]["PlanningPreferences-Input"] | null;
             /**
              * Version
-             * @default 3
+             * @default 4
              */
             version: number;
         };
@@ -1859,6 +1942,7 @@ export interface components {
             entities: components["schemas"]["ExportEntity"][];
             /** Exported At */
             exported_at: string;
+            food_profile?: components["schemas"]["FoodProfile"] | null;
             /**
              * Format
              * @default mealf-household
@@ -1873,7 +1957,7 @@ export interface components {
             planning_preferences?: components["schemas"]["PlanningPreferences-Output"] | null;
             /**
              * Version
-             * @default 3
+             * @default 4
              */
             version: number;
         };
@@ -1918,6 +2002,7 @@ export interface components {
              * @enum {string}
              */
             mode: "ingredients" | "surprise";
+            preferences?: components["schemas"]["FoodTaste"] | null;
             /**
              * Request Id
              * Format: uuid
@@ -3808,6 +3893,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HouseholdSettings"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_profile_api_v1_household_food_profile_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FoodProfileContext"];
+                };
+            };
+        };
+    };
+    put_profile_api_v1_household_food_profile_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FoodProfileWrite"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FoodProfileReceipt"];
                 };
             };
             /** @description Validation Error */

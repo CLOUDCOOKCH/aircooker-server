@@ -2,6 +2,8 @@ import { openDB } from 'idb';
 import type { DBSchema, IDBPDatabase } from 'idb';
 import Decimal from 'decimal.js';
 import { cloneRecipe } from './planning.ts';
+import { EMPTY_FOOD, FOOD_STATE, parseFoodState, queueFood } from './food.ts';
+import type { FoodContext, FoodPatch, FoodState } from './food.ts';
 import { databaseExists, legacy } from './legacy.ts';
 import type { components } from '../api-schema';
 import { assertUUID, entityKey, payload, uuid, validateChange } from './domain.ts';
@@ -145,6 +147,53 @@ export class LocalStore {
   async setSetting(key: string, value: unknown): Promise<void> {
     await this.db.put('meta', value, key);
   }
+  async foodState(): Promise<FoodState> {
+    return parseFoodState(await this.setting(FOOD_STATE, EMPTY_FOOD));
+  }
+  async saveFood(patch: FoodPatch): Promise<void> {
+    const tx = this.db.transaction('meta', 'readwrite');
+    try {
+      const current = parseFoodState((await tx.store.get(FOOD_STATE)) ?? EMPTY_FOOD);
+      await tx.store.put(
+        queueFood(current, patch, Boolean(await tx.store.get('demo'))),
+        FOOD_STATE,
+      );
+      await tx.done;
+    } catch (error) {
+      try {
+        tx.abort();
+      } catch {
+        /* Retain the original error. */
+      }
+      await tx.done.catch(() => undefined);
+      throw error;
+    }
+  }
+  async acceptFood(context: FoodContext, requestID?: string): Promise<void> {
+    const tx = this.db.transaction('meta', 'readwrite');
+    try {
+      const current = parseFoodState((await tx.store.get(FOOD_STATE)) ?? EMPTY_FOOD);
+      // A slow older GET must never replace a newer committed preference snapshot.
+      const newer = !current.context || context.revision >= current.context.revision;
+      await tx.store.put(
+        {
+          context: newer ? context : current.context,
+          queue: current.queue.filter((row) => row.request_id !== requestID),
+        },
+        FOOD_STATE,
+      );
+      await tx.done;
+    } catch (error) {
+      try {
+        tx.abort();
+      } catch {
+        /* Keep the original error. */
+      }
+      await tx.done.catch(() => undefined);
+      throw error;
+    }
+  }
+
   async device(): Promise<string> {
     const tx = this.db.transaction('meta', 'readwrite');
     const existing = await tx.store.get('device');
@@ -217,6 +266,9 @@ export class LocalStore {
       settings_drafts: {
         planning: await tx.objectStore('meta').get('planning:preferences-draft'),
         reminders: await tx.objectStore('meta').get('push:preferences-draft'),
+        food: await tx.objectStore('meta').get(FOOD_STATE),
+        taste: await tx.objectStore('meta').get('food:taste-draft:v1'),
+        pantry: await tx.objectStore('meta').get('food:pantry-draft:v1'),
       },
     };
     await tx.done;
@@ -428,6 +480,13 @@ export class LocalStore {
     const anchor = (await tx.objectStore('meta').get('anchor')) as Anchor | undefined;
     const device = await tx.objectStore('meta').get('device');
     const lastSuccess = await tx.objectStore('meta').get('sync:last-success');
+    let foodPending: number | null = null;
+    try {
+      foodPending = parseFoodState((await tx.objectStore('meta').get(FOOD_STATE)) ?? EMPTY_FOOD)
+        .queue.length;
+    } catch {
+      /* Preserve unreadable preference data and keep diagnostics available. */
+    }
     await tx.done;
     return {
       cursor: anchor?.cursor ?? 0,
@@ -439,6 +498,7 @@ export class LocalStore {
           : null,
       records,
       pending: pending.length,
+      food_pending: foodPending,
       blocked: pending.filter((entry) => entry.blocked).length,
       imports,
     };
@@ -516,9 +576,10 @@ export class LocalStore {
       draft?: string;
       importID?: string;
       suggestion?: { request_id: string; monday: string; basis: string | null };
+      food?: FoodPatch;
     } = {},
   ): Promise<void> {
-    if (!edits.length || edits.length > 100) throw new Error('invalid_batch');
+    if ((!edits.length && !options.food) || edits.length > 100) throw new Error('invalid_batch');
     const device = await this.device();
     const normal = edits.map((edit) => ({
       ...edit,
@@ -613,6 +674,17 @@ export class LocalStore {
         });
       }
       if (options.draft) await tx.objectStore('drafts').delete(options.draft);
+      if (options.food) {
+        const current = parseFoodState(
+          (await tx.objectStore('meta').get(FOOD_STATE)) ?? EMPTY_FOOD,
+        );
+        await tx
+          .objectStore('meta')
+          .put(
+            queueFood(current, options.food, Boolean(await tx.objectStore('meta').get('demo'))),
+            FOOD_STATE,
+          );
+      }
       await tx.done;
     } catch (error) {
       try {

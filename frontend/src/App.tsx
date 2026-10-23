@@ -35,6 +35,7 @@ import type { Recipe } from './lib/domain';
 import type { Occurrence } from './lib/planning';
 import { RecipeDetail, RecipeEditor, Recipes } from './Recipes';
 import { Pantry } from './Pantry';
+import { PantrySetup } from './PantrySetup';
 import { Settings } from './Settings';
 import { Imports } from './Imports';
 import { Shopping } from './Shopping';
@@ -49,6 +50,7 @@ type View =
   | { kind: 'recipe'; id: string }
   | { kind: 'editor'; id?: string; task?: ImportTask; initial?: Recipe; draftID?: string }
   | { kind: 'imports' }
+  | { kind: 'pantry-setup' }
   | { kind: 'ideas' };
 export default function App() {
   const [runtime, setRuntime] = useState<Runtime | null>(null),
@@ -362,6 +364,15 @@ function Kitchen({
         <div />
       </div>
     );
+  else if (view.kind === 'pantry-setup')
+    content = (
+      <PantrySetup
+        back={() => {
+          app.setTab('pantry');
+          back();
+        }}
+      />
+    );
   else if (view.kind === 'recipe')
     content = (
       <RecipeDetail
@@ -415,6 +426,7 @@ function Kitchen({
   else if (app.tab === 'home')
     content = (
       <Home
+        pantrySetup={() => setView({ kind: 'pantry-setup' })}
         day={day}
         setDay={setDay}
         open={open}
@@ -448,7 +460,8 @@ function Kitchen({
         ideas={() => setView({ kind: 'ideas' })}
       />
     );
-  else if (app.tab === 'pantry') content = <Pantry back={shopping} />;
+  else if (app.tab === 'pantry')
+    content = <Pantry back={shopping} setup={() => setView({ kind: 'pantry-setup' })} />;
   else if (app.tab === 'shopping') content = <Shopping />;
   else
     content = (
@@ -522,7 +535,7 @@ function Kitchen({
                   <CloudOff size={15} />
                 ) : app.error ? (
                   <CircleAlert size={15} />
-                ) : app.syncing || app.pending.length || !app.syncChecked ? (
+                ) : app.syncing || app.outgoingCount || !app.syncChecked ? (
                   <RefreshCw size={15} />
                 ) : (
                   <Check size={15} />
@@ -532,11 +545,11 @@ function Kitchen({
                     online: app.online,
                     syncing: app.syncing,
                     error: app.error,
-                    pending: app.pending.length,
+                    pending: app.outgoingCount,
                     checked: app.syncChecked,
                   }),
                 )}
-                {app.pending.length > 0 && <span> · {app.pending.length}</span>}
+                {app.outgoingCount > 0 && <span> · {app.outgoingCount}</span>}
               </span>
               <button
                 className="text-button"

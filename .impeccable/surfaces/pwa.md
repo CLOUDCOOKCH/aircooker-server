@@ -1,5 +1,18 @@
 # mealf PWA operating surface
 
+## Current extension — pantry and food taste onboarding, 2026-10-23
+
+THESIS: Remove repeated household-AI import controls and let households start with their actual pantry and food tastes.
+
+OWN-WORLD: Extend the approved Mealf PNG branding, system typography, semantic Flo / After Dark / Sunday colours, solid forms and restrained glass navigation. No new palette, typeface or raster artwork.
+
+STORY: A nonblocking first-run Today invitation opens selectable pantry basics; Pantry keeps the picker available later. First-use Recipe ideas opens a resumable swipe card with Like, Not for me and Skip, then an explicit Save. Taste settings remain editable. Neither setup generates recipes or changes plans.
+
+FIRST VIEWPORT: Pantry presents a searchable grouped checklist with no invented stock. Taste shows one food, progress and equally accessible decision buttons. Import shows one short AI disclosure and an explicit Prepare AI preview action instead of the marked checkboxes/provider paragraph.
+
+FORM: Code-led Operate extension, no approved comp or new identity round. Persist drafts and outgoing choices, respect reduced motion, support horizontal gestures plus buttons, shared-household preferences and EN/DE at 320 / 390 / desktop widths. Keep real imports, explicit recipe review and save, previous queued requests and all sync/Bring ownership invariants. Food dislikes are taste preferences, not allergy guarantees. Existing DESIGN.md / design.json snapshot drift stays unchanged.
+
+
 ## Current extension — everyday navigation and quick planning, 2026-10-23
 
 THESIS: Reduce the steps and visual weight of everyday planning. The user accepted

@@ -167,7 +167,7 @@ def test_json_export_restore_includes_nonsecret_preferences_and_learning_atomica
     with app.state.database.transaction() as db:
         db.execute("INSERT INTO suggestion_acceptance VALUES (?,3)", (rid,))
     exported = client.get("/api/v1/admin/export").json()
-    assert exported["version"] == 3 and exported["accepted_suggestions"] == {rid: 3}
+    assert exported["version"] == 4 and exported["accepted_suggestions"] == {rid: 3}
     restored, other = clean_client(tmp_path / "clean")
     response = restored.post("/api/v1/admin/import", json=exported)
     assert response.status_code == 200, response.text
@@ -182,7 +182,7 @@ def test_json_export_restore_includes_nonsecret_preferences_and_learning_atomica
     legacy = {
         key: value
         for key, value in exported.items()
-        if key not in ("planning_preferences", "accepted_suggestions")
+        if key not in ("planning_preferences", "accepted_suggestions", "food_profile")
     }
     legacy["version"] = 2
     assert failed.post("/api/v1/admin/import", json=legacy).status_code == 200

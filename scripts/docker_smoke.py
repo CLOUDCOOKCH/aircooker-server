@@ -373,6 +373,19 @@ def main():
         )
         assert configured_ai["enabled"] and configured_ai["key_configured"]
         assert ai_credential not in json.dumps(configured_ai)
+        food_path = "/api/v1/household/food-profile"
+        food_write = {
+            "request_id": str(uuid4()),
+            "base_revision": 0,
+            "patch": {
+                "likes": ["pasta"],
+                "dislikes": ["mushrooms"],
+                "taste_setup_done": True,
+                "pantry_setup_done": True,
+            },
+        }
+        food_receipt = request(base, food_path, food_write, headers, "PUT")
+        food_before = request(base, food_path, headers=headers)
         history = request(base, "/api/v1/sync/state", headers=headers)
         checkpoint = {"cursor": history["cursor"], "token": history["token"]}
         page = request(
@@ -400,6 +413,8 @@ def main():
             raise AssertionError("Revoked session survived restart")
         except HTTPError as failure:
             assert failure.code == 401
+        assert request(base, food_path, headers=headers) == food_before
+        assert request(base, food_path, food_write, headers, "PUT") == food_receipt
         restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
         assert request(base, planning_path, headers=headers) == planning_before
         assert (
@@ -532,14 +547,16 @@ def main():
         assert imported["payload"]["title"] == "Imported bread"
         exported = request(base, "/api/v1/admin/export", headers=headers)
         assert (
-            exported["version"] == 3
+            exported["version"] == 4
             and exported["accepted_suggestions"] == planning_before["accepted_counts"]
         )
+        assert exported["food_profile"] == food_before["profile"]
         assert ai_credential not in json.dumps(exported)
         _, other, _, other_headers = start()
         assert request(other, "/api/v1/admin/import", exported, other_headers)["imported"] == len(
             exported["entities"]
         )
+        assert request(other, food_path, headers=other_headers)["profile"] == food_before["profile"]
         restored = request(other, "/api/v1/planning/shopping-projection", headers=other_headers)
         assert (
             request(other, planning_path, headers=other_headers)["preferences"]

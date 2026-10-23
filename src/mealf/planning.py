@@ -4,6 +4,7 @@ import unicodedata
 from datetime import date, timedelta
 from decimal import Decimal
 
+from .food_profile import pantry_key
 from .models import Meal, Recipe
 from .quantities import fixed_amount
 
@@ -81,7 +82,7 @@ def entities(db, kind):
 def shopping_projection(db, monday: date):
     recipes = entities(db, "recipe")
     pantry = {
-        normalise(p["name"])
+        pantry_key(p["name"])
         for p in entities(db, "pantry").values()
         if p["available"]
         and not (p["include_this_week"] and p.get("include_week_start") == monday.isoformat())
@@ -96,7 +97,7 @@ def shopping_projection(db, monday: date):
         for day in dates:
             for item in scaled(recipe, meal.servings):
                 name = normalise(item.name)
-                if name in pantry:
+                if pantry_key(item.name) in pantry:
                     continue
                 unit, multiplier = UNITS.get(
                     normalise(item.unit), (normalise(item.unit), Decimal(1))

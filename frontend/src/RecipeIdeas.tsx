@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, SlidersHorizontal } from 'lucide-react';
 import type { components } from './api-schema';
 import { useApp } from './model';
 import { PageHeader, Photo } from './components';
@@ -7,6 +7,8 @@ import { payload, uuid } from './lib/domain';
 import type { Recipe } from './lib/domain';
 import { APIError } from './lib/api';
 import { ideaError } from './lib/idea-errors';
+import { FoodSwiper } from './FoodSwiper';
+import { TASTE_FOODS } from './lib/food';
 
 type Status = components['schemas']['AISettingsStatus'];
 type Job = components['schemas']['IdeaStatus'];
@@ -34,6 +36,7 @@ export function RecipeIdeas({
     [error, setError] = useState<string | null>(null),
     [busy, setBusy] = useState(false);
   const lock = useRef(false);
+  const [tasteOpen, setTasteOpen] = useState(false);
   const cacheReadable = useRef(false);
   const configured =
     status?.enabled &&
@@ -154,6 +157,7 @@ export function RecipeIdeas({
         language: app.language,
         consent_external_ai: true,
         ai_destination: [status!.provider!, status!.base_url!, status!.model!],
+        preferences: { likes: app.food.likes, dislikes: app.food.dislikes },
       };
       const next = { ...draft, request, job: undefined };
       await app.store.setSetting(CACHE, next);
@@ -171,9 +175,49 @@ export function RecipeIdeas({
     error ?? draft.job?.error_code,
     !error && draft.job?.state === 'expired',
   );
+  if (
+    tasteOpen ||
+    (!app.demo && ready && app.foodLoaded && !app.food.taste_setup_done && !draft.request)
+  )
+    return <FoodSwiper back={back} done={() => setTasteOpen(false)} />;
   return (
     <>
-      <PageHeader title={t('recipeIdeas')} subtitle={t('ideasIntro')} back={back} />
+      <PageHeader title={t('recipeIdeas')} subtitle={t('ideasIntro')} back={back}>
+        <button
+          type="button"
+          className="secondary compact"
+          disabled={pending || busy}
+          onClick={() => setTasteOpen(true)}
+        >
+          <SlidersHorizontal size={18} />
+          {t('tasteEdit')}
+        </button>
+      </PageHeader>
+      {(app.food.likes.length > 0 || app.food.dislikes.length > 0) && (
+        <div className="ideas-tastes">
+          {app.food.likes.length > 0 && (
+            <p>
+              <strong>{t('tasteLiked')}: </strong>
+              {app.food.likes
+                .map((id) => TASTE_FOODS.find((food) => food.id === id)!.name[app.language])
+                .join(', ')}
+            </p>
+          )}
+          {app.food.dislikes.length > 0 && (
+            <p>
+              <strong>{t('tasteAvoid')}: </strong>
+              {app.food.dislikes
+                .map((id) => TASTE_FOODS.find((food) => food.id === id)!.name[app.language])
+                .join(', ')}
+            </p>
+          )}
+          {app.foodPending > 0 && (
+            <p className="muted" role="status">
+              {t('foodPending')}
+            </p>
+          )}
+        </div>
+      )}
       <div className="ideas-layout">
         <form
           className="ideas-form"

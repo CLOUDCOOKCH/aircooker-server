@@ -139,6 +139,7 @@ def main():
                         page.get_by_label("Password", exact=True).fill("synthetic ideas password")
                         page.get_by_role("button", name="Sign in", exact=True).click()
                         page.get_by_role("button", name="Recipe ideas", exact=False).click()
+                        page.get_by_role("button", name="Not now", exact=True).click()
                         page.get_by_label("What do you have at home?", exact=True).fill(
                             "Spaghetti and minced beef"
                         )
