@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import type { components } from './api-schema';
 import { APIClient, APIError } from './lib/api';
 import { LocalStore } from './lib/store';
 import { legacy } from './lib/legacy';
@@ -38,6 +39,21 @@ function useRuntime(runtime: Runtime) {
   const [rows, setRows] = useState<Entity[]>([]),
     [pending, setPending] = useState<Queued[]>([]),
     [imports, setImports] = useState<ImportTask[]>([]);
+  const [currentUser, setCurrentUser] = useState<components['schemas']['UserInfo'] | null>(null);
+  const refreshUser = async () => {
+    if (runtime.api) {
+      try {
+        setCurrentUser(
+          await runtime.api.request<components['schemas']['UserInfo']>('/api/v1/auth/me'),
+        );
+      } catch {
+        setCurrentUser(null);
+      }
+    }
+  };
+  useEffect(() => {
+    void refreshUser();
+  }, [runtime.api]);
   const [household, setHousehold] = useState(runtime.household);
   const [planning, setPlanning] = useState<PlanningContext>(DEFAULT_PLANNING);
   const [food, setFood] = useState<FoodState>(EMPTY_FOOD);
@@ -93,6 +109,7 @@ function useRuntime(runtime: Runtime) {
         new Intl.DateTimeFormat('en', { timeZone: updated.timezone });
         await store.setSetting('household', updated);
         setHousehold(updated);
+        await refreshUser();
         await refreshPlanning();
         syncPhase.current = 'food_preferences';
         await syncFood(store, runtime.api!);
@@ -210,6 +227,8 @@ function useRuntime(runtime: Runtime) {
     household,
     planning,
     refreshPlanning,
+    currentUser,
+    isAdmin: currentUser?.role === 'admin',
     food: foodProfile(food),
     foodLoaded: food.context !== null || food.queue.length > 0 || runtime.demo,
     foodPending: food.queue.length,

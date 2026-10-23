@@ -79,7 +79,7 @@ export function RecipeIdeas({
     if (!app.api || !app.online || app.demo) return;
     let alive = true;
     void app.api
-      .request<Status>('/api/v1/admin/ai')
+      .request<Status>('/api/v1/ai/status')
       .then((value) => {
         if (alive) {
           setStatus(value);
@@ -127,7 +127,7 @@ export function RecipeIdeas({
             }));
             setConsent(false);
             void app
-              .api!.request<Status>('/api/v1/admin/ai')
+              .api!.request<Status>('/api/v1/ai/status')
               .then(setStatus)
               .catch(() => undefined);
           }

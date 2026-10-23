@@ -2,7 +2,7 @@
 
 Open `/admin/` on the configured HTTPS `BASE_URL` origin. A fresh installation requires the one-time token
 from `/data/config/setup-token`; there are no default credentials. After setup, sign in
-with the shared household account. Browser access expires after 15 minutes and requires
+with an administrator account. Existing shared logins become the first administrator during upgrade. Browser access expires after 15 minutes and requires
 sign-in again. Cookies are Secure/HttpOnly/SameSite=Strict; unsafe operations additionally
 require the same Origin and CSRF token. No integration keys are stored in browser preferences.
 
@@ -21,8 +21,33 @@ Household settings save the name, validated IANA time zone and default language.
 the time zone changes calendar-week/shopping boundaries; inspect the plan after a change.
 The account panel lists independent device sessions, expiry and revocation status. Revoke
 individual devices, including the current session. Changing the password requires the
-current password and revokes all sessions, including this browser. Local container recovery
+current password and revokes that account’s sessions, including this browser. Local container recovery
 is documented in DEPLOYMENT.md and also invalidates existing sessions.
+
+## Household users and roles
+
+In **Account → Household users**, add a username and password (at least 12 characters),
+then choose **User** (the default) or **Admin**. Accounts share the same household recipes,
+plan, pantry, shopping and food preferences. There is no public registration.
+
+- **User:** signs in at `/app/`, uses configured AI and shopping integrations, and manages
+  their own device sessions and password through the account API.
+- **Admin:** also signs in at `/admin/`, manages users, household configuration, AI/Bring!
+  credentials, exports/imports and all device sessions.
+
+Existing accounts have editable usernames, roles, enabled status and optional new passwords.
+Save changes to revoke that account’s sessions immediately, including rotating refresh tokens.
+Other household members stay signed in. Disable an account to prevent further login; shared
+recipes and offline edits are retained. At least one active administrator must remain.
+Usernames are exact and case-sensitive; there are at most 100 accounts, including disabled accounts.
+
+The public admin sign-in page contains no protected data. Regular users cannot establish an
+admin cookie session or access any `/api/v1/admin/` operation, including via bearer tokens or
+PWA cookies. Configuration outside that prefix is also restricted on the server. App-only,
+read-only AI status and household counts keep regular imports and sync diagnostics working.
+Local `recover` restores the original account to an active admin and revokes all sessions.
+Non-secret JSON/ZIP exports omit user accounts and password hashes; sensitive SQLite backups
+include accounts. Offline copies already on a device cannot be remotely erased.
 
 ## Optional AI
 

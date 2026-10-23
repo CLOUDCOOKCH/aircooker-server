@@ -152,7 +152,7 @@ export function Settings({
             <div className="settings-surface">
               <div className="settings-row">
                 <div>
-                  <strong>{app.household.name}</strong>
+                  <strong>{app.currentUser?.username ?? app.household.name}</strong>
                   <small>{app.household.timezone}</small>
                 </div>
                 <ShieldCheck size={22} />
@@ -184,7 +184,7 @@ export function Settings({
                   ))}
                 </select>
               </label>
-              {!app.demo && (
+              {!app.demo && app.isAdmin && (
                 <a className="settings-row" href="/admin/" target="_blank" rel="noreferrer">
                   {t('openAdmin')}
                   <ArrowUpRight size={18} />
@@ -277,9 +277,11 @@ export function Settings({
           <SettingsDisclosure title={t('pushReminders')} description={t('reminderSummary')}>
             <ReminderSettings />
           </SettingsDisclosure>
-          <SettingsDisclosure title={t('aiSettingsTitle')} description={t('aiSummary')}>
-            <AISettings />
-          </SettingsDisclosure>
+          {(app.demo || app.isAdmin) && (
+            <SettingsDisclosure title={t('aiSettingsTitle')} description={t('aiSummary')}>
+              <AISettings />
+            </SettingsDisclosure>
+          )}
           <SettingsDisclosure title={t('chatgptTitle')} description={t('chatgptSummary')}>
             <ChatGPTSettings />
           </SettingsDisclosure>
@@ -322,10 +324,17 @@ export function Settings({
                       <RefreshCw size={18} />
                     </button>
                   )}
-                  <a className="settings-row" href="/admin/#bring" target="_blank" rel="noreferrer">
-                    {t('openAdmin')}
-                    <ArrowUpRight size={18} />
-                  </a>
+                  {app.isAdmin && (
+                    <a
+                      className="settings-row"
+                      href="/admin/#bring"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t('openAdmin')}
+                      <ArrowUpRight size={18} />
+                    </a>
+                  )}
                 </>
               )}
               {app.demo && <p className="settings-description">{t('demoUnavailable')}</p>}

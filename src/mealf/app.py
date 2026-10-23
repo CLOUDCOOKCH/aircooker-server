@@ -112,6 +112,8 @@ from .source_images import bounded_source_photo
 from .suggestion_apply import apply_preview
 from .sync import active, apply_mutation, pull
 from .sync_history import snapshot_page, state_for, validate_anchor
+from .users import register_routes as register_users
+from .users import require_admin
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -351,7 +353,15 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             return JSONResponse({"error": {"code": "request_too_large"}}, status_code=413)
         # Authenticate large transfers before reading/parsing their bodies. Browser CSRF
         # validation is the same as every other authenticated mutation.
-        if image_upload or archive_upload or json_restore:
+        if (
+            image_upload
+            or archive_upload
+            or json_restore
+            or (
+                request.url.path.startswith("/api/v1/admin/")
+                and request.url.path != "/api/v1/admin/login"
+            )
+        ):
             try:
                 session(request, await bearer(request))
             except DomainError as exc:
@@ -400,8 +410,24 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         if not credentials and request.method not in ("GET", "HEAD", "OPTIONS"):
             require_csrf(request, pwa=is_pwa(request))
         with database.connect() as db:
-            return authenticate(db, token)
+            current = authenticate(db, token)
+        path = request.url.path
+        if (
+            path.startswith("/api/v1/admin/")
+            or (path == "/api/v1/household" and request.method == "PUT")
+            or path
+            in {
+                "/api/v1/integrations/bring/connect",
+                "/api/v1/integrations/bring/lists",
+                "/api/v1/integrations/bring/configuration",
+                "/api/v1/integrations/bring/disconnect",
+                "/api/v1/integrations/bring/verify",
+            }
+        ):
+            require_admin(current)
+        return current
 
+    register_users(app, session, database)
     register_reminders(app, session, reminders)
     register_chatgpt(app, session, chatgpt)
     app.state.chatgpt = chatgpt
@@ -477,12 +503,16 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
                     str(uuid4()),
                 ),
             )
-            result = new_session(db, str(body.device_id))
+            household = db.execute("SELECT instance_id,password_hash FROM household").fetchone()
+            db.execute(
+                "INSERT INTO household_user VALUES (?,?,?,?,1)",
+                (household[0], body.username, household[1], "admin"),
+            )
+            result = new_session(db, str(body.device_id), user_id=household[0])
         token_file.unlink(missing_ok=True)
         return result
 
-    @app.post("/api/v1/auth/login", response_model=Tokens)
-    def login(body: Credentials, request: Request):
+    def login(body: Credentials, request: Request, *, admin_only: bool = False):
         with database.transaction() as db:
             allowed = rate_limit(
                 db, "login:" + (request.client.host if request.client else "unknown")
@@ -492,15 +522,26 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         if not allowed or not global_allowed:
             raise DomainError("rate_limited", 429)
         with database.transaction() as db:
-            h = db.execute("SELECT * FROM household").fetchone()
+            h = db.execute(
+                "SELECT * FROM household_user WHERE username=?", (body.username,)
+            ).fetchone()
             valid = verify_password(body.password, h["password_hash"] if h else DUMMY_HASH)
             if (
                 not h
                 or not valid
+                or not h["active"]
                 or not hmac.compare_digest(body.username.encode(), h["username"].encode())
             ):
                 raise DomainError("invalid_credentials", 401)
-            return new_session(db, str(body.device_id))
+            if admin_only:
+                require_admin(h)
+            return new_session(db, str(body.device_id), user_id=h["id"])
+
+    @app.post(
+        "/api/v1/auth/login", response_model=Tokens, operation_id="login_api_v1_auth_login_post"
+    )
+    def token_login(body: Credentials, request: Request):
+        return login(body, request)
 
     @app.post("/api/v1/auth/refresh", response_model=Tokens)
     def refresh(body: Refresh):
@@ -530,14 +571,18 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             return [
                 {**dict(r), "current": r["id"] == s["id"]}
                 for r in db.execute(
-                    "SELECT id,device_id,access_expires,refresh_expires,revoked FROM session"
+                    "SELECT id,device_id,access_expires,refresh_expires,revoked FROM session WHERE user_id=? OR ?='admin'",
+                    (s["user_id"], s["role"]),
                 )
             ]
 
     @app.delete("/api/v1/auth/sessions/{session_id}", status_code=204)
     def revoke(session_id: UUID, s=Depends(session)):
         with database.transaction() as db:
-            db.execute("UPDATE session SET revoked=1 WHERE id=?", (str(session_id),))
+            db.execute(
+                "UPDATE session SET revoked=1 WHERE id=? AND (user_id=? OR ?='admin')",
+                (str(session_id), s["user_id"], s["role"]),
+            )
 
     @app.post("/api/v1/sync/push", response_model=list[MutationResult])
     def push(body: Push, s=Depends(session)):
@@ -722,6 +767,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
     def approve_suggestions(body: SuggestionApply, s=Depends(session)):
         return apply_preview(database, body, s["device_id"])
 
+    @app.get("/api/v1/ai/status", response_model=AISettingsStatus)
     @app.get("/api/v1/admin/ai", response_model=AISettingsStatus)
     def ai_settings(s=Depends(session)):
         return settings_status(data_dir / "config")
@@ -1069,6 +1115,18 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             )
         return result
 
+    @app.get("/api/v1/household/status")
+    def household_status(s=Depends(session)):
+        with database.connect() as db:
+            return {
+                "recipes": db.execute(
+                    "SELECT COUNT(*) FROM entity WHERE kind='recipe' AND deleted=0"
+                ).fetchone()[0],
+                "pending_jobs": db.execute(
+                    "SELECT COUNT(*) FROM background_job WHERE state IN ('queued','running')"
+                ).fetchone()[0],
+            }
+
     @app.get("/api/v1/admin/status", response_model=AdministrationStatus)
     def administration_status(s=Depends(session)):
         with database.connect() as db:
@@ -1141,7 +1199,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         expected = os.environ.get("BASE_URL", "https://localhost").rstrip("/")
         if request.headers.get("origin") != expected:
             raise DomainError("origin_forbidden", 403)
-        tokens = login(body, request)
+        tokens = login(body, request, admin_only=True)
         response = JSONResponse({"authenticated": True, "expires_in": 900})
         response.set_cookie(
             "mealf_session",
@@ -1292,13 +1350,16 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
         if not allowed:
             raise DomainError("rate_limited", 429)
         with database.transaction() as db:
-            h = db.execute("SELECT password_hash FROM household").fetchone()
+            h = db.execute(
+                "SELECT password_hash FROM household_user WHERE id=?", (s["user_id"],)
+            ).fetchone()
             if not verify_password(body.current_password, h[0]):
                 raise DomainError("invalid_credentials", 401)
             db.execute(
-                "UPDATE household SET password_hash=? WHERE id=1", (hasher.hash(body.new_password),)
+                "UPDATE household_user SET password_hash=? WHERE id=?",
+                (hasher.hash(body.new_password), s["user_id"]),
             )
-            db.execute("UPDATE session SET revoked=1")
+            db.execute("UPDATE session SET revoked=1 WHERE user_id=?", (s["user_id"],))
             db.execute(
                 "INSERT INTO audit_event(code,created_at) VALUES (?,?)",
                 ("password_changed", time.time()),

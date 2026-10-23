@@ -147,6 +147,8 @@ jobs:
         env:
           MEALF_SCREENSHOT_DIR: build/push-browser
         run: python scripts/push_browser_smoke.py
+      - name: Household users and server-enforced roles
+        run: timeout 180s python scripts/users_browser_smoke.py
       - name: Exercise console in installed Chrome
         env:
           MEALF_SCREENSHOT_DIR: build/browser

@@ -34,7 +34,7 @@ def verify_password(password: str, password_hash: str) -> bool:
         return False
 
 
-def new_session(db, device_id: str, session_id: str | None = None) -> Tokens:
+def new_session(db, device_id: str, session_id: str | None = None, *, user_id: str) -> Tokens:
     now = time.time()
     db.execute(
         "INSERT INTO device VALUES (?,?) ON CONFLICT(id) DO UPDATE SET last_seen=excluded.last_seen",
@@ -49,15 +49,16 @@ def new_session(db, device_id: str, session_id: str | None = None) -> Tokens:
         )
     else:
         db.execute(
-            "INSERT INTO session VALUES (?,?,?,?,?,?,0)",
-            (sid, device_id, digest(access), digest(refresh), now + 900, now + 30 * 86400),
+            "INSERT INTO session(id,device_id,access_hash,refresh_hash,access_expires,refresh_expires,revoked,user_id) VALUES (?,?,?,?,?,?,0,?)",
+            (sid, device_id, digest(access), digest(refresh), now + 900, now + 30 * 86400, user_id),
         )
     return Tokens(access_token=access, refresh_token=refresh, session_id=UUID(sid))
 
 
 def authenticate(db, token: str):
     row = db.execute(
-        "SELECT * FROM session WHERE access_hash=? AND revoked=0 AND access_expires>? AND refresh_expires>?",
+        "SELECT s.*,u.role,u.username FROM session s JOIN household_user u ON u.id=s.user_id "
+        "WHERE access_hash=? AND revoked=0 AND access_expires>? AND refresh_expires>? AND u.active=1",
         (digest(token), time.time(), time.time()),
     ).fetchone()
     if not row:
@@ -70,12 +71,13 @@ def refresh_session(database, token: str):
     result = None
     with database.transaction() as db:
         row = db.execute(
-            "SELECT * FROM session WHERE refresh_hash=? AND revoked=0 AND refresh_expires>?",
+            "SELECT s.* FROM session s JOIN household_user u ON u.id=s.user_id "
+            "WHERE refresh_hash=? AND revoked=0 AND refresh_expires>? AND u.active=1",
             (digest(token), time.time()),
         ).fetchone()
         if row:
             db.execute("INSERT INTO refresh_history VALUES (?,?)", (digest(token), row["id"]))
-            result = new_session(db, row["device_id"], row["id"])
+            result = new_session(db, row["device_id"], row["id"], user_id=row["user_id"])
         else:
             previous = db.execute(
                 "SELECT session_id FROM refresh_history WHERE token_hash=?", (digest(token),)

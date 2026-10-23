@@ -65,7 +65,7 @@ export function Imports({
     let alive = true;
     if (app.api && !app.demo)
       void app.api
-        .request<components['schemas']['AISettingsStatus']>('/api/v1/admin/ai')
+        .request<components['schemas']['AISettingsStatus']>('/api/v1/ai/status')
         .then(async (value) => {
           if (
             alive &&

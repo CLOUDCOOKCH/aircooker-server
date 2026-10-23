@@ -8,8 +8,8 @@ ownership ledger, SQLite durability and the Docker host's internal network.
 Trust boundaries: public ingress → household API; app/extension shared files → native parser;
 public recipe source → importer; optional AI response → recipe draft; Bring list → reconciler;
 container → local persistent files. The Docker operator and a compromised host can access
-household data and encryption keys and are trusted administrators. Shared-account users
-have household-wide permission; this is not a multi-tenant role system.
+household data and encryption keys and are trusted administrators. Each account belongs to this single household. Admins manage users, credentials and server
+configuration; regular users share household content through the app. This is not a multi-tenant system.
 
 | Threat | Implemented control | Remaining verification |
 | --- | --- | --- |
@@ -43,8 +43,10 @@ construction/OpenAPI generation and ordinary HTTP requests do not emit the token
 Known open risks: request/body parsing still needs load and slow-client testing; there is no
 complete retention policy; image/ZIP decoders need broader adversarial and load validation; filesystem privileges do not defend
 against a malicious Docker administrator; integration service semantics remain unverified.
-External integration configuration requires account-level authentication but the shared
-account has no finer administrator role. A production readiness audit is still mandatory.
+External integration configuration and every admin API operation require an active admin role,
+checked from the database on each request. Regular users cannot establish admin browser sessions.
+Sessions and refresh rotation retain account ownership. Disabling accounts and changing passwords
+or roles revoke the affected account’s sessions; the last active admin is protected transactionally. A production readiness audit is still mandatory.
 
 Device sign-out now has a capability-authenticated revocation endpoint (ADR 008). It
 accepts refresh secrets, never unauthenticated session IDs, revokes only the associated

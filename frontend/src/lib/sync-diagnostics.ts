@@ -31,7 +31,7 @@ export async function syncDiagnostics(
     ),
     probe<components['schemas']['SyncState']>('/api/v1/sync/state?cursor=' + local.cursor),
     probe<components['schemas']['BrowserSession']>('/api/v1/pwa/auth/session'),
-    probe<components['schemas']['AdministrationStatus']>('/api/v1/admin/status'),
+    probe<{ recipes: number; pending_jobs: number }>('/api/v1/household/status'),
   ]);
   const script =
     typeof document === 'undefined'

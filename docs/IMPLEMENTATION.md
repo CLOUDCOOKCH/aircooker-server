@@ -1,3 +1,22 @@
+**Household accounts and RBAC, 2026-10-23 — local implementation, unpublished:**
+Admin-managed accounts in console Account → Household users; User (default) and Admin roles.
+Migration 017 promotes the existing shared login and attaches existing sessions to it.
+Separate Argon2 passwords, live role/active checks, account-scoped session/password operations,
+role/password/disable revocation and transactional last-admin protection are implemented.
+All admin APIs plus household and integration configuration reject regular users. Read-only
+app AI/status and household counts keep shared imports and diagnostics available; PWA hides
+admin controls for regular users. Account secrets are omitted from non-secret exports.
+Local recovery restores the original account as an active admin and revokes all sessions.
+
+Validation: **479 backend / 76 frontend tests pass**, plus Ruff lint/format, mypy,
+OpenAPI drift, Prettier, TypeScript and production frontend build. Real Chromium account
+management and regular/admin PWA flows pass, including mobile Axe and immediate revocation.
+Existing console EN/DE/200% text-zoom, PWA offline/two-device and AI-import browser suites pass
+with synthetic household/provider data. The new account browser suite is included in CI. Docker build/smoke is blocked by Alpine
+package-index HTTP 403; no container publication, live installation or physical-device test
+is claimed. The independent native account UI and contract pin are outside this local PWA/
+server change; its existing wire fields remain unchanged.
+
 # Implementation checklist and evidence
 
 **Ingredient editing and compact pantry, 2026-10-23 — tested locally; unpublished:**

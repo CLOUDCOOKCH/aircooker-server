@@ -125,7 +125,8 @@ docker compose logs mealf
 
 Open `/admin/` on the configured HTTPS origin and complete setup. The username and password must be
 chosen by the administrator. There is no default account and no public registration after
-setup. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYMENT.md),
+setup. Admins can add household members in **Account → Household users**: users access `/app/`,
+admins also access `/admin/`. Existing logins migrate to the first admin account. Configure `BASE_URL` before browser login. See [deployment](docs/DEPLOYMENT.md),
 [security](docs/SECURITY_MODEL.md), [backup](docs/BACKUP.md), [API](docs/API.md) and
 [Bring! integration](docs/BRING.md), and [administration](docs/ADMINISTRATION.md).
 

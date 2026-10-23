@@ -78,7 +78,10 @@ def main():
         with database.transaction() as db:
             if not db.execute("SELECT 1 FROM household").fetchone():
                 parser.error("Complete first-run setup before recovery")
-            db.execute("UPDATE household SET password_hash=?", (hasher.hash(password),))
+            db.execute(
+                "UPDATE household_user SET password_hash=?,role='admin',active=1 WHERE id=(SELECT instance_id FROM household)",
+                (hasher.hash(password),),
+            )
             db.execute("UPDATE session SET revoked=1")
             db.execute(
                 "INSERT INTO audit_event(code,created_at) VALUES (?,?)",

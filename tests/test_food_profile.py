@@ -111,21 +111,14 @@ def test_released_installation_skips_repeated_pantry_onboarding(tmp_path, monkey
             (resources / "migrations" / source.name).write_text(source.read_text())
     with monkeypatch.context() as patch:
         patch.setattr("mealf.db.files", lambda package: resources)
-        app = create_app(tmp_path / "data", run_worker=False)
-        with TestClient(app) as client:
-            token = (app.state.database.root / "config/setup-token").read_text()
-            result = client.post(
-                "/api/v1/setup",
-                headers={"X-Setup-Token": token},
-                json={
-                    "name": "Retained kitchen",
-                    "username": "cook",
-                    "password": "synthetic retained kitchen password",
-                    "device_id": str(uuid4()),
-                },
+        database = Database(tmp_path / "data")
+        # Seed the released schema directly: current setup also creates RBAC accounts.
+        with database.transaction() as db:
+            db.execute(
+                "INSERT INTO household VALUES (1,?,?,?,?,?,?)",
+                ("Retained kitchen", "UTC", "en", "cook", "synthetic hash", str(uuid4())),
             )
-            assert result.status_code == 201
-    upgraded = Database(app.state.database.root)
+    upgraded = Database(database.root)
     with upgraded.connect() as db:
         row = json.loads(db.execute("SELECT payload FROM food_profile").fetchone()[0])
         assert row["pantry_setup_done"] is True and row["taste_setup_done"] is False

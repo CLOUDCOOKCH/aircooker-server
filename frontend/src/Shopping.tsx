@@ -211,7 +211,7 @@ export function Shopping() {
                 </p>
               )}
             </div>
-            {data.connection_state !== 'ready' && (
+            {app.isAdmin && data.connection_state !== 'ready' && (
               <a
                 className={
                   data.connection_state === 'compatibility_unverified' ? 'text-button' : 'primary'
@@ -223,7 +223,7 @@ export function Shopping() {
                 {t('shoppingConfigure')} <ArrowUpRight size={16} />
               </a>
             )}
-            {data.connection_state === 'compatibility_unverified' && (
+            {app.isAdmin && data.connection_state === 'compatibility_unverified' && (
               <details className="shopping-verification">
                 <summary>{t('shoppingVerifyTitle')}</summary>
                 <p>{t('shoppingVerifyHint')}</p>
