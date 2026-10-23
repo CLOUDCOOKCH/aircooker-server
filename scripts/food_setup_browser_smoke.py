@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import socket
+import ssl
 import threading
 import time
 from pathlib import Path
@@ -58,7 +59,10 @@ def main():
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             port = probe.getsockname()[1]
-        base = f"http://127.0.0.1:{port}"
+        tls_root = os.environ.get("MEALF_BROWSER_TEST_TLS")
+        if engine == "webkit" and not tls_root:
+            raise ValueError("WebKit authentication checks require trusted loopback HTTPS fixtures")
+        base = f"{'https' if tls_root else 'http'}://127.0.0.1:{port}"
         os.environ["BASE_URL"] = base
         os.environ["LOG_SETUP_TOKEN"] = "false"
         with patch(
@@ -72,6 +76,8 @@ def main():
                     port=port,
                     log_level="error",
                     access_log=False,
+                    ssl_certfile=str(Path(tls_root) / "server.crt") if tls_root else None,
+                    ssl_keyfile=str(Path(tls_root) / "server.key") if tls_root else None,
                 )
             )
             thread = threading.Thread(target=server.run, daemon=True)
@@ -82,7 +88,12 @@ def main():
                         break
                     time.sleep(0.05)
                 assert server.started
-                with httpx.Client(base_url=base, trust_env=False) as operator:
+                trust = (
+                    ssl.create_default_context(cafile=str(Path(tls_root) / "ca.crt"))
+                    if tls_root
+                    else True
+                )
+                with httpx.Client(base_url=base, trust_env=False, verify=trust) as operator:
                     response = operator.post(
                         "/api/v1/setup",
                         headers={"X-Setup-Token": (root / "config/setup-token").read_text()},

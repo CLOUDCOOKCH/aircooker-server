@@ -120,7 +120,10 @@ jobs:
           MEALF_CAPTURE: '1'
         run: |
           timeout 180s python scripts/food_setup_browser_smoke.py
-          MEALF_LAYOUT_ENGINE=webkit MEALF_FOOD_SCREENSHOT_DIR=build/food-setup-browser-webkit timeout 180s python scripts/food_setup_browser_smoke.py
+          python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-food-browser-tls"
+          install -m 644 "$RUNNER_TEMP/mealf-food-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-food-browser-test.crt
+          update-ca-certificates
+          MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-food-browser-tls" MEALF_LAYOUT_ENGINE=webkit MEALF_FOOD_SCREENSHOT_DIR=build/food-setup-browser-webkit timeout 180s python scripts/food_setup_browser_smoke.py
       - name: Sync truthfulness, two devices, recovery and redacted diagnostics
         run: timeout 180s python scripts/sync_status_browser_smoke.py
       - name: PWA task hierarchy, settings disclosures and offline recipe editing
