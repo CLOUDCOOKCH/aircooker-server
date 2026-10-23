@@ -1,6 +1,6 @@
 # Implementation checklist and evidence
 
-**Security corrections, 2026-10-23 — locally implemented and tested, not yet published:**
+**Security corrections, 2026-10-23 — published and verified in `poc-20261023.1`:**
 IP-rejected native/PWA/admin login attempts no longer consume the shared household budget;
 per-IP admission, distributed protection and expiry remain. Recipe/AI quantities are bounded
 before fixed rendering across ingress, scaling, shopping and legacy local reads. Original
@@ -10,8 +10,30 @@ Local verification: 459 backend and 70 frontend tests pass; Ruff lint/format, my
 drift, PWA types/build pass. Chromium AI ideas regression passes including offline reviewed
 Save/reload/sync, EN/DE recovery and invalid legacy-cache retention without paid retries.
 An independent read-only bypass/regression review found no reportable surviving route.
-No production data, external credentials or live provider/Bring! calls were used. Docker
-publication and physical iPhone acceptance are not inferred from these local checks.
+No production data, external credentials or live provider/Bring! calls were used.
+[Server PR #14](https://github.com/CLOUDCOOKCH/aircooker-server/pull/14) is merged.
+All six [exact-main CI jobs](https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39954293982)
+pass at `8ce57c7ad43a5a5b3498cb381af0f0865d8c20bf`, including Chromium/WebKit, both native
+architecture builds/runtime tests and unsuppressed security scans. The [publication run](https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39955574162)
+also passes with fresh scans and runtime checks of the actual two published images.
+The [public release](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261023.1)
+has index digest `sha256:b1ec2a44c43bf059638a1f8ed59d108f2b0b6d5c75605f92a63d5d6c332282a1`.
+Six public asset checksums, exact Compose/OpenAPI, both native image config IDs versus
+build logs/scans, zero HIGH/CRITICAL findings, SBOMs, source/version labels, matching
+`preview` tag and anonymous pull pass. A disposable published .10-to-.1 same-volume
+5152 upgrade preserves identity, active session, history, recipes and the 400 g projection.
+An old `1.00`/zero-exponent mutation returns its original receipt without changing history.
+Actual packaged model/rendering guards reject both expansion forms, and forty single-IP
+login attempts leave a fresh-IP correct login available. Published EN/DE narrow-phone
+navigation and cached offline shopping pass. The optional local Docker build was blocked
+by the environment's Alpine-download HTTP 403; the native CI and published-image checks
+provide the completed Docker validation. Physical iPhone/live services remain unverified.
+
+Verification commands: `python -m compileall -q src`, `python -m mypy src/mealf
+--ignore-missing-imports`, `npm run typecheck`/`build` pass; focused security tests and
+`python -m pytest -q` pass (459), `npm test` passes (70). Ruff lint/format, Prettier,
+`python scripts/export_contract.py --check`, licence/artwork checks and the real
+`scripts/recipe_ideas_browser_smoke.py`/`scripts/pwa_browser_smoke.py` pass.
 
 **Recipe ideas diagnostics, 2026-10-22 — published and verified in `poc-20261022.10`:**
 allowlisted English/German provider errors survive the durable worker and cached PWA
