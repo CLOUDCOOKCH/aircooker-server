@@ -519,3 +519,12 @@ rerun remains pending. No live AI/Bring!,
 physical iPhone, production-v1, detector (missing launcher, exit 127), design-hook,
 plugin-schema or shipped specialist pass is claimed. DESIGN.md/design.json retain their
 byte-identical historical snapshots and already recorded navigation/layout/type/theme drift.
+
+
+Publication update for pantry/taste, 2026-10-23: `poc-20261023.3` is published from
+`327fcb3`. Exact-main CI, fresh native AMD64/ARM64 image/runtime/security gates and public
+checksum/config/SBOM/anonymous-pull checks pass. Native main CI passes. Earlier pending
+notes are the original handoff. The local published-volume upgrade remains unverified
+after workspace ENOSPC/outage interrupted the rerun. See
+docs/validation/github-food-setup-preview.json. Physical iPhone/live-service, detector
+and shipped-specialist limits remain unchanged.

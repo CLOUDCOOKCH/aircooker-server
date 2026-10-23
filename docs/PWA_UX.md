@@ -1,7 +1,8 @@
 # PWA screen guide
 
-The newer pantry/taste extension is locally tested for candidate `poc-20261023.3`,
-currently unpublished; `.2` below remains the last published navigation preview.
+The pantry/taste extension is published as `poc-20261023.3`; see
+[release checks and limits](validation/github-food-setup-preview.json). The `.2` record
+below retains its original navigation scope.
 Fresh households receive a nonblocking Today pantry invitation. **Shopping → Pantry**
 keeps the searchable 24-staple picker available; only selected actual stock is saved.
 First-use Recipe ideas offers twelve resumable taste cards with gestures plus Like /

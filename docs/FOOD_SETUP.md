@@ -1,7 +1,7 @@
 # Pantry basics and food tastes
 
-This is the locally tested food-setup extension for candidate `poc-20261023.3`, not a
-published preview. The last published preview is `poc-20261023.2`.
+This extension is published as `poc-20261023.3` for AMD64 and ARM64. See
+[release checks and remaining verification](validation/github-food-setup-preview.json).
 See the [bounded review and evidence](validation/food-setup-review.md).
 
 ## Start with actual pantry stock
@@ -95,7 +95,8 @@ the ZIP envelope remains version 1 and formats 1–3 remain importable. See
 
 Retain the existing Docker volume, custom port/command/healthcheck and browser storage
 when upgrading. Save open edits before accepting the PWA update. No database reset,
-reinstall or re-pairing is required by this extension. Candidate image publication,
-both-architecture runtime/security gates and current-source Chromium/WebKit CI remain
-pending in this documentation handoff. Live AI/Bring!, physical iPhone and production-v1
-acceptance remain unverified.
+reinstall or re-pairing is required by this extension. Exact-main Chromium/WebKit CI,
+both architecture image/runtime/security gates and public image checks pass. The local
+published `.2` → `.3` volume-upgrade check remains unverified after workspace ENOSPC and
+an outage interrupted the rerun. Live AI/Bring!, physical iPhone and production-v1 acceptance
+remain unverified.

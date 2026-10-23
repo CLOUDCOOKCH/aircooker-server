@@ -1,24 +1,30 @@
 # Mealf preview
 
-## Candidate: pantry and food tastes
+## Published preview: pantry and food tastes
 
-`poc-20261023.3` is selected for the pantry/taste extension but **has not been published**.
-The repository Compose default points to this candidate; do not assume it can be pulled.
-For an available preview, explicitly set
-`MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server:poc-20261023.2` before the install commands
-below. `.2` remains the last published preview; its completed gates do not certify `.3`.
+`poc-20261023.3` is published for **AMD64 and ARM64**. It adds a searchable 24-staple
+pantry setup, twelve resumable food taste cards shared by the household, frozen tastes
+for new Recipe ideas and concise household import preparation. Recipes still require
+review and explicit Save. Existing households can open **Shopping → Pantry → Choose
+pantry basics** and **Recipe ideas → Your taste**; fresh households receive setup invitations.
+See [food setup](FOOD_SETUP.md), [UI review](validation/food-setup-review.md) and
+[exact source/image evidence](validation/github-food-setup-preview.json).
 
-Candidate source `58c5930` plus the narrow German pantry CSS correction adds actual-stock
-pantry onboarding, resumable shared tastes and shorter import preparation. Local 472
-backend / 76 frontend tests and real Chromium workflows pass with synthetic integrations;
-the manual scoped review resolves its one P2 finding. Both current-source architecture
-build/runtime/security and Chromium/WebKit CI, release images, anonymous pull and the
-candidate persistent-volume upgrade remain pending. A local Docker build was blocked by
-workspace Alpine-download HTTP 403. See [implementation evidence](IMPLEMENTATION.md),
-[food setup operations](FOOD_SETUP.md) and [bounded review](validation/food-setup-review.md).
-Keep existing volumes, browser storage and custom `5152:5152` command/healthcheck settings.
-Save open work and accept a PWA update only after installing a published image. This
-candidate does not establish live AI/Bring!, physical-iPhone or production-v1 acceptance.
+Local **472 backend / 76 frontend tests**, all six exact-main CI jobs and fresh native
+AMD64/ARM64 image/runtime/security gates pass, including Chromium/WebKit, restart,
+persistent work and export/restore. Six public asset checksums, config identities/SBOMs,
+preview alias and anonymous pull pass. Native companion core/Xcode/simulator CI passes.
+Provider responses are synthetic; physical iPhone and live services remain unverified.
+
+The additional local published `.2` → `.3` volume-upgrade check is **unverified**.
+Its old-image launch ran out of workspace disk; after cache cleanup the workspace became
+unavailable before a result was collected. No upgrade pass is claimed from that attempt.
+Both fresh-image CI runtime matrices and migration tests pass.
+
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261023.3`. Retain the existing volume and
+custom `5152:5152` command/healthcheck, save open work and accept the PWA update. Migration
+016 runs at startup; export v4 accepts legacy v1–v3 imports. Keep a backup before upgrading.
+No browser reset/reinstall is needed. This is a preview, not production v1.
 
 ## Published preview: everyday navigation and quick planning
 

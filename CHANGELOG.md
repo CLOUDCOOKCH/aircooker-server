@@ -9,8 +9,9 @@
   writes with device-bound replay and server commit ordering; freeze tastes in new idea
   requests without changing old queued jobs. Migration 016 and export v4 include the
   non-secret profile; old exports and archive envelope v1 remain compatible. Resolve
-  German pantry word breaks at ≤360px with one column. Candidate `poc-20261023.3` is
-  locally tested and manually reviewed; CI/publication gates remain pending.
+  German pantry word breaks at ≤360px with one column. Published as `poc-20261023.3`;
+  exact-main CI, native architecture image/runtime/security gates and public checks pass.
+  Local published-volume upgrade verification was interrupted by workspace ENOSPC/outage.
   Reject backwards food-profile revisions before PUT, and archive pending food state in
   explicit server-history recovery without automatic replay; retain unfinished setup drafts.
   Local totals are 472 backend / 76 frontend tests; this nonvisual follow-up changes no captures.

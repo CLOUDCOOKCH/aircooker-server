@@ -1,6 +1,6 @@
 # ADR 017: Explicit pantry and shared taste onboarding
 
-Status: accepted implementation, 2026-10-23; preview publication pending.
+Status: accepted implementation, 2026-10-23; published preview `poc-20261023.3`.
 
 ## Context
 
