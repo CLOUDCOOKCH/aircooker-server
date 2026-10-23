@@ -165,5 +165,8 @@ export function foodEmoji(name: string): string {
   const food = catalog.items.find((food) =>
     [...Object.values(food.name), ...food.aliases].some((alias) => key(alias) === id),
   );
-  return (food && EMOJI[food.id]) || EXTRA_EMOJI[searchKey(name)] || '🥣';
+  const extra = searchKey(name);
+  return (
+    (food && EMOJI[food.id]) || (Object.hasOwn(EXTRA_EMOJI, extra) ? EXTRA_EMOJI[extra] : '🥣')
+  );
 }
