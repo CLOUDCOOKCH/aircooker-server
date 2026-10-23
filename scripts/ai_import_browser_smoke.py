@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 
 import httpx
 import uvicorn
+from browser_navigation import navigate as navigate_destination
 from browser_settings import settings_section
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
@@ -95,9 +96,7 @@ def main():
                     )
 
                 def navigate(name):
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name=name, exact=True
-                    ).click()
+                    navigate_destination(page, name)
 
                 def configure(provider, model, key):
                     navigate("Settings")

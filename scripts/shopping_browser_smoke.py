@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 import httpx
 import uvicorn
 from bring_api.types import BringItemOperation
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -194,9 +195,7 @@ def main():
                         page.get_by_label("Username", exact=True).fill("cook")
                         page.get_by_label("Password", exact=True).fill("synthetic browser password")
                         page.get_by_role("button", name="Sign in", exact=True).click()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Calendar", exact=True
-                        ).click()
+                        navigate(page, "Calendar")
                         # The calendar shortcut and primary navigation open the same destination.
                         page.locator("main").get_by_role(
                             "button", name="Shopping list", exact=True
@@ -205,9 +204,7 @@ def main():
                             "button", name="Shopping list", exact=True
                         )
                         expect(shopping_nav).to_have_attribute("aria-current", "page")
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Recipes", exact=True
-                        ).click()
+                        navigate(page, "Recipes")
                         shopping_nav.focus()
                         shopping_nav.press("Enter")
                         expect(shopping_nav).to_have_attribute("aria-current", "page")
@@ -259,16 +256,12 @@ def main():
                         page.screenshot(
                             path=str(captures / "shopping-synced-desktop.png"), full_page=True
                         )
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Settings", exact=True
-                        ).click()
+                        navigate(page, "Settings")
                         settings_section(page, "Your household")
                         page.get_by_label("Language", exact=True).select_option("de")
                         page.evaluate("window.mealfAppearance.set('after-dark')")
                         page.set_viewport_size({"width": 390, "height": 844})
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Einkaufsliste", exact=True
-                        ).click()
+                        navigate(page, "Einkaufsliste")
                         expect(
                             page.get_by_text("Mit Bring! abgeglichen", exact=True)
                         ).to_be_visible()
@@ -280,12 +273,12 @@ def main():
                         page.screenshot(
                             path=str(captures / "shopping-synced-phone-de-dark.png"), full_page=True
                         )
-                        # All six destinations keep distinct, usable hit areas at 320px.
+                        # All four primary destinations keep distinct, usable hit areas at 320px.
                         page.set_viewport_size({"width": 320, "height": 740})
                         assert page.evaluate("""() => {
                           const nav = document.querySelector('.nav-links');
                           const boxes = [...nav.querySelectorAll('button')].map(b => b.getBoundingClientRect());
-                          return boxes.length === 6 && boxes.every((b, i) =>
+                          return boxes.length === 4 && boxes.every((b, i) =>
                             b.width >= 44 && b.height >= 44 && b.left >= 0 && b.right <= innerWidth &&
                             (!i || b.left >= boxes[i - 1].right)) &&
                             [...nav.querySelectorAll('button span')].every(s => s.scrollWidth <= s.clientWidth + 1 &&
@@ -305,12 +298,8 @@ def main():
                         page.evaluate("async()=>{await navigator.serviceWorker.ready}")
                         context.set_offline(True)
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Kalender", exact=True
-                        ).click()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Einkaufsliste", exact=True
-                        ).click()
+                        navigate(page, "Kalender")
+                        navigate(page, "Einkaufsliste")
                         expect(page.get_by_text("400 g", exact=True)).to_be_visible()
                         expect(
                             page.get_by_role(

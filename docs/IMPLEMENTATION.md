@@ -1,5 +1,39 @@
 # Implementation checklist and evidence
 
+**Everyday navigation and quick planning, 2026-10-23 — locally implemented/tested;
+publication pending for candidate `poc-20261023.2`:** four primary tabs (Today, Plan,
+Recipes, Shopping), persistent account → Settings → Back, and Shopping → Pantry → Back.
+Internal route IDs, deep links, preferences, API/database/native contracts and durable
+local work remain compatible. Empty Plan slots open title search with rating-first
+recipes and guarded one-tap assignment using saved household/recipe portions. Separate
+Meal options retains date/category/portions/leftovers/recurrence; quick leftovers retain
+the real ID and cap available portions. Compact day meals, actual-occurrence week marks,
+a separate mobile sync-status row and readable inactive nav ink complete the extension.
+Cooking mode remains outside this pass. Original artwork, palettes and three themes stay.
+
+Local verification: 459 backend / 70 frontend tests pass, with the backend run configured
+for EN/DE OCR via `TESSDATA_PREFIX=/workspace/Mealf/mealf-server/build/ux-ocr` (an initial
+unconfigured run had eight OCR-data failures). Ruff lint/format, mypy, Prettier, frontend
+types/build, OpenAPI drift, unchanged pinned iOS schema, brand-byte and licence checks
+pass. Actual Chromium UX covers navigation/Back/Pantry selected state, picker search and
+empty state, default portions, offline double activation/reload/once-only sync, custom
+portions/recurrence and leftover ID/cap. Core PWA, layout/drag/safe-area/date geometry,
+shopping/sync/themes, imports/OCR/AI/ideas/source photos/ChatGPT/push regressions pass
+with synthetic integrations. Final theme/Axe checks pass after inactive nav contrast
+was corrected using semantic ink. A fresh independent manual specialist equivalent
+reviewed all 21 captures and sampled sources: **ship at this scope, no material fixes**.
+Six unmodified captures and checksummed provenance are retained in documentation.
+
+No local WebKit binary; current-source CI has not run. Launcher/detector are unavailable
+(the detector attempt exited 127); no shipped specialist/schema pass is claimed. No
+source-only UI Docker test was required; publication must verify the actual candidate
+images and persistent-volume upgrade. Physical iPhone/live-service acceptance remains
+open. The candidate Compose pin is not publication evidence: the latest actually
+published image is `poc-20261023.1`, recorded below. See [screen guide](PWA_UX.md) and
+[bounded review, capture matrix and exact limits](validation/quick-planning-review.md).
+DESIGN.md and its sidecar are preserved byte-for-byte; their older navigation/layout/
+type/theme descriptions remain documented snapshot drift, outside this extension.
+
 **Security corrections, 2026-10-23 — published and verified in `poc-20261023.1`:**
 IP-rejected native/PWA/admin login attempts no longer consume the shared household budget;
 per-IP admission, distributed protection and expiry remain. Recipe/AI quantities are bounded

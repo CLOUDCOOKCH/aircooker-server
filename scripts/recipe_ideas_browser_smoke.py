@@ -13,6 +13,7 @@ from uuid import uuid4
 
 import httpx
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -177,9 +178,7 @@ def main():
                             page.get_by_role("button", name="Reviewed bolognese", exact=False)
                         ).to_be_visible()
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Recipes", exact=True
-                        ).click()
+                        navigate(page, "Recipes")
                         expect(
                             page.get_by_role("button", name="Reviewed bolognese", exact=False)
                         ).to_be_visible()
@@ -195,16 +194,12 @@ def main():
                             and saved[0]["payload"]["provenance"]["extractor"]
                             == "ai-generated-ideas"
                         )
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Settings", exact=True
-                        ).click()
+                        navigate(page, "Settings")
                         settings_section(page, "Your household")
                         page.get_by_label("Language", exact=True).select_option("de")
                         page.evaluate("window.mealfAppearance.set('after-dark')")
                         page.set_viewport_size({"width": 390, "height": 844})
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Rezepte", exact=True
-                        ).click()
+                        navigate(page, "Rezepte")
                         page.get_by_role("button", name="Rezeptideen", exact=False).click()
                         page.get_by_role("radio", name="Überrasch mich", exact=True).check()
                         page.get_by_role("checkbox").check()
@@ -233,9 +228,7 @@ def main():
                         page.set_viewport_size({"width": 390, "height": 844})
                         context.set_offline(True)
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Rezepte", exact=True
-                        ).click()
+                        navigate(page, "Rezepte")
                         page.get_by_role("button", name="Rezeptideen", exact=False).click()
                         expect(
                             page.get_by_role("heading", name="Kürbissuppe", exact=True)
@@ -248,9 +241,7 @@ def main():
                         )
                         context.set_offline(False)
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Rezepte", exact=True
-                        ).click()
+                        navigate(page, "Rezepte")
                         page.get_by_role("button", name="Rezeptideen", exact=False).click()
                         broken = True
                         page.get_by_role("checkbox").check()
@@ -280,9 +271,7 @@ def main():
                             )
                         call_count = len(calls)
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Rezepte", exact=True
-                        ).click()
+                        navigate(page, "Rezepte")
                         page.get_by_role("button", name="Rezeptideen", exact=False).click()
                         expect(page.get_by_role("alert")).to_contain_text("ai_rate_limited")
                         assert len(calls) == call_count
@@ -318,9 +307,7 @@ def main():
                         }""")
                         call_count = len(calls)
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Rezepte", exact=True
-                        ).click()
+                        navigate(page, "Rezepte")
                         page.get_by_role("button", name="Rezeptideen", exact=False).click()
                         expect(page.get_by_role("alert")).to_be_visible()
                         # An ordinary edit must not overwrite the rejected cached request.
@@ -346,9 +333,7 @@ def main():
                             {"name": cached["name"], "id": legacy_leftover, "recipe": recipe_id},
                         )
                         page.reload()
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Kalender", exact=True
-                        ).click()
+                        navigate(page, "Kalender")
                         expect(
                             page.locator(".leftovers-section").get_by_role("alert")
                         ).to_be_visible()

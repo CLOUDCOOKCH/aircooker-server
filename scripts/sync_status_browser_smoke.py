@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -82,9 +83,7 @@ def main():
                         )
 
                     def nav(screen, name):
-                        screen.get_by_role("navigation").get_by_role(
-                            "button", name=name, exact=True
-                        ).click()
+                        navigate(screen, name)
 
                     def audit(screen):
                         assert screen.locator(".sync-report + .form-actions > button").evaluate_all(

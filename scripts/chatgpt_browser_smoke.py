@@ -14,6 +14,7 @@ from uuid import uuid4
 import httpx
 import jwt
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from cryptography.hazmat.primitives.asymmetric import rsa
 from playwright.sync_api import expect, sync_playwright
@@ -165,9 +166,7 @@ def main():
                     expect(
                         page.get_by_role("heading", name="Your kitchen", exact=True)
                     ).to_be_visible(timeout=15000)
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name="Settings", exact=True
-                    ).click()
+                    navigate(page, "Settings")
                     settings_section(page, "Your ChatGPT plan")
                     panel = page.locator(".chatgpt-settings")
                     expect(
@@ -264,9 +263,7 @@ def main():
                         assert page.evaluate("document.documentElement.scrollWidth<=innerWidth")
 
                     audit()
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name="Recipes", exact=True
-                    ).click()
+                    navigate(page, "Recipes")
                     page.get_by_role("button", name="Import recipe", exact=True).first.click()
                     page.get_by_label("AI account for this import", exact=True).select_option(
                         "chatgpt"
@@ -291,9 +288,7 @@ def main():
                         page.get_by_role("heading", name="Reviewed personal import", exact=True)
                     ).to_be_visible(timeout=10000)
 
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name="Settings", exact=True
-                    ).click()
+                    navigate(page, "Settings")
                     settings_section(page, "Your household")
                     page.get_by_label("Language", exact=True).select_option("de")
                     settings_section(page, "Design-Bibliothek")
@@ -307,9 +302,7 @@ def main():
                     expect(page.locator(".toast")).to_have_count(0, timeout=5000)
                     audit()
                     panel.screenshot(path=str(captures / "connected-phone-de-dark.png"))
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name="Rezepte", exact=True
-                    ).click()
+                    navigate(page, "Rezepte")
                     page.get_by_role("button", name="Rezept importieren", exact=True).first.click()
                     page.get_by_label("KI-Konto für diesen Import", exact=True).select_option(
                         "chatgpt"
@@ -332,9 +325,7 @@ def main():
                         page.get_by_role("heading", name="Deine Küche", exact=True)
                     ).to_be_visible(timeout=10000)
                     context.set_offline(False)
-                    page.get_by_role("navigation").get_by_role(
-                        "button", name="Rezepte", exact=True
-                    ).click()
+                    navigate(page, "Rezepte")
                     page.get_by_role("button", name="Rezept importieren", exact=True).first.click()
                     try:
                         page.get_by_role("button", name="Prüfen", exact=True).last.click(

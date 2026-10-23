@@ -1,40 +1,72 @@
 # PWA screen guide
 
-The 2026-10-22 UX rework keeps the original Mealf peach, wordmark, glass navigation and
-Flo, After Dark and Sunday themes. All six main destinations remain. The native app and
-administration console are unchanged by this PWA layout work.
+The 2026-10-23 navigation and quick-planning extension has four primary tabs:
+**Today, Plan, Recipes and Shopping** (German: **Heute, Plan, Rezepte, Einkauf**).
+Settings opens from the persistent account button; Pantry opens inside Shopping.
+The original Mealf peach, wordmark, glass navigation and Flo / After Dark / Sunday
+appearances remain. This source is locally implemented and tested; candidate
+`poc-20261023.2` is **not published**. The latest published preview is `poc-20261023.1`.
+See the [scoped finish review and exact limits](validation/quick-planning-review.md).
 
-Genuine German After Dark browser captures: [Home](screenshots/pwa-ux/home-phone.png),
-[Calendar](screenshots/pwa-ux/calendar-phone.png),
-[Settings](screenshots/pwa-ux/settings-phone.png). See
-[capture provenance and limitations](screenshots/pwa-ux/provenance.json).
+Genuine current browser captures: [Plan](screenshots/quick-planning/calendar-phone-de-dark.png),
+[English meal picker](screenshots/quick-planning/meal-picker-phone-flo.png),
+[German dark meal picker](screenshots/quick-planning/meal-picker-phone-de-dark.png),
+[320px meal options](screenshots/quick-planning/meal-options-phone-320-sunday.png),
+[Shopping](screenshots/quick-planning/shopping-phone-de-dark.png) and
+[320px Settings](screenshots/quick-planning/settings-phone-320-de-dark.png).
+[Provenance and checksums](screenshots/quick-planning/provenance.json) identify the original
+capture files, dimensions and source fingerprints. These show a disposable synthetic household.
 
-## Everyday tasks
+## Everyday navigation
 
-- **Home** starts with the selected day's meals. Use the date arrows or Today to change
-  the day, Plan a meal to schedule food, or the labelled import/create/inspiration actions
-  below the meals. The weekly overview, suggestions and recipe-book shortcuts remain.
-- **Calendar** groups the week strip and Day / 3 days / Week choices above the board.
-  Today returns to the household's current civil day. Tools contains copy/template actions.
-  Suggest meals and moving-meal guidance follow the board. Multiple-day views scroll
-  horizontally on narrow screens. The drag grips and explicit move/copy editor both work.
-- **Recipes** puts Import and New recipe beside the page title, followed by search,
-  name/rating sorting and Recipe ideas. Recipe details link directly to ingredients and
-  method; servings scaling and planning remain available.
-- **Recipe editor** begins with name and servings. Timing, rating and other metadata live
-  in an expandable details group. Ingredients and method have direct section links.
-  The Save bar stays above phone navigation; the draft indicator distinguishes a locally
-  retained draft from an explicitly saved recipe. Closing a group does not erase its fields.
-- **Import** starts with a URL or a photo/screenshot source. Open “Paste recipe text or
-  upload a file” for other content, or the importing guide for details. Existing provider
-  consent, source uncertainty and explicit review/Save continue to apply.
-- **Pantry** keeps staple entry and availability controls visible; its longer explanation
-  is expandable. **Shopping list** retains quantities, pantry exclusions and Bring status
-  with a manual Sync to Bring! action. It does not become an independent shopping service.
+- **Today** starts with the household's current civil day when you tap its tab. Date
+  arrows and Today select another day or return to the current one. Meals lead into
+  labelled import/create/inspiration actions, the weekly overview and recipe shortcuts.
+- **Plan** opens the existing Calendar screen. The week strip marks dates that actually
+  contain meal occurrences, including recurrence exceptions, rather than decorating every
+  day. Day / 3 days / Week and Tools remain above the board. Day meals use compact rows;
+  multiple-day views scroll horizontally on narrow screens. Drag grips and explicit
+  move/copy controls remain available. Suggestions, Shopping and leftovers follow the board.
+- **Recipes** keeps Import and New recipe beside the title, followed by search,
+  name/rating sorting and Recipe ideas. Recipe details have ingredients/method links,
+  serving scaling and planning. The editor retains expandable metadata, draft feedback
+  and a Save bar above phone navigation; collapsing a group does not erase its fields.
+- **Shopping** retains current-week quantities, pantry exclusions, Bring! readiness and
+  manual Sync to Bring!. Open **Pantry** here to edit staples and availability; Shopping
+  stays selected and Back returns to it. Shopping does not replace the Bring! service.
+- **Settings** opens from the account button in the header. Its Back action returns to
+  the preceding primary destination. Phone branding, sync action and account button share
+  the first header row; truthful sync status occupies its own row below.
 
-## Settings
+Existing `home`, `calendar`, `recipes`, `shopping`, `pantry` and `settings` route identities,
+deep links, stored preferences and offline records remain compatible. Visible tab labels
+change without an API, database or native-app change. The administration console is unchanged.
 
-Open the named section before editing its controls:
+## Quickly plan a meal
+
+1. Open an empty Plan slot. The picker shows the selected date/category and locally
+   searches recipe titles. Recipes sort by rating first, then title; Show more recipes
+   reveals further results. A no-match message lets you refine the search.
+2. Tap a recipe row to add it immediately using the saved household portions preference,
+   or the recipe's servings when no household default is set. A guarded save prevents
+   rapid repeated activation from adding the same assignment twice. Successful addition
+   closes the picker and shows confirmation; offline additions remain in the durable outbox.
+3. Use the separate **Meal options** button for that recipe to change date, category,
+   portions, leftovers or recurrence before explicitly saving. Choose another recipe
+   returns to the picker. Busy controls and dismissal are disabled during the local save.
+
+When available, **Use your leftovers** offers direct assignments. Each choice retains the
+real leftover record ID, caps portions at the available amount and adds no recurrence.
+Existing recipe-to-plan and leftover-to-plan detail routes remain available. Cooking mode
+is outside this extension and has not been implemented.
+
+## Imports and Settings
+
+Import starts with a URL or photo/screenshot. Open “Paste recipe text or upload a file”
+for other sources, or the importing guide for details. Provider consent, uncertainty,
+editable review and explicit Save continue to apply.
+
+Open the named Settings section before editing its controls:
 
 | Task | Section |
 | --- | --- |
@@ -52,29 +84,28 @@ Open the named section before editing its controls:
 
 Blocked work and recovery archives appear when they exist. Expanding or collapsing a
 section retains mounted forms and draft values. Connection failures open This device;
-blocked work remains visible for review. Do not clear browser storage, reinstall the PWA
-or delete Docker volumes as part of updating the layout.
+blocked work remains visible for review. Keep browser storage, existing Docker volumes
+and deployment port/command/healthcheck settings when updating; save open editors and
+accept the PWA update on each device once the candidate is actually published.
 
 ## Verification and limits
 
-`scripts/pwa_ux_browser_smoke.py` uses a real disposable server, SQLite, browser sessions
-and mutations. It checks the six destinations, disclosure navigation, English/German,
-the three themes, search/rating sorting, recipe anchors, retained optional fields and
-offline recipe Save/reload/reconnect. It runs Axe and checks document width at desktop,
-390px and 320px; the narrow calendar keeps an explicitly scrollable internal board.
-The existing import, notification, shopping, conflict and recovery suites still apply.
-Synthetic provider/Bring/push responses in those suites are not live integration evidence.
-The screenshot recipe data is synthetic and the chicken artwork is the existing original
-demo illustration, not a photograph of an actual cooked recipe.
+Local real Chromium checks cover the four tabs, account/Back, Pantry selected state,
+quick-picker search/default portions, offline double activation/reload/once-only sync,
+custom portions/recurrence and real leftover ID/portion caps. The UX suite runs Axe and
+width checks at desktop, 390px and 320px in English/German and the three themes. The
+existing import, shopping, conflict, recovery, touch drag and safe-area regressions pass.
+Inactive navigation labels now use semantic ink after a composited-glass contrast failure;
+the final theme/Axe checks pass. See the [review](validation/quick-planning-review.md)
+for the complete local evidence and its attribution.
 
-Local Chromium checks do not establish physical iPhone, camera, installed-PWA keyboard,
-VoiceOver or live-service acceptance. The API, database schema and native contract are
-unchanged. Final review and exact-source publication status are recorded in
-[implementation progress](IMPLEMENTATION.md); this is still a preview product.
+The screenshots are unmodified Chromium captures; normal screens use full-document
+capture from the top, while dialogs use viewport-only capture to match their backdrops.
+Fixed navigation remains at its original viewport position in a long image. The chicken
+is an existing original generated demo illustration, not a photograph of actual cooking.
+No new shipping raster or replacement branding was introduced.
 
-`ghcr.io/cloudcookch/mealf-server:poc-20261022.9` is published for AMD64/ARM64. Exact-source
-CI also passes Linux WebKit layout/theme/image-import/OCR/offline checks. Both fresh native
-image gates, public checksums/config identities, anonymous pull and the published .8-to-.9
-same-volume 5152 upgrade pass; [release evidence](validation/github-pwa-ux-preview.json).
-Retain your volume and port/command/healthcheck configuration, save editors and accept the
-PWA update on each device. The evidence above does not establish physical-iPhone acceptance.
+Current-source WebKit CI and candidate publication remain pending. Earlier published
+Chromium/WebKit results certify their historical sources only. Local checks and static
+captures do not establish physical iPhone, camera, installed-PWA keyboard, VoiceOver or
+live Bring!/AI/Web Push acceptance. The PWA remains a preview product.

@@ -5,14 +5,17 @@ the PWA at `/app/`, and `/` is reserved for a separately hosted landing page.
 Existing volumes and offline work are preserved; see [upgrade compatibility](docs/MEALF_MIGRATION.md).
 
 **PWA-first delivery.** Open `/app/` on the configured HTTPS backend to use the primary
-installable browser application. Home, Calendar, Recipes, Pantry, Shopping list, Settings, offline editing,
-reviewed imports and two-device synchronisation have real Chromium acceptance coverage.
+installable browser application. Four primary tabs are **Today, Plan, Recipes and Shopping**.
+Open Settings from the persistent account button, or Pantry from Shopping; both have Back.
+Offline editing, reviewed imports and two-device synchronisation have real Chromium coverage.
 The native iOS repository is preserved for later. Read [install/use/develop the PWA](docs/PWA.md)
 and [implemented/remaining scope](docs/PWA_IMPLEMENTATION.md). Choose Flo, After Dark or
 Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
-The PWA task-flow rework keeps the same branding and six destinations, with a focused
-Home, compact calendar controls, labelled recipe actions and expandable Settings groups.
-See [screen guide and validation scope](docs/PWA_UX.md).
+Plan now opens a searchable, ratings-first recipe picker from an empty slot: tap to add
+default portions, or use Meal options for date, category, portions, leftovers and recurrence.
+Existing route IDs, deep links, offline work, artwork and all three themes remain compatible.
+This extension is locally tested; `poc-20261023.2` is not published. The latest published
+preview is `poc-20261023.1`. See [screen guide and validation scope](docs/PWA_UX.md).
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).
@@ -24,10 +27,10 @@ Recipes without a usable picture show the original Mealf peach. URL imports, inc
 AI-assisted imports, try source recipe/preview images and retain them through review and
 offline viewing. See [recipe photos and limits](docs/RECIPE_PHOTOS.md).
 
-Open **Shopping list** in the main navigation to inspect current-week quantities, Bring! item states
+Open **Shopping** in the main navigation to inspect current-week quantities, Bring! item states
 and failures, and use **Sync to Bring!**. See [shopping and safe verification](docs/SHOPPING.md).
 
-Open **Recipe ideas** on Home or in Recipes to enter ingredients you have or choose
+Open **Recipe ideas** on Today or in Recipes to enter ingredients you have or choose
 **Surprise me**. Your configured household AI proposes three recipes for explicit review,
 editing and Save; cached proposals and reviewed saves work offline. See
 [configuration, privacy and limits](docs/RECIPE_IDEAS.md).
@@ -125,7 +128,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional development client, genuine reviewed desktop/phone captures, 59 core tests and real Chromium/WebKit flows; physical Safari and remaining acceptance open |
+| PWA | Functional preview; four primary tabs and quick planning locally tested with 70 frontend tests and real Chromium flows; current-source WebKit CI/publication, physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |

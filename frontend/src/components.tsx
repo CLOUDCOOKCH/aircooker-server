@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, CookingPot, Plus, X } from 'lucide-react';
 import { useApp } from './model';
 import { addDays, displayDate, monday, today } from './lib/domain';
+import { occurrences } from './lib/planning';
 export function IconButton({
   label,
   children,
@@ -135,8 +136,11 @@ export function Photo({
   ) : null;
 }
 export function WeekStrip({ day, onChange }: { day: string; onChange: (day: string) => void }) {
-  const { t, language, household } = useApp();
+  const { t, language, household, entities } = useApp();
   const week = monday(day);
+  const planned = new Set(
+    occurrences(entities('meal'), week, addDays(week, 6)).map((item) => item.day),
+  );
   return (
     <div className="week-control">
       <div className="week-heading">
@@ -160,16 +164,23 @@ export function WeekStrip({ day, onChange }: { day: string; onChange: (day: stri
             key={date}
             onClick={() => onChange(date)}
             aria-pressed={date === day}
-            aria-label={displayDate(date, language, {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-            })}
+            aria-label={
+              displayDate(date, language, {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+              }) +
+              ' · ' +
+              t(planned.has(date) ? 'plannedDay' : 'unplannedDay')
+            }
             className={date === day ? 'selected' : ''}
           >
             <span>{displayDate(date, language, { weekday: 'short' })}</span>
             <strong>{date.slice(8)}</strong>
-            <span className="day-dot" />
+            <span
+              className={'day-dot' + (planned.has(date) ? ' is-planned' : '')}
+              aria-hidden="true"
+            />
           </button>
         ))}
       </div>

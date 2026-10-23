@@ -32,6 +32,12 @@ App Store/TestFlight distribution. Keep the administration console focused on ad
 
 ## Capabilities and Constraints
 
+Current navigation constraint, accepted 2026-10-23: four primary destinations—Today,
+Plan, Recipes and Shopping—with Settings reached from the persistent account button
+and Pantry inside Shopping. Both contextual routes provide Back. Preserve existing
+route/storage identities and explicit review/save controls while making ordinary meal
+assignment faster; cooking mode remains outside this extension.
+
 Preserve the master meal-planning/recipe/privacy/security requirements. On iPhone, replace
 incoming native sharing with paste/import and optional documented Shortcuts; native widgets
 are deferred, reminders use opt-in connected Web Push, and automatic sync relies on opening

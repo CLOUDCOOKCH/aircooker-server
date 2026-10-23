@@ -58,10 +58,12 @@ function SettingsDisclosure({
   );
 }
 export function Settings({
+  back,
   logout,
   reauthenticate,
   shopping,
 }: {
+  back?: () => void;
   logout: () => Promise<void>;
   reauthenticate: () => void;
   shopping: () => void;
@@ -140,7 +142,7 @@ export function Settings({
   };
   return (
     <>
-      <PageHeader title={t('settings')} subtitle={t('settingsIntro')} />
+      <PageHeader title={t('settings')} subtitle={t('settingsIntro')} back={back} />
       <div className="settings-hub">
         <div>
           <SettingsDisclosure

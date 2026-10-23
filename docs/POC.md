@@ -1,5 +1,35 @@
 # Mealf preview
 
+## Candidate: everyday navigation and quick planning — not published
+
+`poc-20261023.2` is the next planned candidate, **not a published image**. The preview
+Compose pin prepares that candidate; do not treat it as release or pull verification.
+The latest actually published security preview is `poc-20261023.1`; its exact-source,
+image and upgrade evidence is recorded in [implementation progress](IMPLEMENTATION.md).
+The older published-preview entries below retain their historical evidence.
+
+The candidate has four primary tabs: Today, Plan, Recipes and Shopping. Settings opens
+from the account button with Back; Pantry lives inside Shopping. Empty Plan slots offer
+local title search, rating-first recipes and guarded one-tap default portions, with
+separate Meal options for date/category/portions/leftovers/recurrence. Real leftover IDs,
+portion caps, actual planned-date markers, compact day rows and a separate mobile
+sync-status row preserve the existing EN/DE, three-theme, offline-first interface.
+Original artwork and route/storage/API/database/native contracts remain unchanged.
+Cooking mode is outside this pass. See [screen guide](PWA_UX.md) and
+[fresh scoped review and genuine captures](validation/quick-planning-review.md).
+
+Local 459 backend / 70 frontend tests, lint/format/types/build/OpenAPI/artwork/licence and
+actual Chromium UX/regression checks pass. The full backend rerun used configured EN/DE
+OCR data. The independent read-only manual finish review returns ship with no material
+fixes. Current-source Chromium/WebKit CI, native candidate-image builds/security/runtime
+checks, publication, anonymous pulls and same-volume upgrade proof remain pending.
+There is no local WebKit binary, physical iPhone or live-provider/Bring! verification.
+
+When the candidate is published, retain the existing volume and custom `5152:5152`
+ports, command and healthcheck; save open editors and accept the PWA update on each device.
+This source-only UI extension requires no data reset or native-app update. This is a
+preview, not production v1 acceptance.
+
 ## Published preview: readable AI diagnostics
 
 `poc-20261022.10` is published and verified for **AMD64 and ARM64**.

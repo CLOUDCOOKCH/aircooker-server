@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   CalendarDays,
@@ -7,9 +7,8 @@ import {
   CircleAlert,
   CloudOff,
   Home as HomeIcon,
-  Leaf,
   RefreshCw,
-  Settings2,
+  UserRound,
   ShoppingBag,
   X,
 } from 'lucide-react';
@@ -292,6 +291,10 @@ function Kitchen({
     [suggestions, setSuggestions] = useState(false);
   const [update, setUpdate] = useState<ServiceWorker | null>(null);
   const [reminder, setReminder] = useState<ReminderTarget | null>(null);
+  const lastMainTab = useRef<Tab>('home');
+  useEffect(() => {
+    if (app.tab !== 'settings') lastMainTab.current = app.tab === 'pantry' ? 'shopping' : app.tab;
+  }, [app.tab]);
   useEffect(() => {
     if (app.ready && reminderTarget(location.search))
       history.replaceState(history.state, '', '/app/');
@@ -340,13 +343,15 @@ function Kitchen({
       app.setTab('shopping');
       back();
     };
-  const tabs: { id: Tab; icon: typeof HomeIcon }[] = [
-    { id: 'home', icon: HomeIcon },
-    { id: 'calendar', icon: CalendarDays },
-    { id: 'recipes', icon: ChefHat },
-    { id: 'pantry', icon: Leaf },
-    { id: 'shopping', icon: ShoppingBag },
-    { id: 'settings', icon: Settings2 },
+  const tabs: {
+    id: Tab;
+    label: 'navToday' | 'navPlan' | 'recipes' | 'navShop';
+    icon: typeof HomeIcon;
+  }[] = [
+    { id: 'home', label: 'navToday', icon: HomeIcon },
+    { id: 'calendar', label: 'navPlan', icon: CalendarDays },
+    { id: 'recipes', label: 'recipes', icon: ChefHat },
+    { id: 'shopping', label: 'navShop', icon: ShoppingBag },
   ];
   let content;
   if (!app.ready)
@@ -443,9 +448,20 @@ function Kitchen({
         ideas={() => setView({ kind: 'ideas' })}
       />
     );
-  else if (app.tab === 'pantry') content = <Pantry />;
+  else if (app.tab === 'pantry') content = <Pantry back={shopping} />;
   else if (app.tab === 'shopping') content = <Shopping />;
-  else content = <Settings shopping={shopping} logout={onLeave} reauthenticate={reauthenticate} />;
+  else
+    content = (
+      <Settings
+        back={() => {
+          app.setTab(lastMainTab.current);
+          back();
+        }}
+        shopping={shopping}
+        logout={onLeave}
+        reauthenticate={reauthenticate}
+      />
+    );
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
@@ -456,28 +472,24 @@ function Kitchen({
           <Brand language={app.language} />
         </div>
         <div className="nav-links">
-          {tabs.map(({ id, icon: Icon }) => (
+          {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              className={app.tab === id ? 'active' : ''}
-              aria-current={app.tab === id ? 'page' : undefined}
-              aria-label={t(id === 'shopping' ? 'shoppingTitle' : id)}
+              className={
+                app.tab === id || (id === 'shopping' && app.tab === 'pantry') ? 'active' : ''
+              }
+              aria-current={
+                app.tab === id || (id === 'shopping' && app.tab === 'pantry') ? 'page' : undefined
+              }
+              aria-label={t(id === 'shopping' ? 'shoppingTitle' : label)}
               onClick={() => {
+                if (id === 'home') setDay(today(app.household.timezone));
                 app.setTab(id);
                 back();
               }}
             >
               <Icon size={22} strokeWidth={app.tab === id ? 2 : 1.6} />
-              <span
-                className={id === 'settings' || id === 'shopping' ? 'nav-label-full' : undefined}
-              >
-                {t(id === 'shopping' ? 'shoppingTitle' : id)}
-              </span>
-              {(id === 'settings' || id === 'shopping') && (
-                <span className="nav-label-short" aria-hidden="true">
-                  {t(id === 'shopping' ? 'navShopping' : 'navSettings')}
-                </span>
-              )}
+              <span>{t(label)}</span>
             </button>
           ))}
         </div>
@@ -487,7 +499,7 @@ function Kitchen({
         </div>
       </nav>
       <div className="main-shell">
-        <div className="connection-bar">
+        <header className="connection-bar">
           <div className="mobile-wordmark">
             <Brand compact language={app.language} />
           </div>
@@ -540,7 +552,20 @@ function Kitchen({
               </button>
             </>
           )}
-        </div>
+          <button
+            type="button"
+            className={'account-button' + (app.tab === 'settings' ? ' active' : '')}
+            aria-label={t('settings')}
+            title={t('settings')}
+            aria-current={app.tab === 'settings' ? 'page' : undefined}
+            onClick={() => {
+              app.setTab('settings');
+              back();
+            }}
+          >
+            <UserRound size={21} aria-hidden="true" />
+          </button>
+        </header>
         {app.error && (
           <div className="status-banner" role="alert">
             <CircleAlert size={18} />
