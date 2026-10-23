@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useApp } from './model';
 import { RECIPE_UNITS, suggestIngredients } from './lib/ingredient-options';
 import type { IngredientOption } from './lib/ingredient-options';
@@ -19,6 +19,7 @@ export function IngredientName({
   const [focused, setFocused] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [active, setActive] = useState(-1);
+  useEffect(() => setActive(-1), [options]);
   const matches = suggestIngredients(options, value);
   const open = focused && !dismissed && matches.length > 0;
   const choose = (name: string) => {
@@ -42,7 +43,7 @@ export function IngredientName({
         aria-autocomplete="list"
         aria-expanded={open}
         aria-controls={open ? id : undefined}
-        aria-activedescendant={open && active >= 0 ? `${id}-${active}` : undefined}
+        aria-activedescendant={open && matches[active] ? `${id}-${active}` : undefined}
         autoComplete="off"
         required
         maxLength={200}
@@ -70,11 +71,13 @@ export function IngredientName({
                 ? (current + 1) % matches.length
                 : current <= 0
                   ? matches.length - 1
-                  : current - 1,
+                  : Math.min(current - 1, matches.length - 1),
             );
           } else if (event.key === 'Enter' && open && active >= 0) {
             event.preventDefault();
-            choose(matches[active].name);
+            const option = matches[active];
+            if (option) choose(option.name);
+            else setActive(-1);
           }
         }}
       />

@@ -302,6 +302,58 @@ def main():
                     field = page.get_by_role("combobox", name="Zutat 1", exact=True)
                     field.fill("zwibel")
                     audit_shot("suggestions-320-de-sunday")
+                    # Another device changes the pantry while a keyboard choice is active.
+                    # Keep focus in the combobox: clicking Sync would itself reset selection.
+                    shared_id = str(uuid4())
+
+                    def shared_name(name, revision=0):
+                        mid = str(uuid4())
+                        operator.post(
+                            "/api/v1/sync/push",
+                            json={
+                                "mutations": [
+                                    {
+                                        "mutation_id": mid,
+                                        "idempotency_key": mid,
+                                        "entity_id": shared_id,
+                                        "kind": "pantry",
+                                        "operation": "upsert",
+                                        "base_revision": revision,
+                                        "device_id": device,
+                                        "client_timestamp": "2000-01-01T00:00:00Z",
+                                        "payload": {"name": name, "available": True},
+                                    }
+                                ]
+                            },
+                        ).raise_for_status()
+                        page.evaluate("dispatchEvent(new Event('online'))")
+
+                    field.fill("zwi")
+                    shared_name("Zwiebelpulver")
+                    extra = page.get_by_role("option", name="Zwiebelpulver Vorrat", exact=True)
+                    expect(extra).to_be_visible()
+                    expect(page.locator(".connection-status")).to_have_text("Aktuell")
+                    field.press("ArrowDown")
+                    field.press("ArrowDown")
+                    expect(extra).to_have_attribute("aria-selected", "true")
+                    revision = next(
+                        row["revision"]
+                        for row in operator.get("/api/v1/pantry").json()["items"]
+                        if row["id"] == shared_id
+                    )
+                    shared_name("__proto__", revision)
+                    expect(extra).not_to_be_visible()
+                    page.wait_for_function(
+                        "document.querySelector('.ingredient-name-field input').getAttribute('aria-activedescendant') === null"
+                    )
+                    field.press("ArrowDown")
+                    field.press("Enter")
+                    expect(field).to_have_value("Zwiebeln")
+                    navigate(page, "Vorrat")
+                    reserved = page.locator(".pantry-item").filter(
+                        has=page.get_by_text("__proto__", exact=True)
+                    )
+                    expect(reserved.locator(".pantry-emoji")).to_have_text("🥣")
                     assert not errors, errors
                     context.close()
                     browser.close()

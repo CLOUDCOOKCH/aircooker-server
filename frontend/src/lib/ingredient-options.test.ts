@@ -71,4 +71,6 @@ test('pantry emoji lookup recognises known names and safely falls back for custo
   assert.equal(foodEmoji('Tomaten'), '🍅');
   assert.equal(foodEmoji('unknown household staple'), '🥣');
   assert.equal(foodEmoji('<script>alert(1)</script>'), '🥣');
+  assert.equal(foodEmoji('__proto__'), '🥣');
+  assert.equal(foodEmoji('constructor'), '🥣');
 });
