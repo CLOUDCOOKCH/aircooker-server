@@ -1,14 +1,12 @@
 # Mealf preview
 
-## Candidate: everyday navigation and quick planning — not published
+## Published preview: everyday navigation and quick planning
 
-`poc-20261023.2` is the next planned candidate, **not a published image**. The preview
-Compose pin prepares that candidate; do not treat it as release or pull verification.
-The latest actually published security preview is `poc-20261023.1`; its exact-source,
-image and upgrade evidence is recorded in [implementation progress](IMPLEMENTATION.md).
-The older published-preview entries below retain their historical evidence.
+`poc-20261023.2` is published and verified for **AMD64 and ARM64**. See
+[exact source, image and upgrade evidence](validation/github-quick-planning-preview.json).
+Older published-preview entries below retain their historical scope.
 
-The candidate has four primary tabs: Today, Plan, Recipes and Shopping. Settings opens
+The PWA has four primary tabs: Today, Plan, Recipes and Shopping. Settings opens
 from the account button with Back; Pantry lives inside Shopping. Empty Plan slots offer
 local title search, rating-first recipes and guarded one-tap default portions, with
 separate Meal options for date/category/portions/leftovers/recurrence. Real leftover IDs,
@@ -21,11 +19,14 @@ Cooking mode is outside this pass. See [screen guide](PWA_UX.md) and
 Local 459 backend / 70 frontend tests, lint/format/types/build/OpenAPI/artwork/licence and
 actual Chromium UX/regression checks pass. The full backend rerun used configured EN/DE
 OCR data. The independent read-only manual finish review returns ship with no material
-fixes. Current-source Chromium/WebKit CI, native candidate-image builds/security/runtime
-checks, publication, anonymous pulls and same-volume upgrade proof remain pending.
-There is no local WebKit binary, physical iPhone or live-provider/Bring! verification.
+fixes. All six exact-main CI jobs pass, including Chromium/WebKit and both architecture
+build/security/runtime checks. Fresh image gates, six public asset checksums, native
+config identities/SBOMs and anonymous pull pass. A published .1-to-.2 same-volume 5152
+upgrade retains identity, session, history and recipes. One offline double-tap meal
+survives reload and syncs once, changing its shopping projection from 400 g to 600 g.
+Physical iPhone and live-provider/Bring! verification remain open.
 
-When the candidate is published, retain the existing volume and custom `5152:5152`
+Use `ghcr.io/cloudcookch/mealf-server:poc-20261023.2`. Retain the existing volume and custom `5152:5152`
 ports, command and healthcheck; save open editors and accept the PWA update on each device.
 This source-only UI extension requires no data reset or native-app update. This is a
 preview, not production v1 acceptance.

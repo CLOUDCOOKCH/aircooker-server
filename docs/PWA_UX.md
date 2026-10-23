@@ -4,8 +4,8 @@ The 2026-10-23 navigation and quick-planning extension has four primary tabs:
 **Today, Plan, Recipes and Shopping** (German: **Heute, Plan, Rezepte, Einkauf**).
 Settings opens from the persistent account button; Pantry opens inside Shopping.
 The original Mealf peach, wordmark, glass navigation and Flo / After Dark / Sunday
-appearances remain. This source is locally implemented and tested; candidate
-`poc-20261023.2` is **not published**. The latest published preview is `poc-20261023.1`.
+appearances remain. `poc-20261023.2` is published and verified for AMD64 and ARM64;
+see [exact-source, image and upgrade evidence](validation/github-quick-planning-preview.json).
 See the [scoped finish review and exact limits](validation/quick-planning-review.md).
 
 Genuine current browser captures: [Plan](screenshots/quick-planning/calendar-phone-de-dark.png),
@@ -86,7 +86,7 @@ Blocked work and recovery archives appear when they exist. Expanding or collapsi
 section retains mounted forms and draft values. Connection failures open This device;
 blocked work remains visible for review. Keep browser storage, existing Docker volumes
 and deployment port/command/healthcheck settings when updating; save open editors and
-accept the PWA update on each device once the candidate is actually published.
+accept the PWA update on each device.
 
 ## Verification and limits
 
@@ -105,7 +105,11 @@ Fixed navigation remains at its original viewport position in a long image. The 
 is an existing original generated demo illustration, not a photograph of actual cooking.
 No new shipping raster or replacement branding was introduced.
 
-Current-source WebKit CI and candidate publication remain pending. Earlier published
-Chromium/WebKit results certify their historical sources only. Local checks and static
-captures do not establish physical iPhone, camera, installed-PWA keyboard, VoiceOver or
-live Bring!/AI/Web Push acceptance. The PWA remains a preview product.
+All six exact-main CI jobs pass, including Chromium/WebKit and both native architecture
+builds, security scans and runtime tests. Fresh image gates, six public asset checksums,
+image identities/SBOMs and anonymous pull pass. A published .1-to-.2 same-volume upgrade
+preserves identity/session/history/recipe/shopping data on internal port 5152. A rapid
+double activation creates one offline meal, survives reload, syncs once and updates the
+400 g shopping requirement to 600 g. See the [release evidence](validation/github-quick-planning-preview.json).
+These checks do not establish physical iPhone, camera, installed-PWA keyboard, VoiceOver
+or live Bring!/AI/Web Push acceptance. The PWA remains a preview product.

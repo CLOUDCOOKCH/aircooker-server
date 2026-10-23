@@ -1,0 +1,146 @@
+{
+  "scope": "PWA four-tab navigation and offline quick planning; preview, not v1 acceptance",
+  "pull_request": {
+    "number": 15,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/pull/15",
+    "source_revision": "31c9ddb3823ac6576ca968068efc5fe399a9e2f3",
+    "merge_revision": "fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34",
+    "merged_tree_matches_reviewed_tree": true
+  },
+  "ci": {
+    "id": 39961500266,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39961500266",
+    "source_revision": "fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 120440355634,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120440355809,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120440355833,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 120440355867,
+        "name": "browser",
+        "conclusion": "success"
+      },
+      {
+        "id": 120440355902,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120440355910,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publication": {
+    "id": 39962376171,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39962376171",
+    "source_revision": "fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 120443339809,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 120443428550,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120443428570,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120444374882,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "release": {
+    "id": 421886367,
+    "tag": "poc-20261023.2",
+    "prerelease": true,
+    "url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261023.2"
+  },
+  "public": {
+    "source_revision": "fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34",
+    "release_id": 421886367,
+    "release_url": "https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261023.2",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261023.2",
+    "index_digest": "sha256:8bf01701628da7d7555455075ae6f37ce2f15887619e73d14542a4c177c14ca3",
+    "assets": {
+      "compose.preview.yaml": {
+        "sha256": "12d1ebe29ae06c3fb286ec67cc661786b7d9fb643d68ec46e3f923bc3c0d8c48",
+        "size": 629
+      },
+      "container-security-amd64.json": {
+        "sha256": "66e2f354af0b7776907639a1505977043c02ddb949db86a2d9140027908df5e7",
+        "size": 186532
+      },
+      "container-security-arm64.json": {
+        "sha256": "5679086b7812a50c91fdabf84998ba7652f643424aad235e307cee0d18b9c48d",
+        "size": 186612
+      },
+      "openapi-v1.json": {
+        "sha256": "c16683fe896187a4287cf689a8e21071528b7530a3fc247e90049a01cbe40b77",
+        "size": 210988
+      },
+      "sbom-amd64.cdx.json": {
+        "sha256": "6ff9eb028b44357ff87a6cef9d620c53c56a6c477c17cc92a864e87119386488",
+        "size": 167969
+      },
+      "sbom-arm64.cdx.json": {
+        "sha256": "ec24b8b71d7e7344fced0d82d4222d8eaa910e7ec990870696077f786b3ac907",
+        "size": 168409
+      }
+    },
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:ff89f06ad61ef7b83a5bf28afbb5c32c0636205865f9cec477bb2cef57b41c19",
+        "config": "sha256:8c75d5428a5263a03d921bdd82748d9dfaf01af83871d0103cc75d3a5ce3c346",
+        "high_critical": 0,
+        "sbom_components": 124
+      },
+      "arm64": {
+        "manifest": "sha256:04107061f96cc23cd2810cd2b87cec1bd226358049ee2e5b918a46fa97b29be6",
+        "config": "sha256:7beb0f4bd506d285f80e3e39903c167358ac717540c168e0434f3536b9451693",
+        "high_critical": 0,
+        "sbom_components": 124
+      }
+    },
+    "anonymous_pull": "passed with isolated empty per-command credentials; global Docker configuration unchanged",
+    "preview_tag": "matches immutable release index",
+    "scanner": "Trivy0.70.0 unsuppressed HIGH/CRITICAL; public config IDs equal native build logs and scan ImageIDs"
+  },
+  "runtime": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:b1ec2a44c43bf059638a1f8ed59d108f2b0b6d5c75605f92a63d5d6c332282a1",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:8bf01701628da7d7555455075ae6f37ce2f15887619e73d14542a4c177c14ca3",
+    "source_revision": "fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34",
+    "same_volume_5152_upgrade": "passed: identity, active session, history proof, recipe and400g projection retained",
+    "published_pwa": "four EN/DE tabs; account diagnostics, nested Pantry/back; 320px targets/header; offline doubletap/reload creates one2portion meal, sync updates400g to600g; cached offline shopping retained",
+    "scope": "Disposable synthetic volume only; no user deployment, live integrations or physical iPhone evidence"
+  },
+  "limits": [
+    "Physical iPhone, installed-PWA keyboard, VoiceOver and live Bring/AI/push remain unverified.",
+    "Synthetic browser/provider fixtures do not establish live integration support.",
+    "Fresh manual UI review: ship at the scoped extension; detector/launcher/shipped specialist unavailable.",
+    "No runtime, migration, API or native-contract changes in this extension."
+  ]
+}

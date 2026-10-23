@@ -1,7 +1,7 @@
 # Implementation checklist and evidence
 
-**Everyday navigation and quick planning, 2026-10-23 — locally implemented/tested;
-publication pending for candidate `poc-20261023.2`:** four primary tabs (Today, Plan,
+**Everyday navigation and quick planning, 2026-10-23 — published and verified in
+`poc-20261023.2`:** four primary tabs (Today, Plan,
 Recipes, Shopping), persistent account → Settings → Back, and Shopping → Pantry → Back.
 Internal route IDs, deep links, preferences, API/database/native contracts and durable
 local work remain compatible. Empty Plan slots open title search with rating-first
@@ -24,12 +24,22 @@ was corrected using semantic ink. A fresh independent manual specialist equivale
 reviewed all 21 captures and sampled sources: **ship at this scope, no material fixes**.
 Six unmodified captures and checksummed provenance are retained in documentation.
 
-No local WebKit binary; current-source CI has not run. Launcher/detector are unavailable
-(the detector attempt exited 127); no shipped specialist/schema pass is claimed. No
-source-only UI Docker test was required; publication must verify the actual candidate
-images and persistent-volume upgrade. Physical iPhone/live-service acceptance remains
-open. The candidate Compose pin is not publication evidence: the latest actually
-published image is `poc-20261023.1`, recorded below. See [screen guide](PWA_UX.md) and
+All six [exact-main CI jobs](https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39961500266)
+pass at `fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34`, including Chromium/WebKit and both native
+architecture build/security/runtime checks. [PR #15](https://github.com/CLOUDCOOKCH/aircooker-server/pull/15)
+is merged. The [publication run](https://github.com/CLOUDCOOKCH/aircooker-server/actions/runs/39962376171)
+passes fresh image gates; the [release](https://github.com/CLOUDCOOKCH/aircooker-server/releases/tag/poc-20261023.2)
+index is `sha256:8bf01701628da7d7555455075ae6f37ce2f15887619e73d14542a4c177c14ca3`.
+Six public asset checksums, exact-source Compose/OpenAPI, both native config identities
+against build logs/scans, zero HIGH/CRITICAL findings, SBOMs, provenance, preview alias and
+anonymous pull pass. A published .1-to-.2 same-volume 5152 upgrade preserves identity,
+session, history, recipes and the 400 g projection. One offline double-activation meal
+survives reload and syncs once, producing the expected 600 g projection. Four EN/DE routes,
+account diagnostics, nested Pantry/Back and narrow cached offline Shopping pass in the
+pulled image. See [exact publication evidence](validation/github-quick-planning-preview.json).
+There is no local WebKit binary; the engine evidence comes from CI. Launcher/detector
+are unavailable (attempt exited 127); no shipped specialist/schema pass is claimed.
+Physical iPhone/live-service acceptance remains open. See [screen guide](PWA_UX.md) and
 [bounded review, capture matrix and exact limits](validation/quick-planning-review.md).
 DESIGN.md and its sidecar are preserved byte-for-byte; their older navigation/layout/
 type/theme descriptions remain documented snapshot drift, outside this extension.

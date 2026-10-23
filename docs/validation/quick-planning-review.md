@@ -1,7 +1,8 @@
 # Navigation and quick planning: bounded finish review
 
-Date: 2026-10-23. Disposition: **ship at this scoped UI extension**; publication remains
-pending. A fresh independent read-only reviewer returned **ship** with no material fixes.
+Date: 2026-10-23. Disposition: **ship at this scoped UI extension**. Publication was
+verified separately after the UI review. A fresh independent read-only reviewer returned
+**ship** with no material fixes.
 This was a fresh manual specialist equivalent: the harness could not select the shipped
 reviewer definition. It read all 21 final captures, PRODUCT.md, the current five-block
 surface direction, the craft floor and sampled runtime sources. It ran no browser,
@@ -123,14 +124,17 @@ reviewer also ran no tests. One automated detector attempt failed with exit 127 
 its launcher was missing; the context launcher was also unavailable. No detector, shipped
 specialist, plugin-schema or design-hook pass is claimed.
 
-There is no local WebKit binary. Current-source Chromium/WebKit CI is expected after push
-and has not run for this candidate; older passing published-source CI is historical only.
-No Docker test was needed for this source-only UI work; actual candidate-image runtime,
-architecture/security gates and persistent-volume upgrade proof belong to publication.
-`poc-20261023.2` is the planned candidate and is **not published**; the preview Compose pin
-alone is not release evidence. The last actually published security image is
-`poc-20261023.1`. Physical iPhone/Safari, installed-PWA keyboard, VoiceOver, live providers,
-Bring! and live push remain unverified. This verdict does not accept the complete product.
+There is no local WebKit binary. All six exact-main CI jobs subsequently pass at
+`fe2c53a4f18cdd6b9f2821e98f2ce3e0d9368f34`, including Chromium/WebKit and both native
+architecture build/security/runtime checks. Publication run `39962376171` passes fresh
+image gates. `poc-20261023.2` is published; six public asset checksums, native config IDs
+against build logs/scans, SBOMs and anonymous pull pass. A published .1-to-.2 same-volume
+5152 upgrade retains identity, session, history and recipes. One offline double-tap meal
+survives reload and syncs once, changing the projection from 400 g to 600 g. These are
+implementation-agent release checks, not additional tests run by the reviewer/documenter;
+see [exact evidence](github-quick-planning-preview.json). Physical iPhone/Safari,
+installed-PWA keyboard, VoiceOver, live providers, Bring! and live push remain unverified.
+This verdict does not accept the complete product.
 
 ## material_fixes
 

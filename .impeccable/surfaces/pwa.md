@@ -38,8 +38,10 @@ filenames/checksums are in docs/screenshots/quick-planning/. Normal views are fu
 captures from the top; modal views use the viewport to retain a complete backdrop.
 Local 459 backend/70 frontend tests and actual Chromium UX/regressions pass with EN/DE
 OCR data configured and synthetic integrations; final theme/Axe checks pass after inactive
-navigation contrast was corrected to semantic ink. Current-source WebKit CI and candidate
-`poc-20261023.2` publication remain pending; `poc-20261023.1` is the latest published image.
+navigation contrast was corrected to semantic ink. Exact-main Chromium/WebKit CI and
+both native architecture image/security/runtime gates pass. `poc-20261023.2` is published;
+public checksums/identities/SBOMs, anonymous pull and a same-volume 5152 upgrade with
+once-only offline quick planning pass. See docs/validation/github-quick-planning-preview.json.
 No local WebKit binary, physical-iPhone/live-service proof, shipped specialist/schema or
 detector pass is claimed (launcher unavailable; detector attempt exited 127). DESIGN.md
 and design.json remain byte-identical historical snapshots with the drift already noted.
