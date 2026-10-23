@@ -21,13 +21,22 @@ existing native wire fields remain unchanged. Native account-management UI is ou
 
 # Implementation checklist and evidence
 
-**Ingredient editing and compact pantry, 2026-10-23 — tested locally; unpublished:**
-the PWA recipe editor offers native common-unit choices, retained imported/custom units,
+**Ingredient editing and compact pantry, 2026-10-23 — container image `poc-20261023.5` available:**
+Combined source `7054a06` retains ingredient source `0ec966d` unchanged. Exact-source
+CI `39984576734` passes all six gates on attempt 2 (479 backend/81 frontend), including
+Chromium/WebKit; fresh AMD64/ARM64 image/security/runtime checks pass. Anonymous public
+pull and same-volume `.3` → `.5` 5152 upgrade with offline ingredient Save/reload/sync and
+pantry exclusion pass. GitHub release creation returned HTTP 500 after successful image
+push/attestation, so prerelease metadata/assets are pending; `.4` was never published.
+See [durable image evidence](validation/github-ingredient-preview.json).
+
+The PWA recipe editor offers native common-unit choices, retained imported/custom units,
 optional local pantry/other-recipe name suggestions with typo matching, and free new names.
 Explicit recipe Save, original text, quantities, drafts and outgoing sync remain intact.
 No automatic pantry creation, historical rename/merge, guessed unit conversion or Bring
 ledger mutation. Pantry rows are denser with decorative food emojis and a generic fallback.
-Native/API/database identities remain unchanged; no companion contract pin update is needed.
+This ingredient extension changes no native/API/database identity or contract. The
+combined release separately includes household-account migration 017.
 
 Supplied implementation evidence: **472 backend / 81 frontend tests pass**, Ruff check/format,
 mypy, OpenAPI drift, TypeScript/build, Prettier, artwork and licence checks. Real Chromium
@@ -50,9 +59,10 @@ reviewer's ship addendum without rerunning checks. No additional material findin
 recapture was required; no CSS/layout/copy/artwork changed and all seven original PNGs
 remain byte-identical. This follow-up does not imply a new backend/full-regression pass.
 
-Exact-main CI `39983929824`, publication and new WebKit ingredient coverage are pending;
-no final CI or local WebKit pass is claimed. Candidate `poc-20261023.4` is selected in
-Compose; `.3` remains latest published. This follow-up documentation is not yet committed.
+The ingredient-only CI `39983929824` was cancelled by the concurrent account merge.
+Combined exact-source CI `39984576734` and WebKit ingredient checks now pass; no local
+WebKit pass is claimed. The image is available as `.5`; `.4` was never published.
+GitHub prerelease metadata/assets remain pending after the upstream HTTP500.
 Live AI/Bring!, physical iPhone/Safari and full-product acceptance remain unverified.
 Context/detector attempts exited 127; no hook/schema/shipped-specialist pass is claimed.
 DESIGN.md/design.json remain byte-identical historical snapshots; navigation/layout/type/

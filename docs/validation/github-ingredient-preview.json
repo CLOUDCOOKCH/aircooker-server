@@ -1,0 +1,786 @@
+{
+  "recorded_at": "2026-10-23T16:36:27.630561+00:00",
+  "feature_source_revision": "0ec966db645fcc105c6e897e417667392ad0bc48",
+  "release_source_revision": "7054a064d05776084a723516447c6b2f2cc681b7",
+  "pull_requests": {
+    "feature": 18,
+    "release_notes": 19,
+    "correctness_guards": 20
+  },
+  "status": {
+    "ghcr_image": "published and independently verified",
+    "github_prerelease": "blocked: release creation returned HTTP 500; release lookup returned 404",
+    "public_release_assets": "not verified; no completed GitHub release",
+    "preview_4": "never published; included in combined poc-20261023.5"
+  },
+  "ci": {
+    "run": {
+      "id": 39984576734,
+      "head_sha": "7054a064d05776084a723516447c6b2f2cc681b7",
+      "head_branch": "main",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 2,
+      "html_url": "https://github.com/CLOUDCOOKCH/mealf/actions/runs/39984576734"
+    },
+    "jobs": [
+      {
+        "id": 120524492743,
+        "name": "browser",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run python -m pip install --require-hashes -r requirements-browser.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Verify pinned browser engines and expose Chromium to smoke scripts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run npm --prefix frontend ci --ignore-scripts --no-fund",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run npm --prefix frontend run build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run apt-get update -qq && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Exercise PWA offline and device workflows in installed Chrome",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Exercise image/PDF imports and provider settings with synthetic cloud responses",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Personal ChatGPT connection and recipe import (synthetic OpenAI)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Recipe ideas, explicit review and offline save (synthetic provider HTTP)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Pantry and food taste onboarding with synthetic provider HTTP",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Sync truthfulness, two devices, recovery and redacted diagnostics",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "PWA task hierarchy, settings disclosures and offline recipe editing",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Ingredient suggestions, units and compact pantry with offline editing",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Shopping requirements and manual Bring sync with synthetic service",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Recipe fallbacks and reviewed source photos with synthetic network responses",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Exercise push settings/offline/receiver with explicit delivery doubles",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Household users and server-enforced roles",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Exercise console in installed Chrome",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23
+          },
+          {
+            "name": "Exercise phone layout and focus in Chrome and WebKit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 47
+          },
+          {
+            "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 48
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 49
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 50
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 51
+          }
+        ]
+      },
+      {
+        "id": 120524495587,
+        "name": "security (ubuntu-24.04-arm)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run python -m pip install pip-audit==2.9.0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run python -m pip_audit -r requirements.lock --strict",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Scan secrets",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run docker build -t mealf-server:scan .",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Post Run aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          }
+        ]
+      },
+      {
+        "id": 120524495769,
+        "name": "security (ubuntu-24.04)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run python -m pip install pip-audit==2.9.0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run python -m pip_audit -r requirements.lock --strict",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Scan secrets",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run docker build -t mealf-server:scan .",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Post Run aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          }
+        ]
+      },
+      {
+        "id": 120524496682,
+        "name": "checks (ubuntu-24.04-arm)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run python -m pip install --require-hashes -r requirements-dev.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run python -m ruff check src tests scripts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run python -m ruff format --check src tests scripts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run python -m mypy src/mealf --ignore-missing-imports",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run python scripts/license_inventory.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run python scripts/build_brand_assets.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Run python -m pytest -q --junitxml=build/tests.xml",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run python scripts/export_contract.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run docker build -t mealf-server:development .",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run python scripts/docker_smoke.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Run timeout 180s python scripts/operator_docker_smoke.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 32
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 33
+          }
+        ]
+      },
+      {
+        "id": 120524546616,
+        "name": "pwa-core",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run npm ci --ignore-scripts --no-fund",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run npm run api:generate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run git diff --exit-code -- src/api-schema.d.ts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run npm run typecheck",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run npm run format:check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run npm test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run npm run build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Run npm audit --audit-level=high",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23
+          }
+        ]
+      },
+      {
+        "id": 120524551368,
+        "name": "checks (ubuntu-24.04)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run python -m pip install --require-hashes -r requirements-dev.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run sudo apt-get update -qq && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-deu",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run python -m ruff check src tests scripts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run python -m ruff format --check src tests scripts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run python -m mypy src/mealf --ignore-missing-imports",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run python scripts/license_inventory.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run python scripts/build_brand_assets.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Run python -m pytest -q --junitxml=build/tests.xml",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run python scripts/export_contract.py --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run docker build -t mealf-server:development .",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run python scripts/docker_smoke.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Run timeout 180s python scripts/operator_docker_smoke.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 32
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 33
+          }
+        ]
+      }
+    ]
+  },
+  "publication": {
+    "run_id": 39986813128,
+    "conclusion": "failure",
+    "failure": "GitHub prerelease creation HTTP500 after successful image push and provenance attestation",
+    "gate_job": 120528007341,
+    "arm64_job": 120528093663,
+    "amd64_job": 120528093747,
+    "publish_job": 120529182000,
+    "gate_and_native_image_jobs": "success"
+  },
+  "public_image": {
+    "source_revision": "7054a064d05776084a723516447c6b2f2cc681b7",
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261023.5",
+    "index_digest": "sha256:04f0a318c42c2a3b7b933770ec526f389c3b50fae1c9e5ad50ce8a7679f866f6",
+    "architectures": {
+      "amd64": {
+        "manifest": "sha256:c08d4a52d7bf9844cb4fbd7dd2fcc0262f06fc60834fe2e4645151bfca51dbee",
+        "config": "sha256:8af2ca94edb7ababeddec385111830025c6ca3ec3183098230460543063cb80f",
+        "verification": "exact config from successful native image scan and runtime job"
+      },
+      "arm64": {
+        "manifest": "sha256:b1ca3d6e1ddfa6bcdd9b9e29f99cabfa2ff8f9f17d1658aeb9b1d2ea646e6fa9",
+        "config": "sha256:07806b7c777a7b67d869c83f8e1a814dd70c5a27bb4fa2d4449b459d61b7a7b9",
+        "verification": "exact config from successful native image scan and runtime job"
+      }
+    },
+    "preview_tag": "matches immutable release index",
+    "anonymous_pull": "passed with empty isolated per-command credentials",
+    "oci_labels": "source revision and version match the tested source",
+    "release_metadata": "GitHub release creation returned HTTP500; page/assets not verified in this image-only proof"
+  },
+  "published_upgrade": {
+    "old": "ghcr.io/cloudcookch/mealf-server@sha256:03027245719a96a8f4135021d66713090321d5c0f35633451d263ab9bd2ef093",
+    "new": "ghcr.io/cloudcookch/mealf-server@sha256:04f0a318c42c2a3b7b933770ec526f389c3b50fae1c9e5ad50ce8a7679f866f6",
+    "source_revision": "7054a064d05776084a723516447c6b2f2cc681b7",
+    "same_volume_5152_upgrade": "passed: identity, active session, history proof and imported recipe retained",
+    "published_pwa": "Offline touch choice zwibel to Zwiebeln, unit tbsp, Save/reload/sync, original text and exact quantity retained",
+    "calculation": "Choosing actual pantry identity removes the existing requirement without creating pantry records",
+    "scope": "Disposable synthetic volume only; no user deployment, live Bring/AI or physical iPhone evidence"
+  },
+  "tests": {
+    "original_local_backend": 472,
+    "combined_ci_backend": 479,
+    "frontend": 81,
+    "browser": "Chromium and WebKit ingredient/pantry guards, EN/DE, themes, widths and regressions pass; offline reload verified in Chromium",
+    "ci_attempt": 2,
+    "initial_attempt": "Existing WebKit controlled-outage diagnostic fixture failed; failed browser job rerun passed; no error-check or security suppression"
+  },
+  "review": {
+    "disposition": "ship",
+    "material_findings": 0,
+    "follow_up": "Bounded nonvisual prototype-name and shared-option guard source review; no recapture required",
+    "kind": "Independent manual specialist equivalents; shipped specialist unavailable"
+  },
+  "limits": [
+    "No physical iPhone/Safari acceptance",
+    "No live AI or Bring verification",
+    "No completed GitHub prerelease/asset checksum verification",
+    "No detector/hook/schema pass; launcher unavailable",
+    "Ingredient extension changes no native/API/database contract; combined release includes separately implemented account migration 017"
+  ]
+}

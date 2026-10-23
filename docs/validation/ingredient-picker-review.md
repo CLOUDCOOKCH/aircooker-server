@@ -9,10 +9,15 @@ manual specialist equivalents, not a shipped-specialist pass.
 The original review/capture handoff records implementation `469d83d`. A subsequent
 nonvisual correctness follow-up is merged in release source
 `0ec966db645fcc105c6e897e417667392ad0bc48` ([PR #20](https://github.com/CLOUDCOOKCH/mealf/pull/20));
-its bounded review is recorded below. This follow-up documentation is not yet committed.
-The feature remains unpublished at this handoff. Compose selects candidate
-`poc-20261023.4`; `.3` remains the latest published preview. Exact-main CI `39983929824`
-and publication are pending; no final CI, WebKit or release acceptance is claimed here.
+its bounded review is recorded below. The combined image `poc-20261023.5` ships these
+unchanged ingredient/pantry components at source `7054a06`; `.4` was never published.
+Exact-source CI `39984576734` passes all six gates on attempt 2, including Chromium/WebKit;
+479 backend and 81 frontend tests pass. Fresh native AMD64/ARM64 image/security/runtime
+checks, anonymous public pull and a same-volume 5152 `.3` → `.5` upgrade pass.
+GitHub prerelease creation returned HTTP 500 after image push/attestation, so release
+metadata/assets remain pending. See [exact evidence](github-ingredient-preview.json).
+The earlier pending CI `39983929824` was cancelled when the account workstream advanced
+main. This image evidence does not expand the bounded visual-review verdict.
 
 ## persistence
 
@@ -99,9 +104,10 @@ or documenter:
   phantom pantry records; keyboard/trusted-tap selection; pantry toggles; English/German;
   all three themes; Axe and 1440/390/320 widths. Existing PWA offline/two-device, PWA UX,
   AI-import and food-setup browser suites pass with synthetic providers.
-- **Pending:** exact-source CI, publication and WebKit ingredient coverage. The script's
-  later CI WebKit/TLS-fixture support does not change UI/captures and has no local WebKit
-  pass. Offline reload remains Chromium-only in that script because of the known WebKit
+- **Passed subsequently:** exact-source CI, Chromium/WebKit ingredient coverage, native
+  AMD64/ARM64 image gates, anonymous pull and the published-image upgrade described above.
+  GitHub prerelease metadata/assets remain pending. There is no local WebKit pass;
+  offline reload remains Chromium-only in that script because of the known WebKit
   automation limitation.
 - **Unverified:** actual AI/Bring! live services, physical iPhone/Safari, motion quality,
   screen-reader behavior and complete-product acceptance. Static screenshots establish
@@ -132,8 +138,8 @@ backend/full-regression pass. The independent reviewer retained **ship, zero add
 material findings**. No CSS, layout, copy or artwork changed, all seven original capture
 bytes remain unchanged, and the reviewer required no recapture. Original review/captures
 remain historical evidence for their source; this addendum covers only the subsequent
-correctness diff. Exact-source CI/publication and physical/live acceptance remain pending
-or unverified as stated above.
+correctness diff. The subsequent combined CI and image proof are recorded above;
+GitHub prerelease metadata/assets and physical/live acceptance remain pending or unverified.
 
 ## material_fixes
 
