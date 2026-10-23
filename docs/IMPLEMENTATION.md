@@ -39,8 +39,20 @@ field stacking before an independent read-only review returned **ship, zero mate
 The documenter inspected source, review and four genuine screenshot copies; no tests or
 browser workflows were rerun during documentation.
 
-CI/publication and new WebKit ingredient coverage are pending; no local WebKit pass is
-claimed. Candidate `poc-20261023.4` is selected in Compose; `.3` remains latest published.
+**Bounded nonvisual follow-up:** the original review/captures record `469d83d`; release
+source `0ec966db645fcc105c6e897e417667392ad0bc48` is now merged through PR #20. The four-file
+diff from `59e5efd` guards own-property emoji lookup for `__proto__`/`constructor` and
+resets/guards combobox active selection when shared household options change. Supplied
+follow-up evidence reports 81 core tests, build, Prettier, Ruff and real Chromium passing,
+including a focused-combobox server-sync race and prototype-name fallback regression.
+The documenter inspected the diff, `/tmp/mealf-ingredient-guard-browser.log` and the same
+reviewer's ship addendum without rerunning checks. No additional material finding or
+recapture was required; no CSS/layout/copy/artwork changed and all seven original PNGs
+remain byte-identical. This follow-up does not imply a new backend/full-regression pass.
+
+Exact-main CI `39983929824`, publication and new WebKit ingredient coverage are pending;
+no final CI or local WebKit pass is claimed. Candidate `poc-20261023.4` is selected in
+Compose; `.3` remains latest published. This follow-up documentation is not yet committed.
 Live AI/Bring!, physical iPhone/Safari and full-product acceptance remain unverified.
 Context/detector attempts exited 127; no hook/schema/shipped-specialist pass is claimed.
 DESIGN.md/design.json remain byte-identical historical snapshots; navigation/layout/type/
