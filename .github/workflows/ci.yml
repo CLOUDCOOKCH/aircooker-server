@@ -131,6 +131,12 @@ jobs:
           MEALF_CAPTURE: '1'
           MEALF_UX_SCREENSHOT_DIR: build/pwa-ux-browser
         run: timeout 180s python scripts/pwa_ux_browser_smoke.py
+      - name: Ingredient suggestions, units and compact pantry with offline editing
+        env:
+          MEALF_CAPTURE: '1'
+        run: |
+          timeout 180s python scripts/ingredient_browser_smoke.py
+          MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" MEALF_LAYOUT_ENGINE=webkit MEALF_INGREDIENT_SCREENSHOT_DIR=build/ingredient-browser-webkit timeout 180s python scripts/ingredient_browser_smoke.py
       - name: Shopping requirements and manual Bring sync with synthetic service
         run: timeout 180s python scripts/shopping_browser_smoke.py
       - name: Recipe fallbacks and reviewed source photos with synthetic network responses
@@ -169,6 +175,8 @@ jobs:
             build/food-setup-browser-webkit
             build/sync-status-browser
             build/pwa-ux-browser
+            build/ingredient-browser
+            build/ingredient-browser-webkit
             build/shopping-browser
             build/source-photo-browser
             build/theme-browser

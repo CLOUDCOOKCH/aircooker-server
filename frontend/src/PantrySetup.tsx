@@ -4,6 +4,7 @@ import { useApp } from './model';
 import { PageHeader } from './components';
 import { PANTRY_FOODS, pantryKey } from './lib/food';
 import { uuid } from './lib/domain';
+import { foodEmoji } from './lib/ingredient-options';
 import type { Edit } from './lib/store';
 
 const DRAFT = 'food:pantry-draft:v1';
@@ -156,6 +157,9 @@ export function PantrySetup({ back }: { back: () => void }) {
                         checked={selected.includes(food.id)}
                         onChange={() => void toggle(food.id)}
                       />
+                      <span className="pantry-emoji" aria-hidden="true">
+                        {foodEmoji(food.name[app.language])}
+                      </span>
                       <span>{food.name[app.language]}</span>
                       <Check size={16} aria-hidden="true" />
                     </label>
