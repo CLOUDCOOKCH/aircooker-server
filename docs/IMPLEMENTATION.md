@@ -1,5 +1,18 @@
 # Implementation checklist and evidence
 
+**Security corrections, 2026-10-23 — locally implemented and tested, not yet published:**
+IP-rejected native/PWA/admin login attempts no longer consume the shared household budget;
+per-IP admission, distributed protection and expiry remain. Recipe/AI quantities are bounded
+before fixed rendering across ingress, scaling, shopping and legacy local reads. Original
+Decimal representations survive replay; unsafe records, offline edits/drafts/checkpoints
+and rejected cached ideas are retained. The canonical API documents the numerical bound.
+Local verification: 459 backend and 70 frontend tests pass; Ruff lint/format, mypy, OpenAPI
+drift, PWA types/build pass. Chromium AI ideas regression passes including offline reviewed
+Save/reload/sync, EN/DE recovery and invalid legacy-cache retention without paid retries.
+An independent read-only bypass/regression review found no reportable surviving route.
+No production data, external credentials or live provider/Bring! calls were used. Docker
+publication and physical iPhone acceptance are not inferred from these local checks.
+
 **Recipe ideas diagnostics, 2026-10-22 — published and verified in `poc-20261022.10`:**
 allowlisted English/German provider errors survive the durable worker and cached PWA
 failure, with explicit recovery and no automatic paid retries. Gemini display names with

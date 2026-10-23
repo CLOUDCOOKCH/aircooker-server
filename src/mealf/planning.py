@@ -5,6 +5,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 from .models import Meal, Recipe
+from .quantities import fixed_amount
 
 UNITS = {
     "kg": ("g", Decimal(1000)),
@@ -126,9 +127,9 @@ def shopping_projection(db, monday: date):
         if entry["quantity"] is None:
             entry["spec"] = entry["original_text"] or "as needed"
         else:
-            value = format(entry["quantity"].normalize(), "f")
+            value = fixed_amount(entry["quantity"])
             if entry["quantity_max"] is not None:
-                value += "–" + format(entry["quantity_max"].normalize(), "f")
+                value += "–" + fixed_amount(entry["quantity_max"])
             entry["spec"] = f"{value} {entry['unit']}".strip()
         entry["sources"].sort()
     return requirements

@@ -6,6 +6,34 @@ import { emptyRecipe, entityKey, uuid } from './domain.ts';
 import type { Change, Meal } from './domain.ts';
 
 const token = 'a'.repeat(32);
+test('rejected quantity snapshots retain offline edits, drafts and the sync checkpoint', async () => {
+  const store = await LocalStore.open(uuid());
+  const id = uuid();
+  const recipe = { ...emptyRecipe(), title: 'Pending soup' };
+  await store.saveBatch([{ kind: 'recipe', id, value: recipe }]);
+  const draft = { ...recipe, servings: '1e-1000000' };
+  await store.saveDraft('unsafe-draft', draft);
+  const pending = await store.pending();
+  const change: Change = {
+    revision: 1,
+    kind: 'recipe',
+    entity_id: uuid(),
+    deleted: false,
+    payload: draft,
+    updated_at: '2026-10-23T00:00:00Z',
+  };
+  await assert.rejects(store.merge([change], { cursor: 1, token }), /invalid_quantity/);
+  await assert.rejects(store.replaceSnapshot([change], { cursor: 1, token }), /invalid_quantity/);
+  await assert.rejects(
+    store.saveBatch([{ kind: 'recipe', id, value: draft }], { draft: 'unsafe-draft' }),
+    /invalid_quantity/,
+  );
+  assert.deepEqual(await store.pending(), pending);
+  assert.deepEqual((await store.draft('unsafe-draft'))?.value, draft);
+  assert.equal((await store.entities('recipe'))[0].payload.title, 'Pending soup');
+  assert.equal((await store.anchor()).cursor, 0);
+  store.close();
+});
 test('offline edits, queue identities and drafts survive closing the local database', async () => {
   const instance = uuid();
   const store = await LocalStore.open(instance);

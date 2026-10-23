@@ -3,7 +3,6 @@
 import hashlib
 import json
 import time
-from decimal import Decimal
 from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
@@ -15,11 +14,12 @@ from .diagnostics import public_error
 from .errors import DomainError
 from .jobs import enqueue
 from .models import Ingredient, Model, Recipe
+from .quantities import IdeaServings, Positive
 
 
 class IdeaIngredient(Model):
     name: str = Field(min_length=1, max_length=200)
-    quantity: Annotated[Decimal, Field(gt=0, le=1000000)] | None = None
+    quantity: Positive | None = None
     unit: str = Field(default="", max_length=30)
     preparation: str = Field(default="", max_length=300)
     original_text: str = Field(default="", max_length=500)
@@ -28,7 +28,7 @@ class IdeaIngredient(Model):
 class RecipeIdea(Model):
     title: str = Field(min_length=1, max_length=200)
     description: str = Field(default="", max_length=1000)
-    servings: Annotated[Decimal, Field(gt=0, le=1000)]
+    servings: IdeaServings
     ingredients: list[IdeaIngredient] = Field(min_length=1, max_length=40)
     steps: list[Annotated[str, Field(min_length=1, max_length=2000)]] = Field(
         min_length=1, max_length=30

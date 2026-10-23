@@ -2,7 +2,6 @@
 
 import hashlib
 import time
-from decimal import Decimal
 from typing import Annotated, Literal
 from uuid import UUID
 
@@ -12,6 +11,7 @@ from pydantic import Field, field_validator
 from .auth import rate_limit
 from .errors import DomainError
 from .models import Model
+from .quantities import PlanningServings
 
 Category = Literal["breakfast", "lunch", "dinner"]
 
@@ -25,7 +25,7 @@ class PlanningPreferences(Model):
         default_factory=default_categories, min_length=1, max_length=3
     )
     allow_repeats: bool = False
-    servings: Annotated[Decimal, Field(gt=0, le=100)] | None = None
+    servings: PlanningServings | None = None
     use_leftovers: bool = True
 
     @field_validator("categories")

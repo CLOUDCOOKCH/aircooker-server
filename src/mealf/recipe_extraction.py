@@ -4,11 +4,17 @@ from decimal import Decimal
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
 from pydantic.alias_generators import to_camel
 
+from .quantities import AMOUNT_DESCRIPTION, bounded_float_amount
+
 Text = Annotated[str, Field(min_length=1, max_length=5000)]
-Amount = Annotated[float, Field(gt=0, le=1000000, strict=True)]
+Amount = Annotated[
+    float,
+    Field(gt=0, le=1000000, strict=True, description=AMOUNT_DESCRIPTION),
+    AfterValidator(bounded_float_amount),
+]
 Minutes = Annotated[int, Field(ge=0, le=525600, strict=True)]
 
 

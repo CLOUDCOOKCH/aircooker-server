@@ -34,6 +34,7 @@ export function RecipeIdeas({
     [error, setError] = useState<string | null>(null),
     [busy, setBusy] = useState(false);
   const lock = useRef(false);
+  const cacheReadable = useRef(false);
   const configured =
     status?.enabled &&
     status.input_formats?.includes('text') &&
@@ -52,6 +53,7 @@ export function RecipeIdeas({
           throw new Error('invalid');
         value.job?.recipes?.forEach((recipe) => payload('recipe', recipe));
         if (alive) {
+          cacheReadable.current = true;
           setDraft(value);
           setReady(true);
         }
@@ -67,7 +69,7 @@ export function RecipeIdeas({
     };
   }, [app.store]);
   useEffect(() => {
-    if (ready)
+    if (ready && cacheReadable.current)
       void app.store.setSetting(CACHE, draft).catch(() => setError('local_storage_unavailable'));
   }, [ready, draft, app.store]);
   useEffect(() => {
@@ -155,6 +157,7 @@ export function RecipeIdeas({
       };
       const next = { ...draft, request, job: undefined };
       await app.store.setSetting(CACHE, next);
+      cacheReadable.current = true;
       setDraft(next);
     } catch {
       setError('local_storage_unavailable');

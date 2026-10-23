@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Stop IP-blocked login attempts from draining the shared household admission budget.
+  Bound recipe/AI quantities before fixed-decimal expansion across backend and PWA,
+  including serving defaults, imports, shopping calculations and legacy local records.
+  Preserve Decimal representations for sync replay, unsent edits and rejected cached
+  proposals. Keep ordinary fractions, scientific notation and serving scaling.
+
 - Show actionable English/German Recipe ideas errors with allowlisted diagnostic codes;
   distinguish provider rejection, missing model/endpoint, quota, timeout, blocked and
   incomplete output. Preserve requests and avoid automatic paid retries. Explain raw
