@@ -125,7 +125,18 @@ not application behavior. One detector attempt failed with missing launcher, exi
 No automated detector, design-hook, plugin-schema or shipped specialist pass is claimed.
 No live AI/Bring!, physical iPhone/Safari, installed keyboard/VoiceOver, motion or production
 v1 acceptance is established. [Server PR #16](https://github.com/CLOUDCOOKCH/aircooker-server/pull/16)
-is draft; `.3` is selected but unpublished. `.2` remains the last published preview.
+was draft at the original handoff; the subsequent publication update below records
+its merge and released image.
+
+Publication update by the implementation agent after the review/documenter handoff:
+PR #16 merged at `327fcb3`. All six exact-main CI jobs `39973942662`, publication
+`39975217859`, fresh native AMD64/ARM64 image/runtime/security gates and public download/
+checksum/config/SBOM checks pass. Native main CI `39971563258` passes. Earlier pending
+observations above are handoff history, not current publication status. These are parent
+release checks, not additional reviewer/documenter tests. The local published `.2` → `.3`
+volume-upgrade check remains unverified after ENOSPC and a workspace outage interrupted
+the rerun. See [exact evidence](github-food-setup-preview.json). Physical iPhone/live
+services remain unverified; the UI verdict still covers its one scored fix only.
 
 ## material_fixes
 

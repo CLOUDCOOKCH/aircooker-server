@@ -1,0 +1,170 @@
+{
+  "scope": "Pantry onboarding, shared food tastes and streamlined household imports; preview, not v1 acceptance",
+  "pull_request": {
+    "number": 16,
+    "url": "https://github.com/CLOUDCOOKCH/mealf/pull/16",
+    "source_revision": "ab8269c8ae25b8bb7acaa79fd3e165b468b3b090",
+    "merge_revision": "327fcb389aec57f53cffb913b1a1cc74a12719f3",
+    "merged_tree_matches_reviewed_tree": true
+  },
+  "ci": {
+    "id": 39973942662,
+    "url": "https://github.com/CLOUDCOOKCH/mealf/actions/runs/39973942662",
+    "source_revision": "327fcb389aec57f53cffb913b1a1cc74a12719f3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 120483543721,
+        "name": "pwa-core",
+        "conclusion": "success"
+      },
+      {
+        "id": 120483543946,
+        "name": "security (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120483544021,
+        "name": "browser",
+        "conclusion": "success"
+      },
+      {
+        "id": 120483544075,
+        "name": "checks (ubuntu-24.04)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120483544100,
+        "name": "checks (ubuntu-24.04-arm)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120483544313,
+        "name": "security (ubuntu-24.04)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publication": {
+    "id": 39975217859,
+    "url": "https://github.com/CLOUDCOOKCH/mealf/actions/runs/39975217859",
+    "source_revision": "327fcb389aec57f53cffb913b1a1cc74a12719f3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 120487924973,
+        "name": "gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 120488009237,
+        "name": "verify-images (ubuntu-24.04, amd64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120488009307,
+        "name": "verify-images (ubuntu-24.04-arm, arm64)",
+        "conclusion": "success"
+      },
+      {
+        "id": 120489124329,
+        "name": "publish",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "release": {
+    "id": 421984974,
+    "tag": "poc-20261023.3",
+    "prerelease": true,
+    "url": "https://github.com/CLOUDCOOKCH/mealf/releases/tag/poc-20261023.3"
+  },
+  "public": {
+    "image": "ghcr.io/cloudcookch/mealf-server:poc-20261023.3",
+    "index_digest": "sha256:03027245719a96a8f4135021d66713090321d5c0f35633451d263ab9bd2ef093",
+    "source_revision": "327fcb389aec57f53cffb913b1a1cc74a12719f3",
+    "verification": "Passed before workspace outage: six downloaded public asset checksums, exact-source Compose/OpenAPI, native config identities against build logs/scans, zero unsuppressed HIGH/CRITICAL, SBOMs, preview alias and anonymous Docker pull",
+    "assets": [
+      {
+        "name": "compose.preview.yaml",
+        "sha256": "sha256:6b3cd610d89c472041b04108ea154bf74e756a6670987ae2c082376bbc99c860",
+        "size": 629
+      },
+      {
+        "name": "container-security-amd64.json",
+        "sha256": "sha256:dae49439572d2dc63dbac9ef265a97037db9f73395fa18bcd21f8ca059e08868",
+        "size": 186521
+      },
+      {
+        "name": "container-security-arm64.json",
+        "sha256": "sha256:e96b7b790762aa43c947189f9c16c4f050ba959f65e06d964f6310d9a77b3997",
+        "size": 186600
+      },
+      {
+        "name": "openapi-v1.json",
+        "sha256": "sha256:35b8aa292a9740ccfba797ae4bfb0743f1d86d2a99c8b7ba5100f93c7331dd83",
+        "size": 217836
+      },
+      {
+        "name": "sbom-amd64.cdx.json",
+        "sha256": "sha256:5ba2f7c966a8219548f7385315fd7f9da8b28dddbeea5630b229520f1e64dd3e",
+        "size": 167958
+      },
+      {
+        "name": "sbom-arm64.cdx.json",
+        "sha256": "sha256:ad28cd6eae4341c0eab96e29e5ed44259976ce1e79e7a89c2335125313f0bf2e",
+        "size": 168398
+      }
+    ],
+    "architecture_configs": {
+      "amd64": "sha256:13c847fe2906b0fa7fb5348960a2596ea810a009d5daa11a8b7144b38ee9a6b0",
+      "arm64": "sha256:e3019b3a26326761080445c2f8cc8afcbd0678f37495ae5c90be8a592981fef6"
+    }
+  },
+  "native_companion": {
+    "pull_request": "https://github.com/CLOUDCOOKCH/aircooker-ios/pull/4",
+    "merge_revision": "1b2f3d380ee68117b06188c52f0fe5cd959a2c22",
+    "ci": {
+      "id": 39971563258,
+      "url": "https://github.com/CLOUDCOOKCH/aircooker-ios/actions/runs/39971563258",
+      "source_revision": "1b2f3d380ee68117b06188c52f0fe5cd959a2c22",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 120475307345,
+          "name": "core",
+          "conclusion": "success"
+        },
+        {
+          "id": 120475307497,
+          "name": "native",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "schema_pin_source": "58c5930ff22707b128a3eb0c83cd44fbf18caefe",
+    "schema_sha256": "35b8aa292a9740ccfba797ae4bfb0743f1d86d2a99c8b7ba5100f93c7331dd83",
+    "scope": "Contract/localisation/core/Xcode/simulator checks; no native food onboarding UI"
+  },
+  "tests": {
+    "backend": 472,
+    "frontend": 76,
+    "food_browser": "Chromium trusted touch/offline Save/reload/sync; WebKit trusted HTTPS online flow; provider HTTP synthetic",
+    "published_images": "Fresh native AMD64 and ARM64 CI verifies startup, restart, persistent jobs, profile replay and export/restore",
+    "ui_review": "Manual initial fix; scoring pass resolves one finding. Detector launcher unavailable."
+  },
+  "local_published_upgrade": {
+    "state": "unverified",
+    "target": "Published .2 to .3 same-volume internal port 5152",
+    "first_attempt": "Old .2 container exited with ENOSPC in local test workspace",
+    "recovery": "Removed one unused older verification image; .2 and .3 images retained",
+    "last_attempt": "Started after cache cleanup; workspace became unavailable before a result could be collected. No pass claimed."
+  },
+  "limits": [
+    "Physical iPhone, installed-PWA keyboard/VoiceOver and live AI/Bring/push unverified.",
+    "Synthetic provider responses do not prove live-model compatibility.",
+    "Local Docker build blocked by workspace Alpine egress policy; production images built/scanned/exercised on native GitHub runners.",
+    "Shared working folder contained separate uncommitted account-management changes; release and evidence use only immutable tested source327fcb3.",
+    "Published-to-published local volume-upgrade check remains unverified due workspace outage."
+  ]
+}

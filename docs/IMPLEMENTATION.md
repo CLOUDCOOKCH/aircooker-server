@@ -1,7 +1,7 @@
 # Implementation checklist and evidence
 
-**Pantry and food taste setup, 2026-10-23 — locally tested; candidate `poc-20261023.3`
-unpublished:** source `58c5930` plus a scoped ≤360px one-column pantry CSS correction.
+**Pantry and food taste setup, 2026-10-23 — published as `poc-20261023.3`:**
+release source `327fcb3`; UI began at `58c5930` plus a scoped ≤360px pantry correction.
 Adds the canonical 24-staple EN/DE catalogue, fresh-household Today invitation, permanent
 Pantry picker, twelve resumable taste cards, shared revisioned profile/outgoing queue and
 frozen preferences on new Recipe ideas requests. Import uses concise disclosure plus
@@ -21,15 +21,19 @@ a meaningful regression test brings the frontend total to 76. UI/CSS/captures ar
 The documenter ran no browser/tests. See [behavior](FOOD_SETUP.md) and
 [review/provenance and limits](validation/food-setup-review.md).
 
-[Server PR #16](https://github.com/CLOUDCOOKCH/aircooker-server/pull/16) remains draft.
-GitHub AMD64/ARM64 image HIGH/CRITICAL scans pass; remaining current-source
-build/runtime and Chromium/WebKit gates are pending; the locally blocked Docker build hit Alpine HTTP 403 under workspace policy.
-Vite development serves the catalogue (200) and denies unrelated requirements (403).
-The independent native contract is pinned at `58c5930` in companion PR #4; local contract
-and 296 locale checks pass. Native PR #4 CI `39970064341` succeeds, including Xcode and
-simulator tests; merged at `1b2f3d380ee68117b06188c52f0fe5cd959a2c22`, exact-main rerun pending.
-No native food UI, live AI/Bring!, physical iPhone or production-v1 acceptance is claimed.
-`poc-20261023.2` remains the last published preview; Compose's `.3` default is a candidate.
+[Server PR #16](https://github.com/CLOUDCOOKCH/mealf/pull/16) is merged at `327fcb3`.
+All six exact-main CI jobs `39973942662` and publication `39975217859` pass. Both native
+architecture images pass unsuppressed HIGH/CRITICAL scans and startup/restart/persistence/
+export-restore checks. Six public checksums/config identities/SBOMs and anonymous pull pass.
+The local published `.2` → `.3` upgrade remains unverified: initial old-image launch hit
+ENOSPC; after removing an unused verification image, the workspace went offline before
+the rerun result. Local construction also encountered blocked Alpine egress. No local
+upgrade/build pass is claimed; see [exact evidence](validation/github-food-setup-preview.json).
+Vite serves the catalogue (200) and denies unrelated requirements (403).
+The native contract is pinned at `58c5930` in merged companion PR #4; local contract and
+296 locale checks pass. Exact native main CI `39971563258` passes core, formatting,
+Xcode and simulator at `1b2f3d3`. No native food UI, live AI/Bring!, physical iPhone or
+production-v1 acceptance is claimed.
 DESIGN.md/design.json remain byte-identical historical references with existing drift.
 
 **Everyday navigation and quick planning, 2026-10-23 — published and verified in

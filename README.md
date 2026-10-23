@@ -14,9 +14,10 @@ Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
 Plan now opens a searchable, ratings-first recipe picker from an empty slot: tap to add
 default portions, or use Meal options for date, category, portions, leftovers and recurrence.
 Existing route IDs, deep links, offline work, artwork and all three themes remain compatible.
-The quick-planning extension is published as `poc-20261023.2`, the latest published preview.
-The newer pantry/taste candidate `poc-20261023.3` is locally tested and unpublished; its
-Compose default is a candidate reference. See [preview availability](docs/POC.md). See [screen guide and validation scope](docs/PWA_UX.md).
+The latest preview, `poc-20261023.3`, adds pantry onboarding, shared food tastes and
+streamlined imports. Both architecture image/runtime/security gates and public download
+checks pass; see [preview availability](docs/POC.md), [exact evidence](docs/validation/github-food-setup-preview.json)
+and [screen guide](docs/PWA_UX.md).
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).
@@ -135,7 +136,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional preview; `.2` navigation published; pantry/taste `.3` candidate has 76 frontend tests and Chromium coverage; candidate CI/publication, physical Safari and remaining acceptance open |
+| PWA | Functional preview; pantry/taste `.3` published, 76 frontend tests, Chromium/WebKit and both architecture runtime/security gates pass; local published upgrade, physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |
