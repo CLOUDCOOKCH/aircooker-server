@@ -1,0 +1,463 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "salt",
+      "name": {
+        "en": "Salt",
+        "de": "Salz"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "salt",
+        "salz"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "pepper",
+      "name": {
+        "en": "Black pepper",
+        "de": "Schwarzer Pfeffer"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "pepper",
+        "black pepper",
+        "pfeffer",
+        "schwarzer pfeffer"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "olive-oil",
+      "name": {
+        "en": "Olive oil",
+        "de": "Olivenöl"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "olive oil",
+        "olivenöl"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "rapeseed-oil",
+      "name": {
+        "en": "Rapeseed oil",
+        "de": "Rapsöl"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "rapeseed oil",
+        "canola oil",
+        "rapsöl"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "vinegar",
+      "name": {
+        "en": "Vinegar",
+        "de": "Essig"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "vinegar",
+        "essig"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "stock",
+      "name": {
+        "en": "Vegetable stock",
+        "de": "Gemüsebouillon"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "vegetable stock",
+        "vegetable broth",
+        "gemüsebouillon",
+        "gemüsebrühe"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "soy-sauce",
+      "name": {
+        "en": "Soy sauce",
+        "de": "Sojasauce"
+      },
+      "pantry_group": "seasoning",
+      "aliases": [
+        "soy sauce",
+        "sojasauce",
+        "sojasoße"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "flour",
+      "name": {
+        "en": "Flour",
+        "de": "Mehl"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "flour",
+        "mehl"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "sugar",
+      "name": {
+        "en": "Sugar",
+        "de": "Zucker"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "sugar",
+        "zucker"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "rice",
+      "name": {
+        "en": "Rice",
+        "de": "Reis"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "rice",
+        "reis"
+      ],
+      "taste": true,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "pasta",
+      "name": {
+        "en": "Pasta",
+        "de": "Pasta"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "pasta",
+        "nudeln",
+        "teigwaren"
+      ],
+      "taste": true,
+      "icon": "wheat"
+    },
+    {
+      "id": "oats",
+      "name": {
+        "en": "Rolled oats",
+        "de": "Haferflocken"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "rolled oats",
+        "oats",
+        "haferflocken"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "canned-tomatoes",
+      "name": {
+        "en": "Canned tomatoes",
+        "de": "Dosentomaten"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "canned tomatoes",
+        "tinned tomatoes",
+        "dosentomaten"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "tomato-paste",
+      "name": {
+        "en": "Tomato paste",
+        "de": "Tomatenmark"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "tomato paste",
+        "tomatenmark"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "chickpeas",
+      "name": {
+        "en": "Chickpeas",
+        "de": "Kichererbsen"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "chickpeas",
+        "kichererbsen"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "lentils",
+      "name": {
+        "en": "Lentils",
+        "de": "Linsen"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "lentils",
+        "linsen"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "beans",
+      "name": {
+        "en": "Canned kidney beans",
+        "de": "Kidneybohnen aus der Dose"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "canned kidney beans",
+        "kidneybohnen aus der dose"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "honey",
+      "name": {
+        "en": "Honey",
+        "de": "Honig"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "honey",
+        "honig"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "baking-powder",
+      "name": {
+        "en": "Baking powder",
+        "de": "Backpulver"
+      },
+      "pantry_group": "cupboard",
+      "aliases": [
+        "baking powder",
+        "backpulver"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "milk",
+      "name": {
+        "en": "Milk",
+        "de": "Milch"
+      },
+      "pantry_group": "fridge",
+      "aliases": [
+        "milk",
+        "milch"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "eggs",
+      "name": {
+        "en": "Eggs",
+        "de": "Eier"
+      },
+      "pantry_group": "fridge",
+      "aliases": [
+        "eggs",
+        "egg",
+        "eier",
+        "ei"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "butter",
+      "name": {
+        "en": "Butter",
+        "de": "Butter"
+      },
+      "pantry_group": "fridge",
+      "aliases": [
+        "butter"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "onions",
+      "name": {
+        "en": "Onions",
+        "de": "Zwiebeln"
+      },
+      "pantry_group": "fridge",
+      "aliases": [
+        "onions",
+        "onion",
+        "zwiebeln",
+        "zwiebel"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "garlic",
+      "name": {
+        "en": "Garlic",
+        "de": "Knoblauch"
+      },
+      "pantry_group": "fridge",
+      "aliases": [
+        "garlic",
+        "knoblauch"
+      ],
+      "taste": false,
+      "icon": "cooking-pot"
+    },
+    {
+      "id": "vegetables",
+      "name": {
+        "en": "Vegetables",
+        "de": "Gemüse"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "carrot"
+    },
+    {
+      "id": "chicken",
+      "name": {
+        "en": "Chicken",
+        "de": "Poulet"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "chicken"
+    },
+    {
+      "id": "beef",
+      "name": {
+        "en": "Beef",
+        "de": "Rindfleisch"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "beef"
+    },
+    {
+      "id": "fish",
+      "name": {
+        "en": "Fish",
+        "de": "Fisch"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "fish"
+    },
+    {
+      "id": "legumes",
+      "name": {
+        "en": "Beans & lentils",
+        "de": "Bohnen & Linsen"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "bean"
+    },
+    {
+      "id": "cheese",
+      "name": {
+        "en": "Cheese",
+        "de": "Käse"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "milk"
+    },
+    {
+      "id": "mushrooms",
+      "name": {
+        "en": "Mushrooms",
+        "de": "Pilze"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "sprout"
+    },
+    {
+      "id": "spicy",
+      "name": {
+        "en": "Spicy food",
+        "de": "Scharfes Essen"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "flame"
+    },
+    {
+      "id": "mediterranean",
+      "name": {
+        "en": "Mediterranean food",
+        "de": "Mediterrane Küche"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "salad"
+    },
+    {
+      "id": "asian",
+      "name": {
+        "en": "Asian-inspired food",
+        "de": "Asiatische Küche"
+      },
+      "pantry_group": null,
+      "aliases": [],
+      "taste": true,
+      "icon": "soup"
+    }
+  ]
+}

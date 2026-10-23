@@ -115,6 +115,15 @@ jobs:
         run: timeout 180s python scripts/chatgpt_browser_smoke.py
       - name: Recipe ideas, explicit review and offline save (synthetic provider HTTP)
         run: timeout 180s python scripts/recipe_ideas_browser_smoke.py
+      - name: Pantry and food taste onboarding with synthetic provider HTTP
+        env:
+          MEALF_CAPTURE: '1'
+        run: |
+          timeout 180s python scripts/food_setup_browser_smoke.py
+          python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
+          install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
+          update-ca-certificates
+          MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" MEALF_LAYOUT_ENGINE=webkit MEALF_FOOD_SCREENSHOT_DIR=build/food-setup-browser-webkit timeout 180s python scripts/food_setup_browser_smoke.py
       - name: Sync truthfulness, two devices, recovery and redacted diagnostics
         run: timeout 180s python scripts/sync_status_browser_smoke.py
       - name: PWA task hierarchy, settings disclosures and offline recipe editing
@@ -143,9 +152,6 @@ jobs:
           python scripts/image_import_browser_smoke.py
           MEALF_LAYOUT_ENGINE=webkit python scripts/pwa_layout_smoke.py
           MEALF_LAYOUT_ENGINE=webkit python scripts/theme_browser_smoke.py
-          python scripts/browser_test_tls.py "$RUNNER_TEMP/mealf-browser-tls"
-          install -m 644 "$RUNNER_TEMP/mealf-browser-tls/ca.crt" /usr/local/share/ca-certificates/mealf-browser-test.crt
-          update-ca-certificates
           timeout 180s env PYTHONUNBUFFERED=1 MEALF_BROWSER_TEST_TLS="$RUNNER_TEMP/mealf-browser-tls" MEALF_LAYOUT_ENGINE=webkit python scripts/image_import_browser_smoke.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
@@ -159,6 +165,8 @@ jobs:
             build/ai-import-browser
             build/chatgpt-browser
             build/recipe-ideas-browser
+            build/food-setup-browser
+            build/food-setup-browser-webkit
             build/sync-status-browser
             build/pwa-ux-browser
             build/shopping-browser

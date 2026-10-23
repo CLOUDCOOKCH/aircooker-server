@@ -1,5 +1,25 @@
 # Mealf preview
 
+## Candidate: pantry and food tastes
+
+`poc-20261023.3` is selected for the pantry/taste extension but **has not been published**.
+The repository Compose default points to this candidate; do not assume it can be pulled.
+For an available preview, explicitly set
+`MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server:poc-20261023.2` before the install commands
+below. `.2` remains the last published preview; its completed gates do not certify `.3`.
+
+Candidate source `58c5930` plus the narrow German pantry CSS correction adds actual-stock
+pantry onboarding, resumable shared tastes and shorter import preparation. Local 472
+backend / 76 frontend tests and real Chromium workflows pass with synthetic integrations;
+the manual scoped review resolves its one P2 finding. Both current-source architecture
+build/runtime/security and Chromium/WebKit CI, release images, anonymous pull and the
+candidate persistent-volume upgrade remain pending. A local Docker build was blocked by
+workspace Alpine-download HTTP 403. See [implementation evidence](IMPLEMENTATION.md),
+[food setup operations](FOOD_SETUP.md) and [bounded review](validation/food-setup-review.md).
+Keep existing volumes, browser storage and custom `5152:5152` command/healthcheck settings.
+Save open work and accept a PWA update only after installing a published image. This
+candidate does not establish live AI/Bring!, physical-iPhone or production-v1 acceptance.
+
 ## Published preview: everyday navigation and quick planning
 
 `poc-20261023.2` is published and verified for **AMD64 and ARM64**. See
@@ -262,7 +282,7 @@ retain their existing volume and follow the backup/upgrade guide rather than sta
 another container against the same SQLite database. The setup token is a secret: do not
 paste it into support issues or commit it.
 
-The version tag for this preview is `ghcr.io/cloudcookch/mealf-server:poc-20261022.5`. The moving `:preview`
+The last published version tag is `ghcr.io/cloudcookch/mealf-server:poc-20261023.2`. The moving `:preview`
 channel is available for intentional preview upgrades. For reproducible installs, set
 `MEALF_IMAGE=ghcr.io/cloudcookch/mealf-server@sha256:…` to the digest at the top of the
 GitHub prerelease. No `latest-stable` tag is created by preview publication.

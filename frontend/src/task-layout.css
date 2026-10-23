@@ -3,6 +3,262 @@
   font-size: 2rem;
   letter-spacing: -0.03em;
 }
+
+/* Pantry and taste setup share the existing solid surfaces and semantic palette. */
+.pantry-welcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  background: var(--surface);
+  border-radius: 12px;
+}
+.pantry-welcome > div {
+  flex: 1 1 280px;
+}
+.pantry-welcome h2 {
+  margin: 0 0 6px;
+}
+.pantry-welcome p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  max-width: 60ch;
+}
+.pantry-onboarding,
+.taste-onboarding {
+  max-width: 760px;
+  margin-inline: auto;
+}
+.staple-picker {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.staple-group {
+  margin: 32px 0;
+}
+.staple-group h2 {
+  margin: 0 0 14px;
+}
+.staple-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.staple-option {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+.staple-option input {
+  flex-shrink: 0;
+}
+.staple-option span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.staple-option svg {
+  display: none;
+  visibility: hidden;
+  flex-shrink: 0;
+}
+.staple-option.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.staple-option.selected svg {
+  visibility: visible;
+}
+.staple-option:hover {
+  border-color: var(--control-border);
+}
+.staple-option:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.staple-picker:disabled .staple-option {
+  opacity: 0.65;
+  cursor: wait;
+}
+.onboarding-finish {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.onboarding-finish > p {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.taste-progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 auto 24px;
+  max-width: 480px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.taste-progress progress {
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  accent-color: var(--accent);
+  border: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--soft);
+}
+.taste-progress progress::-webkit-progress-bar {
+  background: var(--soft);
+}
+.taste-progress progress::-webkit-progress-value {
+  background: var(--accent);
+}
+.taste-progress progress::-moz-progress-bar {
+  background: var(--accent);
+}
+.taste-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 260px;
+  max-width: 480px;
+  padding: 32px 24px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 16px;
+  touch-action: pan-y;
+  user-select: none;
+  overflow-wrap: anywhere;
+}
+.taste-card > svg {
+  color: var(--accent);
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+.app-shell .taste-card h2 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+.taste-card p {
+  max-width: 32ch;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+.taste-actions,
+.taste-skip-row {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 20px auto 0;
+}
+.taste-actions > button {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+}
+.taste-skip-row {
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.taste-onboarding .onboarding-finish {
+  max-width: 480px;
+  margin-inline: auto;
+}
+.taste-footnote {
+  max-width: 60ch;
+  font-size: 0.8125rem;
+  margin: 24px auto 0;
+}
+.taste-summary {
+  max-width: 480px;
+  margin: auto;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: 16px;
+}
+.taste-summary > svg {
+  color: var(--accent);
+}
+.taste-summary h3 {
+  margin: 24px 0 8px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.taste-summary p {
+  overflow-wrap: anywhere;
+}
+.ideas-tastes {
+  font-size: 0.875rem;
+  margin: 0 0 24px;
+  max-width: 68ch;
+}
+.ideas-tastes p {
+  margin: 4px 0;
+}
+.import-ai-notice {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 65ch;
+}
+@media (max-width: 540px) {
+  .staple-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .staple-option {
+    padding: 12px 10px;
+    font-size: 0.875rem;
+  }
+  .staple-option svg {
+    display: none;
+  }
+  .taste-card {
+    min-height: 230px;
+  }
+  .taste-actions {
+    gap: 8px;
+  }
+  .taste-actions > button {
+    padding-inline: 10px;
+  }
+  .onboarding-finish > .primary {
+    width: 100%;
+  }
+}
+@media (max-width: 360px) {
+  .staple-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .taste-card {
+    transform: none !important;
+  }
+}
 .app-shell h2 {
   font-size: 1.125rem;
 }

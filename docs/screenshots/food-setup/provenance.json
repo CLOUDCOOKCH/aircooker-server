@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-23",
+  "implementation_source": "58c5930 plus scoped frontend/src/task-layout.css <=360px single-column correction",
+  "capture_script": "scripts/food_setup_browser_smoke.py",
+  "engine": "real Chromium",
+  "data": "Disposable synthetic household, synthetic Gemini provider HTTP; no live household or provider data. No new shipping raster or generated replacement artwork.",
+  "review": "All 13 final source captures opened by parent and reviewer; documenter opened these six copies.",
+  "capture_script_sha256": "54e362896835845bd5fe7397ab8bb2d33167d69560df95d1c4069da501e91614",
+  "reviewed_css_sha256": "9d44b6d4562231617f95802721657270e8a9f5ee95b019f0e4cf6b95fcedb637",
+  "files": [
+    {
+      "file": "welcome-desktop.png",
+      "source": ".impeccable/review/food-setup/welcome-desktop.png",
+      "sha256": "adcf60482a215cfdc9f96090b93a9ea1f91527effdecc22d70973aa6e8fbd369",
+      "image": {
+        "width": 1440,
+        "height": 1006
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "locale": "en",
+      "theme": "Flo light",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    },
+    {
+      "file": "pantry-mobile.png",
+      "source": ".impeccable/review/food-setup/pantry-mobile.png",
+      "sha256": "f394abe00f88d6b118d49f4e9faa984bbb875413cfdac16b777c6392f71404d4",
+      "image": {
+        "width": 390,
+        "height": 1800
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "en",
+      "theme": "Flo light",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    },
+    {
+      "file": "pantry-de-sunday.png",
+      "source": ".impeccable/review/food-setup/pantry-de-sunday.png",
+      "sha256": "d0c058f142a6473068bb91617d376a2c356b0a4c2582e59beeb7dd83efb87df9",
+      "image": {
+        "width": 320,
+        "height": 2575
+      },
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "locale": "de",
+      "theme": "Sunday",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    },
+    {
+      "file": "taste-de-after-dark.png",
+      "source": ".impeccable/review/food-setup/taste-de-after-dark.png",
+      "sha256": "cbec63dce4ab274cbb86836a66871ff1ebe735df8e0208a051a0f8bd8fd8a777",
+      "image": {
+        "width": 390,
+        "height": 1159
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "de",
+      "theme": "After Dark",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    },
+    {
+      "file": "taste-summary-desktop.png",
+      "source": ".impeccable/review/food-setup/taste-summary-desktop.png",
+      "sha256": "08b760cec1bd3525b8451a3556e300bfb2837924f9b13ed19767302b669e7859",
+      "image": {
+        "width": 1440,
+        "height": 1006
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "locale": "en",
+      "theme": "Flo light",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    },
+    {
+      "file": "import-mobile.png",
+      "source": ".impeccable/review/food-setup/import-mobile.png",
+      "sha256": "9a8c58e248c8e55a1dd41b825183b02eba5babbebe15c67ceda2507cd7329ff3",
+      "image": {
+        "width": 390,
+        "height": 1016
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "en",
+      "theme": "Flo light",
+      "capture": "full document from top; animations disabled",
+      "edited": false
+    }
+  ],
+  "reviewed_source_sha256": {
+    "frontend/src/PantrySetup.tsx": "90d3ca178a267dd8662aeb1ca367ed1c019410ccf876c2114fdeba16701871e5",
+    "frontend/src/FoodSwiper.tsx": "4b56f8b2f1762fab242473c3d0e0dbe7198d4e961fc2fd96ca35ed9e3bfbaa6b",
+    "frontend/src/RecipeIdeas.tsx": "7f8ebc8381845cf2aadf55dfc9f3af57d8370c757a32e22e17ab1b375485ee88",
+    "frontend/src/Imports.tsx": "acbf63e36374f955b37d0888e66ed550159fea9bcf5241572d9ffb3b504effad",
+    "frontend/src/lib/food.ts": "0ff7fef738fd252219012fb4e13b066bcfee4e6059da12f2f7aab8cd75c48f93",
+    "frontend/src/lib/food-sync.ts": "c00ce5c64fe1f079db9a32a978b76ccb724eaecf3e89060e2b33b829f73203c0",
+    "src/mealf/food_profile.py": "6a2874d35259c18e3ba9650ebb3c75a34a9b5534c7ef6257aede696e73360486",
+    "src/mealf/food_catalog.json": "40469398d444bc882299a7d4d3282b11804eabc2b00aba04ef0c79a0d84c8578",
+    "src/mealf/migrations/016_food_profile.sql": "de2ab99783967685a6f2bb13bdc04f30bc13d8a0ba97641d24319f2757be10ab"
+  },
+  "capture_script_source": "server commit 58c5930; captures use its script plus the current runtime CSS fix",
+  "current_regression_script_sha256": "7e22f0b674d9c6cc0fa251e914409c06d65ab0937b452287f625a5cf0b4bef23",
+  "script_change_after_capture": "Trusted Chromium CDP touch and WebKit online regression support were added after the UI captures; screenshot bytes and reviewed UI runtime sources are unchanged.",
+  "post_capture_nonvisual_correction": "After captures and the independent UI review, food-sync.ts adds revision preflight before PUT and store.ts archives raw food state atomically during explicit server-history recovery, clearing active snapshot/queue while retaining setup drafts. Implementation-agent regression tests verify no PUT on backwards history and no automatic replay after recovery (472 backend / 76 frontend). No UI/CSS/assets/capture bytes changed; reviewed_source_sha256 retains the originally reviewed hashes and does not claim reviewer coverage of this follow-up.",
+  "post_capture_nonvisual_source_sha256": {
+    "frontend/src/lib/food-sync.ts": "8bba19f82f57f5b5a523da7fcb6fbdeaef8c77d0046d3133deb15710955423c8",
+    "frontend/src/lib/store.ts": "cbd50357d7a209d37c6a3fd017ca5e0efc47eaa3f7175119a40da647596b3c35"
+  }
+}

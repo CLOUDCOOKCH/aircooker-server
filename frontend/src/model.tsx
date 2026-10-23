@@ -7,6 +7,9 @@ import { SyncEngine } from './lib/sync';
 import { reminderTarget } from './lib/notifications';
 import { DEFAULT_PLANNING, PLANNING_PATH, parsePlanningContext } from './lib/preferences';
 import type { PlanningContext } from './lib/preferences';
+import { EMPTY_FOOD, foodProfile } from './lib/food';
+import type { FoodState, FoodPatch } from './lib/food';
+import { syncFood } from './lib/food-sync';
 import { openDemo, DEMO_ID } from './lib/demo';
 import { translate } from './i18n';
 import type { Key, Language } from './i18n';
@@ -37,6 +40,7 @@ function useRuntime(runtime: Runtime) {
     [imports, setImports] = useState<ImportTask[]>([]);
   const [household, setHousehold] = useState(runtime.household);
   const [planning, setPlanning] = useState<PlanningContext>(DEFAULT_PLANNING);
+  const [food, setFood] = useState<FoodState>(EMPTY_FOOD);
   const [language, setLanguageState] = useState<Language>(runtime.household.language);
   const [tab, setTabState] = useState<Tab>('home');
   const [syncing, setSyncing] = useState(false),
@@ -57,6 +61,12 @@ function useRuntime(runtime: Runtime) {
     setRows(all.filter((row) => !row.deleted));
     setPending(queue);
     setImports(tasks);
+    try {
+      setFood(await store.foodState());
+    } catch {
+      setError('storage_error');
+      setSyncChecked(false);
+    }
   };
   const refreshPlanning = async () => {
     const current =
@@ -84,7 +94,13 @@ function useRuntime(runtime: Runtime) {
         await store.setSetting('household', updated);
         setHousehold(updated);
         await refreshPlanning();
-        if (!result.blocked && (await store.pending()).length === 0) {
+        syncPhase.current = 'food_preferences';
+        await syncFood(store, runtime.api!);
+        if (
+          !result.blocked &&
+          (await store.pending()).length === 0 &&
+          (await store.foodState()).queue.length === 0
+        ) {
           await store.setSetting('sync:last-success', new Date().toISOString());
           setSyncChecked(true);
         }
@@ -183,6 +199,10 @@ function useRuntime(runtime: Runtime) {
     await store.setSetting('language', value);
     setLanguageState(value);
   };
+  const saveFood = async (patch: FoodPatch) => {
+    await store.saveFood(patch);
+    await changed();
+  };
   const entities = <K extends Kind>(kind: K) =>
     rows.filter((row) => row.kind === kind) as Entity<K>[];
   return {
@@ -190,6 +210,11 @@ function useRuntime(runtime: Runtime) {
     household,
     planning,
     refreshPlanning,
+    food: foodProfile(food),
+    foodLoaded: food.context !== null || food.queue.length > 0 || runtime.demo,
+    foodPending: food.queue.length,
+    outgoingCount: pending.length + food.queue.length,
+    saveFood,
     rows,
     pending,
     imports,

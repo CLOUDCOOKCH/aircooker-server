@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Replace repeated household-AI import controls with a short disclosure and explicit
+  Prepare AI preview; retain separate personal ChatGPT consent and reviewed recipe Save.
+  Add actual-stock pantry setup from Today/Pantry, 24 EN/DE staples with conservative
+  aliases, twelve resumable taste cards and explicit shared Save. Persist offline profile
+  writes with device-bound replay and server commit ordering; freeze tastes in new idea
+  requests without changing old queued jobs. Migration 016 and export v4 include the
+  non-secret profile; old exports and archive envelope v1 remain compatible. Resolve
+  German pantry word breaks at ≤360px with one column. Candidate `poc-20261023.3` is
+  locally tested and manually reviewed; CI/publication gates remain pending.
+  Reject backwards food-profile revisions before PUT, and archive pending food state in
+  explicit server-history recovery without automatic replay; retain unfinished setup drafts.
+  Local totals are 472 backend / 76 frontend tests; this nonvisual follow-up changes no captures.
+
 - Simplify PWA navigation to Today, Plan, Recipes and Shopping. Open Settings from a
   persistent account button with Back, and Pantry inside Shopping with Shopping selected.
   Add a local title-search picker with rating-first recipes and guarded one-tap default
@@ -9,7 +22,7 @@
   Preserve real leftover IDs and available portions, compact day meals and use actual
   occurrences for planned-day markers. Separate phone sync status and improve inactive
   navigation contrast. Keep EN/DE, all themes, original assets, route IDs and offline/sync
-  contracts. Locally tested and independently reviewed; `poc-20261023.2` publication pending.
+  contracts. Published and verified as `poc-20261023.2`; see the maintained preview evidence.
 
 - Stop IP-blocked login attempts from draining the shared household admission budget.
   Bound recipe/AI quantities before fixed-decimal expansion across backend and PWA,

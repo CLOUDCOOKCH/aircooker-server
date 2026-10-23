@@ -128,9 +128,14 @@ def main():
                     page.get_by_label("Image, PDF or cooking video", exact=False).set_input_files(
                         {"name": name, "mimeType": mime, "buffer": raw}
                     )
-                    page.get_by_label("I agree to send this content", exact=False).check()
+                    assert (
+                        page.get_by_label("I agree to send this content", exact=False).count() == 0
+                    )
+                    expect(
+                        page.get_by_text("Preparing this preview may send", exact=False)
+                    ).to_be_visible()
                     audit()
-                    page.get_by_role("button", name="Prepare preview", exact=True).click()
+                    page.get_by_role("button", name="Prepare AI preview", exact=True).click()
                     page.get_by_role("button", name="Review", exact=True).last.click(timeout=20000)
                     expect(
                         page.get_by_role("heading", name="Review your import", exact=True)

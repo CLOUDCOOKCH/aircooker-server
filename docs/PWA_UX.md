@@ -1,5 +1,15 @@
 # PWA screen guide
 
+The newer pantry/taste extension is locally tested for candidate `poc-20261023.3`,
+currently unpublished; `.2` below remains the last published navigation preview.
+Fresh households receive a nonblocking Today pantry invitation. **Shopping → Pantry**
+keeps the searchable 24-staple picker available; only selected actual stock is saved.
+First-use Recipe ideas offers twelve resumable taste cards with gestures plus Like /
+Not for me / Skip / Back and explicit Save. Shared taste is editable and is not allergy
+protection. Household imports replace the marked controls with a concise disclosure and
+**Prepare AI preview**; personal ChatGPT consent remains separate. Recipe Save remains
+explicit. See [full behavior](FOOD_SETUP.md), [final reviewed captures and resolution](validation/food-setup-review.md).
+
 The 2026-10-23 navigation and quick-planning extension has four primary tabs:
 **Today, Plan, Recipes and Shopping** (German: **Heute, Plan, Rezepte, Einkauf**).
 Settings opens from the persistent account button; Pantry opens inside Shopping.

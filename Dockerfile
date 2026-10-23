@@ -6,6 +6,7 @@ RUN --mount=type=secret,id=proxy_ca \
     if [ -f /run/secrets/proxy_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/proxy_ca; fi; \
     npm ci --ignore-scripts --no-fund
 COPY frontend ./
+COPY src/mealf/food_catalog.json /build/src/mealf/food_catalog.json
 RUN npm run build
 FROM python:3.12.14-alpine3.24@sha256:4c47124a8391cb7a9f571164147d154777cf012a4ece5f86097130d7a4478111 AS base
 FROM base AS builder

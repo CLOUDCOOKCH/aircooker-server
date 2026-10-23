@@ -1,5 +1,37 @@
 # Implementation checklist and evidence
 
+**Pantry and food taste setup, 2026-10-23 — locally tested; candidate `poc-20261023.3`
+unpublished:** source `58c5930` plus a scoped ≤360px one-column pantry CSS correction.
+Adds the canonical 24-staple EN/DE catalogue, fresh-household Today invitation, permanent
+Pantry picker, twelve resumable taste cards, shared revisioned profile/outgoing queue and
+frozen preferences on new Recipe ideas requests. Import uses concise disclosure plus
+Prepare AI preview; personal ChatGPT consent and explicit recipe Save remain separate.
+Migration 016 and non-secret export v4 preserve old import/archive compatibility.
+
+Implementation-agent evidence: **472 backend / 76 frontend tests pass**, Ruff lint/format,
+mypy, Prettier, TypeScript/build, OpenAPI drift, original-artwork and licence checks.
+Real Chromium food setup, AI imports, source photos, Recipe ideas, PWA UX and sync-status
+suites pass with synthetic provider HTTP, Axe, EN/DE/all three themes, 1440/390/320 widths,
+offline Save/reload/sync, draft resume and actual-adapter preference payload/no-autosave
+checks. The bounded independent manual review initially found one P2 German-label issue;
+the narrow correction resolves it: **ship, 1 resolved / 0 partial / 0 unresolved**.
+A subsequent nonvisual sync fix blocks profile PUTs on backwards server revisions and
+archives pending food state during explicit history recovery without automatic replay;
+a meaningful regression test brings the frontend total to 76. UI/CSS/captures are unchanged.
+The documenter ran no browser/tests. See [behavior](FOOD_SETUP.md) and
+[review/provenance and limits](validation/food-setup-review.md).
+
+[Server PR #16](https://github.com/CLOUDCOOKCH/aircooker-server/pull/16) remains draft.
+GitHub AMD64/ARM64 image HIGH/CRITICAL scans pass; remaining current-source
+build/runtime and Chromium/WebKit gates are pending; the locally blocked Docker build hit Alpine HTTP 403 under workspace policy.
+Vite development serves the catalogue (200) and denies unrelated requirements (403).
+The independent native contract is pinned at `58c5930` in companion PR #4; local contract
+and 296 locale checks pass. Native PR #4 CI `39970064341` succeeds, including Xcode and
+simulator tests; merged at `1b2f3d380ee68117b06188c52f0fe5cd959a2c22`, exact-main rerun pending.
+No native food UI, live AI/Bring!, physical iPhone or production-v1 acceptance is claimed.
+`poc-20261023.2` remains the last published preview; Compose's `.3` default is a candidate.
+DESIGN.md/design.json remain byte-identical historical references with existing drift.
+
 **Everyday navigation and quick planning, 2026-10-23 — published and verified in
 `poc-20261023.2`:** four primary tabs (Today, Plan,
 Recipes, Shopping), persistent account → Settings → Back, and Shopping → Pantry → Back.

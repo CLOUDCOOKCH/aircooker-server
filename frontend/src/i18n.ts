@@ -1,4 +1,43 @@
 export const en = {
+  pantryWelcomeTitle: 'What’s already in your kitchen?',
+  pantryWelcomeHint: 'Choose the basics you have so they stay off your shopping list.',
+  pantryChooseBasics: 'Choose pantry basics',
+  pantrySetupTitle: 'Start with your pantry',
+  pantrySetupHint:
+    'Select only what you have. These staples stay off shopping calculations until you change their availability. You can edit them later.',
+  pantrySeasoning: 'Seasoning & oils',
+  pantryCupboard: 'In the cupboard',
+  pantryFridge: 'Fridge & fresh',
+  pantryNoMatches: 'No matching basics. You can add a custom item in Pantry.',
+  pantrySelected: 'basics selected',
+  pantrySaveBasics: 'Save my pantry',
+  setupNotNow: 'Not now',
+  foodSaveError: 'Could not save your choices. They are still here. Try again.',
+  foodPending: 'Saved on this device. Household sync is pending.',
+  tasteTitle: 'Make it your kind of food',
+  tasteIntro:
+    'A few swipes for better recipe ideas. Right to like, left for not for me. The buttons work too.',
+  tasteProgress: 'Food preference progress',
+  tasteChoose: 'Choose your preference',
+  tasteCardHint: 'Would you enjoy this in your next meal?',
+  tasteAlreadyLiked: 'You like this. Keep it or change your choice.',
+  tasteAlreadyDisliked: 'You prefer to avoid this. Keep it or change your choice.',
+  tasteLike: 'Like',
+  tasteDislike: 'Not for me',
+  tasteSkipFood: 'Skip this food',
+  tasteReady: 'Your taste, ready to cook',
+  tasteSummaryHint: 'Your next ideas will use these choices. Nothing has been generated yet.',
+  tasteLiked: 'More of this',
+  tasteAvoid: 'Prefer to avoid',
+  tasteNone: 'No preference',
+  tasteReview: 'Review my choices',
+  tasteSave: 'Save my taste',
+  tasteEdit: 'Your taste',
+  tasteShared:
+    'Shared with your household and included when you request AI ideas. These are taste preferences, not allergy restrictions.',
+  importAIAutomatic:
+    'Preparing this preview may send source content to your household’s configured AI service. You review the recipe before saving.',
+  queueImportAI: 'Prepare AI preview',
   navToday: 'Today',
   navPlan: 'Plan',
   navShop: 'Shopping',
@@ -65,7 +104,7 @@ export const en = {
   ideasIngredients: 'What do you have at home?',
   ideasPlaceholder: 'Spaghetti, minced beef, onions…',
   ideasSurpriseHint: 'Get three fresh recipe ideas. No ingredient list is sent in this mode.',
-  ideasConsent: 'Send my ingredient list or surprise request to this configured AI provider.',
+  ideasConsent: 'Send this request and my saved food preferences to this configured AI provider.',
   ideasConfigure:
     'Enable a household AI provider with text support in Settings to generate recipes.',
   ideasGenerate: 'Give me three ideas',
@@ -679,6 +718,48 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  pantryWelcomeTitle: 'Was ist schon in deiner Küche?',
+  pantryWelcomeHint:
+    'Wähle deine vorhandenen Basics, damit sie nicht auf der Einkaufsliste landen.',
+  pantryChooseBasics: 'Vorrats-Basics wählen',
+  pantrySetupTitle: 'Starte mit deinem Vorrat',
+  pantrySetupHint:
+    'Wähle nur, was du hast. Diese Basics werden beim Einkauf ausgelassen, bis du ihre Verfügbarkeit änderst. Du kannst alles später bearbeiten.',
+  pantrySeasoning: 'Gewürze & Öle',
+  pantryCupboard: 'Im Vorratsschrank',
+  pantryFridge: 'Frisch & gekühlt',
+  pantryNoMatches: 'Keine passenden Basics. Eigene Zutaten kannst du im Vorrat hinzufügen.',
+  pantrySelected: 'Basics ausgewählt',
+  pantrySaveBasics: 'Meinen Vorrat speichern',
+  setupNotNow: 'Jetzt nicht',
+  foodSaveError:
+    'Deine Auswahl konnte nicht gespeichert werden. Sie bleibt hier. Versuche es erneut.',
+  foodPending: 'Auf diesem Gerät gespeichert. Die Haushaltssynchronisierung steht noch aus.',
+  tasteTitle: 'Ganz nach deinem Geschmack',
+  tasteIntro:
+    'Ein paar Wischer für bessere Rezeptideen. Rechts: mag ich. Links: lieber nicht. Die Tasten funktionieren genauso.',
+  tasteProgress: 'Fortschritt der Essensvorlieben',
+  tasteChoose: 'Wähle deine Vorliebe',
+  tasteCardHint: 'Hättest du darauf bei deiner nächsten Mahlzeit Lust?',
+  tasteAlreadyLiked: 'Das magst du. Behalte oder ändere deine Auswahl.',
+  tasteAlreadyDisliked: 'Das lässt du lieber aus. Behalte oder ändere deine Auswahl.',
+  tasteLike: 'Mag ich',
+  tasteDislike: 'Lieber nicht',
+  tasteSkipFood: 'Dieses Essen überspringen',
+  tasteReady: 'Dein Geschmack steht fest',
+  tasteSummaryHint:
+    'Deine nächsten Ideen berücksichtigen diese Auswahl. Es wurde noch nichts generiert.',
+  tasteLiked: 'Mehr davon',
+  tasteAvoid: 'Lieber auslassen',
+  tasteNone: 'Keine Vorliebe',
+  tasteReview: 'Auswahl überprüfen',
+  tasteSave: 'Meinen Geschmack speichern',
+  tasteEdit: 'Dein Geschmack',
+  tasteShared:
+    'Mit deinem Haushalt geteilt und bei KI-Rezeptideen mitgesendet. Das sind Geschmacksvorlieben, keine Allergievorgaben.',
+  importAIAutomatic:
+    'Für diese Vorschau können Quellinhalte an den eingerichteten KI-Dienst deines Haushalts gesendet werden. Du prüfst das Rezept vor dem Speichern.',
+  queueImportAI: 'KI-Vorschau vorbereiten',
   navToday: 'Heute',
   navPlan: 'Plan',
   navShop: 'Einkauf',
@@ -746,7 +827,7 @@ export const de: Record<Key, string> = {
   ideasPlaceholder: 'Spaghetti, Hackfleisch, Zwiebeln…',
   ideasSurpriseHint: 'Drei neue Rezeptideen. In diesem Modus wird keine Zutatenliste gesendet.',
   ideasConsent:
-    'Meine Zutatenliste oder Überraschungsanfrage an diesen eingerichteten KI-Anbieter senden.',
+    'Diese Anfrage und meine gespeicherten Essensvorlieben an diesen eingerichteten KI-Anbieter senden.',
   ideasConfigure:
     'Aktiviere in den Einstellungen einen Haushalts-KI-Anbieter mit Textunterstützung.',
   ideasGenerate: 'Gib mir drei Ideen',

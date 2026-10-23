@@ -12,6 +12,7 @@ from .ai_settings import load_configuration
 from .auth import rate_limit
 from .diagnostics import public_error
 from .errors import DomainError
+from .food_profile import FoodTaste
 from .jobs import enqueue
 from .models import Ingredient, Model, Recipe
 from .quantities import IdeaServings, Positive
@@ -46,6 +47,7 @@ class IdeaRequest(Model):
     language: Literal["en", "de"] = "en"
     consent_external_ai: Literal[True]
     ai_destination: tuple[str, str, str]
+    preferences: FoodTaste | None = None
 
     @model_validator(mode="after")
     def valid_input(self):
@@ -77,7 +79,8 @@ def status(database, iid):
 
 
 def start(database, body):
-    raw = body.model_dump_json()
+    # Retain pre-preferences fingerprints for existing durable requests and replay.
+    raw = body.model_dump_json(exclude={"preferences"} if body.preferences is None else None)
     fingerprint = hashlib.sha256(raw.encode()).hexdigest()
     with database.transaction() as db:
         existing = db.execute(
@@ -138,7 +141,12 @@ def process(database, payload, provider_factory):
                 raise DomainError("ai_request_limit", 429)
         provider = provider_factory(config)
         try:
-            generated = provider.generate_ideas(body.ingredients, body.language, body.mode)
+            if body.preferences is None:
+                generated = provider.generate_ideas(body.ingredients, body.language, body.mode)
+            else:
+                generated = provider.generate_ideas(
+                    body.ingredients, body.language, body.mode, body.preferences.prompt_data()
+                )
         finally:
             provider.close()
         generated = GeneratedIdeas.model_validate(generated)

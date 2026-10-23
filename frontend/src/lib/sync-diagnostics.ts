@@ -48,6 +48,7 @@ export async function syncDiagnostics(
       cursor: local.cursor,
       records: local.records,
       pending_mutations: local.pending,
+      pending_food_preferences: local.food_pending,
       blocked_mutations: local.blocked,
       imports: local.imports,
       last_success: local.lastSuccess,

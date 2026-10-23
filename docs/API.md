@@ -1,11 +1,36 @@
 # API and offline sync protocol v1
 
+## Household food profile
+
+Authenticated `GET /api/v1/household/food-profile` returns `{revision, profile}`.
+The profile has `likes`, `dislikes` (unique known catalogue taste IDs, at most 12 each)
+and boolean `pantry_setup_done` / `taste_setup_done`. Lists must be disjoint.
+Authenticated `PUT` takes `{request_id, base_revision, patch}` and returns
+`{request_id, revision, conflict}`. A patch must provide at least one known non-null field;
+fields omitted from it retain their current server value. Existing cookie CSRF rules apply.
+PUT is limited to 120 requests per authenticated device per hour (429
+`food_preferences_request_limit`). Invalid merged choices return 422
+`invalid_food_preferences`; schema-invalid writes also return 422.
+
+Writes commit transactionally in server order. A stale `base_revision` sets `conflict=true`
+while accepting the changed fields; it is not a compare-and-swap rejection. Whole lists
+replace changed fields. Replaying the same UUID/body from its original authenticated
+device returns the original receipt; changed body or another device returns 409
+`idempotency_conflict`. GET the profile after a receipt to refresh the snapshot.
+The browser retains a durable outgoing queue separately from entity-sync mutations,
+processes entity/history sync first, and refuses to replace a newer profile context with
+a slower older response. This route changes no recipe, meal or Bring! entity.
+See [setup, offline and export behavior](FOOD_SETUP.md).
+
 ## Creative recipe ideas
 
 Authenticated `POST /api/v1/recipe-ideas` accepts `IdeaRequest`, returning 202 `IdeaStatus`:
 UUID request_id, mode (`ingredients`/`surprise`), language (`en`/`de`), explicit true AI
 consent and displayed `(provider, base_url, model)` destination. Ingredients requires nonempty
-text (maximum 2000 characters); surprise requires empty text. Same UUID/body replays;
+text (maximum 2000 characters); surprise requires empty text. Optional `preferences` holds
+validated `likes`/`dislikes` taste IDs, frozen in this request and translated to food names
+for the provider. It is taste guidance, not an allergy restriction. Omission retains old
+request fingerprints and replay behavior. Same UUID/body replays;
 changed payload returns 409. Configuration/consent mismatch returns 409, invalid input 422,
 quota exhaustion 429. Existing authentication/CSRF protections apply.
 
@@ -129,6 +154,10 @@ Replaying the same ID/content returns the existing job. Different content for th
 mutation to `/imports/{id}/confirm`. Unsupported content returns `needs_input` with an error
 code and retains its source URL. AI additionally requires `use_ai=true` and
 `consent_external_ai=true`; the administrator selects endpoint, model and encrypted saved key or credential file.
+The PWA household form supplies these fields through the disclosed **Prepare AI preview**
+action instead of separate household checkboxes. `ai_destination` pins the known public
+provider/base URL/model; offline queueing can use a cached public configuration, and
+configuration changes fail closed. Personal ChatGPT background consent stays separate.
 
 ## Weekly suggestion review
 

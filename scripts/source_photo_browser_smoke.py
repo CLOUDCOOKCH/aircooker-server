@@ -198,9 +198,9 @@ def main():
                 page.get_by_role("button", name="Back", exact=True).click()
                 page.get_by_role("button", name="Import recipe", exact=True).first.click()
                 page.get_by_label("Recipe URL", exact=True).fill(source)
-                page.get_by_label("Use configured AI", exact=True).check()
-                page.get_by_label("I agree to send this content", exact=False).check()
-                page.get_by_role("button", name="Prepare preview", exact=True).click()
+                assert page.get_by_label("Use configured AI", exact=True).count() == 0
+                assert page.get_by_label("I agree to send this content", exact=False).count() == 0
+                page.get_by_role("button", name="Prepare AI preview", exact=True).click()
                 page.get_by_role("button", name="Review", exact=True).last.click(timeout=20000)
                 expect(page.locator(".editor-photo.food-photo")).to_be_visible()
                 assert len(operator.get("/api/v1/recipes").json()["items"]) == 2

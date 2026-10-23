@@ -3,7 +3,7 @@ import { Plus, Search, Trash2 } from 'lucide-react';
 import { useApp } from './model';
 import { Empty, IconButton, PageHeader } from './components';
 import { monday, pantryIncludedThisWeek, today, uuid } from './lib/domain';
-export function Pantry({ back }: { back?: () => void }) {
+export function Pantry({ back, setup }: { back?: () => void; setup?: () => void }) {
   const app = useApp(),
     { t } = app;
   const [name, setName] = useState(''),
@@ -28,7 +28,13 @@ export function Pantry({ back }: { back?: () => void }) {
   };
   return (
     <>
-      <PageHeader title={t('pantry')} subtitle={t('pantryIntro')} back={back} />
+      <PageHeader title={t('pantry')} subtitle={t('pantryIntro')} back={back}>
+        {setup && (
+          <button className="secondary compact" onClick={setup}>
+            {t('pantryChooseBasics')}
+          </button>
+        )}
+      </PageHeader>
       <details className="pantry-help">
         <summary>{t('pantryHeading')}</summary>
         <p>{t('pantryBody')}</p>

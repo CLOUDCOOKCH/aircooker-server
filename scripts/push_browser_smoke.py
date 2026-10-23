@@ -121,7 +121,7 @@ def main():
                 page.get_by_label("Kitchen name", exact=True).fill("Browser kitchen")
                 page.get_by_label("Household time zone", exact=True).fill("Europe/Zurich")
                 page.get_by_role("button", name="Set up your kitchen", exact=True).click()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible(
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible(
                     timeout=15000
                 )
                 page.wait_for_function("!!navigator.serviceWorker.controller")

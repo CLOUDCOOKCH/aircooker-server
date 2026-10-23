@@ -188,7 +188,9 @@ def main():
                 touch_page.touchscreen.tap(20, 200)
                 assert touch_page.evaluate("visualViewport.scale") == 1
                 touch_page.get_by_role("button", name="Explore the demo").click()
-                expect(touch_page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(
+                    touch_page.get_by_role("heading", name="Your kitchen", exact=True)
+                ).to_be_visible()
                 touch_page.wait_for_function("document.documentElement.scrollHeight > innerHeight")
                 touch_session.send(
                     "Input.dispatchTouchEvent",
@@ -214,7 +216,7 @@ def main():
                 page.emulate_media(color_scheme="light")
                 page.set_viewport_size({"width": 1440, "height": 1000})
                 page.get_by_role("button", name="Explore the demo").click()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 expect(page.get_by_role("navigation", name="mealf", exact=True)).to_be_visible()
                 expect(page.locator(".featured-meal img")).to_be_visible()
                 audit("home desktop")
@@ -288,7 +290,7 @@ def main():
                 page.get_by_label("Kitchen name", exact=True).fill("Browser kitchen")
                 page.get_by_label("Household time zone", exact=True).fill("Europe/Zurich")
                 page.get_by_role("button", name="Set up your kitchen", exact=True).click()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible(
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible(
                     timeout=15000
                 )
                 page.get_by_role("button", name="New recipe", exact=True).click()
@@ -302,13 +304,13 @@ def main():
                 page.wait_for_function("!!navigator.serviceWorker.controller")
                 context.set_offline(True)
                 page.get_by_role("button", name="Save", exact=True).click()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Offline test soup", exact=False)
                 ).to_be_visible()
                 page.reload()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Offline test soup", exact=False)
@@ -335,9 +337,9 @@ def main():
                 second.get_by_label("Username", exact=True).fill("cook")
                 second.get_by_label("Password", exact=True).fill("synthetic pwa kitchen password")
                 second.get_by_role("button", name="Sign in", exact=True).click()
-                expect(second.get_by_role("heading", name="Your kitchen")).to_be_visible(
-                    timeout=15000
-                )
+                expect(
+                    second.get_by_role("heading", name="Your kitchen", exact=True)
+                ).to_be_visible(timeout=15000)
                 navigate(second, "Recipes")
                 expect(
                     second.get_by_role("button", name="Offline test soup", exact=False)

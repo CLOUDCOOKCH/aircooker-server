@@ -204,7 +204,7 @@ export function Settings({
                 disabled={app.demo || app.syncing}
               >
                 <span>
-                  {t('sync')} · {app.pending.length} {t('pending')}
+                  {t('sync')} · {app.outgoingCount} {t('pending')}
                 </span>
                 <RefreshCw size={17} />
               </button>
