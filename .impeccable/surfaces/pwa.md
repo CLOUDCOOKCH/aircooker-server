@@ -32,11 +32,18 @@ matrix/provenance are linked in the [review](../../docs/validation/ingredient-pi
 Supplied implementation evidence reports 472 backend/81 frontend tests and Chromium
 ingredient/offline/two-device/UX/AI-import/food-setup workflows passing with synthetic
 data, EN/DE, three themes, Axe and 1440/390/320 widths. Documentation inspected evidence
-without rerunning browser/tests. WebKit ingredient CI, exact-source CI and publication
-remain pending; `.4` is the candidate and `.3` latest published. No live AI/Bring!, physical
+without rerunning browser/tests. Subsequent exact-source CI `39984576734` passes all six
+gates on attempt 2 (479 backend/81 frontend), including Chromium/WebKit. The combined
+`poc-20261023.5` image at `7054a06` retains these UI files unchanged; `.4` was not published.
+Fresh AMD64/ARM64 image/security/runtime checks, anonymous pull and a same-volume 5152
+upgrade with offline ingredient Save/reload/sync and pantry exclusion pass. GitHub returned
+HTTP500 creating release metadata after successful image push/attestation; page/assets
+remain pending. See [exact image evidence](../../docs/validation/github-ingredient-preview.json).
+No live AI/Bring!, physical
 iPhone/Safari, motion or full-product acceptance is claimed. Context/detector attempts
-exited 127; no hook/schema/shipped-specialist pass. Native/API/database identities and
-Bring ledger remain unchanged. DESIGN.md/design.json retain existing navigation/layout/
+exited 127; no hook/schema/shipped-specialist pass. This ingredient extension leaves
+native/API/database identities and the Bring ledger unchanged; the combined image
+separately includes account migration 017. DESIGN.md/design.json retain existing navigation/layout/
 type/theme snapshot drift byte-for-byte; the review records it without repair.
 
 ## Current extension — pantry and food taste onboarding, 2026-10-23

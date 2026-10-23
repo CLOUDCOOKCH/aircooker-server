@@ -1,6 +1,13 @@
 # Mealf preview
 
-## Household users and roles — `poc-20261023.5` candidate
+## Container image available — `poc-20261023.5`
+
+The AMD64/ARM64 image is public and verified at
+`ghcr.io/cloudcookch/mealf-server@sha256:04f0a318c42c2a3b7b933770ec526f389c3b50fae1c9e5ad50ce8a7679f866f6`.
+All six exact-source CI gates and fresh native image checks pass; anonymous pull and a
+`.3` → `.5` same-volume 5152 upgrade pass. GitHub returned HTTP 500 creating its prerelease
+page, so metadata/assets remain pending. See [exact image evidence](validation/github-ingredient-preview.json).
+The earlier `.4` ingredient candidate was superseded without publication.
 
 Admins can add household members at **/admin/ → Account → Household users**. Each account
 has its own password and either **User** (default; app access) or **Admin** (app and
@@ -15,16 +22,16 @@ backups include them. The public admin sign-in page remains available, but regul
 cannot establish an admin session or call admin/configuration APIs. See
 [account management](ADMINISTRATION.md#household-users-and-roles).
 
-This candidate includes the ingredient editing and compact pantry changes described
-below. Local checks and exact-main CI must complete before publication; the matching
-GitHub prerelease establishes availability. Use
-`ghcr.io/cloudcookch/mealf-server:poc-20261023.5` only once it is published. Keep your
+This image includes the ingredient editing and compact pantry changes described
+below. Local checks, exact-main CI and independent image verification pass; GitHub
+prerelease metadata remains pending. Use
+`ghcr.io/cloudcookch/mealf-server:poc-20261023.5`. Keep your
 existing `/data` volume or NAS bind mount, plus your custom `5152:5152` command and
 healthcheck. Save editors, update the container and accept the PWA update. No reset or
 browser-storage deletion is required. Live integrations and physical iPhone acceptance
 remain unverified; this is a preview, not production-v1 acceptance.
 
-## Ingredient choices and compact pantry — `poc-20261023.4`
+## Ingredient choices and compact pantry — included in `poc-20261023.5`
 
 This build adds predefined metric/cooking units and optional ingredient-name suggestions
 from the locally cached pantry and other recipes. A typo such as `zwibel` can suggest
@@ -42,9 +49,9 @@ sync before deliberate reloads; its error checks remain strict. Offline reload i
 in Chromium. Physical iPhone/Safari and live AI/Bring! acceptance remain unverified.
 No API, database migration, native contract, Bring ownership or original artwork changes.
 
-Publication availability is established by the matching completed GitHub prerelease.
-Once it exists, use `ghcr.io/cloudcookch/mealf-server:poc-20261023.4` or its immutable
-Image reference shown at the start of the release. Keep the existing data volume and
+The earlier `.4` candidate was superseded without publication. These features are
+available in `ghcr.io/cloudcookch/mealf-server:poc-20261023.5` or its immutable
+image reference shown above. Keep the existing data volume and
 custom `5152:5152` command/healthcheck; save open work and accept the PWA update.
 No browser reset or reinstall is needed. This is a preview, not production v1.
 Earlier published-preview sections below describe their historical versions.

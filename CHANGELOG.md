@@ -16,8 +16,12 @@
   do not guess conversions or mutate pantry/Bring identities. Compact pantry rows and add
   requested decorative food emojis with a generic fallback. Local 472 backend/81 frontend
   tests and Chromium regressions pass; independent UI review: ship, zero material findings.
-  Candidate `poc-20261023.4` remains unpublished; CI/WebKit/publication and physical/live
-  acceptance are pending. See [ingredient editing](docs/INGREDIENT_EDITING.md).
+  Included in published container image `poc-20261023.5`; `.4` was never published.
+  All exact-source CI/native architecture gates, anonymous pull and same-volume 5152
+  upgrade pass; 479 backend/81 frontend tests pass in the combined build. GitHub returned
+  HTTP500 creating the release page, so its metadata/assets remain pending. Physical/live
+  acceptance is unverified. See [ingredient editing](docs/INGREDIENT_EDITING.md) and
+  [image evidence](docs/validation/github-ingredient-preview.json).
 
 - Replace repeated household-AI import controls with a short disclosure and explicit
   Prepare AI preview; retain separate personal ChatGPT consent and reviewed recipe Save.

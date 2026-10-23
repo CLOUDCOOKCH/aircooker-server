@@ -6,10 +6,18 @@ finish review supplied from `/tmp/mealf-ingredient-finish-review.md`, followed b
 documentation handoff. The shipped specialist definition was unavailable; these are
 manual specialist equivalents, not a shipped-specialist pass.
 
-Implementation `469d83d` is committed; this documentation handoff is not yet committed.
-The feature remains unpublished at this handoff. Compose selects candidate
-`poc-20261023.4`; `.3` remains the latest published preview. CI/publication are pending.
-No immutable source hash or exact-source release acceptance is claimed here.
+The original review/capture handoff records implementation `469d83d`. A subsequent
+nonvisual correctness follow-up is merged in release source
+`0ec966db645fcc105c6e897e417667392ad0bc48` ([PR #20](https://github.com/CLOUDCOOKCH/mealf/pull/20));
+its bounded review is recorded below. The combined image `poc-20261023.5` ships these
+unchanged ingredient/pantry components at source `7054a06`; `.4` was never published.
+Exact-source CI `39984576734` passes all six gates on attempt 2, including Chromium/WebKit;
+479 backend and 81 frontend tests pass. Fresh native AMD64/ARM64 image/security/runtime
+checks, anonymous public pull and a same-volume 5152 `.3` → `.5` upgrade pass.
+GitHub prerelease creation returned HTTP 500 after image push/attestation, so release
+metadata/assets remain pending. See [exact evidence](github-ingredient-preview.json).
+The earlier pending CI `39983929824` was cancelled when the account workstream advanced
+main. This image evidence does not expand the bounded visual-review verdict.
 
 ## persistence
 
@@ -96,9 +104,10 @@ or documenter:
   phantom pantry records; keyboard/trusted-tap selection; pantry toggles; English/German;
   all three themes; Axe and 1440/390/320 widths. Existing PWA offline/two-device, PWA UX,
   AI-import and food-setup browser suites pass with synthetic providers.
-- **Pending:** exact-source CI, publication and WebKit ingredient coverage. The script's
-  later CI WebKit/TLS-fixture support does not change UI/captures and has no local WebKit
-  pass. Offline reload remains Chromium-only in that script because of the known WebKit
+- **Passed subsequently:** exact-source CI, Chromium/WebKit ingredient coverage, native
+  AMD64/ARM64 image gates, anonymous pull and the published-image upgrade described above.
+  GitHub prerelease metadata/assets remain pending. There is no local WebKit pass;
+  offline reload remains Chromium-only in that script because of the known WebKit
   automation limitation.
 - **Unverified:** actual AI/Bring! live services, physical iPhone/Safari, motion quality,
   screen-reader behavior and complete-product acceptance. Static screenshots establish
@@ -112,11 +121,31 @@ PWA, UX, AI imports and food setup. Their successful outcomes support the attrib
 local results above; the reviewer's test evidence was supplied separately. Temporary
 logs and review input are session artifacts, not durable public release evidence.
 
+**Bounded nonvisual follow-up, 2026-10-23:** The documenter inspected the four-file diff
+from `59e5efd` to merged release source `0ec966db645fcc105c6e897e417667392ad0bc48`,
+the same independent reviewer's ship addendum and `/tmp/mealf-ingredient-guard-browser.log`.
+Own-property lookup makes custom names `__proto__` and `constructor` use the generic
+emoji fallback. The combobox resets active selection when household options change,
+omits nonexistent active descendants and guards keyboard selection against missing
+matches. The regression changes a pantry entry over actual server sync while preserving
+combobox focus, checks stale selection clears, selects the remaining name by keyboard
+and confirms `__proto__` renders a bowl without a page error.
+
+The supplied follow-up evidence reports 81 core tests, production build, Prettier,
+Ruff and real Chromium passing; the documenter inspected the passing browser log and
+did not rerun checks. This extends the original local evidence without claiming a new
+backend/full-regression pass. The independent reviewer retained **ship, zero additional
+material findings**. No CSS, layout, copy or artwork changed, all seven original capture
+bytes remain unchanged, and the reviewer required no recapture. Original review/captures
+remain historical evidence for their source; this addendum covers only the subsequent
+correctness diff. The subsequent combined CI and image proof are recorded above;
+GitHub prerelease metadata/assets and physical/live acceptance remain pending or unverified.
+
 ## material_fixes
 
-None. Zero material in-scope findings, with no required source correction or recapture
-after the independent review. This verdict does not certify unrelated historical drift
-or the entire product.
+None required by the original independent review or its bounded follow-up. Zero material
+in-scope findings and no required recapture. This verdict does not certify unrelated
+historical drift or the entire product.
 
 ## keep
 

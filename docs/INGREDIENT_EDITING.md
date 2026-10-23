@@ -56,7 +56,11 @@ Existing availability and civil-week shopping inclusion controls retain their be
 
 The [bounded review](validation/ingredient-picker-review.md) records a ship verdict with
 zero material findings, representative genuine captures and attributed local validation.
-This source is currently unpublished; `poc-20261023.4` is the candidate and `.3` remains
-the latest published preview. CI and publication evidence are pending. Local Chromium
-automation uses synthetic household and provider data; live AI/Bring!, physical iPhone
-and Safari acceptance remain unverified.
+The feature is available in the combined container image `poc-20261023.5`; `.4` was never
+published. All six exact-source CI gates and both native architecture image checks pass,
+including Chromium/WebKit ingredient tests. Anonymous pull and a `.3` → `.5` same-volume
+5152 upgrade pass, including offline name/unit Save/reload/sync and pantry exclusion.
+GitHub release-page creation returned HTTP 500; its prerelease metadata/assets remain
+pending. See [image and test evidence](validation/github-ingredient-preview.json).
+Tests use synthetic household/provider data; live AI/Bring!, physical iPhone and Safari
+acceptance remain unverified.
