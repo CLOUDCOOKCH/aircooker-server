@@ -1,5 +1,30 @@
 # Mealf preview
 
+## Ingredient choices and compact pantry — `poc-20261023.4`
+
+This build adds predefined metric/cooking units and optional ingredient-name suggestions
+from the locally cached pantry and other recipes. A typo such as `zwibel` can suggest
+`Zwiebeln`; users choose a match or type a new name. Unknown imported units stay editable,
+original ingredient text is retained and recipe Save remains explicit. Pantry rows are
+denser and show decorative food emojis, with a generic fallback for custom items.
+See [ingredient editing](INGREDIENT_EDITING.md) and the
+[bounded manual UI review with genuine captures](validation/ingredient-picker-review.md).
+
+Local **472 backend / 81 frontend tests**, lint/format/types/build/OpenAPI/artwork/licence
+checks and real Chromium offline save/reload/sync regressions pass. All six feature-PR
+CI jobs pass, including Chromium/WebKit ingredient tests and both architecture image,
+runtime and unsuppressed HIGH/CRITICAL security gates. The online WebKit test waits for
+sync before deliberate reloads; its error checks remain strict. Offline reload is verified
+in Chromium. Physical iPhone/Safari and live AI/Bring! acceptance remain unverified.
+No API, database migration, native contract, Bring ownership or original artwork changes.
+
+Publication availability is established by the matching completed GitHub prerelease.
+Once it exists, use `ghcr.io/cloudcookch/mealf-server:poc-20261023.4` or its immutable
+Image reference shown at the start of the release. Keep the existing data volume and
+custom `5152:5152` command/healthcheck; save open work and accept the PWA update.
+No browser reset or reinstall is needed. This is a preview, not production v1.
+Earlier published-preview sections below describe their historical versions.
+
 ## Published preview: pantry and food tastes
 
 `poc-20261023.3` is published for **AMD64 and ARM64**. It adds a searchable 24-staple
