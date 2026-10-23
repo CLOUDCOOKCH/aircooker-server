@@ -205,7 +205,10 @@ function useRuntime(runtime: Runtime) {
       channel.postMessage('changed');
       channel.close();
     }
-    void sync();
+    // A local edit can land after an active pass captured its outbox. Schedule
+    // another pass after that one settles without delaying the durable local save.
+    if (syncWork.current) void syncWork.current.then(() => sync());
+    else void sync();
   };
   const save = async (edits: Edit[], options?: Parameters<LocalStore['saveBatch']>[1]) => {
     await store.saveBatch(edits, options);

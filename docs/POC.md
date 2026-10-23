@@ -1,5 +1,29 @@
 # Mealf preview
 
+## Household users and roles — `poc-20261023.5` candidate
+
+Admins can add household members at **/admin/ → Account → Household users**. Each account
+has its own password and either **User** (default; app access) or **Admin** (app and
+administration access). Users share recipes, plans, pantry, shopping and food tastes.
+Admins can change roles, reset passwords and disable accounts. Changes revoke that
+account's sessions; a transactional guard keeps at least one active admin.
+
+Migration 017 preserves the original household login as the first administrator and
+attaches existing sessions to it. Existing volumes, household identity, sync proofs,
+recipes and offline work remain. Non-secret exports omit accounts; sensitive SQLite
+backups include them. The public admin sign-in page remains available, but regular users
+cannot establish an admin session or call admin/configuration APIs. See
+[account management](ADMINISTRATION.md#household-users-and-roles).
+
+This candidate includes the ingredient editing and compact pantry changes described
+below. Local checks and exact-main CI must complete before publication; the matching
+GitHub prerelease establishes availability. Use
+`ghcr.io/cloudcookch/mealf-server:poc-20261023.5` only once it is published. Keep your
+existing `/data` volume or NAS bind mount, plus your custom `5152:5152` command and
+healthcheck. Save editors, update the container and accept the PWA update. No reset or
+browser-storage deletion is required. Live integrations and physical iPhone acceptance
+remain unverified; this is a preview, not production-v1 acceptance.
+
 ## Ingredient choices and compact pantry — `poc-20261023.4`
 
 This build adds predefined metric/cooking units and optional ingredient-name suggestions

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Add admin-managed household accounts with separate passwords, User/Admin roles,
+  server-enforced access to configuration and every admin API, account-scoped sessions,
+  isolated reset/disable/role revocation and transactional last-admin protection.
+  Preserve the original account and existing sessions through migration 017. Provide
+  app-only AI status/household counts and hide administration controls from regular
+  users. Candidate `poc-20261023.5` includes the ingredient improvements below; exact-main
+  publication and image gates remain required. See [accounts](docs/ADMINISTRATION.md).
+
 - Add optional offline ingredient-name suggestions from pantry/other recipes, including
   typo matches, while retaining free names, imported original text and explicit recipe Save.
   Add common-unit choices with stable stored values and preserved custom/imported units;

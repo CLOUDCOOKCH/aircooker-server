@@ -14,10 +14,12 @@ Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
 Plan now opens a searchable, ratings-first recipe picker from an empty slot: tap to add
 default portions, or use Meal options for date, category, portions, leftovers and recurrence.
 Existing route IDs, deep links, offline work, artwork and all three themes remain compatible.
-The latest preview, `poc-20261023.3`, adds pantry onboarding, shared food tastes and
+The latest published preview, `poc-20261023.3`, adds pantry onboarding, shared food tastes and
 streamlined imports. Both architecture image/runtime/security gates and public download
 checks pass; see [preview availability](docs/POC.md), [exact evidence](docs/validation/github-food-setup-preview.json)
 and [screen guide](docs/PWA_UX.md).
+The multiuser candidate `poc-20261023.5` adds admin-managed household accounts and includes
+the newer ingredient picker. It is available only after its matching prerelease is published.
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).

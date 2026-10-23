@@ -204,6 +204,37 @@ def main():
 
     try:
         name, base, device, headers = start()
+        # Exercise account ownership and authorization in the installed non-root image.
+        admin = request(base, "/api/v1/auth/me", headers=headers)
+        assert admin["role"] == "admin" and admin["active"]
+        member = request(
+            base,
+            "/api/v1/admin/users",
+            {
+                "username": "member",
+                "password": "synthetic member container password",
+                "role": "user",
+            },
+            headers,
+        )
+        member_credentials = {
+            "username": "member",
+            "password": "synthetic member container password",
+            "device_id": str(uuid4()),
+        }
+        member_tokens = request(base, "/api/v1/auth/login", member_credentials)
+        member_headers = {"Authorization": "Bearer " + member_tokens["access_token"]}
+        assert request(base, "/api/v1/auth/me", headers=member_headers) == member
+        assert request(base, "/api/v1/household", headers=member_headers) == request(
+            base, "/api/v1/household", headers=headers
+        )
+        for endpoint in ["/api/v1/admin/users", "/api/v1/admin/ai", "/api/v1/admin/export"]:
+            try:
+                request(base, endpoint, headers=member_headers)
+                raise AssertionError("Regular user accessed " + endpoint)
+            except HTTPError as failure:
+                assert failure.code == 403
+        assert request(base, "/api/v1/ai/status", headers=member_headers)["enabled"] is False
         maintenance_preview = json.loads(
             docker("exec", name, "python", "-m", "mealf.cli", "cleanup", "--dry-run")
         )
@@ -413,6 +444,25 @@ def main():
             raise AssertionError("Revoked session survived restart")
         except HTTPError as failure:
             assert failure.code == 401
+        assert request(base, "/api/v1/auth/me", headers=member_headers) == member
+        assert request(base, "/api/v1/recipes", headers=member_headers) == request(
+            base, "/api/v1/recipes", headers=headers
+        )
+        changed = request(
+            base, "/api/v1/admin/users/" + member["id"], {"active": False}, headers, "PATCH"
+        )
+        assert changed["active"] is False
+        for endpoint, body, auth in [
+            ("/api/v1/auth/me", None, member_headers),
+            ("/api/v1/auth/refresh", {"refresh_token": member_tokens["refresh_token"]}, None),
+            ("/api/v1/auth/login", member_credentials, None),
+        ]:
+            try:
+                request(base, endpoint, body, auth)
+                raise AssertionError("Disabled account retained a capability")
+            except HTTPError as failure:
+                assert failure.code == 401
+        assert request(base, "/api/v1/auth/me", headers=headers) == admin
         assert request(base, food_path, headers=headers) == food_before
         assert request(base, food_path, food_write, headers, "PUT") == food_receipt
         restored_ai = request(base, "/api/v1/admin/ai", headers=headers)
@@ -588,7 +638,7 @@ def main():
         )
         assert request(third, "/api/v1/media/" + image_id, headers=third_headers) == canonical_photo
         print(
-            "PASS: non-root/read-only Docker, bootstrap, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore."
+            "PASS: non-root/read-only Docker, bootstrap, household admin/user roles and shared content, denied admin access, persisted account sessions and isolated disable/revocation, HTTP auth, rotated-capability revocation across restart with another active session preserved, idempotent sync, recipe/meal projection, restart, offline replay, immutable photo upload, leftover exclusion, suggestion approval/replay across restart, encrypted AI settings persistence/redaction, stable history proofs and anchored snapshot pages, durable fractional-ingredient import preview and explicit confirmation, JSON and streamed archive restore."
         )
     finally:
         for name in containers:

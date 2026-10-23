@@ -390,12 +390,31 @@ def main():
                 expect(page.get_by_role("heading", name="Nothing to fork. Yet.")).to_be_visible()
                 expect(page.locator(".connection-status")).to_have_text("Up to date", timeout=15000)
                 second_context.set_offline(False)
-                second.get_by_role("button", name="Sync now", exact=True).click()
                 expect(
                     second.get_by_role("alert").filter(has_text="Changes need review")
                 ).to_be_visible(timeout=15000)
+                expect(second.get_by_role("button", name="Sync now", exact=True)).to_be_enabled()
                 navigate(second, "Settings")
+                expect(
+                    second.get_by_role("button", name="Keep recipe as a new copy", exact=True)
+                ).to_be_visible()
+                # Delay an account refresh during a second pass, after the rejected
+                # record is already visible. The local recovery must not wait for it.
+                held_account_reads = []
+                second.route("**/api/v1/auth/me", lambda route: held_account_reads.append(route))
+                second.get_by_role("button", name="Sync now", exact=True).click()
+                for _ in range(50):
+                    if held_account_reads:
+                        break
+                    second.wait_for_timeout(100)
+                assert held_account_reads, "Expected an in-flight account refresh"
                 second.get_by_role("button", name="Keep recipe as a new copy", exact=True).click()
+                expect(
+                    second.get_by_role("button", name="Keep recipe as a new copy", exact=True)
+                ).to_have_count(0)
+                for held in list(held_account_reads):
+                    held.continue_()
+                second.unroute("**/api/v1/auth/me")
                 expect(second.locator(".connection-status")).to_have_text(
                     "Up to date", timeout=15000
                 )
