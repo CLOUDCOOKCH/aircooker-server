@@ -43,6 +43,12 @@ with the household and saved explicitly. Preferences are not allergy restriction
 imports use a concise disclosure and **Prepare AI preview**; personal ChatGPT consent and
 reviewed recipe Save remain separate. See [food setup and offline behavior](docs/FOOD_SETUP.md).
 
+The recipe editor now offers common units, retained custom units and optional local
+ingredient suggestions from your pantry and other recipes, including typo matches such
+as `zwibel` → `Zwiebeln`. New names stay allowed; recipe Save is required. Pantry rows are
+denser and pair names with decorative food emojis. This extension is tested locally and
+unpublished; see [ingredient editing and limits](docs/INGREDIENT_EDITING.md).
+
 For missing updates, use **Settings → Check sync connection** and the
 [sync troubleshooting guide](docs/SYNC_TROUBLESHOOTING.md). A redacted report checks local/
 server progress without exporting recipe content or clearing pending work.

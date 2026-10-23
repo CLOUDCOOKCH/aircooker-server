@@ -1,5 +1,44 @@
 # mealf PWA operating surface
 
+## Current extension — ingredient editing and compact pantry, 2026-10-23
+
+THESIS: Make ordinary ingredient entry consistent and fast while keeping new names and
+imported/custom units editable. Reduce pantry row height without shrinking label actions.
+
+OWN-WORLD: Extend original Mealf PNG branding, system typography, Flo / After Dark / Sunday
+semantic colours, solid forms and restrained glass navigation. User-requested food emojis
+decorate pantry/basics names, with a generic bowl fallback and text retained; this scoped
+request supersedes the older snapshot's emoji prohibition here. No new identity, comp,
+palette, typeface or raster asset. Original PNG bytes remain unchanged.
+
+STORY: In the recipe editor, type a name, optionally select a pantry/other-recipe suggestion
+(including `zwibel` → existing `Zwiebeln`), choose a stable common unit or edit a custom one,
+then explicitly Save. Suggestions operate locally/offline and never silently rename/merge
+other records, create pantry stock or alter Bring ownership. Imported original text and
+quantity/preparation metadata survive selection; unit choice performs no guessed conversion.
+
+FIRST VIEWPORT: Ingredient help explains household suggestions and free input. Up to six
+in-flow source-labelled options keep the form readable; native unit selection exposes a
+custom field for unknown imported values. Pantry uses 56px desktop rows, ordinary phone
+rows around 92px, ≥44px label actions and wrapping long names.
+
+FORM: Code-led Operate extension; keyboard arrows/Enter/Escape and trusted tap support
+optional suggestions. Existing drafts/outbox and explicit recipe Save remain separate.
+At ≤360px, quantity/unit fields stack. A bounded self-check corrected top alignment and
+narrow stacking before a fresh independent read-only manual review returned ship with
+zero material findings. Four unmodified genuine documentation captures and the seven-view
+matrix/provenance are linked in the [review](../../docs/validation/ingredient-picker-review.md).
+
+Supplied implementation evidence reports 472 backend/81 frontend tests and Chromium
+ingredient/offline/two-device/UX/AI-import/food-setup workflows passing with synthetic
+data, EN/DE, three themes, Axe and 1440/390/320 widths. Documentation inspected evidence
+without rerunning browser/tests. WebKit ingredient CI, exact-source CI and publication
+remain pending; `.4` is the candidate and `.3` latest published. No live AI/Bring!, physical
+iPhone/Safari, motion or full-product acceptance is claimed. Context/detector attempts
+exited 127; no hook/schema/shipped-specialist pass. Native/API/database identities and
+Bring ledger remain unchanged. DESIGN.md/design.json retain existing navigation/layout/
+type/theme snapshot drift byte-for-byte; the review records it without repair.
+
 ## Current extension — pantry and food taste onboarding, 2026-10-23
 
 THESIS: Remove repeated household-AI import controls and let households start with their actual pantry and food tastes.

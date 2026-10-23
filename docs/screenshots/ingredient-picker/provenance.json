@@ -1,0 +1,140 @@
+{
+  "recordedAt": "2026-10-23",
+  "captureTool": "Real Chromium via scripts/ingredient_browser_smoke.py",
+  "captureMode": "full-document from scroll position 0,0; animations disabled",
+  "fixedPositionCaveat": "Navigation and sticky Save are painted at original viewport bands; later content scrolls beneath them. Export height can exceed viewport height.",
+  "data": "Synthetic household and source-platform imported typo fixture only; existing original Mealf artwork.",
+  "transformations": "None; documentation copies preserve PNG bytes.",
+  "evidenceLimits": [
+    "Static screenshots do not establish motion, screen-reader or physical-iPhone/Safari behavior.",
+    "Documenter inspected supplied sources/review/logs and opened four copied PNGs; did not run tests/browser workflows.",
+    "Implementation 469d83d committed; documentation handoff uncommitted and feature unpublished; exact-source CI and publication pending."
+  ],
+  "independentReview": {
+    "source": "/tmp/mealf-ingredient-finish-review.md",
+    "verdict": "ship",
+    "materialFindings": 0,
+    "scope": "Manual read-only specialist equivalent; shipped specialist unavailable"
+  },
+  "captures": [
+    {
+      "source": ".impeccable/review/ingredient-picker/pantry-320-de-sunday.png",
+      "documentationCopy": null,
+      "sha256": "81b204b18d07970007f5fe9283fab5154d5cfacf732d58b1d7ecc1d116d6593c",
+      "pixelDimensions": [
+        320,
+        1316
+      ],
+      "viewport": [
+        320,
+        740
+      ],
+      "language": "de",
+      "theme": "Sunday",
+      "openedByDocumenter": false,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/pantry-basics-320-de-sunday.png",
+      "documentationCopy": "docs/screenshots/ingredient-picker/pantry-basics-320-de-sunday.png",
+      "sha256": "759fe5a741b9d439cc794cd74ce266ce04d25d69cd960d9e9ee3d2d70c702b00",
+      "pixelDimensions": [
+        320,
+        2577
+      ],
+      "viewport": [
+        320,
+        740
+      ],
+      "language": "de",
+      "theme": "Sunday",
+      "openedByDocumenter": true,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/pantry-desktop.png",
+      "documentationCopy": "docs/screenshots/ingredient-picker/pantry-desktop.png",
+      "sha256": "6f828866c18182911b8143317c5f7318be7ecb5f57d571f7912b880c3fb74727",
+      "pixelDimensions": [
+        1440,
+        1006
+      ],
+      "viewport": [
+        1440,
+        1000
+      ],
+      "language": "en",
+      "theme": "Flo",
+      "openedByDocumenter": true,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/pantry-phone-de-dark.png",
+      "documentationCopy": null,
+      "sha256": "9c3f4bc83e7d58d167b72af7902d2f893cf4fd0a41ed1c9ad47505571ffc46f9",
+      "pixelDimensions": [
+        390,
+        1295
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "openedByDocumenter": false,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/suggestions-320-de-sunday.png",
+      "documentationCopy": null,
+      "sha256": "3db694af16875f1a3b1ab68d24b684f94be07c43188445c269ed2c2ad814abd1",
+      "pixelDimensions": [
+        320,
+        2848
+      ],
+      "viewport": [
+        320,
+        740
+      ],
+      "language": "de",
+      "theme": "Sunday",
+      "openedByDocumenter": false,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/suggestions-desktop.png",
+      "documentationCopy": "docs/screenshots/ingredient-picker/suggestions-desktop.png",
+      "sha256": "136fc12fb12963b10d10e65a909774e4338ad5a008d626513ff609aec75dde65",
+      "pixelDimensions": [
+        1440,
+        2175
+      ],
+      "viewport": [
+        1440,
+        1000
+      ],
+      "language": "en",
+      "theme": "Flo",
+      "openedByDocumenter": true,
+      "openedByIndependentReviewer": true
+    },
+    {
+      "source": ".impeccable/review/ingredient-picker/suggestions-phone-de-dark.png",
+      "documentationCopy": "docs/screenshots/ingredient-picker/suggestions-phone-de-dark.png",
+      "sha256": "18c6f700abb365a024dbf8ec21db1a9b61f4050baed6261848f5687466a7422c",
+      "pixelDimensions": [
+        390,
+        2535
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "openedByDocumenter": true,
+      "openedByIndependentReviewer": true
+    }
+  ]
+}
