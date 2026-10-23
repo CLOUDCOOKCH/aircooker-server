@@ -212,7 +212,7 @@ def main():
                 else:
                     context.set_offline(True)
                 page.reload()
-                expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
+                expect(page.get_by_role("heading", name="Your kitchen", exact=True)).to_be_visible()
                 navigate(page, "Settings")
                 settings_section(page, "Theme library")
                 expect(page.get_by_role("radio", name="After Dark", exact=True)).to_be_checked()

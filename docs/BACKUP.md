@@ -8,19 +8,24 @@ recovery snapshot includes secrets and sessions. Both may contain private recipe
 The administration console downloads GET `/api/v1/admin/export/archive`. Its ZIP contains
 `manifest.json` (`mealf-household-archive`, version 1) and `media/<UUID>.jpg` files with
 SHA-256 metadata. It includes household name/timezone/language, typed entity snapshots,
-retained deletion history, referenced photos, shared planning preferences and accepted-recipe counts. It excludes password hashes, active
+retained deletion history, referenced photos, shared planning preferences, accepted-recipe counts and the
+shared food profile (likes/dislikes and setup-completion flags). It excludes password hashes, active
 sessions, integration credentials, keys, prompts, job internals and diagnostics.
 
-GET `/api/v1/admin/export` provides JSON (`mealf-household`, version 3) with base64 media
-for small exports. Version 1/2 JSON remains importable without the new preference/learning
-fields. The ZIP envelope stays v1 and embeds the v3 household manifest; older server versions
-cannot import it. Do not relabel archives to bypass compatibility checks. If JSON exceeds 8 MiB, use the archive.
+GET `/api/v1/admin/export` provides JSON (`mealf-household`, version 4) with base64 media
+for small exports. Versions 1–3 remain importable without a food profile; version 3 retains
+its planning/learning fields. Missing optional profiles leave the destination profile unchanged.
+Version 1/2 rejects planning/learning fields, and versions 1–3 reject a food-profile field.
+The ZIP envelope stays v1 and embeds the v4 household manifest; older server versions
+cannot import the newer household format. Food-profile replay receipts, local setup drafts
+and outgoing profile queues are excluded from this portable export. Private pending-work
+recovery exports are separate; see [food setup](FOOD_SETUP.md). Do not relabel archives to bypass compatibility checks. If JSON exceeds 8 MiB, use the archive.
 
 On an already configured destination, POST JSON to `/api/v1/admin/import` or stream the ZIP
 body to `/api/v1/admin/import/archive` with `Content-Type: application/zip`. Authenticate
 with the destination household session. Browser mutations also require same-origin CSRF.
 These endpoints merge; they never silently replace existing entities. Duplicate entity IDs
-produce 409 and roll back media, entities, settings, planning preferences/learning and sync changes together. Validate the
+produce 409 and roll back media, entities, settings, planning preferences/learning, food profile and sync changes together. Validate the
 result through the application and API before relying on a backup.
 
 Archive restores reject unexpected/duplicate member names, symlinks, unsupported encryption,

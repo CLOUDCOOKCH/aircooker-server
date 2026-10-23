@@ -1,6 +1,6 @@
 # Recipe ideas
 
-Open **Recipe ideas** on Home or in Recipes. Choose **Use what I have**, enter ingredients
+Open **Recipe ideas** on Today or in Recipes. Choose **Use what I have**, enter ingredients
 (for example, spaghetti and minced beef), or choose **Surprise me**. The configured
 household AI produces three complete proposals in the English/German interface language.
 Check the full ingredient list: extra ingredients may be needed. This does not inspect
@@ -12,6 +12,17 @@ or reviewing proposals never changes the library, calendar or Bring! list. Saved
 subsequently be scheduled normally. Generated content retains provider/model provenance;
 no nutrition, source attribution or photo is invented. The original peach is the placeholder.
 
+## Shared food tastes
+
+First-use ideas offers twelve resumable food cards before the request form, unless a
+previous request is already queued. Like / Not for me / Skip and Back work with buttons
+as well as pointer gestures. **Save my taste** shares the choices with the household;
+**Not now** marks setup complete without committing draft choices. **Your taste** reopens
+editing. Selection and profile Save make no AI calls. Preferences describe taste and cannot
+guarantee allergy safety. New explicit requests freeze the effective saved choices; later
+edits do not change queued requests. Older requests without preferences replay unchanged.
+See [pantry/taste setup](FOOD_SETUP.md) for offline, conflict and privacy behavior.
+
 ## Configuration and privacy
 
 Configure a text-capable household AI in Settings or `/admin/`. Existing Gemini, OpenAI,
@@ -20,7 +31,7 @@ depends on the model/endpoint. This feature does not use a personal ChatGPT-plan
 or silently fall back to another billing source.
 
 The page displays provider, model and base URL and asks permission to send the request.
-Ingredients mode sends your entered text and requested language/mode. Surprise sends an
+Ingredients mode sends your entered text, saved liked/disliked food names and requested language/mode. Surprise sends the same tastes and an
 empty ingredient string, even when earlier typed ingredients remain locally. Neither mode
 uploads the recipe library, pantry, shopping list, calendar, credentials or a photo. The
 server supplies a bounded generation prompt/schema. Cloud providers can charge per request

@@ -249,6 +249,11 @@
     width: 100%;
   }
 }
+@media (max-width: 360px) {
+  .staple-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .taste-card {
     transform: none !important;

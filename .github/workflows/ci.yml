@@ -118,7 +118,9 @@ jobs:
       - name: Pantry and food taste onboarding with synthetic provider HTTP
         env:
           MEALF_CAPTURE: '1'
-        run: timeout 180s python scripts/food_setup_browser_smoke.py
+        run: |
+          timeout 180s python scripts/food_setup_browser_smoke.py
+          MEALF_LAYOUT_ENGINE=webkit MEALF_FOOD_SCREENSHOT_DIR=build/food-setup-browser-webkit timeout 180s python scripts/food_setup_browser_smoke.py
       - name: Sync truthfulness, two devices, recovery and redacted diagnostics
         run: timeout 180s python scripts/sync_status_browser_smoke.py
       - name: PWA task hierarchy, settings disclosures and offline recipe editing
@@ -163,6 +165,8 @@ jobs:
             build/ai-import-browser
             build/chatgpt-browser
             build/recipe-ideas-browser
+            build/food-setup-browser
+            build/food-setup-browser-webkit
             build/sync-status-browser
             build/pwa-ux-browser
             build/shopping-browser

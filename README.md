@@ -14,8 +14,9 @@ Sunday in Settings; see [themes and offline appearance](docs/THEMES.md).
 Plan now opens a searchable, ratings-first recipe picker from an empty slot: tap to add
 default portions, or use Meal options for date, category, portions, leftovers and recurrence.
 Existing route IDs, deep links, offline work, artwork and all three themes remain compatible.
-This extension is locally tested; `poc-20261023.2` is not published. The latest published
-preview is `poc-20261023.1`. See [screen guide and validation scope](docs/PWA_UX.md).
+The quick-planning extension is published as `poc-20261023.2`, the latest published preview.
+The newer pantry/taste candidate `poc-20261023.3` is locally tested and unpublished; its
+Compose default is a candidate reference. See [preview availability](docs/POC.md). See [screen guide and validation scope](docs/PWA_UX.md).
 Use **Import recipe → Photo or screenshot** to take a recipe photo or choose an image,
 extract English/German text locally and review it before saving. See
 [photo import, privacy and limits](docs/IMAGE_IMPORT.md).
@@ -34,6 +35,12 @@ Open **Recipe ideas** on Today or in Recipes to enter ingredients you have or ch
 **Surprise me**. Your configured household AI proposes three recipes for explicit review,
 editing and Save; cached proposals and reviewed saves work offline. See
 [configuration, privacy and limits](docs/RECIPE_IDEAS.md).
+
+Fresh households can choose actual pantry basics from Today; **Shopping → Pantry** keeps
+the picker available later. First-use Recipe ideas offers resumable food tastes, shared
+with the household and saved explicitly. Preferences are not allergy restrictions. Household
+imports use a concise disclosure and **Prepare AI preview**; personal ChatGPT consent and
+reviewed recipe Save remain separate. See [food setup and offline behavior](docs/FOOD_SETUP.md).
 
 For missing updates, use **Settings → Check sync connection** and the
 [sync troubleshooting guide](docs/SYNC_TROUBLESHOOTING.md). A redacted report checks local/
@@ -128,7 +135,7 @@ The server owns [OpenAPI v1](contracts/openapi-v1.json); iOS pins an exact copy 
 
 | Area | Current status |
 | --- | --- |
-| PWA | Functional preview; four primary tabs and quick planning locally tested with 70 frontend tests and real Chromium flows; current-source WebKit CI/publication, physical Safari and remaining acceptance open |
+| PWA | Functional preview; `.2` navigation published; pantry/taste `.3` candidate has 75 frontend tests and Chromium coverage; candidate CI/publication, physical Safari and remaining acceptance open |
 | Brand artwork | Supplied original peach/wordmark installed in the PWA/console and install icons; [sources and compatibility](docs/BRANDING.md) |
 | Bootstrap, Argon2id, per-device access/rotating refresh tokens | Implemented; automated tests |
 | SQLite WAL, migrations, mutation replay/tombstones and restore history proofs | Implemented; automated tests; anchored snapshot recovery requires the updated native client |

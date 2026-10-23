@@ -24,6 +24,8 @@ from mealf.app import create_app
 def main():
     captures = Path(os.environ.get("MEALF_FOOD_SCREENSHOT_DIR", "build/food-setup-browser"))
     captures.mkdir(parents=True, exist_ok=True)
+    engine = os.environ.get("MEALF_LAYOUT_ENGINE", "chromium")
+    assert engine in {"chromium", "webkit"}
     calls = []
 
     def transport(request):
@@ -104,10 +106,14 @@ def main():
                         },
                     ).raise_for_status()
                     with sync_playwright() as playwright:
-                        browser = playwright.chromium.launch(
-                            executable_path=shutil.which("chromium")
-                            or shutil.which("google-chrome"),
-                            args=["--no-sandbox"],
+                        browser = (
+                            playwright.chromium.launch(
+                                executable_path=shutil.which("chromium")
+                                or shutil.which("google-chrome"),
+                                args=["--no-sandbox"],
+                            )
+                            if engine == "chromium"
+                            else playwright.webkit.launch()
                         )
                         context = browser.new_context(
                             viewport={"width": 1440, "height": 1000}, has_touch=True
@@ -155,7 +161,7 @@ def main():
                         capture("pantry-desktop.png")
                         page.set_viewport_size({"width": 390, "height": 844})
                         capture("pantry-mobile.png")
-                        context.set_offline(True)
+                        context.set_offline(engine == "chromium")
                         page.get_by_role("button", name="Save my pantry", exact=True).click()
                         expect(
                             page.get_by_role("heading", name="Pantry", exact=True)
@@ -181,12 +187,32 @@ def main():
                         page.get_by_role("button", name="Recipe ideas", exact=False).click()
                         expect(page.get_by_role("heading", name="Rice", exact=True)).to_be_visible()
                         capture("taste-mobile.png")
-                        # A real pointer drag exercises the same pointer handlers as touch.
                         card = page.locator(".taste-card").bounding_box()
-                        page.mouse.move(card["x"] + 80, card["y"] + 100)
-                        page.mouse.down()
-                        page.mouse.move(card["x"] + 190, card["y"] + 100, steps=8)
-                        page.mouse.up()
+                        if engine == "chromium":
+                            touch = context.new_cdp_session(page)
+                            x, y = card["x"] + 80, card["y"] + 100
+                            touch.send(
+                                "Input.dispatchTouchEvent",
+                                {"type": "touchStart", "touchPoints": [{"x": x, "y": y}]},
+                            )
+                            for step in range(1, 9):
+                                touch.send(
+                                    "Input.dispatchTouchEvent",
+                                    {
+                                        "type": "touchMove",
+                                        "touchPoints": [{"x": x + step * 14, "y": y}],
+                                    },
+                                )
+                            touch.send(
+                                "Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []}
+                            )
+                            touch.detach()
+                        else:
+                            # WebKit automation exposes trusted mouse pointers; device touch remains unverified.
+                            page.mouse.move(card["x"] + 80, card["y"] + 100)
+                            page.mouse.down()
+                            page.mouse.move(card["x"] + 190, card["y"] + 100, steps=8)
+                            page.mouse.up()
                         expect(
                             page.get_by_role("heading", name="Pasta", exact=True)
                         ).to_be_visible()
@@ -229,7 +255,7 @@ def main():
                         ).to_be_visible()
                         page.set_viewport_size({"width": 1440, "height": 1000})
                         capture("taste-summary-desktop.png")
-                        context.set_offline(True)
+                        context.set_offline(engine == "chromium")
                         page.get_by_role("button", name="Save my taste", exact=True).click()
                         expect(
                             page.get_by_label("What do you have at home?", exact=True)
@@ -290,7 +316,7 @@ def main():
                 server.should_exit = True
                 thread.join(timeout=10)
     print(
-        "PASS: pantry selection/offline reload, gesture+button taste draft resume, explicit preference-aware ideas, clean imports; synthetic provider only"
+        f"PASS ({engine}): pantry selection, gesture+button taste draft resume, explicit preference-aware ideas, clean imports; offline reload on Chromium only; synthetic provider only"
     )
 
 
