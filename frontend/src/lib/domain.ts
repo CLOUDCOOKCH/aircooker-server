@@ -57,9 +57,23 @@ export function amount(value: unknown, zero = false, maximum = '1000000'): strin
   if (input.length > 100 || !/^\d+(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(input))
     throw new Error('invalid_quantity');
   const number = new Decimal(input);
-  if (!number.isFinite() || number.lt(0) || (!zero && number.eq(0)) || number.gt(maximum))
+  if (
+    !number.isFinite() ||
+    number.lt(0) ||
+    (!zero && number.eq(0)) ||
+    (number.eq(0) && /[1-9]/.test(input.split(/[eE]/)[0])) ||
+    number.gt(maximum)
+  )
     throw new Error('invalid_quantity');
-  return number.toFixed();
+  return fixedAmount(number, 100);
+}
+/** Check the rendered size before allocating; calculated serving/unit results get extra room. */
+export function fixedAmount(value: Decimal, maximum = 512): string {
+  const places = value.decimalPlaces();
+  const length =
+    (value.isNegative() ? 1 : 0) + Math.max(1, value.e + 1) + (places ? places + 1 : 0);
+  if (!value.isFinite() || length > maximum) throw new Error('invalid_quantity');
+  return value.toFixed();
 }
 export function emptyRecipe(): Recipe {
   return {

@@ -45,6 +45,47 @@ def configured(client):
     assert response.status_code == 200, response.text
 
 
+@pytest.mark.parametrize("quantity", ["1e-1000000", "10E-1000001"])
+def test_gemini_durable_job_rejects_quantity_expansion_before_preview(harness, quantity):
+    client, app, *_ = harness
+    configured(client)
+    proposals = deepcopy(GENERATED)
+    for idea in proposals["ideas"]:
+        idea["ingredients"][0]["quantity"] = quantity
+    calls = []
+
+    def handle(req):
+        calls.append(req)
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {
+                        "finishReason": "STOP",
+                        "content": {"parts": [{"text": json.dumps(proposals)}]},
+                    }
+                ]
+            },
+        )
+
+    body = request()
+    assert client.post("/api/v1/recipe-ideas", json=body).status_code == 202
+    job = claim(app.state.database)
+    process(
+        app.state.database,
+        json.loads(job["payload"]),
+        lambda config: provider_for(config, httpx.MockTransport(handle)),
+    )
+    finish(app.state.database, job)
+    result = client.get("/api/v1/recipe-ideas/" + body["request_id"])
+    assert result.status_code == 200
+    assert result.json()["state"] == "failed"
+    assert result.json()["error_code"] == "ai_schema_validation_failed"
+    assert result.json()["recipes"] == []
+    assert len(result.content) < 1000 and len(calls) == 1
+    assert client.get("/api/v1/recipes").json()["items"] == []
+
+
 def request(**changes):
     return {
         "request_id": str(uuid4()),

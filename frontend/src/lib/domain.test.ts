@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import Decimal from 'decimal.js';
 import {
   addDays,
   amount,
   civil,
   distance,
   emptyRecipe,
+  fixedAmount,
   monday,
   payload,
   pantryIncludedThisWeek,
@@ -20,6 +22,41 @@ test('civil dates survive DST, travel, leap days and year boundaries', () => {
   assert.equal(distance('2026-03-28', '2026-03-30'), 2);
   assert.equal(today('America/Los_Angeles', new Date('2026-10-21T01:00:00Z')), '2026-10-20');
   for (const input of ['2026-02-29', '2026-1-01', '0000-01-01']) assert.throws(() => civil(input));
+});
+test('untrusted exponents are bounded before fixed rendering, including underflow and aliases', () => {
+  for (const input of [
+    '1e-1000000',
+    '10E-1000001',
+    '0.1e-999999',
+    '1e-1000000000',
+    '1e-999999999999999999999999999999999999',
+    5e-324,
+    '0.' + '0'.repeat(99) + '1',
+  ]) {
+    assert.throws(() => amount(input, true), /invalid_quantity/);
+    assert.throws(() =>
+      payload('recipe', {
+        ...emptyRecipe(),
+        title: 'Unsafe',
+        ingredients: [{ id: uuid(), name: 'Flour', quantity: input }],
+      }),
+    );
+    assert.throws(() => payload('recipe', { ...emptyRecipe(), title: 'Unsafe', servings: input }));
+    assert.throws(() =>
+      payload('recipe', {
+        ...emptyRecipe(),
+        title: 'Unsafe',
+        ingredients: [{ id: uuid(), name: 'Flour', quantity: '0', quantity_max: input }],
+      }),
+    );
+  }
+  assert.equal(amount('1e-98'), '0.' + '0'.repeat(97) + '1');
+  assert.equal(amount('10e-99'), amount('1e-98'));
+  assert.throws(() => amount('1e-99'));
+  assert.equal(amount('0e-1000000000', true), '0');
+  assert.equal(amount('1.00'), '1');
+  assert.throws(() => fixedAmount(new Decimal('1e-1000000')), /invalid_quantity/);
+  assert.equal(fixedAmount(new Decimal('1e-202')).length, 204);
 });
 test('quantities stay exact and invalid numeric prefixes never reach the outbox', () => {
   assert.equal(amount('0.1'), '0.1');

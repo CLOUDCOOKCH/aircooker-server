@@ -6,9 +6,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from .quantities import Positive, Quantity
 from .recipe_extraction import ExtractionResult, RecipeTimes, RecipeYield, StepDetails
-
-Positive = Annotated[Decimal, Field(gt=0, le=1000000)]
 
 
 class Model(BaseModel):
@@ -18,8 +17,8 @@ class Model(BaseModel):
 class Ingredient(Model):
     id: UUID
     name: str = Field(min_length=1, max_length=200)
-    quantity: Annotated[Decimal, Field(ge=0, le=1000000)] | None = None
-    quantity_max: Annotated[Decimal, Field(ge=0, le=1000000)] | None = None
+    quantity: Quantity | None = None
+    quantity_max: Quantity | None = None
     unit: str = Field(default="", max_length=30)
     preparation: str = Field(default="", max_length=300)
     original_text: str = Field(default="", max_length=500)

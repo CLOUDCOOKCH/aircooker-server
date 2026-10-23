@@ -2057,9 +2057,9 @@ export interface components {
              */
             preparation: string;
             /** Quantity */
-            quantity?: number | string | null;
+            quantity?: (number | string) | null;
             /** Quantity Max */
-            quantity_max?: number | string | null;
+            quantity_max?: (number | string) | null;
             /**
              * Quantity Text
              * @default
@@ -2171,7 +2171,10 @@ export interface components {
              * @default false
              */
             discarded: boolean;
-            /** Portions */
+            /**
+             * Portions
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
+             */
             portions: number | string;
             /**
              * Produced On
@@ -2216,6 +2219,7 @@ export interface components {
             recurrence?: components["schemas"]["Recurrence"] | null;
             /**
              * Servings
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
              * @default 2
              */
             servings: number | string;
@@ -2348,7 +2352,7 @@ export interface components {
             /** Categories */
             categories?: ("breakfast" | "lunch" | "dinner")[];
             /** Servings */
-            servings?: number | string | null;
+            servings?: (number | string) | null;
             /**
              * Use Leftovers
              * @default true
@@ -2540,6 +2544,7 @@ export interface components {
             schema_version: "1.0.0";
             /**
              * Servings
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
              * @default 2
              */
             servings: number | string;
@@ -2603,6 +2608,7 @@ export interface components {
             schema_version: "1.0.0";
             /**
              * Servings
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
              * @default 2
              */
             servings: string;
@@ -2953,7 +2959,10 @@ export interface components {
              * Format: uuid
              */
             recipe_id: string;
-            /** Servings */
+            /**
+             * Servings
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
+             */
             servings: number | string;
             /** Weekday */
             weekday: number;
@@ -3028,6 +3037,7 @@ export interface components {
             recurrence?: components["schemas"]["Recurrence"] | null;
             /**
              * Servings
+             * @description At most 100 characters in fixed decimal notation, ignoring insignificant trailing zeros.
              * @default 2
              */
             servings: string;
@@ -5492,7 +5502,7 @@ export interface operations {
                 seed?: number;
                 categories?: ("breakfast" | "lunch" | "dinner")[] | null;
                 allow_repeats?: boolean | null;
-                servings?: number | string | null;
+                servings?: (number | string) | null;
             };
             header?: never;
             path?: never;

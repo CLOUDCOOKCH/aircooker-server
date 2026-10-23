@@ -43,6 +43,19 @@ receipt fingerprints. See [connection guide](CHATGPT.md) for error recovery and 
 The canonical generated contract is `contracts/openapi-v1.json`. Generate with
 `PYTHONPATH=src python scripts/export_contract.py`; CI checks exact drift. The live contract
 is `/api/v1/openapi.json`. API-major 1 and sync-protocol 1 are exposed by system info.
+
+Recipe quantities, servings and leftover portions must fit within 100 characters when
+rendered in fixed decimal notation, ignoring insignificant trailing zeros. This resource
+bound also applies to AI extraction/generation, planning preferences and suggestion query
+parameters. Scientific notation remains supported (`1e-3` means `0.001`); extreme negative
+exponents are rejected before expansion. Computed display/shopping quantities have a
+separate 512-character rendering bound for serving ratios and unit conversions. No value
+is silently rounded to satisfy these bounds. Backend validation preserves original Decimal
+serialization, including `1.00`, for mutation idempotency compatibility. Existing unsafe
+records are retained and rejected at use, rather than deleted or rewritten; correct the
+quantity in the recipe editor before retrying. Rejected offline drafts/outboxes remain
+available, and an invalid cached ideas request is preserved until explicit regeneration.
+
 The current contract describes implemented routes only. Missing operations remain on the
 implementation checklist; the suggested product endpoint list is not falsely advertised.
 

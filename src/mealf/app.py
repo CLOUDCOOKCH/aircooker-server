@@ -10,7 +10,6 @@ import tempfile
 import time
 from contextlib import asynccontextmanager, suppress
 from datetime import date, datetime
-from decimal import Decimal
 from pathlib import Path
 from typing import Literal
 from uuid import UUID, uuid4
@@ -99,6 +98,7 @@ from .planning_preferences import context as planning_context
 from .planning_preferences import register_routes as register_planning_preferences
 from .pwa_auth import ACCESS_COOKIE, is_pwa, require_csrf
 from .pwa_auth import register_routes as register_pwa_auth
+from .quantities import PlanningServings
 from .recipe_imports import process_import
 from .recommendations import planning_basis, suggest_week
 from .reminder_routes import register_routes as register_reminders
@@ -485,7 +485,8 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             allowed = rate_limit(
                 db, "login:" + (request.client.host if request.client else "unknown")
             )
-            global_allowed = rate_limit(db, "login:household", maximum=30)
+            # An IP already denied admission must not drain other devices' budget.
+            global_allowed = allowed and rate_limit(db, "login:household", maximum=30)
         if not allowed or not global_allowed:
             raise DomainError("rate_limited", 429)
         with database.transaction() as db:
@@ -694,7 +695,7 @@ def _create_app(data_dir: Path, run_worker: bool, lease: InstanceLock | None):
             default=None, min_length=1, max_length=3
         ),
         allow_repeats: bool | None = None,
-        servings: Decimal | None = Query(default=None, gt=0, le=100),
+        servings: PlanningServings | None = None,
         s=Depends(session),
     ):
         with database.connect() as db:

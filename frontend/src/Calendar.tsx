@@ -667,12 +667,14 @@ export function PlanMeal({ target, onClose }: { target: PlanningTarget; onClose:
     [until, setUntil] = useState(addDays(target.day, 84)),
     [error, setError] = useState(false),
     [saving, setSaving] = useState(false);
-  const leftovers = app
-    .entities('leftover')
-    .filter(
-      (row) =>
-        !row.payload.discarded && new Decimal(availablePortions(row, app.entities('meal'))).gt(0),
-    );
+  const leftovers = app.entities('leftover').filter((row) => {
+    if (row.payload.discarded) return false;
+    try {
+      return new Decimal(availablePortions(row, app.entities('meal'))).gt(0);
+    } catch {
+      return false; // Retain unsafe legacy records; the list below exposes the error.
+    }
+  });
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -1047,8 +1049,17 @@ function Leftovers({ plan }: { plan: (target: PlanningTarget) => void }) {
       <h2>{t('leftovers')}</h2>
       <p className="muted">{t(leftovers.length ? 'leftoverHint' : 'noLeftovers')}</p>
       {leftovers.map((row) => {
-        const recipe = app.entities('recipe').find((r) => r.id === row.payload.recipe_id),
+        const recipe = app.entities('recipe').find((r) => r.id === row.payload.recipe_id);
+        let portions: string;
+        try {
           portions = availablePortions(row, meals);
+        } catch {
+          return (
+            <p className="error-note" role="alert" key={row.id}>
+              {recipe?.payload.title ?? t('leftovers')}: {t('invalid')}
+            </p>
+          );
+        }
         return (
           <div className="settings-row" key={row.id}>
             <div>

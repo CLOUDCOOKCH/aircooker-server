@@ -1,7 +1,17 @@
 import { DEFAULT_PLANNING } from './preferences.ts';
 import type { PlanningContext } from './preferences.ts';
 import Decimal from 'decimal.js';
-import { addDays, categories, civil, distance, emptyRecipe, monday, uuid } from './domain.ts';
+import {
+  addDays,
+  amount,
+  categories,
+  civil,
+  distance,
+  emptyRecipe,
+  fixedAmount,
+  monday,
+  uuid,
+} from './domain.ts';
 import type { Category, Entity, Meal, Recipe, Template } from './domain.ts';
 import type { Edit } from './store.ts';
 
@@ -126,12 +136,17 @@ export function applyTemplate(
   }));
 }
 export function scale(recipe: Recipe, servings: string): Recipe['ingredients'] {
-  const ratio = new Decimal(servings).div(recipe.servings);
+  const ratio = new Decimal(amount(servings)).div(amount(recipe.servings));
   return recipe.ingredients.map((item) => ({
     ...item,
-    quantity: item.quantity === null ? null : new Decimal(item.quantity).mul(ratio).toFixed(),
+    quantity:
+      item.quantity === null
+        ? null
+        : fixedAmount(new Decimal(amount(item.quantity, true)).mul(ratio)),
     quantity_max:
-      item.quantity_max === null ? null : new Decimal(item.quantity_max).mul(ratio).toFixed(),
+      item.quantity_max === null
+        ? null
+        : fixedAmount(new Decimal(amount(item.quantity_max, true)).mul(ratio)),
   }));
 }
 /** Conservative editor parsing: explicit fractions/decimals/ranges, never a numeric prefix. */
@@ -148,6 +163,7 @@ export function parseQuantity(raw: string): {
     .replaceAll('⅓', ' 1/3')
     .replaceAll('⅔', ' 2/3');
   if (!input) return { quantity: null, quantity_max: null };
+  if (input.length > 100) throw new Error('invalid_quantity');
   const parse = (part: string) => {
     const match = part.trim().match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);
     let value: Decimal;
@@ -159,7 +175,7 @@ export function parseQuantity(raw: string): {
       value = new Decimal(part.trim());
     }
     if (value.lt(0) || value.gt(1_000_000)) throw new Error('invalid_quantity');
-    return value.toFixed();
+    return amount(value.toString(), true);
   };
   const parts = input.split(/\s*[–-]\s*/);
   if (parts.length > 2) throw new Error('invalid_quantity');
@@ -169,10 +185,13 @@ export function parseQuantity(raw: string): {
   return { quantity, quantity_max: upper };
 }
 export function availablePortions(leftover: Entity<'leftover'>, meals: Entity<'meal'>[]): string {
-  return meals
+  const remaining = meals
     .filter((row) => row.payload.leftover_id === leftover.id)
-    .reduce((n, row) => n.minus(row.payload.servings), new Decimal(leftover.payload.portions))
-    .toFixed();
+    .reduce(
+      (n, row) => n.minus(amount(row.payload.servings)),
+      new Decimal(amount(leftover.payload.portions)),
+    );
+  return fixedAmount(remaining);
 }
 export type Suggestion = {
   recipeID: string;
@@ -228,7 +247,7 @@ export function suggestWeek(
             )[0]
         : undefined;
       if (leftover) {
-        const portions = preferences.servings ?? available.get(leftover.id)!.toFixed();
+        const portions = preferences.servings ?? fixedAmount(available.get(leftover.id)!);
         available.set(leftover.id, available.get(leftover.id)!.minus(portions));
         result.push({
           recipeID: leftover.payload.recipe_id,

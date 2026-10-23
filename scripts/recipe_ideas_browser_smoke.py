@@ -303,6 +303,55 @@ def main():
                         model_field.fill("gemini-3.8-flash")
                         assert model_field.evaluate("input => input.checkValidity()")
                         assert len(operator.get("/api/v1/recipes").json()["items"]) == 1
+                        # Simulate an installed preview's old, now-invalid cached proposal.
+                        cached = page.evaluate("""async () => {
+                            const name = (await indexedDB.databases()).find(d => d.name.startsWith('mealf:')).name;
+                            const db = await new Promise((resolve, reject) => {
+                                const r = indexedDB.open(name); r.onsuccess = () => resolve(r.result); r.onerror = reject;
+                            });
+                            const tx = db.transaction('meta', 'readwrite'), store = tx.objectStore('meta');
+                            const draft = await new Promise(resolve => { const r = store.get('recipe-ideas:v1'); r.onsuccess = () => resolve(r.result); });
+                            draft.job = {id: draft.request.request_id, state:'ready', recipes:[{title:'Legacy proposal', servings:'1e-1000000'}]};
+                            store.put(draft, 'recipe-ideas:v1');
+                            await new Promise((resolve, reject) => {tx.oncomplete=resolve;tx.onerror=reject;});
+                            db.close(); return {name, draft};
+                        }""")
+                        call_count = len(calls)
+                        page.reload()
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Rezepte", exact=True
+                        ).click()
+                        page.get_by_role("button", name="Rezeptideen", exact=False).click()
+                        expect(page.get_by_role("alert")).to_be_visible()
+                        # An ordinary edit must not overwrite the rejected cached request.
+                        page.get_by_role("textbox").fill("Keep the old proposal")
+                        retained = page.evaluate(
+                            """async name => {
+                            const db = await new Promise(resolve => {const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);});
+                            const value = await new Promise(resolve => {const r=db.transaction('meta').objectStore('meta').get('recipe-ideas:v1');r.onsuccess=()=>resolve(r.result);});
+                            db.close();return value;
+                        }""",
+                            cached["name"],
+                        )
+                        assert retained == cached["draft"] and len(calls) == call_count
+                        legacy_leftover = str(uuid4())
+                        recipe_id = operator.get("/api/v1/recipes").json()["items"][0]["id"]
+                        page.evaluate(
+                            """async ({name, id, recipe}) => {
+                            const db = await new Promise(resolve => {const r=indexedDB.open(name);r.onsuccess=()=>resolve(r.result);});
+                            const tx=db.transaction('entities','readwrite');
+                            tx.objectStore('entities').put({key:'leftover:'+id,id,kind:'leftover',revision:0,deleted:false,payload:{recipe_id:recipe,portions:'1e-1000000',produced_on:'2026-10-19',discarded:false}});
+                            await new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=reject;});db.close();
+                        }""",
+                            {"name": cached["name"], "id": legacy_leftover, "recipe": recipe_id},
+                        )
+                        page.reload()
+                        page.get_by_role("navigation").get_by_role(
+                            "button", name="Kalender", exact=True
+                        ).click()
+                        expect(
+                            page.locator(".leftovers-section").get_by_role("alert")
+                        ).to_be_visible()
                         assert not errors, errors
                         browser.close()
             finally:
@@ -310,7 +359,7 @@ def main():
                 thread.join(timeout=20)
                 assert not thread.is_alive()
     print(
-        "PASS: actual AI adapters over synthetic provider HTTP, durable job/three-idea previews, ingredient and surprise privacy, no automatic save, offline edited Save/reload/sync, cached ideas, malformed-output/model/quota errors, no paid retry on reload, settings recovery and Gemini model-ID validation, EN desktop/DE320 phone and Axe; no live provider/iPhone verification."
+        "PASS: actual AI adapters over synthetic provider HTTP, durable job/three-idea previews, ingredient and surprise privacy, no automatic save, offline edited Save/reload/sync, cached ideas, malformed-output/model/quota errors, no paid retry on reload, settings recovery and Gemini model-ID validation, rejected legacy proposal retained without retry/overwrite, EN desktop/DE320 phone and Axe; no live provider/iPhone verification."
     )
 
 

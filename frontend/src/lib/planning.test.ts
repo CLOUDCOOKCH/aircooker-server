@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyRecipe, entityKey, uuid } from './domain.ts';
+import { emptyIngredient, emptyRecipe, entityKey, uuid } from './domain.ts';
 import type { Entity, Meal } from './domain.ts';
 import {
   applyTemplate,
+  availablePortions,
   changeOccurrence,
   copyMeals,
   makeTemplate,
@@ -12,6 +13,50 @@ import {
   scale,
   suggestWeek,
 } from './planning.ts';
+test('legacy quantities cannot bypass bounds through scaling, parsing or leftovers', () => {
+  const r = recipe().payload;
+  r.ingredients = [
+    {
+      ...emptyIngredient(),
+      id: uuid(),
+      name: 'Flour',
+      quantity: '1e-1000000',
+      quantity_max: null,
+      unit: 'g',
+      preparation: '',
+      original_text: '',
+    },
+  ];
+  assert.throws(() => scale(r, '2'), /invalid_quantity/);
+  r.ingredients[0].quantity = '1e-98';
+  assert.equal(scale(r, '1e-98')[0].quantity?.length, 199);
+  assert.throws(() => scale(r, '1e-1000000'), /invalid_quantity/);
+  assert.throws(() => scale({ ...r, servings: '1e-1000000' }, '2'), /invalid_quantity/);
+  assert.throws(() => parseQuantity('0.' + '0'.repeat(1000) + '1'), /invalid_quantity/);
+  assert.equal(parseQuantity('⅓').quantity, '0.33333333333333333333');
+  const id = uuid();
+  const leftover: Entity<'leftover'> = {
+    key: entityKey('leftover', id),
+    id,
+    kind: 'leftover',
+    revision: 0,
+    deleted: false,
+    payload: {
+      recipe_id: uuid(),
+      portions: '1e-1000000',
+      produced_on: '2026-10-19',
+      discarded: false,
+    },
+  };
+  assert.throws(() => availablePortions(leftover, []), /invalid_quantity/);
+  leftover.payload.portions = '2';
+  const m = meal(leftover.payload.recipe_id);
+  m.payload.leftover_id = id;
+  m.payload.servings = '1e-1000000';
+  assert.throws(() => availablePortions(leftover, [m]), /invalid_quantity/);
+  m.payload.servings = '0.5';
+  assert.equal(availablePortions(leftover, [m]), '1.5');
+});
 const recipe = (title = 'Soup'): Entity<'recipe'> => {
   const id = uuid();
   return {
