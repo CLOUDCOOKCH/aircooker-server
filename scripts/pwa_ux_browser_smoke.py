@@ -400,7 +400,7 @@ def main():
                     page.get_by_role("button", name="Add ingredient", exact=True).click()
                     page.get_by_label("Ingredient 1", exact=True).fill("Rice")
                     page.get_by_label("Quantity", exact=True).fill("200")
-                    page.get_by_label("Unit", exact=True).fill("g")
+                    page.get_by_label("Unit", exact=True).select_option("g")
                     page.get_by_role("button", name="Add step", exact=True).click()
                     page.get_by_label("Step 1", exact=True).fill("Cook the rice.")
                     page.locator(".editor-optional > summary").click()

@@ -1,4 +1,11 @@
 export const en = {
+  ingredientSuggestions: 'Ingredient suggestions',
+  ingredientChoiceHint:
+    'Choose a name from your pantry or recipes to keep ingredients consistent. You can also type a new one.',
+  ingredientNewName: 'New ingredient — save the recipe to add it.',
+  unitCustom: 'Other unit…',
+  unitCustomName: 'Custom unit',
+
   pantryWelcomeTitle: 'What’s already in your kitchen?',
   pantryWelcomeHint: 'Choose the basics you have so they stay off your shopping list.',
   pantryChooseBasics: 'Choose pantry basics',
@@ -718,6 +725,13 @@ export const en = {
 export type Key = keyof typeof en;
 export type Language = 'en' | 'de';
 export const de: Record<Key, string> = {
+  ingredientSuggestions: 'Zutatenvorschläge',
+  ingredientChoiceHint:
+    'Wähle einen Namen aus deinem Vorrat oder deinen Rezepten, damit Zutaten einheitlich bleiben. Du kannst auch neue eingeben.',
+  ingredientNewName: 'Neue Zutat – wird mit dem Rezept gespeichert.',
+  unitCustom: 'Andere Einheit…',
+  unitCustomName: 'Eigene Einheit',
+
   pantryWelcomeTitle: 'Was ist schon in deiner Küche?',
   pantryWelcomeHint:
     'Wähle deine vorhandenen Basics, damit sie nicht auf der Einkaufsliste landen.',

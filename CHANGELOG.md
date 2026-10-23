@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Add optional offline ingredient-name suggestions from pantry/other recipes, including
+  typo matches, while retaining free names, imported original text and explicit recipe Save.
+  Add common-unit choices with stable stored values and preserved custom/imported units;
+  do not guess conversions or mutate pantry/Bring identities. Compact pantry rows and add
+  requested decorative food emojis with a generic fallback. Local 472 backend/81 frontend
+  tests and Chromium regressions pass; independent UI review: ship, zero material findings.
+  Candidate `poc-20261023.4` remains unpublished; CI/WebKit/publication and physical/live
+  acceptance are pending. See [ingredient editing](docs/INGREDIENT_EDITING.md).
+
 - Replace repeated household-AI import controls with a short disclosure and explicit
   Prepare AI preview; retain separate personal ChatGPT consent and reviewed recipe Save.
   Add actual-stock pantry setup from Today/Pantry, 24 EN/DE staples with conservative

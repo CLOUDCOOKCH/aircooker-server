@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Search, Trash2 } from 'lucide-react';
 import { useApp } from './model';
+import { foodEmoji } from './lib/ingredient-options';
 import { Empty, IconButton, PageHeader } from './components';
 import { monday, pantryIncludedThisWeek, today, uuid } from './lib/domain';
 export function Pantry({ back, setup }: { back?: () => void; setup?: () => void }) {
@@ -96,6 +97,9 @@ export function Pantry({ back, setup }: { back?: () => void; setup?: () => void 
                       .catch(() => setError(true))
                   }
                 />
+                <span className="pantry-emoji" aria-hidden="true">
+                  {foodEmoji(row.payload.name)}
+                </span>
                 <strong>{row.payload.name}</strong>
               </label>
               <label className="check-row pantry-override">

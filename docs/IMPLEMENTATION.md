@@ -1,5 +1,31 @@
 # Implementation checklist and evidence
 
+**Ingredient editing and compact pantry, 2026-10-23 — tested locally; unpublished:**
+the PWA recipe editor offers native common-unit choices, retained imported/custom units,
+optional local pantry/other-recipe name suggestions with typo matching, and free new names.
+Explicit recipe Save, original text, quantities, drafts and outgoing sync remain intact.
+No automatic pantry creation, historical rename/merge, guessed unit conversion or Bring
+ledger mutation. Pantry rows are denser with decorative food emojis and a generic fallback.
+Native/API/database identities remain unchanged; no companion contract pin update is needed.
+
+Supplied implementation evidence: **472 backend / 81 frontend tests pass**, Ruff check/format,
+mypy, OpenAPI drift, TypeScript/build, Prettier, artwork and licence checks. Real Chromium
+ingredient, offline/two-device PWA, UX, AI-import and food-setup suites pass with synthetic
+providers; ingredient coverage includes canonical/custom names and units, offline Save/reload/
+sync, original text, no phantom pantry, keyboard/trusted tap, pantry toggles, EN/DE, three
+themes, Axe and 1440/390/320 widths. A bounded self-check corrected alignment and narrow
+field stacking before an independent read-only review returned **ship, zero material findings**.
+The documenter inspected source, review and four genuine screenshot copies; no tests or
+browser workflows were rerun during documentation.
+
+CI/publication and new WebKit ingredient coverage are pending; no local WebKit pass is
+claimed. Candidate `poc-20261023.4` is selected in Compose; `.3` remains latest published.
+Live AI/Bring!, physical iPhone/Safari and full-product acceptance remain unverified.
+Context/detector attempts exited 127; no hook/schema/shipped-specialist pass is claimed.
+DESIGN.md/design.json remain byte-identical historical snapshots; navigation/layout/type/
+theme drift is reported without repair. See [behavior](INGREDIENT_EDITING.md) and
+[review, provenance and limits](validation/ingredient-picker-review.md).
+
 **Pantry and food taste setup, 2026-10-23 — published as `poc-20261023.3`:**
 release source `327fcb3`; UI began at `58c5930` plus a scoped ≤360px pantry correction.
 Adds the canonical 24-staple EN/DE catalogue, fresh-household Today invitation, permanent

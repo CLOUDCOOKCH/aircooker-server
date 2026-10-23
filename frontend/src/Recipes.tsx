@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import {
   ArrowDown,
@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useApp } from './model';
+import { IngredientName, IngredientUnit } from './IngredientFields';
+import { ingredientOptions } from './lib/ingredient-options';
 import { AddButton, Empty, IconButton, PageHeader, Photo, safeURL, Sheet } from './components';
 import { amount, emptyIngredient, emptyRecipe, payload, uuid } from './lib/domain';
 import type { Entity, Recipe } from './lib/domain';
@@ -375,6 +377,17 @@ export function RecipeEditor({
 }) {
   const app = useApp(),
     { t, store } = app;
+  const nameOptions = useMemo(
+    () =>
+      ingredientOptions(
+        app.entities('pantry').map((row) => row.payload.name),
+        app
+          .entities('recipe')
+          .filter((row) => row.id !== entity?.id)
+          .map((row) => row.payload.ingredients.map((item) => item.name)),
+      ),
+    [app.rows, entity?.id],
+  );
   const key =
     draftID ?? (task ? 'import:' + task.id : entity ? 'recipe:' + entity.id : 'recipe:new');
   const [value, setValue] = useState<EditorValue | null>(null),
@@ -720,19 +733,18 @@ export function RecipeEditor({
           )}
           <section id="editor-ingredients">
             <h2>{t('ingredients')}</h2>
+            <p className="ingredient-choice-hint">{t('ingredientChoiceHint')}</p>
             {recipe.ingredients.map((item, index) => (
               <fieldset className="ingredient-editor" key={item.id}>
                 <legend className="sr-only">
                   {t('ingredient')} {index + 1}
                 </legend>
                 <div className="ingredient-editor-top">
-                  <input
-                    aria-label={`${t('ingredient')} ${index + 1}`}
-                    required
-                    maxLength={200}
-                    placeholder={t('ingredient')}
+                  <IngredientName
+                    label={`${t('ingredient')} ${index + 1}`}
                     value={item.name}
-                    onChange={(e) => setIngredient(index, { name: e.target.value })}
+                    options={nameOptions}
+                    onChange={(name) => setIngredient(index, { name })}
                   />
                   <IconButton
                     label={`${t('remove')} ${t('ingredient')} ${index + 1}`}
@@ -767,14 +779,10 @@ export function RecipeEditor({
                       }
                     />
                   </label>
-                  <label>
-                    {t('unit')}
-                    <input
-                      maxLength={30}
-                      value={item.unit}
-                      onChange={(e) => setIngredient(index, { unit: e.target.value })}
-                    />
-                  </label>
+                  <IngredientUnit
+                    value={item.unit}
+                    onChange={(unit) => setIngredient(index, { unit })}
+                  />
                 </div>
                 <label>
                   {t('preparation')}
