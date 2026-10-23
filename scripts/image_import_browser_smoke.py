@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from browser_navigation import navigate
 from browser_settings import settings_section
 from browser_test_errors import unexpected_browser_errors
 from playwright.sync_api import expect, sync_playwright
@@ -256,16 +257,12 @@ def main():
                 outage(True)
                 phase("offline reviewed save")
                 page.get_by_role("button", name="Save", exact=True).click()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Recipes", exact=True
-                ).click()
+                navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Reviewed photo rice", exact=False).first
                 ).to_be_visible()
                 page.reload()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Recipes", exact=True
-                ).click()
+                navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Reviewed photo rice", exact=False).first
                 ).to_be_visible()
@@ -280,7 +277,7 @@ def main():
                 assert len(stored) == 1 and stored[0]["payload"]["title"] == "Reviewed photo rice"
                 assert stored[0]["payload"]["image_id"]
                 phase("server confirmation after restart")
-                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(page, "Settings")
                 phase("Settings clicked")
                 expect(page.get_by_role("heading", name="Settings", exact=True)).to_be_visible()
                 phase("Settings ready")
@@ -305,9 +302,7 @@ def main():
                 settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.set_viewport_size({"width": 390, "height": 844})
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Start", exact=True
-                ).click()
+                navigate(page, "Start")
                 page.get_by_role("button", name="Rezept importieren", exact=True).click()
                 page.get_by_role("button", name="Foto oder Screenshot", exact=True).click()
                 choose("Foto aufnehmen", "recipe-photo-de.png")

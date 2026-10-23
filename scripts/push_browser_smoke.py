@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
@@ -124,9 +125,7 @@ def main():
                     timeout=15000
                 )
                 page.wait_for_function("!!navigator.serviceWorker.controller")
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 settings_section(page, "Meal reminders")
                 expect(
                     page.get_by_role("button", name="Connect notifications", exact=True)
@@ -174,9 +173,7 @@ def main():
                     page.get_by_role("button", name="Save reminder settings", exact=True)
                 ).to_be_disabled()
                 page.reload()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 settings_section(page, "Meal reminders")
                 expect(page.locator('input[type="time"]').nth(2)).to_have_value("19:10")
                 # navigator.onLine is only a hint (Chromium may report true after a SW reload).
@@ -205,9 +202,7 @@ def main():
                 assert finish(app.state.database, job) and len(delivered) == 1
                 assert delivered[0][1]["body"] == "Your meal reminders are connected."
                 page.reload()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 settings_section(page, "Meal reminders")
                 expect(
                     page.get_by_text("Last accepted by delivery service:", exact=False)
@@ -235,9 +230,7 @@ def main():
                 )
                 settings_section(page, "Dein Haushalt")
                 page.get_by_label("Sprache", exact=True).select_option("en")
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Home", exact=True
-                ).click()
+                navigate(page, "Home")
                 page.get_by_role("button", name="New recipe", exact=True).click()
                 page.get_by_label("Recipe name", exact=True).fill("Unsaved notification recipe")
                 # Real worker-origin message, same path used by the notificationclick handler.
@@ -277,9 +270,7 @@ def main():
                 )
                 awaitable = "async()=>{for(const n of await(await navigator.serviceWorker.ready).getNotifications())n.close();}"
                 page.evaluate(awaitable)
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 settings_section(page, "Meal reminders")
                 page.get_by_role("button", name="Disconnect notifications", exact=True).click()
                 expect(
@@ -300,9 +291,7 @@ def main():
                     },
                 )
                 page.reload()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 settings_section(page, "Meal reminders")
                 expect(page.get_by_text("Notifications are blocked.", exact=False)).to_be_visible()
                 expect(

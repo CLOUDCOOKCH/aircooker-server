@@ -13,6 +13,7 @@ from uuid import uuid4
 
 import httpx
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -168,8 +169,7 @@ def main():
                         },
                     ).raise_for_status()
                 page.reload()
-                nav = page.get_by_role("navigation")
-                nav.get_by_role("button", name="Recipes", exact=True).click()
+                navigate(page, "Recipes")
                 expect(page.locator(".recipe-card")).to_have_count(2, timeout=15000)
                 expect(page.locator(".recipe-card .photo-placeholder")).to_have_count(2)
 
@@ -220,12 +220,12 @@ def main():
                     r for r in rows if r["payload"]["title"] == "Reviewed source lemon recipe"
                 )
                 assert imported["payload"]["provenance"]["image_source"] == source + "dish.png"
-                nav.get_by_role("button", name="Settings", exact=True).click()
+                navigate(page, "Settings")
                 settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 page.evaluate("window.mealfAppearance.set('after-dark')")
                 page.set_viewport_size({"width": 390, "height": 844})
-                nav.get_by_role("button", name="Rezepte", exact=True).click()
+                navigate(page, "Rezepte")
                 expect(page.locator(".recipe-card")).to_have_count(3)
                 expect(page.locator(".recipe-card .food-photo")).to_have_count(1)
                 audit()
@@ -233,9 +233,7 @@ def main():
                 page.evaluate("async()=>{await navigator.serviceWorker.ready}")
                 context.set_offline(True)
                 page.reload()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Rezepte", exact=True
-                ).click()
+                navigate(page, "Rezepte")
                 expect(page.locator(".recipe-card .food-photo")).to_have_count(1)
                 expect(page.locator(".recipe-card .photo-placeholder")).to_have_count(2)
                 audit()

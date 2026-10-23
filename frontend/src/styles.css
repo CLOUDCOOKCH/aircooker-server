@@ -2873,7 +2873,7 @@ a.settings-row:hover {
   }
 }
 
-/* Six primary destinations stay readable on the narrowest supported phones. */
+/* Primary navigation stays readable on the narrowest supported phones. */
 @media (max-width: 360px) {
   .app-nav {
     width: calc(100vw - 16px - var(--safe-left) - var(--safe-right));

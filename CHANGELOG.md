@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Simplify PWA navigation to Today, Plan, Recipes and Shopping. Open Settings from a
+  persistent account button with Back, and Pantry inside Shopping with Shopping selected.
+  Add a local title-search picker with rating-first recipes and guarded one-tap default
+  portions; keep date/category/portions/leftovers/recurrence in separate Meal options.
+  Preserve real leftover IDs and available portions, compact day meals and use actual
+  occurrences for planned-day markers. Separate phone sync status and improve inactive
+  navigation contrast. Keep EN/DE, all themes, original assets, route IDs and offline/sync
+  contracts. Locally tested and independently reviewed; `poc-20261023.2` publication pending.
+
 - Stop IP-blocked login attempts from draining the shared household admission budget.
   Bound recipe/AI quantities before fixed-decimal expansion across backend and PWA,
   including serving defaults, imports, shopping calculations and legacy local records.

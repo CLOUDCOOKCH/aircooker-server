@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, RefreshCw, ShoppingBag } from 'lucide-react';
+import { ArrowUpRight, Leaf, RefreshCw, ShoppingBag } from 'lucide-react';
 import { useApp } from './model';
 import { Empty, PageHeader } from './components';
 import { addDays, displayDate } from './lib/domain';
@@ -132,7 +132,12 @@ export function Shopping() {
             ? `${displayDate(data.period, app.language)} – ${displayDate(addDays(data.period, 6), app.language)}`
             : t('shoppingWeek')
         }
-      />
+      >
+        <button type="button" className="secondary compact" onClick={() => app.setTab('pantry')}>
+          <Leaf size={18} />
+          {t('pantry')}
+        </button>
+      </PageHeader>
       <p className="shopping-intro">{t('shoppingIntro')}</p>
       {app.demo && <p className="info-note">{t('demoUnavailable')}</p>}
       {(stale || !app.online) && data && (

@@ -1,5 +1,50 @@
 # mealf PWA operating surface
 
+## Current extension — everyday navigation and quick planning, 2026-10-23
+
+THESIS: Reduce the steps and visual weight of everyday planning. The user accepted
+the four-tab and faster-calendar recommendation with “go on”. This extends the
+established Mealf interface; it does not replace its visual identity.
+
+OWN-WORLD: Original peach/wordmark PNGs, system typography, Flo / After Dark / Sunday
+semantic colours, solid content/forms and restrained glass navigation. No new artwork,
+palette, font, physical imitation or decorative motion.
+
+STORY: Today shows the current household day; Plan arranges meals; Recipes holds the
+library; Shopping contains the Pantry entry. A persistent account button opens Settings
+and Back returns to the previous primary destination. Existing internal route identities,
+offline records, deep links, imports and sync contracts remain compatible.
+
+FIRST VIEWPORT: Four readable primary tabs replace six competing ones. Mobile branding,
+sync and account controls share the first header row; truthful sync status has its own
+row. Plan retains Day / 3 days / Week, touch drag and accessible movement. Compact meal
+rows and real planned-day markers make the calendar easier to scan.
+
+FORM: Code-led Operate extension of the approved world; no new concept seed, decision
+comp or comp-reproduction gate. An empty slot opens a searchable recipe list with
+favourites first. Tap a recipe to add default portions once; Meal options retains date,
+category, portions, leftovers and recurrence. Quick leftover choices retain their real
+reference and cap portions at the available amount. Cooking mode is outside this pass.
+
+Current authority: this scoped contract supersedes the six-primary-tab statements in
+the historical records below. DESIGN.md and design.json retain older snapshot drift;
+do not repair unrelated tokens, dimensions or historical evidence during this extension.
+Final evidence and limitations belong in docs/validation/quick-planning-review.md.
+
+Finish evidence, 2026-10-23: a fresh independent read-only manual specialist equivalent
+reviewed all 21 final captures and sampled sources, returning **ship at this scoped
+extension, no material fixes**. Six genuine, unmodified documentation copies with source
+filenames/checksums are in docs/screenshots/quick-planning/. Normal views are full-document
+captures from the top; modal views use the viewport to retain a complete backdrop.
+Local 459 backend/70 frontend tests and actual Chromium UX/regressions pass with EN/DE
+OCR data configured and synthetic integrations; final theme/Axe checks pass after inactive
+navigation contrast was corrected to semantic ink. Current-source WebKit CI and candidate
+`poc-20261023.2` publication remain pending; `poc-20261023.1` is the latest published image.
+No local WebKit binary, physical-iPhone/live-service proof, shipped specialist/schema or
+detector pass is claimed (launcher unavailable; detector attempt exited 127). DESIGN.md
+and design.json remain byte-identical historical snapshots with the drift already noted.
+See the review for sources, the 21-capture matrix, test attribution and exact limits.
+
 ## Direction contract — whole-PWA UX rework, 2026-10-22
 
 THESIS: Make everyday meal planning feel orderly and immediate. The user finds the whole

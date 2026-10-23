@@ -1,0 +1,134 @@
+{
+  "kind": "Genuine Chromium screenshots; unmodified copies of final local quick-planning captures",
+  "captured": "2026-10-23",
+  "generator": "scripts/pwa_ux_browser_smoke.py",
+  "sourceState": "uncommitted working-tree extension; publication pending",
+  "baseCommit": "e4d3db905a43c1c8117d6efaf1fdb70b864fe623",
+  "content": "Disposable synthetic household. Chicken is the existing original AI-generated demo illustration, not actual cooking photography. No new shipping artwork.",
+  "capturePolicy": "Animation disabled. Normal screens captured full document after scrollTo(0,0); an open modal uses the original viewport to match its backdrop.",
+  "limits": [
+    "Full-document screenshots retain fixed navigation at the original viewport position; exported image height differs from viewport height.",
+    "Static Chromium captures do not prove motion, physical iPhone/Safari, installed-PWA keyboard, VoiceOver or live integrations.",
+    "Only the six files listed here are copied into this documentation directory; the full 21-capture source matrix is recorded in docs/validation/quick-planning-review.md."
+  ],
+  "files": {
+    "calendar-phone-de-dark.png": {
+      "source": ".impeccable/review/quick-plan/calendar-phone-de-dark.png",
+      "sha256": "7a0a46237e6e31bf6fbe0d20649b7533938a6c0a2e9624f217fba275958d02f1",
+      "bytes": 84788,
+      "imageSize": [
+        390,
+        1507
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "captureMode": "full-document from top",
+      "transformation": "none; byte-for-byte copy"
+    },
+    "meal-picker-phone-flo.png": {
+      "source": ".impeccable/review/quick-plan/meal-picker-phone-flo.png",
+      "sha256": "c0eabbe31f9a327e65ab3850e303e850fcc7daaa2cff94c31e8d141a93b56c88",
+      "bytes": 67669,
+      "imageSize": [
+        390,
+        844
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "en",
+      "theme": "Flo (light)",
+      "captureMode": "viewport-only modal",
+      "transformation": "none; byte-for-byte copy"
+    },
+    "meal-picker-phone-de-dark.png": {
+      "source": ".impeccable/review/quick-plan/meal-picker-phone-de-dark.png",
+      "sha256": "74bdfb5cb44fc9dbb8fdedf67badefcc96079abc8bb259e3194c16a4a38d7b02",
+      "bytes": 62900,
+      "imageSize": [
+        390,
+        844
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "captureMode": "viewport-only modal",
+      "transformation": "none; byte-for-byte copy"
+    },
+    "meal-options-phone-320-sunday.png": {
+      "source": ".impeccable/review/quick-plan/meal-options-phone-320-sunday.png",
+      "sha256": "24181fb324d0a86d9622fc11bd75d805cacae6bc15838166ffa8efe3879e5907",
+      "bytes": 34272,
+      "imageSize": [
+        320,
+        740
+      ],
+      "viewport": [
+        320,
+        740
+      ],
+      "language": "de",
+      "theme": "Sunday",
+      "captureMode": "viewport-only modal",
+      "transformation": "none; byte-for-byte copy"
+    },
+    "shopping-phone-de-dark.png": {
+      "source": ".impeccable/review/quick-plan/shopping-phone-de-dark.png",
+      "sha256": "049a1d8ac9405763ca8aea121740b74cdebd2c5ce6a71159a29e28bbd4c6475d",
+      "bytes": 71929,
+      "imageSize": [
+        390,
+        1225
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "captureMode": "full-document from top",
+      "transformation": "none; byte-for-byte copy"
+    },
+    "settings-phone-320-de-dark.png": {
+      "source": ".impeccable/review/quick-plan/settings-phone-320-de-dark.png",
+      "sha256": "034bed69a81f46fddfbd1fa7a8cf7f2c1f47f1077359ef0698f207771121f27f",
+      "bytes": 87757,
+      "imageSize": [
+        320,
+        1690
+      ],
+      "viewport": [
+        320,
+        740
+      ],
+      "language": "de",
+      "theme": "After Dark",
+      "captureMode": "full-document from top",
+      "transformation": "none; byte-for-byte copy"
+    }
+  },
+  "runtimeSourceSha256": {
+    "frontend/src/App.tsx": "d67835314db88c76c65981c333d60e485cd245b8df8cc92cc355930714e97133",
+    "frontend/src/Calendar.tsx": "44a9670dfd6756def3711c94c99e1cf061d96006037cdb1387105611a9fe8407",
+    "frontend/src/components.tsx": "c4cfd43aaee62a31c9c5344a958a6659edbc58b63111bf5713fd58d114fe6f7d",
+    "frontend/src/Shopping.tsx": "04df7641b03236ec1e4ad2527a9d4017845b7fec8a6e683140d4b526023f71fc",
+    "frontend/src/Pantry.tsx": "caf6d16ba0309de2730cf01ae7987d33733e9c48d0bfaf7384b0219eb3d2144c",
+    "frontend/src/Settings.tsx": "141c1ce4381b39c793c544a894f30173a8e26f784b74cc4a5c2432e6be114656",
+    "frontend/src/i18n.ts": "3a7fba1ba26d79eab6f28825e970fc34485c62e31509aa3e90855d6ba9d2667c",
+    "frontend/src/styles.css": "1ea4ecd6d6a9915518ad070566a17418d3b5cf7011cdb3845e50c0f50a26e4ae",
+    "frontend/src/task-layout.css": "c1ba39280f9bc750eee6677f36c72b2dca34e0095dc5ba70a3dd7b479eeff4e4",
+    "scripts/pwa_ux_browser_smoke.py": "1bcc55e9602c3ee2eead69f363284d380cc1646d387647724c5c95f11ad99f2f"
+  },
+  "preservedDesignSnapshotSha256": {
+    "DESIGN.md": "443b13fa38a9c6e79670df7bcad90fa37e90421dfe52730256ef4dfabdd466b9",
+    ".impeccable/design.json": "b9ccc9ccbe9a0e0759c5e5bd8dc467038edba10a4b3d0dadb434d09659d57d99"
+  }
+}

@@ -723,14 +723,210 @@
     padding: 4px;
   }
 }
-@media (max-width: 360px) {
-  .connection-bar .sync-label {
-    display: none;
-  }
-  .connection-bar .sync-label-short {
-    display: inline;
+
+/* Daily navigation: four destinations, with account and pantry in context. */
+.app-shell .nav-links > button:not(.active) {
+  color: var(--ink);
+}
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+}
+.account-button:hover,
+.account-button.active {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.app-shell .connection-bar > .text-button {
+  margin-left: 0;
+  min-height: 44px;
+}
+.week-strip .day-dot.is-planned {
+  opacity: 1;
+  width: 5px;
+  height: 5px;
+}
+.week-strip .selected .day-dot:not(.is-planned) {
+  background: transparent;
+  border: 1px solid currentColor;
+  width: 5px;
+  height: 5px;
+}
+.calendar-week[data-view] .meal-open {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.calendar-week[data-view] .meal-open > .food-photo,
+.calendar-week[data-view] .meal-open > .photo-placeholder {
+  width: 40px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.calendar-week[data-view='day'] .meal-row {
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+}
+.calendar-week[data-view='day'] .meal-open {
+  grid-column: 2;
+  grid-row: 1;
+}
+.calendar-week[data-view='day'] .meal-drag-handle {
+  grid-column: 1;
+  grid-row: 1;
+}
+.calendar-week[data-view='day'] .meal-row > .icon-button:last-child {
+  grid-column: 3;
+  grid-row: 1;
+}
+.calendar-week[data-view='day'] .meal-row > .icon-button {
+  margin-top: 0;
+}
+.meal-picker-context {
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.meal-picker-hint {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin: 0 0 20px;
+  max-width: 65ch;
+}
+.meal-picker .search-field {
+  margin-bottom: 24px;
+}
+.meal-picker h3 {
+  margin: 24px 0 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.meal-choice {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.meal-choice-add {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  min-height: 76px;
+  padding: 10px 4px;
+  text-align: left;
+  background: transparent;
+}
+.meal-choice-add:hover:not(:disabled),
+.meal-leftover-choice:hover:not(:disabled) {
+  background: var(--soft);
+}
+.meal-choice-add > .food-photo,
+.meal-choice-add > .photo-placeholder {
+  width: 48px;
+  height: 52px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.meal-choice-add > span,
+.meal-leftover-choice > span {
+  flex: 1;
+  min-width: 0;
+}
+.meal-choice strong,
+.meal-leftover-choice strong {
+  display: block;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.meal-choice small,
+.meal-leftover-choice small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.meal-choice svg,
+.meal-leftover-choice > svg {
+  flex-shrink: 0;
+}
+.meal-choice > .icon-button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+}
+.meal-options-fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+.picker-back {
+  justify-content: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.meal-leftover-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 4px;
+  min-height: 68px;
+  text-align: left;
+  background: transparent;
+  color: var(--accent-ink);
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 800px), (hover: none) and (pointer: coarse) and (max-height: 500px) {
+  .nav-links > button {
+    font-size: 0.75rem;
+    padding: 8px 4px;
   }
   .app-shell .connection-bar {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-bottom: 20px;
+  }
+  .app-shell .connection-bar > .text-button {
+    order: 1;
+    margin-left: auto;
+    min-width: 44px;
+    justify-content: center;
+  }
+  .connection-bar .sync-label,
+  .connection-bar .sync-label-short {
+    display: none;
+  }
+  .account-button {
+    order: 2;
+    margin-left: 0;
+  }
+  .connection-status {
+    order: 3;
+    flex-basis: 100%;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+  }
+  .connection-bar > .demo-label {
+    order: 3;
+  }
+  .connection-bar > .muted {
+    order: 4;
+    flex-basis: 100%;
   }
 }

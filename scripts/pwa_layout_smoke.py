@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -142,19 +143,16 @@ def main():
                         "button", name="Demo entdecken" if language == "de" else "Explore the demo"
                     ).click()
                     expect(page.locator(".app-nav")).to_be_visible()
-                    nav = page.locator(".nav-links")
                     if language == "de":
-                        nav.get_by_role("button", name="Settings").click()
+                        navigate(page, "Settings")
                         settings_section(page, "Your household")
                         page.get_by_label("Language", exact=True).select_option("de")
-                        nav.get_by_role("button", name="Start", exact=True).click()
+                        navigate(page, "Start")
                     if mobile:
                         expect(page.locator(".nav-brand")).to_be_hidden()
                     check("home", ".app-nav")
                     page.screenshot(path=str(captures / f"{name}-home.png"))
-                    nav.get_by_role(
-                        "button", name="Rezepte" if language == "de" else "Recipes"
-                    ).click()
+                    navigate(page, "Rezepte" if language == "de" else "Recipes")
                     expect(page.locator(".recipe-card").first).to_be_visible()
                     check("recipes")
                     page.locator(".search-field input").click()
@@ -172,9 +170,7 @@ def main():
                     page.get_by_role(
                         "button", name="Zurück" if language == "de" else "Back", exact=True
                     ).click()
-                    nav.get_by_role(
-                        "button", name="Kalender" if language == "de" else "Calendar"
-                    ).click()
+                    navigate(page, "Kalender" if language == "de" else "Calendar")
                     views = page.locator(".calendar-view-switch")
                     views.get_by_role(
                         "button", name="3 Tage" if language == "de" else "3 days", exact=True
@@ -186,6 +182,7 @@ def main():
                     page.locator(".calendar-slot .slot-heading button").first.click()
                     dialog = page.locator(".sheet")
                     expect(dialog).to_be_visible()
+                    dialog.locator(".meal-choice > .icon-button").first.click()
                     check("plan meal", ".sheet")
                     assert dialog.locator(".form-row").evaluate("""row => {
                         const labels=[...row.querySelectorAll('label')];
@@ -263,9 +260,7 @@ def main():
                         ).to_have_count(0)
                         page.reload()
                         expect(page.locator(".app-nav")).to_be_visible()
-                        page.locator(".nav-links").get_by_role(
-                            "button", name="Calendar", exact=True
-                        ).click()
+                        navigate(page, "Calendar")
                         expect(page.locator(".calendar-week")).to_have_attribute(
                             "data-view", "three"
                         )

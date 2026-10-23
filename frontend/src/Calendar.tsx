@@ -15,6 +15,8 @@ import {
   ShoppingBag,
   Pencil,
   GripVertical,
+  Search,
+  SlidersHorizontal,
 } from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useApp } from './model';
@@ -582,12 +584,16 @@ export function Calendar({
               >
                 <div className="slot-heading">
                   <h3>{t(category)}</h3>
-                  <IconButton
-                    label={`${t('addMeal')} ${date} ${t(category)}`}
-                    onClick={() => plan({ day: date, category })}
-                  >
-                    <Plus size={17} />
-                  </IconButton>
+                  {items.some(
+                    (item) => item.day === date && item.entity.payload.category === category,
+                  ) && (
+                    <IconButton
+                      label={`${t('addMeal')} ${date} ${t(category)}`}
+                      onClick={() => plan({ day: date, category })}
+                    >
+                      <Plus size={17} />
+                    </IconButton>
+                  )}
                 </div>
                 {items
                   .filter((item) => item.day === date && item.entity.payload.category === category)
@@ -667,6 +673,10 @@ export function PlanMeal({ target, onClose }: { target: PlanningTarget; onClose:
     [until, setUntil] = useState(addDays(target.day, 84)),
     [error, setError] = useState(false),
     [saving, setSaving] = useState(false);
+  const [details, setDetails] = useState(Boolean(target.recipeID)),
+    [query, setQuery] = useState(''),
+    [visible, setVisible] = useState(20);
+  const saveLock = useRef(false);
   const leftovers = app.entities('leftover').filter((row) => {
     if (row.payload.discarded) return false;
     try {
@@ -675,148 +685,331 @@ export function PlanMeal({ target, onClose }: { target: PlanningTarget; onClose:
       return false; // Retain unsafe legacy records; the list below exposes the error.
     }
   });
-  const save = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const defaultServings = (recipe: Entity<'recipe'>) =>
+    app.planning.preferences.servings ?? recipe.payload.servings;
+  const chooseDetails = (recipe: Entity<'recipe'>) => {
+    setRecipe(recipe.id);
+    setServings(defaultServings(recipe));
+    setLeftover('');
+    setError(false);
+    setDetails(true);
+  };
+  const commit = async (
+    id: string,
+    portions: string,
+    leftover: string | null,
+    recurrence: Meal['recurrence'],
+  ) => {
+    if (saveLock.current) return;
+    saveLock.current = true;
     setSaving(true);
+    setError(false);
     try {
-      const recipe = recipes.find((row) => row.id === recipeID);
+      const recipe = recipes.find((row) => row.id === id);
       if (!recipe) throw new Error();
       const edit = mealEdit(recipe, date, category);
       edit.value = {
         ...edit.value,
-        servings: amount(servings),
-        leftover_id: leftoverID || null,
-        recurrence:
-          !leftoverID && repeat !== '0'
-            ? { interval_weeks: Number(repeat), until, exceptions: [] }
-            : null,
+        servings: amount(portions),
+        leftover_id: leftover,
+        recurrence,
       };
       await app.save([edit]);
+      app.setNotice('planAdded');
       onClose();
     } catch {
       setError(true);
     } finally {
+      saveLock.current = false;
       setSaving(false);
     }
   };
+  const save = (event: React.FormEvent) => {
+    event.preventDefault();
+    void commit(
+      recipeID,
+      servings,
+      leftoverID || null,
+      !leftoverID && repeat !== '0'
+        ? { interval_weeks: Number(repeat), until, exceptions: [] }
+        : null,
+    );
+  };
+  const matches = recipes
+    .filter((row) =>
+      row.payload.title
+        .toLocaleLowerCase(app.language)
+        .includes(query.trim().toLocaleLowerCase(app.language)),
+    )
+    .sort(
+      (a, b) =>
+        (b.payload.rating ?? 0) - (a.payload.rating ?? 0) ||
+        a.payload.title.localeCompare(b.payload.title, app.language),
+    );
   return (
-    <Sheet title={t('addMeal')} onClose={onClose}>
+    <Sheet title={t('addMeal')} onClose={onClose} busy={saving}>
       {!recipes.length ? (
-        <Empty title={t('emptyRecipes')} body={t('emptyRecipesBody')} />
-      ) : (
-        <form onSubmit={(e) => void save(e)}>
-          <label>
-            {t('chooseRecipe')}
-            <select
-              value={recipeID}
-              onChange={(e) => {
-                setRecipe(e.target.value);
-                setLeftover('');
-                setServings(recipes.find((r) => r.id === e.target.value)!.payload.servings);
-              }}
-            >
-              {recipes.map((row) => (
-                <option value={row.id} key={row.id}>
-                  {row.payload.title}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="form-row">
-            <label>
-              {t('date')}
-              <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} />
-            </label>
-            <label>
-              {t('category')}
-              <select value={category} onChange={(e) => setCategory(e.target.value as Category)}>
-                {categories.map((value) => (
-                  <option key={value} value={value}>
-                    {t(value)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <label>
-            {t('servings')}
+        <Empty title={t('emptyRecipes')} body={t('emptyRecipesBody')}>
+          <button
+            className="primary"
+            onClick={() => {
+              app.setTab('recipes');
+              onClose();
+            }}
+          >
+            {t('recipes')}
+          </button>
+        </Empty>
+      ) : !details ? (
+        <div className="meal-picker" aria-busy={saving}>
+          <p className="meal-picker-context">
+            {displayDate(date, app.language, { weekday: 'long', day: 'numeric', month: 'short' })} ·{' '}
+            {t(category)}
+          </p>
+          <p className="meal-picker-hint">{t('planPickerHint')}</p>
+          <label className="search-field">
+            <Search size={19} aria-hidden="true" />
             <input
-              type="number"
-              required
-              min="0.01"
-              max="1000000"
-              step="any"
-              value={servings}
-              onChange={(e) => setServings(e.target.value)}
+              type="search"
+              aria-label={t('search')}
+              placeholder={t('search')}
+              value={query}
+              disabled={saving}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setVisible(20);
+              }}
             />
           </label>
-          {leftovers.some((row) => row.payload.recipe_id === recipeID) && (
-            <label>
-              {t('leftovers')}
-              <select
-                value={leftoverID}
-                onChange={(e) => {
-                  setLeftover(e.target.value);
-                  if (e.target.value) {
-                    setRepeat('0');
-                    setServings(
-                      availablePortions(
-                        leftovers.find((row) => row.id === e.target.value)!,
-                        app.entities('meal'),
-                      ),
-                    );
-                  }
-                }}
-              >
-                <option value="">{t('addMeal')}</option>
-                {leftovers
-                  .filter((row) => row.payload.recipe_id === recipeID)
-                  .map((row) => (
-                    <option key={row.id} value={row.id}>
-                      {row.payload.produced_on} · {availablePortions(row, app.entities('meal'))}{' '}
-                      {t('portions')}
-                    </option>
-                  ))}
-              </select>
-              <small>{t('leftoverHint')}</small>
-            </label>
+          {!query && leftovers.length > 0 && (
+            <section className="meal-picker-leftovers" aria-label={t('planLeftoverList')}>
+              <h3>{t('planLeftoverList')}</h3>
+              {leftovers.map((row) => {
+                const recipe = recipes.find((recipe) => recipe.id === row.payload.recipe_id);
+                if (!recipe) return null;
+                const remaining = availablePortions(row, app.entities('meal'));
+                const portions = Decimal.min(defaultServings(recipe), remaining).toString();
+                return (
+                  <button
+                    type="button"
+                    key={row.id}
+                    className="meal-leftover-choice"
+                    disabled={saving}
+                    onClick={() => {
+                      setLeftover(row.id);
+                      void commit(recipe.id, portions, row.id, null);
+                    }}
+                  >
+                    <Leaf size={18} aria-hidden="true" />
+                    <span>
+                      <strong>{recipe.payload.title}</strong>
+                      <small>
+                        {portions} {t('portions')} · {t('leftovers')}
+                      </small>
+                    </span>
+                    <Plus size={18} aria-hidden="true" />
+                  </button>
+                );
+              })}
+            </section>
           )}
-          {!leftoverID && (
-            <>
-              <label>
-                {t('repeat')}
-                <select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
-                  <option value="0">{t('noRepeat')}</option>
-                  {[1, 2, 3, 4].map((n) => (
-                    <option key={n} value={n}>
-                      {n} {t('weeks')}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              {repeat !== '0' && (
-                <label>
-                  {t('until')}
-                  <input
-                    type="date"
-                    required
-                    min={date}
-                    max={addDays(date, 3660)}
-                    value={until}
-                    onChange={(e) => setUntil(e.target.value)}
-                  />
-                </label>
-              )}
-            </>
+          <h3>
+            {!query && matches.some((row) => (row.payload.rating ?? 0) >= 4)
+              ? t('planSuggested')
+              : t('planRecipeList')}
+          </h3>
+          <div className="meal-picker-list">
+            {matches.slice(0, visible).map((row) => {
+              const minutes = row.payload.times?.totalMinutes;
+              return (
+                <div className="meal-choice" key={row.id}>
+                  <button
+                    type="button"
+                    className="meal-choice-add"
+                    aria-label={`${t('planRecipeAction')} · ${row.payload.title}`}
+                    disabled={saving}
+                    onClick={() => {
+                      setLeftover('');
+                      void commit(row.id, defaultServings(row), null, null);
+                    }}
+                  >
+                    <Photo id={row.payload.image_id} />
+                    <span>
+                      <strong>{row.payload.title}</strong>
+                      <small>
+                        {defaultServings(row)} {t('servingsText')}
+                        {minutes != null && (
+                          <>
+                            {' '}
+                            · {minutes} {t('planMinutes')}
+                          </>
+                        )}
+                      </small>
+                    </span>
+                    <Plus size={18} aria-hidden="true" />
+                  </button>
+                  <IconButton
+                    label={`${t('planOptions')} · ${row.payload.title}`}
+                    disabled={saving}
+                    onClick={() => chooseDetails(row)}
+                  >
+                    <SlidersHorizontal size={19} />
+                  </IconButton>
+                </div>
+              );
+            })}
+          </div>
+          {!matches.length && (
+            <p className="muted" role="status">
+              {t('planNoMatches')}
+            </p>
+          )}
+          {matches.length > visible && (
+            <button
+              type="button"
+              className="text-button full"
+              disabled={saving}
+              onClick={() => setVisible((count) => count + 20)}
+            >
+              {t('planMoreRecipes')}
+            </button>
           )}
           {error && (
             <p className="error-note" role="alert">
               {t(leftoverID ? 'insufficientLeftovers' : 'invalid')}
             </p>
           )}
-          <button className="primary full" disabled={saving}>
-            {t('save')}
+        </div>
+      ) : (
+        <form onSubmit={(e) => void save(e)}>
+          <button
+            type="button"
+            className="text-button picker-back"
+            disabled={saving}
+            onClick={() => setDetails(false)}
+          >
+            <ChevronLeft size={16} />
+            {t('planDifferentRecipe')}
           </button>
+          <fieldset className="meal-options-fields" disabled={saving}>
+            <label>
+              {t('chooseRecipe')}
+              <select
+                value={recipeID}
+                onChange={(e) => {
+                  setRecipe(e.target.value);
+                  setLeftover('');
+                  setServings(defaultServings(recipes.find((r) => r.id === e.target.value)!));
+                }}
+              >
+                {recipes.map((row) => (
+                  <option value={row.id} key={row.id}>
+                    {row.payload.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="form-row">
+              <label>
+                {t('date')}
+                <input
+                  type="date"
+                  required
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </label>
+              <label>
+                {t('category')}
+                <select value={category} onChange={(e) => setCategory(e.target.value as Category)}>
+                  {categories.map((value) => (
+                    <option key={value} value={value}>
+                      {t(value)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <label>
+              {t('servings')}
+              <input
+                type="number"
+                required
+                min="0.01"
+                max="1000000"
+                step="any"
+                value={servings}
+                onChange={(e) => setServings(e.target.value)}
+              />
+            </label>
+            {leftovers.some((row) => row.payload.recipe_id === recipeID) && (
+              <label>
+                {t('leftovers')}
+                <select
+                  value={leftoverID}
+                  onChange={(e) => {
+                    setLeftover(e.target.value);
+                    if (e.target.value) {
+                      setRepeat('0');
+                      setServings(
+                        availablePortions(
+                          leftovers.find((row) => row.id === e.target.value)!,
+                          app.entities('meal'),
+                        ),
+                      );
+                    }
+                  }}
+                >
+                  <option value="">{t('addMeal')}</option>
+                  {leftovers
+                    .filter((row) => row.payload.recipe_id === recipeID)
+                    .map((row) => (
+                      <option key={row.id} value={row.id}>
+                        {row.payload.produced_on} · {availablePortions(row, app.entities('meal'))}{' '}
+                        {t('portions')}
+                      </option>
+                    ))}
+                </select>
+                <small>{t('leftoverHint')}</small>
+              </label>
+            )}
+            {!leftoverID && (
+              <>
+                <label>
+                  {t('repeat')}
+                  <select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
+                    <option value="0">{t('noRepeat')}</option>
+                    {[1, 2, 3, 4].map((n) => (
+                      <option key={n} value={n}>
+                        {n} {t('weeks')}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {repeat !== '0' && (
+                  <label>
+                    {t('until')}
+                    <input
+                      type="date"
+                      required
+                      min={date}
+                      max={addDays(date, 3660)}
+                      value={until}
+                      onChange={(e) => setUntil(e.target.value)}
+                    />
+                  </label>
+                )}
+              </>
+            )}
+            {error && (
+              <p className="error-note" role="alert">
+                {t(leftoverID ? 'insufficientLeftovers' : 'invalid')}
+              </p>
+            )}
+            <button className="primary full" disabled={saving}>
+              {t('save')}
+            </button>
+          </fieldset>
         </form>
       )}
     </Sheet>

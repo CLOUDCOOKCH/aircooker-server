@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -164,7 +165,7 @@ def main():
                 page.goto(base + "/app/")
                 check("flo", "light")
                 page.get_by_role("button", name="Explore the demo").click()
-                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(page, "Settings")
                 settings_section(page, "Theme library")
                 expect(page.get_by_role("group", name="Theme library")).to_be_visible()
                 expect(page.get_by_role("radio", name="Flo", exact=True)).to_be_checked()
@@ -178,17 +179,13 @@ def main():
                     if theme != "flo":
                         if theme == "sunday":
                             page.set_viewport_size({"width": 1440, "height": 1000})
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Home", exact=True
-                        ).click()
+                        navigate(page, "Home")
                         expect(page.locator(".featured-meal img")).to_be_visible()
                         page.locator(".featured-meal img").evaluate(
                             "async image=>{await image.decode();}"
                         )
                         page.screenshot(path=str(captures / (theme + "-home.png")))
-                        page.get_by_role("navigation").get_by_role(
-                            "button", name="Settings"
-                        ).click()
+                        navigate(page, "Settings")
                         settings_section(page, "Theme library")
                         page.set_viewport_size({"width": 390, "height": 844})
                     # Explicit palettes hold under the opposite system setting.
@@ -216,13 +213,13 @@ def main():
                     context.set_offline(True)
                 page.reload()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
-                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(page, "Settings")
                 settings_section(page, "Theme library")
                 expect(page.get_by_role("radio", name="After Dark", exact=True)).to_be_checked()
                 choose("Sunday")
                 page.reload()
                 expect(page.locator("html")).to_have_attribute("data-theme", "sunday")
-                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(page, "Settings")
                 settings_section(page, "Theme library")
                 settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
@@ -280,10 +277,8 @@ def main():
                 early.reload()
                 expect(early.locator("html")).to_have_attribute("data-theme", "flo")
                 early.close()
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Start", exact=True
-                ).click()
-                page.get_by_role("navigation").get_by_role("button", name="Einstellungen").click()
+                navigate(page, "Start")
+                navigate(page, "Einstellungen")
                 settings_section(page, "Design-Bibliothek")
                 page.set_viewport_size({"width": 320, "height": 568})
                 check("after-dark", "dark")
@@ -306,16 +301,14 @@ def main():
                 page.reload()
                 expect(page.locator("html")).to_have_attribute("data-theme", "flo")
                 admin.get_by_label("Theme", exact=True).select_option("sunday")
-                page.get_by_role("navigation").get_by_role("button", name="Einstellungen").click()
+                navigate(page, "Einstellungen")
                 settings_section(page, "Design-Bibliothek")
                 settings_section(page, "Dein Haushalt")
                 page.get_by_label("Sprache", exact=True).select_option("en")
                 page.set_viewport_size({"width": 1440, "height": 1000})
                 page.get_by_role("radio", name="Sunday", exact=True).scroll_into_view_if_needed()
                 page.screenshot(path=str(captures / "sunday-settings-desktop.png"))
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Home", exact=True
-                ).click()
+                navigate(page, "Home")
                 assert errors == [], errors
                 context.close()
             (captures / "evidence.json").write_text(json.dumps(evidence, indent=2) + "\n")

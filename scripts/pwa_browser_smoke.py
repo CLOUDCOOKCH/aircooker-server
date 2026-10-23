@@ -14,6 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import uvicorn
+from browser_navigation import navigate
 from browser_settings import settings_section
 from playwright.sync_api import expect, sync_playwright
 
@@ -226,7 +227,7 @@ def main():
                 page.emulate_media(color_scheme="dark")
                 audit("home phone dark")
                 capture("pwa-home-phone-dark.png")
-                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(page, "Recipes")
                 expect(page.get_by_role("heading", name="Recipes", exact=True)).to_be_visible()
                 audit("recipes phone dark")
                 capture("pwa-recipes-phone-dark.png")
@@ -256,7 +257,7 @@ def main():
                 page.locator(".app-footer [data-peach]").click()
                 expect(page.locator("#peach-reaction")).not_to_be_empty()
                 context.set_offline(False)
-                page.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(page, "Settings")
                 settings_section(page, "Your household")
                 page.get_by_label("Language", exact=True).select_option("de")
                 expect(page.get_by_role("heading", name="Einstellungen")).to_be_visible()
@@ -264,7 +265,7 @@ def main():
                 expect(page.locator('a[href="/admin/#bring"]')).to_have_count(0)
                 audit("settings phone German dark")
                 capture("pwa-settings-phone-de-dark.png")
-                page.get_by_role("navigation").get_by_role("button", name="Kalender").click()
+                navigate(page, "Kalender")
                 expect(page.get_by_role("heading", name="Kalender", exact=True)).to_be_visible()
                 audit("calendar phone German dark")
                 capture("pwa-calendar-phone-de-dark.png")
@@ -302,13 +303,13 @@ def main():
                 context.set_offline(True)
                 page.get_by_role("button", name="Save", exact=True).click()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
-                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Offline test soup", exact=False)
                 ).to_be_visible()
                 page.reload()
                 expect(page.get_by_role("heading", name="Your kitchen")).to_be_visible()
-                page.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(page, "Recipes")
                 expect(
                     page.get_by_role("button", name="Offline test soup", exact=False)
                 ).to_be_visible()
@@ -337,7 +338,7 @@ def main():
                 expect(second.get_by_role("heading", name="Your kitchen")).to_be_visible(
                     timeout=15000
                 )
-                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(second, "Recipes")
                 expect(
                     second.get_by_role("button", name="Offline test soup", exact=False)
                 ).to_be_visible(timeout=15000)
@@ -391,12 +392,12 @@ def main():
                 expect(
                     second.get_by_role("alert").filter(has_text="Changes need review")
                 ).to_be_visible(timeout=15000)
-                second.get_by_role("navigation").get_by_role("button", name="Settings").click()
+                navigate(second, "Settings")
                 second.get_by_role("button", name="Keep recipe as a new copy", exact=True).click()
                 expect(second.locator(".connection-status")).to_have_text(
                     "Up to date", timeout=15000
                 )
-                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(second, "Recipes")
                 expect(
                     second.locator(".recipe-card").filter(
                         has_text="Keep this rejected offline edit"
@@ -419,7 +420,7 @@ def main():
                 plan.get_by_role("button", name="Save", exact=True).click()
                 expect(plan).not_to_be_visible()
                 expect(second.get_by_role("button", name="Plan a meal", exact=True)).to_be_focused()
-                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                navigate(second, "Calendar")
                 expect(
                     second.locator(".meal-open").filter(has_text="Keep this rejected offline edit")
                 ).to_be_visible()
@@ -433,7 +434,7 @@ def main():
                 ).last.click()
                 expect(second.get_by_role("dialog")).not_to_be_visible()
                 expect(second.locator(".leftovers-section")).to_contain_text("2 Remaining portions")
-                second.get_by_role("navigation").get_by_role("button", name="Pantry").click()
+                navigate(second, "Pantry")
                 second.get_by_role("textbox", name="Staple name", exact=True).fill("Carrots")
                 second.get_by_role("button", name="Add", exact=True).click()
                 expect(second.locator(".pantry-item")).to_contain_text("Carrots")
@@ -473,7 +474,7 @@ def main():
                     and server_meals[0]["payload"]["date"] == planned_day
                 )
                 # Import structured user-supplied content through the actual persistent job handler.
-                second.get_by_role("navigation").get_by_role("button", name="Recipes").click()
+                navigate(second, "Recipes")
                 second.get_by_role("button", name="Import recipe", exact=True).click()
                 source = {
                     "@context": "https://schema.org",
@@ -523,7 +524,7 @@ def main():
                     row["payload"]["title"] == "Explicitly reviewed beans" for row in final_rows
                 )
                 # Editing a reusable week is offline-safe and never rewrites existing meals.
-                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                navigate(second, "Calendar")
                 second.get_by_role("button", name="Week options", exact=True).click()
                 second.get_by_role("textbox", name="Template name", exact=True).fill(
                     "Everyday week"
@@ -568,7 +569,7 @@ def main():
                 ).to_be_visible()
                 second.get_by_role("button", name="Close", exact=True).click()
                 second.reload()
-                second.get_by_role("navigation").get_by_role("button", name="Calendar").click()
+                navigate(second, "Calendar")
                 second.get_by_role("button", name="Week options", exact=True).click()
                 second.get_by_role("button", name="Edit template Quick lunches", exact=True).click()
                 expect(
@@ -625,9 +626,7 @@ def main():
                     for row in applied
                 ), (expected_day, applied)
                 # Shared household suggestion defaults, offline drafts and approved learning.
-                second.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(second, "Settings")
                 settings_section(second, "Your household")
                 expect(second.locator('a[href="/admin/"]')).to_be_visible()
                 settings_section(second, "Bring!")
@@ -658,9 +657,7 @@ def main():
                         full_page=True,
                         animations="disabled",
                     )
-                page.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(page, "Settings")
                 page.get_by_role("button", name="Sync now", exact=True).click()
                 settings_section(page, "Meal suggestions")
                 first_planning = page.locator(".settings-group").filter(
@@ -684,15 +681,11 @@ def main():
                 second_context.set_offline(True)
                 planning.get_by_label("Servings", exact=True).fill("4.5")
                 second.reload()
-                second.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(second, "Settings")
                 settings_section(second, "Meal suggestions")
                 expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
                 # An unsaved draft does not change cached or server-wide suggestion defaults.
-                second.get_by_role("navigation").get_by_role(
-                    "button", name="Calendar", exact=True
-                ).click()
+                navigate(second, "Calendar")
                 second.get_by_role("button", name="Next week", exact=True).click()
                 second.get_by_role("button", name="Next week", exact=True).click()
                 second.get_by_role("button", name="Suggest meals", exact=True).click()
@@ -741,9 +734,7 @@ def main():
                 assert learning["accepted_counts"] and all(
                     count == 1 for count in learning["accepted_counts"].values()
                 )
-                second.get_by_role("navigation").get_by_role(
-                    "button", name="Settings", exact=True
-                ).click()
+                navigate(second, "Settings")
                 settings_section(second, "Meal suggestions")
                 expect(planning.get_by_label("Servings", exact=True)).to_have_value("4.5")
                 planning.get_by_role("button", name="Save suggestion settings", exact=True).click()
